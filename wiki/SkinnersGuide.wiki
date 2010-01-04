@@ -1,0 +1,172 @@
+#summary Use Fanart Handler Plugin In Your Skin.
+#labels Featured
+<wiki:toc max_depth="2" />
+
+= Introduction =
+The Fanart Handler plugin is a plugin originally created to push fanart of now played music to the your skin. The good thing about this plugin is that it push image names that can be used in a skin by the "image" control. To use cycling images in the past you had to use "multiimage" and this control consumes alot of memory. This is the skin designer's guide to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+
+*The scope of this plugin has expanded and the current scope are*
+  # Push music fanart for now played music track (artist images)
+  # Push music fanart for browsed music artist in myMusic plugin
+  # Push movie fanart for browsed video title in myVideo plugin
+  # Push scorecenter fanart for browsed category in myScoreCenter plugin
+  # Push cycling fanart from the following folders for use anywhere in a skin for
+    * thumbs\MovingPictures\Backdrops\FullSize
+    * thumbs\Fan Art\fanart\original
+    * thumbs\Skin Fanart\games
+    * thumbs\Skin Fanart\movies
+    * thumbs\Skin Fanart\music
+    * thumbs\Skin Fanart\pictures
+    * thumbs\Skin Fanart\plugins
+    * thumbs\Skin Fanart\tv
+
+----
+
+= The Fanart Fading Transition =
+The plugin supports animation effects to the fanart so that it fades from one image to another. This is possible by using two label controls and two images controls. The plugin handles visiblity of the label controls. Use visibility tag on the image contol and animation(s) to enable a smooth transition effect. An example implementation is listed below.
+{{{
+<control>
+  <description>DUMMY CONTROLL FOR FANART 1 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919291</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+  
+<control>
+  <description>DUMMY CONTROLL FOR FANART 2 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919292</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+
+<control>
+  <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
+  <type>label</type>
+  <id>91919293</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+
+<control>
+  <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
+  <type>label</type>
+  <id>91919294</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+
+<control>
+  <description>DEFAULT BACKGROUND WHEN FANART NOT AVAILABLE</description>
+  <id>0</id>
+  <type>multiimage</type>
+  <posx>0</posx>
+  <posy>0</posy>
+  <width>1280</width>
+  <height>720</height>
+  <imagepath>music</imagepath>
+  <timeperimage>30000</timeperimage>
+  <fadetime>800</fadetime>
+  <loop>yes</loop>
+  <randomize>True</randomize>		
+  <visible>!control.isvisible(91919293)</visible>
+  <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
+  <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
+</control>	
+
+<control>
+  <description>FANART IMAGE 1</description>
+  <id>897688</id>
+  <type>image</type>
+  <posx>0</posx>
+  <posy>0</posy>
+  <width>1280</width>
+  <height>720</height>
+  <texture>#fanarthandler.music.backdrop1.play</texture>
+  <visible>control.isvisible(91919291)</visible>
+  <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
+  <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
+</control>
+
+<control>
+  <description>FANART IMAGE 2</description>
+  <id>897689</id>
+  <type>image</type>
+  <posx>0</posx>
+  <posy>0</posy>
+  <width>1280</width>
+  <height>720</height>
+  <texture>#fanarthandler.music.backdrop2.play</texture>
+  <visible>control.isvisible(91919292)</visible>
+  <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
+  <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
+</control>
+}}}
+
+----
+
+= Add Support For Random Images To A Skin File =
+By default no random images are loaded. The reason for this is to save memory in MP. If all random images for all supported paths (games, ,ovies, moving pictures, music, pictures and tvseries) where loaded in all skin files this would mean unnecessary use of memory. To enable random images to be pushed to a skin file you add "define" tags in the skin file header. See example below.
+{{{
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window>
+<id>35</id>
+<defaultcontrol>77032</defaultcontrol>
+<allowoverlay>no</allowoverlay>
+<disabletopbar>yes</disabletopbar>
+<rememberLastFocusedControl>no</rememberLastFocusedControl>
+<define>#useRandomGamesFanart:No</define>
+<define>#useRandomMoviesFanart:Yes</define>
+<define>#useRandomMovingPicturesFanart:No</define>
+<define>#useRandomMusicFanart:Yes</define>
+<define>#useRandomPicturesFanart:Yes</define>
+<define>#useRandomPluginsFanart:Yes</define>
+<define>#useRandomTVFanart:Yes</define>
+<define>#useRandomTVSeriesFanart:Yes</define>
+<controls>
+}}}
+== Available Define Tags ==
+||useRandomGamesFanart||Enables cycling fanart from the tags "#fanarthandler.games.backdrop1.any" and "#fanarthandler.games.backdrop2.any"||
+||useRandomMoviesFanart||Enables cycling fanart from the tags "#fanarthandler.movie.backdrop1.any" and "#fanarthandler.movie.backdrop2.any"||
+||useRandomMovingPicturesFanart||Enables cycling fanart from the tags "#fanarthandler.movingpicture.backdrop1.any" and "#fanarthandler.movingpicture.backdrop2.any"||
+||useRandomMusicFanart||Enables cycling fanart from the tags "#fanarthandler.music.backdrop1.any" and "#fanarthandler.music.backdrop2.any"||
+||useRandomPicturesFanart||Enables cycling fanart from the tags "#fanarthandler.picture.backdrop1.any" and "#fanarthandler.picture.backdrop2.any"||
+||useRandomPluginsFanart||Enables cycling fanart from the tags "#fanarthandler.plugins.backdrop1.any" and "#fanarthandler.plugins.backdrop2.any"||
+||useRandomTVFanart||Enables cycling fanart from the tags "#fanarthandler.tv.backdrop1.selected" and "#fanarthandler.tv.backdrop2.selected"||
+||useRandomTVSeriesFanart||Enables cycling fanart from the tags "#fanarthandler.tvseries.backdrop1.selected" and "#fanarthandler.tvseries.backdrop2.selected"||
+
+----
+
+= Available Skin Tags =
+||#fanarthandler.games.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\games" folder.||
+||#fanarthandler.games.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\games" folder.||
+||#fanarthandler.movie.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
+||#fanarthandler.movie.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
+||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\games" folder.||
+||#fanarthandler.movie.backdrop2.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\games" folder.||
+||#fanarthandler.movingpicture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
+||#fanarthandler.movingpicture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
+||#fanarthandler.music.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
+||#fanarthandler.music.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
+||#fanarthandler.music.overlay.play||a||
+||#fanarthandler.music.backdrop1.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now played music (artist).||
+||#fanarthandler.music.backdrop2.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now played music (artist).||
+||#fanarthandler.music.backdrop1.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\music" folder.||
+||#fanarthandler.music.backdrop2.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\music" folder.||
+||#fanarthandler.picture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\pictures" folder.||
+||#fanarthandler.picture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\pictures" folder.||
+||#fanarthandler.plugins.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\plugins" folder.||
+||#fanarthandler.plugins.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\plugins" folder.||
+||#fanarthandler.scorecenter.backdrop1.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\scorecenter" folder.||
+||#fanarthandler.scorecenter.backdrop2.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\scorecenter" folder.||
+||#fanarthandler.tv.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\tv" folder.||
+||#fanarthandler.tv.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\tv" folder.||
+||#fanarthandler.tvseries.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
+||#fanarthandler.tvseries.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
+
+----
