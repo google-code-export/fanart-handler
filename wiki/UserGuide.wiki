@@ -1,0 +1,102 @@
+#summary Enable Music Fanart.
+#labels Featured
+
+<wiki:toc max_depth="2" />
+
+= Introduction =
+The Fanart Handler plugin is a plugin originally created to push fanart of now played music to the your skin. The good thing about this plugin is that it push image names that can be used in a skin by the "image" control. To use cycling images in the past you had to use "multiimage" and this control consumes alot of memory. This is the skin designer's guide to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+
+*The scope of this plugin has expanded and the current scope are*
+  # Push music fanart for now played music track (artist images)
+  # Push music fanart for browsed music artist in myMusic plugin
+  # Push music fanart for browsed music artist in GlobalSearch plugin
+  # Push music fanart for browsed music artist in Music Videos plugin
+  # Push music fanart for browsed music artist in mVidsplugin
+  # Push music fanart for browsed music artist in YouTube.FM plugin
+  # Push movie fanart for browsed video title in myVideo plugin
+  # Push scorecenter fanart for browsed category in myScoreCenter plugin
+  # Push cycling fanart from the following folders for use anywhere in a skin for
+    * thumbs\MovingPictures\Backdrops\FullSize
+    * thumbs\Fan Art\fanart\original
+    * thumbs\Skin Fanart\games
+    * thumbs\Skin Fanart\movies
+    * thumbs\Skin Fanart\music
+    * thumbs\Skin Fanart\pictures
+    * thumbs\Skin Fanart\plugins
+    * thumbs\Skin Fanart\tv
+
+----
+
+=Add Your Own Custom Fanart (Backdrops) To Be Used In The Skin=
+To add you fanart (backdrops) that you yourself has downloaded or made to be used by the fanart handler plugin you should use these folders
+  # thumbs\Skin Fanart\games (used for pushing random game images to a skin)
+  # thumbs\Skin Fanart\movies (used for pushing random movie images to a skin)
+  # thumbs\Skin Fanart\music (used for pushing random music images to a skin, also used for providing fanart for now played artist or selected artist in your music library)
+  # thumbs\Skin Fanart\pictures (used for pushing random picture images to a skin)
+  # thumbs\Skin Fanart\plugins (used for pushing random plugins images to a skin)
+  # thumbs\Skin Fanart\scorecenter (used for pushing images of selected genre in the scorecenter plugin to a skin).
+  # thumbs\Skin Fanart\tv (used for pushing random tv images to a skin)
+
+The *thumb* directory is located in;
+  # Windows Vista: C:\ProgramData\Team MediaPortal\MediaPortal\
+  # Windows XP: C:\Documents and Settings\All Users\Application Data\Team MediaPortal\MediaPortal\
+You can find this folder by clicking Start button in Windows and the "Programs\Team MediaPortal\MediaPortal\User Files".
+ 
+
+==Naming Convention for your custom fanart==
+If you add music or video fanart that you want the skin to use when you select a video or music (or play music) you should follow the following naming convention. If the current played artist in MP is Madonna that will be matched in the fanart folder for any image that starts with "madonna" followed by n umbers and a file extenstion. This means a file named "madonna1.jpg" will be a match. This means a file named "This Is A Madonna Image.jpg" will not be a match. And a file named madoXnna.jpg will not be a match. And Madonna010.jpg will be a match.
+
+----
+
+= Configuration =
+
+==Enable Fanart for Music==
+  # Open MP Configuration
+  # Click on Plugins
+  # Scroll all the way down in the list of plugins and under the headline Process Plugins you will find a plugin called Fanart Handler. Right click in this plugin and make sure it is enabled.
+  # Right click on the plugin again and this time choose configuration.
+  # You will now see a small dialog window that looks like in the picture below. 
+
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin.jpg
+<br>
+===Music Fanart Options===
+*Selected Fanart Sources*
+The three checkboxes under the headline "Selected Fanart Sources" is used to decide what folders are used to provide music fanart to the skin. Check the sources that you want. *MP Artist Thumbs* is a directory where MP automatically downloads artist images to (quite bad resolution). *MP Album Thumbs* is a directory where MP automatically downloads album images to (quite bad resolution). *X-Factor Fanart Directory* is the folder  "thumbs\Skin Fanart\music", this is a folder that you yourself can add fanart images to.
+
+*Use Fanart In Now Playing Overlay*
+The checkbox under the headline "" is to decide if you also want fanart in the little window that is displayed in most screens of the skin (top left or right) when you play music (see image furter down on this page for an example).
+
+*Disable Fanart Sources (Random Images*
+Two options exist in this section:
+  * MP Artist Thumbs
+  * MP Album Thumbs
+selecting both these optins means that these source will not be included when providing random images for music (only fanart from the Music Fanart Directory). This option exit because you may want to enable or example MP Artist Thumbs when browing music in the myMusic  plugin but think the resolution is to bad to be used in basichome when navigating the music menu.
+
+===Music Plugin Fanart Option===
+*Enable Fanart For Selected Items*
+Select this option if you want to enable fanart when browing your music collection in for example myMusic, mVids or Music Videos.
+
+===Video Plugin Fanart Option===
+*Enable Fanart For Selected Items*
+Select this option if you want to enable fanart when browing your movie collection in the myVideo plugin.
+
+===ScoreCenter Plugin Fanart Option===
+*Enable Fanart For Selected Genres*
+Select this option if you want to enable fanart when browing different genres in the ScoreCenter plugin.
+
+===Minimum Resolution For Images===
+This option sets the minumum resolution for images in the plugin. For example: an image for music exist in resolution 356x400 but you have set minimum resolution to 400x400. This means that the image will not be dispalyed by the plugion. This option exists so that you can disable the use of low resolution images. Set this to "0x0" to disable the check and allow all images.
+
+===Show Each Image For===
+This option controls how long each image will be displayed before next image for selected or played artist/title will be displayed.
+
+----
+==Scraper Options==
+This feature is not yet implemented in the plugin. It is a feature to come soon that will enable automatic download of music fanart from www.htbackdrops.com-
+
+----
+==Disable Fanart for Music==
+  # Open MP Configuration
+  # Click on Plugins
+  # Scroll all the way down in the list of plugins and under the headline Process Plugins you will find a plugin called XFactor Fanart Handler. Right click in this plugin and make sure it is disabled.
+----
