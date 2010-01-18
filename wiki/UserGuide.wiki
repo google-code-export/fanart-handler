@@ -68,15 +68,16 @@ If you add music or video fanart that you want the skin to use when you select a
 ----
 
 = Configuration =
-
-==Enable Fanart for Music==
   # Open MP Configuration
   # Click on Plugins
   # Scroll all the way down in the list of plugins and under the headline Process Plugins you will find a plugin called Fanart Handler. Right click in this plugin and make sure it is enabled.
   # Right click on the plugin again and this time choose configuration.
-  # You will now see a small dialog window that looks like in the picture below. 
+  # You will now see a small dialog window that looks like in the picture below.
 
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin.jpg
+
+==Enable Fanart for Music== 
+Click on the "Common Settings" tab.
 <br>
 ===Music Fanart Options===
 *Selected Fanart Sources*
@@ -110,8 +111,10 @@ This option sets the minumum resolution for images in the plugin. For example: a
 This option controls how long each image will be displayed before next image for selected or played artist/title will be displayed.
 
 ----
-==Scraper Options==
-This feature is not yet implemented in the plugin. It is a feature to come soon that will enable automatic download of music fanart from www.htbackdrops.com-
+==Scraper Settings==
+Click on the "Common Settings" tab. You will now see a small dialog window that looks like in the picture below.
+
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin1.jpg
 
 ----
 ==Disable Fanart for Music==
