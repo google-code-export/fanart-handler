@@ -80,11 +80,31 @@ http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin.jpg
 Click on the "Common Settings" tab.
 <br>
 ===Music Fanart Options===
-*Selected Fanart Sources*
-The three checkboxes under the headline "Selected Fanart Sources" is used to decide what folders are used to provide music fanart to the skin. Check the sources that you want. *MP Artist Thumbs* is a directory where MP automatically downloads artist images to (quite bad resolution). *MP Album Thumbs* is a directory where MP automatically downloads album images to (quite bad resolution). *X-Factor Fanart Directory* is the folder  "thumbs\Skin Fanart\music", this is a folder that you yourself can add fanart images to.
+*Selected Fanart Sources - MP Artist Thumbs*
+Check this option if you want the artist thumbnail images that
+MediaPortal automatically downloads for an artist to be used
+when you select a music artist/album/track in MediaPortal. These
+images are often in low resolution (=bad quality) but setting the 
+"Minimum Resolution For Images" option can solve this problem.
 
-*Use Fanart In Now Playing Overlay*
-The checkbox under the headline "" is to decide if you also want fanart in the little window that is displayed in most screens of the skin (top left or right) when you play music (see image furter down on this page for an example).
+*Selected Fanart Sources - MP Album Thumbs*
+Check this option if you want the album thumbnail images that
+MediaPortal automatically downloads for an albun to be used
+when you select a music artist/album/track in MediaPortal. These
+images are often in low resolution (=bad quality) but setting the 
+"Minimum Resolution For Images" option can solve this problem.
+
+*Selected Fanart Sources - Music Fanart Directory*
+Check this option if you want the fanart/backdrop images that
+you have donwloaded/created and put in the "/thumbs/Skin Fanart/music"
+folder or the fanart/backdrops that this plugin downloads (if scraper
+is enabled) to be used when you select a music artist/album/track 
+in MediaPortal. Enabling this option is recommended.
+
+*Use Fanart In Now Playing Overlay - Use Fanart In Overlay*
+This option enables fanart as background in the now
+playing window in MediaPortal if your current skin
+supports it.
 
 *Disable Fanart Sources (Random Images*
 Two options exist in this section:
@@ -115,6 +135,74 @@ This option controls how long each image will be displayed before next image for
 Click on the "Common Settings" tab. You will now see a small dialog window that looks like in the picture below.
 
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin1.jpg
+
+===Scraper Options===
+*Enable Automatic Download Of Music Fanart For Artists In Your MP MusicDatabase*
+Check this option if you want the artist thumbnail images that
+MediaPortal automatically downloads for an artist to be used
+when you select a music artist/album/track in MediaPortal. These
+images are often in low resolution (=bad quality) but setting the 
+"Minimum Resolution For Images" option can solve this problem.
+Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing all the artists that you have 
+allready in your MediaPortal music database and then 
+downloading the found images to your harddrive (to 
+the "thumbs/Skin Fanart/music" folder). Leaving this 
+option unchecked will disable scraping and you will 
+have to manually add your fanart images to the
+"thumbs/Skin Fanart/music" folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.
+
+*Enable Automatic Download Of Music Fanart For Artists Now Being Played*
+Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing evry song you play in
+MediaPortal and then downloading the found images 
+to your harddrive (to the "thumbs/Skin Fanart/music" 
+folder). Leaving this option unchecked will disable 
+now playing scraping and you will have to manually 
+add your fanart images to the "thumbs/Skin Fanart/music" 
+folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.
+
+*Download Max X Images Per Artist*
+Choose how many images the scraper will try to
+download for every artist. Choosing a higher number
+will consume more harddisk space. 
+
+*Scraper Interval X (Hours)*
+Select the  number of hours between each new scraper attempt.
+
+*Reset Scraper Button*
+The first time you open MediaPortal after enabling the scraper
+will cause a big search for fanart matching every artist you
+have in your MediaPortal music database. This is only done once.
+After this MediaPortal will perorm this "initial scrape" only for
+new added artists. If you at a later stage decided that you for 
+example want to increase the number of imges per artis
+you will have to press this button to initiate a new intitial scrape
+the next time you start MediaPortal. After the initial scrape this
+plugin will only scrape the htbackdrop site for new images.
+
+----
+==Manage Fanart==
+Click on the "Manage Fanart" tab. You will now see a small dialog window that looks like in the picture below.
+
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
+
+===xx Button===
+
+===xx Button===
+
+===xx Button===
+
+===xx Button===
+
 
 ----
 ==Disable Fanart for Music==
