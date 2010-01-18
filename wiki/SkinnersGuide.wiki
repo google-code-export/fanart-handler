@@ -205,7 +205,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 }}}
 
-== An Example - Music Now Playing ==
+== An Example - Selected Music (in lists) ==
 {{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
