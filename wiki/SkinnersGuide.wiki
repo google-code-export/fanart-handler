@@ -127,9 +127,9 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
+  <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
   <type>label</type>
-  <id>91919293</id>
+  <id>91919294</id>
   <posX>0</posX>
   <posY>0</posY>
   <width>1</width>
