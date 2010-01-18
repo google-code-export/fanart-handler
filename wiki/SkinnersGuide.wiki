@@ -24,9 +24,12 @@ The Fanart Handler plugin is a plugin originally created to push fanart of now p
 
 = The Fanart Fading Transition =
 The plugin supports animation effects to the fanart so that it fades from one image to another. This is possible by using two label controls and two images controls. The plugin handles visiblity of the label controls. Use visibility tag on the image contol and animation(s) to enable a smooth transition effect. An example implementation is listed below.
+
+== Controllong Visibility ==
+These controls exist to control visibility in the skin. There are two times three controls. One set of controls for selected items (like when browsing your playlist or music collection), one set of controls for now played music and one set of controls for random images.
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919291</id>
   <posX>0</posX>
@@ -35,7 +38,7 @@ The plugin supports animation effects to the fanart so that it fades from one im
 </control>
   
 <control>
-  <description>DUMMY CONTROLL FOR FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROLL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919292</id>
   <posX>0</posX>
@@ -43,6 +46,47 @@ The plugin supports animation effects to the fanart so that it fades from one im
   <width>1</width>
 </control>
 
+<control>
+  <description>DUMMY CONTROLL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919295</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+  
+<control>
+  <description>DUMMY CONTROLL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919296</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+
+<control>
+  <description>DUMMY CONTROLL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919297</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+  
+<control>
+  <description>DUMMY CONTROLL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919298</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+}}}
+
+== Fanart Available Controls ==
+The fanart availabel controls can be used in a skin if you need to know if currently selected or played artist/title has fanart (i.e if the plugin found fanart or not).
+
+{{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
   <type>label</type>
@@ -56,6 +100,36 @@ The plugin supports animation effects to the fanart so that it fades from one im
   <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
   <type>label</type>
   <id>91919294</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+}}}
+
+== An Example ==
+{{{
+<control>
+  <description>DUMMY CONTROLL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919295</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+  
+<control>
+  <description>DUMMY CONTROLL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919296</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+</control>
+
+<control>
+  <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
+  <type>label</type>
+  <id>91919293</id>
   <posX>0</posX>
   <posY>0</posY>
   <width>1</width>
@@ -74,7 +148,7 @@ The plugin supports animation effects to the fanart so that it fades from one im
   <fadetime>800</fadetime>
   <loop>yes</loop>
   <randomize>True</randomize>		
-  <visible>!control.isvisible(91919293)</visible>
+  <visible>!control.isvisible(91919294)</visible>
   <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
   <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
 </control>	
