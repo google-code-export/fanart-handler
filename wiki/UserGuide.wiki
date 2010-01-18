@@ -81,54 +81,41 @@ Click on the "Common Settings" tab.
 <br>
 ===Music Fanart Options===
 *Selected Fanart Sources - MP Artist Thumbs*
-Check this option if you want the artist thumbnail images that
-MediaPortal automatically downloads for an artist to be used
-when you select a music artist/album/track in MediaPortal. These
-images are often in low resolution (=bad quality) but setting the 
-"Minimum Resolution For Images" option can solve this problem.
+Check this option if you want the artist thumbnail images that MediaPortal automatically downloads for an artist to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the "Minimum Resolution For Images" option can solve this problem.
 
 *Selected Fanart Sources - MP Album Thumbs*
-Check this option if you want the album thumbnail images that
-MediaPortal automatically downloads for an albun to be used
-when you select a music artist/album/track in MediaPortal. These
-images are often in low resolution (=bad quality) but setting the 
-"Minimum Resolution For Images" option can solve this problem.
+Check this option if you want the album thumbnail images that MediaPortal automatically downloads for an albun to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the  "Minimum Resolution For Images" option can solve this problem.
 
 *Selected Fanart Sources - Music Fanart Directory*
-Check this option if you want the fanart/backdrop images that
-you have donwloaded/created and put in the "/thumbs/Skin Fanart/music"
-folder or the fanart/backdrops that this plugin downloads (if scraper
-is enabled) to be used when you select a music artist/album/track 
-in MediaPortal. Enabling this option is recommended.
+Check this option if you want the fanart/backdrop images that you have donwloaded/created and put in the "/thumbs/Skin Fanart/music" folder or the fanart/backdrops that this plugin downloads (if scraper is enabled) to be used when you select a music artist/album/track in MediaPortal. Enabling this option is recommended.
 
 *Use Fanart In Now Playing Overlay - Use Fanart In Overlay*
-This option enables fanart as background in the now
-playing window in MediaPortal if your current skin
-supports it.
+This option enables fanart as background in the now playing window in MediaPortal if your current skin supports it.
 
-*Disable Fanart Sources (Random Images*
-Two options exist in this section:
-  * MP Artist Thumbs
-  * MP Album Thumbs
-selecting both these optins means that these source will not be included when providing random images for music (only fanart from the Music Fanart Directory). This option exit because you may want to enable or example MP Artist Thumbs when browing music in the myMusic  plugin but think the resolution is to bad to be used in basichome when navigating the music menu.
+*Disable Fanart Sources (Random Images) - MP Artist Thumbs*
+Check this opton if you have enabled the option "MP Artist Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that artist thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
+
+*Disable Fanart Sources (Random Images) - MP Album Thumbs*
+Check this opton if you have enabled the option "MP Album Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that album thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
 
 ===Music Plugin Fanart Option===
 *Enable Fanart For Selected Items*
-Select this option if you want to enable fanart when browing your music collection in for example myMusic, mVids or Music Videos.
+Check this option to enable fanart for selected items anywhere in a skin when browsing your music collection. Like in myMusic plugin, music playlist, Music Videos or Last FM. Checking this option is highly recommended.
 
 ===Video Plugin Fanart Option===
 *Enable Fanart For Selected Items*
-Select this option if you want to enable fanart when browing your movie collection in the myVideo plugin.
+Check this option to enable fanart for selected items when browsing your movies using the myVideos plugin.
 
 ===ScoreCenter Plugin Fanart Option===
 *Enable Fanart For Selected Genres*
-Select this option if you want to enable fanart when browing different genres in the ScoreCenter plugin.
+Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.
 
 ===Minimum Resolution For Images===
-This option sets the minumum resolution for images in the plugin. For example: an image for music exist in resolution 356x400 but you have set minimum resolution to 400x400. This means that the image will not be dispalyed by the plugion. This option exists so that you can disable the use of low resolution images. Set this to "0x0" to disable the check and allow all images.
+Select the  minimum image resolution (quality) you want for fanart/backdrops/thumbs. Setting this to "0x0" will allow all images. If you have enabled "MP Artist Thumbs" 
+or "MP Album Thumbs" you may want to leave this to "400x400" (because most of these thumbs are below "600x600" in resolution).
 
 ===Show Each Image For===
-This option controls how long each image will be displayed before next image for selected or played artist/title will be displayed.
+Select the number of seconds each image will be displayed before trying to switch to next image for selected or played artist (or next randomg image or next selected move and so on).
 
 ----
 ==Scraper Settings==
