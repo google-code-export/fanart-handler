@@ -182,13 +182,20 @@ Click on the "Manage Fanart" tab. You will now see a small dialog window that lo
 
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
-===xx Button===
+===Enable/Disable Selected Fanart Button===
+Press this button to enable or disable the use of the selected fanart/backdrop. Enabled means that the image will be used by the plugin in MediaPortal. Disabled means that MediaPortal will not use the image. The difference between pressing this button and the "Delete Selected Fanart" is that this button keeps the image on your harddrive but also in the fanart database and this also means that the scraper will NOT download it again. Pressing the delete button will delete the image but it can re-appear because the scraper can find the image on a future scrape.
 
-===xx Button===
+===Cleanup Missing Fanart Button===
+Press this button to sync fanart database and images on your harddrive. Any entries in the fanart database that has no matching image stored on your harddrive will be removed.
 
-===xx Button===
+===Delete Selected Fanart Button===
+Press this button to delete the selected fanart/backdrop from the fanart database but also from your harddrive. The difference between pressing this button and the "Enable/Disable Selected Fanart" button is that this button deletes the image from your harddrive and
+the fanart database and this saves harddisk space but the image can re-appear because the scraper can find the image on a future scrape.
 
-===xx Button===
+===Delete All Fanart Button===
+WARNING: Pressing this button will delete all images stored on your harddrive in the "thumbs/Skin Fanart/music" folder and also from the fanart database.
+
+The purpose of this button is to reset everything and allow for a complete new initial scrape. 
 
 
 ----
