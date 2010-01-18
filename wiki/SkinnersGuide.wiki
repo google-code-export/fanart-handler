@@ -23,6 +23,7 @@ The Fanart Handler plugin is a plugin originally created to push fanart of now p
 == Requirements ==
   * MediaPortal 1.0.2 or later
   * Fanart Handler Plugin
+  * A skin that supports the Fanart Handler.
 *NOTE* This plugin only supports JPG images.
 
 ----
