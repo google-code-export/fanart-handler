@@ -20,6 +20,11 @@ The Fanart Handler plugin is a plugin originally created to push fanart of now p
     * thumbs\Skin Fanart\plugins
     * thumbs\Skin Fanart\tv
 
+== Requirements ==
+  * MediaPortal 1.0.2 or later
+  * Fanart Handler Plugin
+*NOTE* This plugin only supports JPG images.
+
 ----
 
 = The Fanart Fading Transition =
