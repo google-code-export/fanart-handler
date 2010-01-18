@@ -185,7 +185,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop1.play</texture>
-  <visible>control.isvisible(91919291)</visible>
+  <visible>control.isvisible(91919295)</visible>
   <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
   <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
 </control>
@@ -199,7 +199,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop2.play</texture>
-  <visible>control.isvisible(91919292)</visible>
+  <visible>control.isvisible(91919296)</visible>
   <animation effect="fade" start="10" end="100" time="1000" delay="80" reversible="false">Visible</animation>
   <animation effect="fade" start="100" end="0" time="900" reversible="false">Hidden</animation>
 </control>
