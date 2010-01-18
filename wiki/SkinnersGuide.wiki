@@ -3,14 +3,31 @@
 <wiki:toc max_depth="2" />
 
 = Introduction =
-The Fanart Handler plugin is a plugin originally created to push fanart of now played music to the your skin. The good thing about this plugin is that it push image names that can be used in a skin by the "image" control. To use cycling images in the past you had to use "multiimage" and this control consumes alot of memory. This is the skin designer's guide to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
+  * Search and download music fanart (scrape) from the [http://htbackdrops.com/ htbackdrops] site.
+    # for all artists stored in your MP music database.
+    # for any artist currently being played (on the fly).
 
-*The scope of this plugin has expanded and the current scope are*
-  # Push music fanart for now played music track (artist images)
-  # Push music fanart for browsed music artist in myMusic plugin
-  # Push movie fanart for browsed video title in myVideo plugin
-  # Push scorecenter fanart for browsed category in myScoreCenter plugin
-  # Push cycling fanart from the following folders for use anywhere in a skin for
+  * Push fanart that you store on your local harddrive to the current used MP skin. 
+    # push fanart for now played music
+    # push fanart for selected music or movie
+    # push random images from selected folders
+
+This is the skin designer's guide to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+
+The scope of this plugin is to;
+  # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
+  # scrape htbackdrops site for music fanart for currently played artist.
+  # push music fanart for now played music track (artist images)
+  # push music fanart for browsed music artist in myMusic plugin
+  # push music fanart for browsed/played music artist in myMusicPlaylist plugin
+  # push music fanart for browsed music artist in GlobalSearch plugin
+  # push music fanart for browsed music artist in Music Videos plugin
+  # push music fanart for browsed music artist in mVidsplugin
+  # push music fanart for browsed music artist in YouTube.FM plugin
+  # push movie fanart for browsed video title in myVideo plugin
+  # push scorecenter fanart for browsed category in myScoreCenter plugin
+  # push cycling fanart from the following folders for use anywhere in a skin for
     * thumbs\MovingPictures\Backdrops\FullSize
     * thumbs\Fan Art\fanart\original
     * thumbs\Skin Fanart\games
