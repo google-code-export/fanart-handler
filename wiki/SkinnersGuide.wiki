@@ -1,6 +1,5 @@
 #summary Use Fanart Handler Plugin In Your Skin.
 #labels Featured
-#sidebar SkinnersGuideSidebar
 <wiki:toc max_depth="2" />
 
 = Introduction =
