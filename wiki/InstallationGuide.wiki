@@ -1,0 +1,22 @@
+#summary Installation Guide.
+
+<wiki:toc max_depth="2" />
+
+=Installation=
+==First Time Installation==
+Just download the MPI file from the Download page (link), double click and the installation is done. Follow the user guide to configure the plugin.
+
+*NOTE!* If you are using latest SVN of MediaPortal you will have to locate the old MPIInstaller in the Mediaportal directory. Start the MPIInstaller and locate the installer file. The reason for this is that SVN version of MP includes the new MPEInstaller that is not compatible with the old one and assisiated MPI files with it.
+
+---- 
+==Installation If You Have The Beta Or Release Candidate Version Allready Installed==
+If you have installed the Beta or Release Candidate versions of this skin, please follow these steps to install.
+copy your fanart in the /thumbs/skin fanart/music to a backup location
+delete all fanart in the /thumbs/skin fanart/music folder
+copy your /database/fanarthandler.db3 file to a backup location
+delete your /database/fanarthandler.db3 file
+install the MPI file (link).
+
+*NOTE!* If you are using latest SVN of MediaPortal you will have to locate the old MPIInstaller in the Mediaportal directory. Start the MPIInstaller and locate the installer file. The reason for this is that SVN version of MP includes the new MPEInstaller that is not compatible with the old one and assisiated MPI files with it.
+
+---- 
