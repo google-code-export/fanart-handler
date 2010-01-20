@@ -330,6 +330,16 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 }}}
 
+To get even more examples you can look at these x-factor skin files using this plugin;
+  * [http://x-factor.googlecode.com/svn/trunk/MyMusicPlayingNow.xml MyMusicPlayingNow.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/mymusicplaylist.xml mymusicplaylist.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/mymusicgenres.xml mymusicgenres.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/myvideo.xml myvideo.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/Basichome.xml Basichome.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/MyRadioLastFM.xml MyRadioLastFM.xml]
+  * [http://x-factor.googlecode.com/svn/trunk/myLyrics.xml myLyrics.xml]
+
+
 ----
 
 = Add Support For Random Images To A Skin File =
