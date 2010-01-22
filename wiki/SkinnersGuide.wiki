@@ -369,6 +369,7 @@ The scraper is running control can be used in a skin if want to display when the
   <posX>0</posX>
   <posY>0</posY>
   <width>1</width>
+  <visible>no</visible>
 </control> 
 }}}
 
