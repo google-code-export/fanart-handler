@@ -50,8 +50,8 @@ The plugin supports animation effects to the fanart so that it fades from one im
 
 == Controllong Visibility ==
 These controls exist to control visibility in the skin. There are two times three controls. One set of controls for selected items (like when browsing your playlist or music collection), one set of controls for now played music and one set of controls for random images.
-{{{
 *This control will be visible when image 1 for selected item is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -60,8 +60,9 @@ These controls exist to control visibility in the skin. There are two times thre
   <posY>0</posY>
   <width>1</width>
 </control>
-  
+}}}
 *This control will be visible when image 2 for selected item is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -70,8 +71,9 @@ These controls exist to control visibility in the skin. There are two times thre
   <posY>0</posY>
   <width>1</width>
 </control>
-
+}}}
 *This control will be visible when image 1 for played item is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -80,8 +82,9 @@ These controls exist to control visibility in the skin. There are two times thre
   <posY>0</posY>
   <width>1</width>
 </control>
-  
+ }}}
 *This control will be visible when image 2 for played item is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -90,8 +93,9 @@ These controls exist to control visibility in the skin. There are two times thre
   <posY>0</posY>
   <width>1</width>
 </control>
-
+}}}
 *This control will be visible when random image 1 is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -100,8 +104,9 @@ These controls exist to control visibility in the skin. There are two times thre
   <posY>0</posY>
   <width>1</width>
 </control>
-  
+}}}  
 *This control will be visible when random image 2 is the one that the skin should display*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
@@ -115,8 +120,8 @@ These controls exist to control visibility in the skin. There are two times thre
 == Fanart Available Controls ==
 The fanart availabel controls can be used in a skin if you need to know if currently selected or played artist/title has fanart (i.e if the plugin found fanart or not).
 
-{{{
 *This control will be visible when selected fanart is availble. Use this in visibility tags to show hide images depending on if the plugin found fanart or not*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
   <type>label</type>
@@ -125,8 +130,10 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <posY>0</posY>
   <width>1</width>
 </control>
+}}}
 
 *This control will be visible when playing fanart is availble. Use this in visibility tags to show hide images depending on if the plugin found fanart or not*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
   <type>label</type>
@@ -135,7 +142,6 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <posY>0</posY>
   <width>1</width>
 </control>
-
 }}}
 
 == An Example - Music Now Playing ==
@@ -354,8 +360,8 @@ To get even more examples you can look at these x-factor skin files using this p
 ==Scraper is Running (Will be availeble in version 1.1 of this plugin==
 The scraper is running control can be used in a skin if want to display when the scraper is running.
 
-{{{
 *This control will be visible when the scraper is running*
+{{{
 <control>
   <description>DUMMY CONTROLL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
   <type>label</type>
@@ -475,7 +481,7 @@ By default no random images are loaded. The reason for this is to save memory in
 <disabletopbar>yes</disabletopbar>
 <rememberLastFocusedControl>no</rememberLastFocusedControl>
 <define>#useRandomGamesFanart:No</define>
-<define>#useRandomScoreCenterFanart:Yes</define>  (*Will be available in plugin version 1.1*)
+<define>#useRandomScoreCenterFanart:Yes</define>  (Will be available in plugin version 1.1)
 <define>#useRandomMoviesFanart:Yes</define>
 <define>#useRandomMovingPicturesFanart:No</define>
 <define>#useRandomMusicFanart:Yes</define>
