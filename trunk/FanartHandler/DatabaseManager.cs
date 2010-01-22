@@ -25,6 +25,7 @@ namespace FanartHandler
         public Hashtable htAnyMovingPicturesFanart;
         public Hashtable htAnyMusicFanart;
         public Hashtable htAnyPictureFanart;
+        public Hashtable htAnyScorecenter;
         public Hashtable htAnyTVSeries;
         public Hashtable htAnyTVFanart;
         public Hashtable htAnyPluginFanart;
@@ -35,6 +36,8 @@ namespace FanartHandler
         private string scraperMPDatabase = null;
         private bool isScraping = false;
         private Scraper scraper;
+        public int totArtistsBeingScraped = 0;
+        public int currArtistsBeingScraped = 0;
 
         /// <summary>
         /// Returns if scraping is running or not.
@@ -118,7 +121,7 @@ namespace FanartHandler
         /// <summary>
         /// Performs a scrape for artist now being played in MediaPortal.
         /// </summary>
-        public bool NowPlayingScrape(string artist, FanartHandler.Class1.ScraperWorkerNowPlaying swnp)
+        public bool NowPlayingScrape(string artist, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
         {
             try
             {
@@ -144,6 +147,50 @@ namespace FanartHandler
                 return false;
             }
         }
+
+        public int GetTotalArtistsInMPMusicDatabase()
+        {
+            ArrayList al = new ArrayList();
+            m_db.GetAllArtists(ref al);
+            return al.Count;
+        }
+
+        public int GetTotalArtistsInFanartDatabase()
+        {
+            string sqlQuery = "SELECT count(Artist) FROM Music_Artist;";
+            SQLiteResultSet result = dbClient.Execute(sqlQuery);
+            int i = 0;
+            if (result != null)
+            {
+                i = Int32.Parse(result.GetField(0, 0));
+            }
+            return i;
+        }
+
+        public int GetTotalArtistsInitialisedInFanartDatabase()
+        {
+            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart');";
+            SQLiteResultSet result = dbClient.Execute(sqlQuery);
+            int i = 0;
+            if (result != null)
+            {
+                i = Int32.Parse(result.GetField(0, 0));
+            }
+            return i;
+        }
+
+        public int GetTotalArtistsUnInitialisedInFanartDatabase()
+        {
+            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist not in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart');";
+            SQLiteResultSet result = dbClient.Execute(sqlQuery);
+            int i = 0;
+            if (result != null)
+            {
+                i = Int32.Parse(result.GetField(0, 0));
+            }
+            return i;
+        }
+        
 
         /// <summary>
         /// Return the current number of images an artist has.
@@ -179,12 +226,15 @@ namespace FanartHandler
         {
             try
             {
+                isScraping = true;
                 scraper = new Scraper();
                 scraper.getNewImages(iMax, this);
                 scraper = null;
+                isScraping = false;
             }
             catch (Exception ex)
             {
+                isScraping = false;
                 logger.Error("doNewScrape: " + ex.ToString());
             }
         }
@@ -222,7 +272,7 @@ namespace FanartHandler
         /// <summary>
         /// Performs the scrape (now playing or intitial).
         /// </summary>
-        public int doScrape (string artist, bool useSuccessfulScrape, bool useStopScraper, FanartHandler.Class1.ScraperWorkerNowPlaying swnp)
+        public int doScrape (string artist, bool useSuccessfulScrape, bool useStopScraper, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
         {
             try
             {
@@ -301,7 +351,7 @@ namespace FanartHandler
         /// Performs the intitial scrape (on htbackdrops.com) for any artist in the MP music
         /// database until max images per artist is meet or no more images exist for the artist.
         /// </summary>        
-        public void InitialScrape(FanartHandler.Class1.ScraperWorker sw)
+        public void InitialScrape(FanartHandler.FanartHandlerSetup.ScraperWorker sw)
         {
             try
             {
@@ -311,6 +361,7 @@ namespace FanartHandler
                 musicDatabaseArtists = new ArrayList();
                 m_db.GetAllArtists(ref musicDatabaseArtists);                
                 string artist;
+                totArtistsBeingScraped = musicDatabaseArtists.Count;
                 if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
                 {
                     for (int i = 0; i < musicDatabaseArtists.Count; i++)
@@ -318,6 +369,7 @@ namespace FanartHandler
                         artist = musicDatabaseArtists[i].ToString();
                         if (stopScraper == true)
                         {
+                            stopScraper = false;
                             break;
                         }
                         if (doScrape(artist, true, true, null) > 0 && firstRun)
@@ -329,6 +381,7 @@ namespace FanartHandler
                                 firstRun = false;
                             }                            
                         }
+                        currArtistsBeingScraped++;
                     }
                 }
                 logger.Info("InitialScrape is done.");
@@ -349,7 +402,7 @@ namespace FanartHandler
         /// </summary>
         private void addScapedFanartToAnyHash()
         {
-            if (htAnyMusicFanart.Count < 1)
+            if (htAnyMusicFanart == null || htAnyMusicFanart.Count < 1)
             {
                 Hashtable htTmp = new Hashtable();
                 string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Enabled = 'True' AND Type IN ('MusicFanart');";
@@ -547,6 +600,8 @@ namespace FanartHandler
                 return htAnyMusicFanart;
             else if (type.Equals("Picture"))
                 return htAnyPictureFanart;
+            else if (type.Equals("ScoreCenter"))
+                return htAnyScorecenter;
             else if (type.Equals("MovingPicture"))
                 return htAnyMovingPicturesFanart;
             else if (type.Equals("TVSeries"))
@@ -576,6 +631,8 @@ namespace FanartHandler
                 htAnyMusicFanart = ht;
             else if (type.Equals("Picture"))
                 htAnyPictureFanart = ht;
+            else if (type.Equals("ScoreCenter"))
+                htAnyScorecenter = ht;                
             else if (type.Equals("MovingPicture"))
                 htAnyMovingPicturesFanart = ht;
             else if (type.Equals("TVSeries"))

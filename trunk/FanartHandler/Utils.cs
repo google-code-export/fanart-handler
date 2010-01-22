@@ -241,6 +241,26 @@ namespace FanartHandler
             return s.Replace("'", "''");
         }
 
+        public static string PatchFilename(string s)
+        {
+            s = s.Replace("?", "");
+            s = s.Replace("[", "");
+            s = s.Replace("]", "");
+            s = s.Replace("/", "");
+            s = s.Replace("\\", "");
+            s = s.Replace("=", "");
+            s = s.Replace("+", "");
+            s = s.Replace("<", "");
+            s = s.Replace(">", "");
+            s = s.Replace(":", "");
+            s = s.Replace(";", "");
+            s = s.Replace("\"", "");
+            s = s.Replace(",", "");
+            s = s.Replace("*", "");
+            s = s.Replace("|", "");
+            return s.Replace("^", "");                          
+        }
+
         /// <summary>
         /// Remove trailing digits.
         /// </summary>

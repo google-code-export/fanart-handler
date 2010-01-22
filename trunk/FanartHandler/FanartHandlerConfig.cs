@@ -9,13 +9,29 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
+using System.Threading;
+using System.Timers;
 using SQLite.NET;
 using System.IO;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using MediaPortal.Services;
+using MediaPortal.Music.Database;
 
 namespace FanartHandler
-{
+{    
     public partial class FanartHandlerConfig : Form
     {
+        private DataTable myDataTable = null;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private const string logFileName = "fanarthandler_config.log";
+        private const string oldLogFileName = "fanarthandler_config.old.log";
+        private FanartHandlerSetup.ScraperWorker scraperWorkerObject;        
+        private Thread scrapeWorkerThread;
+        private System.Timers.Timer scraperTimer = null;
+        private TimerCallback myProgressTimer = null;
+        private System.Threading.Timer progressTimer = null;
         private DatabaseManager dbm;
         private string useArtist = null;
         private string useAlbum = null;
@@ -33,6 +49,8 @@ namespace FanartHandler
         private string scraperMusicPlaying = null;
         private string scraperMPDatabase = null;
         private string scraperInterval = null;
+        private string useAspectRatio = null;
+        private bool isScraping = false;
         
 
         public FanartHandlerConfig()
@@ -106,6 +124,7 @@ namespace FanartHandler
                     xmlwriter.SetValue("FanartHandler", "scraperMusicPlaying", checkBoxScraperMusicPlaying.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "scraperMPDatabase", checkBoxEnableScraperMPDatabase.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "scraperInterval", comboBoxScraperInterval.SelectedItem);
+                    xmlwriter.SetValue("FanartHandler", "useAspectRatio", checkBoxAspectRatio.Checked ? true : false);
                 }
                 MessageBox.Show("Settings has been successfully saved!");
                 this.Close();
@@ -171,6 +190,7 @@ namespace FanartHandler
                 scraperMusicPlaying = xmlreader.GetValueAsString("FanartHandler", "scraperMusicPlaying", "");
                 scraperMPDatabase = xmlreader.GetValueAsString("FanartHandler", "scraperMPDatabase", "");
                 scraperInterval = xmlreader.GetValueAsString("FanartHandler", "scraperInterval", "");                         
+                useAspectRatio = xmlreader.GetValueAsString("FanartHandler", "useAspectRatio", "");
             }
                 if (useFanart != null && useFanart.Length > 0)
                 {
@@ -349,27 +369,160 @@ namespace FanartHandler
                     scraperInterval = "24";
                     comboBoxScraperInterval.SelectedItem = "24";
                 }
-                dbm = new DatabaseManager();
-                dbm.initDB(Convert.ToInt32(scraperMaxImages), scraperMPDatabase, scraperMusicPlaying);                
+                if (useAspectRatio != null && useAspectRatio.Length > 0)
+                {
+                    if (useAspectRatio.Equals("True"))
+                        checkBoxAspectRatio.Checked = true;
+                    else
+                        checkBoxAspectRatio.Checked = false;
+                }
+                else
+                {
+                    useAspectRatio = "False";
+                    checkBoxAspectRatio.Checked = false;
+                }
+                try
+                {
+                    initLogger();  
+                    dbm = new DatabaseManager();
+                    dbm.initDB(Convert.ToInt32(scraperMaxImages), scraperMPDatabase, scraperMusicPlaying);
+                    myDataTable = new DataTable();
+                    myDataTable.Columns.Add("Artist");
+                    myDataTable.Columns.Add("Enabled");
+                    myDataTable.Columns.Add("Image");
+                    myDataTable.Columns.Add("Image Path");
+                    dataGridView1.DataSource = myDataTable;
+                    UpdateFanartTable();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("FanartHandlerConfig_Load: " + ex.ToString());
+                    myDataTable = new DataTable();
+                    myDataTable.Columns.Add("Artist");
+                    myDataTable.Columns.Add("Enabled");
+                    myDataTable.Columns.Add("Image");
+                    myDataTable.Columns.Add("Image Path");
+                    dataGridView1.DataSource = myDataTable;
+                    //dataGridView1.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+                }
+        }
 
-            DataTable d = new DataTable();
-            d.Columns.Add("Artist");
-            d.Columns.Add("Enabled");
-            d.Columns.Add("Image");
-            d.Columns.Add("Image Path");
-            SQLiteResultSet result = dbm.getDataForTable();
-            for (int i = 0; i < result.Rows.Count; i++)
-            {                
-                DataRow myDataRow = d.NewRow();
-                myDataRow["Artist"] = result.GetField(i, 0);
-                myDataRow["Enabled"] = result.GetField(i, 1);
-                myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
-                myDataRow["Image Path"] = result.GetField(i, 2);
-                d.Rows.Add(myDataRow);
+        private void UpdateFanartTable()
+        {
+            try
+            {
+                //myDataTable.Rows.Clear();
+                SQLiteResultSet result = dbm.getDataForTable();
+                int iRows = myDataTable.Rows.Count;
+                if (result != null)
+                {
+                    for (int i = 0; i < result.Rows.Count; i++)
+                    {
+                        if (i >= iRows)
+                        {
+                            //add new rows
+                            DataRow myDataRow = myDataTable.NewRow();
+                            myDataRow["Artist"] = result.GetField(i, 0);
+                            myDataRow["Enabled"] = result.GetField(i, 1);
+                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image Path"] = result.GetField(i, 2);
+                            myDataTable.Rows.Add(myDataRow);
+                        }
+                        else
+                        {
+                            //update existing rows
+                            myDataTable.Rows[i]["Artist"] = result.GetField(i, 0);
+                            myDataTable.Rows[i]["Enabled"] = result.GetField(i, 1);
+                            myDataTable.Rows[i]["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataTable.Rows[i]["Image Path"] = result.GetField(i, 2);
+                        }
+                        
+                    }
+                }
+                result = null;
+                //dataGridView1.Refresh();
+                //dataGridView1.DataSource = myDataTable;
+                //dataGridView1.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+
+                labelTotalMPArtistCount.Text = "" + dbm.GetTotalArtistsInMPMusicDatabase();
+                labelTotalFanartArtistCount.Text = "" + dbm.GetTotalArtistsInFanartDatabase();
+                labelTotalFanartArtistInitCount.Text = "" + dbm.GetTotalArtistsInitialisedInFanartDatabase();
+                labelTotalFanartArtistUnInitCount.Text = "" + dbm.GetTotalArtistsUnInitialisedInFanartDatabase();
             }
-            result = null;
-            dataGridView1.DataSource = d;
-            dataGridView1.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+            catch (Exception ex)
+            {
+                logger.Error("UpdateFanartTable: " + ex.ToString());
+                dataGridView1.DataSource = null;
+                DataTable d = new DataTable();
+                d.Columns.Add("Artist");
+                d.Columns.Add("Enabled");
+                d.Columns.Add("Image");
+                d.Columns.Add("Image Path");
+                dataGridView1.DataSource = d;
+                dataGridView1.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+            }
+        }
+
+        /// <summary>
+        /// Setup logger. This funtion made by the team behind Moving Pictures 
+        /// (http://code.google.com/p/moving-pictures/)
+        /// </summary>
+        private void initLogger()
+        {
+            LoggingConfiguration config = new LoggingConfiguration();
+
+            try
+            {
+                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
+                if (logFile.Exists)
+                {
+                    if (File.Exists(Config.GetFile(Config.Dir.Log, oldLogFileName)))
+                        File.Delete(Config.GetFile(Config.Dir.Log, oldLogFileName));
+
+                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, oldLogFileName));
+                    logFile.Delete();
+                }
+            }
+            catch (Exception) { }
+
+
+            FileTarget fileTarget = new FileTarget();
+            fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
+            fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
+                                "${level:fixedLength=true:padding=5} " +
+                                "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
+                                "${exception:format=tostring}";
+
+            config.AddTarget("file", fileTarget);
+
+            // Get current Log Level from MediaPortal 
+            LogLevel logLevel;
+            MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+            switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0))
+            {
+                case Level.Error:
+                    logLevel = LogLevel.Error;
+                    break;
+                case Level.Warning:
+                    logLevel = LogLevel.Warn;
+                    break;
+                case Level.Information:
+                    logLevel = LogLevel.Info;
+                    break;
+                case Level.Debug:
+                default:
+                    logLevel = LogLevel.Debug;
+                    break;
+            }
+
+#if DEBUG
+            logLevel = LogLevel.Debug;
+#endif
+
+            LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
+            config.LoggingRules.Add(rule);
+
+            LogManager.Configuration = config;
         }
 
         private string getFilenameOnly(string filename)
@@ -456,7 +609,7 @@ namespace FanartHandler
             try
             {                
                 Bitmap img = (Bitmap)Image.FromFile(dataGridView1[3, e.RowIndex].Value.ToString());
-                Size imgSize = new Size(158, 89);
+                Size imgSize = new Size(168, 102);
                 Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);                
                 Graphics gfx = Graphics.FromImage(finalImg);
                 gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -490,38 +643,44 @@ namespace FanartHandler
                     dataGridView1.Rows.Remove(dataGridView1.CurrentRow);
                 }
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //MessageBox.Show(ex.ToString());
+                logger.Error("button2_Click: " + ex.ToString());                
             }                        
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete all fanart? This will cause all fanart stored in your music fanart folder to be deleted.", "Delete All Music Fanart", MessageBoxButtons.YesNo);
-            if (result == DialogResult.No)
+            try
             {
-                MessageBox.Show("Operation was aborted!");
-            }
+                DialogResult result = MessageBox.Show("Are you sure you want to delete all fanart? This will cause all fanart stored in your music fanart folder to be deleted.", "Delete All Music Fanart", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    MessageBox.Show("Operation was aborted!");
+                }
 
-            if (result == DialogResult.Yes)
-            {
-                dbm.DeleteAllFanart("MusicFanart");
-                string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\music";
-                string[] dirs = Directory.GetFiles(path, "*.jpg");
-                foreach (string dir in dirs)
+                if (result == DialogResult.Yes)
                 {
-                    File.Delete(dir);
+                    dbm.DeleteAllFanart("MusicFanart");
+                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\music";
+                    string[] dirs = Directory.GetFiles(path, "*.jpg");
+                    foreach (string dir in dirs)
+                    {
+                        File.Delete(dir);
+                    }
+                    int rowCount = dataGridView1.Rows.Count;
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        dataGridView1.Rows.RemoveAt(i);
+                    }
+                    dbm.ResetInitialScrape();
+                    MessageBox.Show("Done!");
                 }
-                int rowCount = dataGridView1.Rows.Count;
-                for (int i = 0; i < rowCount; i++)
-                {
-                    dataGridView1.Rows.RemoveAt(i);
-                }
-                dbm.ResetInitialScrape();
-                MessageBox.Show("Done!");
             }
-            
+            catch (Exception ex)
+            {
+                logger.Error("button3_Click: " + ex.ToString());
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -544,16 +703,23 @@ namespace FanartHandler
                     }
                 }
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //MessageBox.Show(ex.ToString());
+                logger.Error("button4_Click: " + ex.ToString());
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            int i = dbm.syncDatabase();
-            MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
+            try
+            {
+                int i = dbm.syncDatabase();
+                MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
+            }
+            catch (Exception ex)
+            {
+                logger.Error("button5_Click: " + ex.ToString());
+            }
         }
 
         private void comboBoxScraperInterval_SelectedIndexChanged(object sender, EventArgs e)
@@ -566,6 +732,139 @@ namespace FanartHandler
             this.Close();
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True"))
+                {
+                    if (isScraping)
+                    {
+                        stopScraper();
+                    }
+                    else
+                    {
+                        button6.Text = "Stop Scraper";
+                        UpdateScraperTimer();
+                        myProgressTimer = new TimerCallback(HandleScraperThread);
+                        progressTimer = new System.Threading.Timer(myProgressTimer, null, 5000, 10000);                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("button6_Click: " + ex.ToString());
+            }
+        }
+
+        public void UpdateScraperTimer()
+        {
+            try
+            {
+                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True") && dbm.GetIsScraping() == false)
+                {
+                    startScraper();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("UpdateScraperTimer: " + ex.ToString());
+            }
+        }
+
+        private void stopScraper()
+        {
+            try
+            {
+                button6.Enabled = false;
+                // Request that the worker thread stop itself:            
+                if (scraperWorkerObject != null && scrapeWorkerThread != null && scrapeWorkerThread.IsAlive)
+                {
+                    scraperWorkerObject.RequestStop();
+
+                    // Use the Join method to block the current thread 
+                    // until the object's thread terminates.
+                    scrapeWorkerThread.Join();
+                }                
+                button6.Text = "Start Scraper";
+                isScraping = false;
+                dbm.totArtistsBeingScraped = 0;
+                dbm.currArtistsBeingScraped = 0;
+                progressTimer.Dispose();
+                progressBar1.Value = 1;
+                scraperWorkerObject = null;
+                scrapeWorkerThread = null;
+                dbm.stopScraper = false;
+                button6.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("stopScraper: " + ex.ToString());
+            }
+        }
+
+        private void HandleScraperThread(Object stateInfo)
+        {
+            try
+            {
+                progressBar1.Minimum = 1;
+                progressBar1.Maximum = dbm.totArtistsBeingScraped;
+                progressBar1.Value = dbm.currArtistsBeingScraped;
+                if (dbm.GetIsScraping())
+                {
+                    isScraping = true;
+                    button6.Text = "Stop Scraper";
+                    UpdateFanartTable();
+                }
+                else
+                {
+                    button6.Text = "Start Scraper";
+                    isScraping = false;
+                    dbm.stopScraper = false;
+                    progressTimer.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("HandleScraperThread: " + ex.ToString());
+            }
+        }
+
+        private void startScraper()
+        {
+            try
+            {
+                button6.Enabled = false;
+                dbm.totArtistsBeingScraped = 0;
+                dbm.currArtistsBeingScraped = 0;
+                scraperWorkerObject = new FanartHandlerSetup.ScraperWorker(dbm);
+                scrapeWorkerThread = new Thread(scraperWorkerObject.DoWork);
+
+                // Start the worker thread.
+                scrapeWorkerThread.Start();
+                // Loop until worker thread activates.
+                while (!scrapeWorkerThread.IsAlive) ;
+                button6.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("startScraper: " + ex.ToString());
+            }
+        }
+
+        private void checkBoxAspectRatio_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

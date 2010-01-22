@@ -120,6 +120,9 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="checkBoxThumbsArtist.ToolTip" xml:space="preserve">
     <value>Check this option if you want the artist thumbnail images that
 MediaPortal automatically downloads for an artist to be used
@@ -169,24 +172,23 @@ anywhere in a skin when browsing your music collection.
 Like in myMusic plugin, music playlist, Music Videos or Last FM.
 Checking this option is highly recommended.</value>
   </data>
+  <data name="checkBoxAspectRatio.ToolTip" xml:space="preserve">
+    <value>Check this opton if you have only want the fanart
+handler to display wide images. Wide being
+images with aspect ratio equal or greater than
+1.55 (like 16:10 and 16:9). This option is used together
+with the minimum pixels property. The minimum pixel 
+property is validated first.</value>
+  </data>
   <data name="comboBoxMinResolution.ToolTip" xml:space="preserve">
     <value>Select the  minimum image resolution (quality) you want
 for fanart/backdrops/thumbs. Setting this to "0x0" will
 allow all images. If you have enabled "MP Artist Thumbs" 
 or "MP Album Thumbs" you may want to leave this to 
 "400x400" (because most of these thumbs are below 
-"600x600" in resolution).</value>
-  </data>
-  <data name="button1.ToolTip" xml:space="preserve">
-    <value>The first time you open MediaPortal after enabling the scraper
-will cause a big search for fanart matching every artist you
-have in your MediaPortal music database. This is only done once.
-After this MediaPortal will perorm this "initial scrape" only for
-new added artists. If you at a later stage decided that you for 
-example want to increase the number of imges per artis
-you will have to press this button to initiate a new intitial scrape
-the next time you start MediaPortal. After the initial scrape this
-plugin will only scrape the htbackdrop site for new images.</value>
+"600x600" in resolution). This option is used together
+with the "Display Only Wide Images (Aspect Ratio &gt;= 1.55)" 
+property.</value>
   </data>
   <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
     <value>Check this option if you want this plugin to automatically
@@ -247,6 +249,17 @@ the fanart database and this saves harddisk space but
 the image can re-appear because the scraper can find 
 the image on a future scrape.</value>
   </data>
+  <data name="button1.ToolTip" xml:space="preserve">
+    <value>The first time you open MediaPortal after enabling the scraper
+will cause a big search for fanart matching every artist you
+have in your MediaPortal music database. This is only done once.
+After this MediaPortal will perorm this "initial scrape" only for
+new added artists. If you at a later stage decided that you for 
+example want to increase the number of imges per artis
+you will have to press this button to initiate a new intitial scrape
+the next time you start MediaPortal. After the initial scrape this
+plugin will only scrape the htbackdrop site for new images.</value>
+  </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>The Fanart Handler plugin is a plugin originally created to push fanart of now played or selected music to the your skin. The scope has expanded and this plugin now also supports more formats (read more on this in the text below). The plugin also enables scraping of music artist fanart from the internet site www.htbackdrops.com. The good thing about this plugin is that it push image names that can be used in a skin by the "image" control. To use cycling images in the past you had to use "multiimage" and this control consumes alot of memory. 
 
@@ -269,4 +282,7 @@ The scope of this plugin has expanded and the current scope are
    * thumbs\Skin Fanart\plugins
    * thumbs\Skin Fanart\tv</value>
   </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>32</value>
+  </metadata>
 </root>

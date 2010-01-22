@@ -33,9 +33,7 @@ namespace FanartHandler
                 string filename;
                 WebRequest objRequest = WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1");
                 //ADD PROXY CODE HERE IF NEEDED!!!
-//                WebProxy proxy = new WebProxy(@"http://10.2.18.89:8002");
-//                proxy.Credentials = new NetworkCredential("edholmm", "Sommar2021", "findusnet");
-//                WebRequest.DefaultWebProxy = proxy;
+
                 //Found: 529 image(s) on 18 page(s). Displayed:
                 //"http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=1"
                 string sReg = @"Found: [0-9]+ image\(s\) on [0-9]+ page\(s\). Displayed:";
@@ -97,7 +95,7 @@ namespace FanartHandler
                         for (m = reg.Match(strResult); m.Success; m = m.NextMatch())
                         {
                             if (dbm.stopScraper == true)
-                            {
+                            {                                
                                 break;
                             } 
                             picUri = m.Groups[0].ToString();
@@ -119,7 +117,7 @@ namespace FanartHandler
                                     responsePic = requestPic.GetResponse();
                                     webImage = Image.FromStream(responsePic.GetResponseStream());
                                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                                    filename = path + @"\" + sArtist + " ("+randNumber.Next(0, 99999) + ").jpg";
+                                    filename = path + @"\" + Utils.PatchFilename(sArtist) + " ("+randNumber.Next(0, 99999) + ").jpg";
                                     logger.Debug("Downloading fanart for " + sArtist + " (" + filename + ").");
                                     webImage.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
                                     responsePic.Close();
@@ -160,7 +158,7 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int getImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.Class1.ScraperWorkerNowPlaying swnp)
+        public int getImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
         {
             try
             {
@@ -171,9 +169,7 @@ namespace FanartHandler
                 //HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=" + HttpUtility.UrlEncode(artist));
                 HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?");                
                 //ADD PROXY CODE HERE IF NEEDED!!!
-//                WebProxy proxy = new WebProxy(@"http://10.2.18.89:8002");
-//                proxy.Credentials = new NetworkCredential("edholmm", "Sommar2021", "findusnet");
-//                WebRequest.DefaultWebProxy = proxy;
+
                 string sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
                 string values = "search_terms=all";
                 values += "&cat_id=1";
@@ -225,7 +221,7 @@ namespace FanartHandler
                             responsePic = requestPic.GetResponse();
                             webImage = Image.FromStream(responsePic.GetResponseStream());
                             path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                            filename = path + @"\" + artist + " ("+randNumber.Next(0, 99999) + ").jpg";
+                            filename = path + @"\" + Utils.PatchFilename(artist) + " (" + randNumber.Next(0, 99999) + ").jpg";
                             logger.Debug("Downloading fanart for " + artist + " (" + filename + ").");
                             webImage.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
                             responsePic.Close();
