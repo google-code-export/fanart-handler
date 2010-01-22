@@ -50,7 +50,7 @@ The plugin supports animation effects to the fanart so that it fades from one im
 
 == Controllong Visibility ==
 These controls exist to control visibility in the skin. There are two times three controls. One set of controls for selected items (like when browsing your playlist or music collection), one set of controls for now played music and one set of controls for random images.
-*This control will be visible when image 1 for selected item is the one that the skin should display*
+<br>*This control will be visible when image 1 for selected item is the one that the skin should display*
 {{{
 <control>
   <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
