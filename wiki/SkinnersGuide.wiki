@@ -524,6 +524,8 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.picture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\pictures" folder.||
 ||#fanarthandler.plugins.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\plugins" folder.||
 ||#fanarthandler.plugins.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\plugins" folder.||
+||#fanarthandler.scorecenter.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\scorecenter" folder.||
+||#fanarthandler.scorecenter.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\scorecenter" folder.||
 ||#fanarthandler.scorecenter.backdrop1.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\scorecenter" folder.||
 ||#fanarthandler.scorecenter.backdrop2.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\scorecenter" folder.||
 ||#fanarthandler.tv.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\tv" folder.||
