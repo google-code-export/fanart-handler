@@ -6,14 +6,14 @@
 Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
   * Search and download music fanart (scrape) from the [http://htbackdrops.com/ htbackdrops] site.
     # for all artists stored in your MP music database.
-    # for any artist currently being played (on the fly).
+    # for any artist currently playing (on the fly).
 
   * Push fanart that you store on your local harddrive to the current used MP skin. 
     # push fanart for now played music
     # push fanart for selected music or movie
     # push random images from selected folders
 
-This is the skin designer's guide to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+This is the *Skin Designer's Guide* to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
 
 The scope of this plugin is to;
   # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
@@ -48,12 +48,12 @@ The scope of this plugin is to;
 = The Fanart Fading Transition =
 The plugin supports animation effects to the fanart so that it fades from one image to another. This is possible by using two label controls and two images controls. The plugin handles visiblity of the label controls. Use visibility tag on the image contol and animation(s) to enable a smooth transition effect. An example implementation is listed below.
 
-== Controllong Visibility ==
-These controls exist to control visibility in the skin. There are two times three controls. One set of controls for selected items (like when browsing your playlist or music collection), one set of controls for now played music and one set of controls for random images.
+== Controlling Visibility ==
+These controls exist to control visibility in the skin. There are three sets of two  controls. One set of controls for selected items (like when browsing your playlist or music collection), one set of controls for now played music and one set of controls for random images.
 <br>*This control will be visible when image 1 for selected item is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919291</id>
   <posX>0</posX>
@@ -64,7 +64,7 @@ These controls exist to control visibility in the skin. There are two times thre
 *This control will be visible when image 2 for selected item is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919292</id>
   <posX>0</posX>
@@ -75,7 +75,7 @@ These controls exist to control visibility in the skin. There are two times thre
 *This control will be visible when image 1 for played item is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919295</id>
   <posX>0</posX>
@@ -86,7 +86,7 @@ These controls exist to control visibility in the skin. There are two times thre
 *This control will be visible when image 2 for played item is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919296</id>
   <posX>0</posX>
@@ -97,7 +97,7 @@ These controls exist to control visibility in the skin. There are two times thre
 *This control will be visible when random image 1 is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919297</id>
   <posX>0</posX>
@@ -108,7 +108,7 @@ These controls exist to control visibility in the skin. There are two times thre
 *This control will be visible when random image 2 is the one that the skin should display*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919298</id>
   <posX>0</posX>
@@ -118,12 +118,12 @@ These controls exist to control visibility in the skin. There are two times thre
 }}}
 
 == Fanart Available Controls ==
-The fanart availabel controls can be used in a skin if you need to know if currently selected or played artist/title has fanart (i.e if the plugin found fanart or not).
+The fanart available controls can be used in a skin if you need to know if currently selected or played artist/title has fanart (i.e if the plugin found fanart or not).
 
-*This control will be visible when selected fanart is availble. Use this in visibility tags to show hide images depending on if the plugin found fanart or not*
+*This control will be visible when selected fanart is available. Use this in visibility tags to show or hide images depending if the plugin found fanart or not*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART AVAILABILITY CONDITION</description>
   <type>label</type>
   <id>91919293</id>
   <posX>0</posX>
@@ -132,10 +132,10 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 }}}
 
-*This control will be visible when playing fanart is availble. Use this in visibility tags to show hide images depending on if the plugin found fanart or not*
+*This control will be visible when playing fanart is availble. Use this in visibility tags to show or hide images depending if the plugin found fanart or not*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART AVAILABILITY CONDITION</description>
   <type>label</type>
   <id>91919294</id>
   <posX>0</posX>
@@ -147,7 +147,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 == An Example - Music Now Playing ==
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919295</id>
   <posX>0</posX>
@@ -156,7 +156,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
   
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919296</id>
   <posX>0</posX>
@@ -165,7 +165,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 
 <control>
-  <description>DUMMY CONTROLL FOR PLAYING FANART AVAILABILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR PLAYING FANART AVAILABILITY CONDITION</description>
   <type>label</type>
   <id>91919294</id>
   <posX>0</posX>
@@ -177,8 +177,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>DEFAULT BACKGROUND WHEN FANART NOT AVAILABLE</description>
   <id>0</id>
   <type>multiimage</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <imagepath>music</imagepath>
@@ -195,8 +195,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 1</description>
   <id>897688</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop1.play</texture>
@@ -209,8 +209,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 2</description>
   <id>897689</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop2.play</texture>
@@ -223,7 +223,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 == An Example - Selected Music (in lists) ==
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919291</id>
   <posX>0</posX>
@@ -232,7 +232,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
   
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919292</id>
   <posX>0</posX>
@@ -241,7 +241,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
 
 <control>
-  <description>DUMMY CONTROLL FOR SELECTED FANART AVAILABILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR SELECTED FANART AVAILABILITY CONDITION</description>
   <type>label</type>
   <id>91919293</id>
   <posX>0</posX>
@@ -253,8 +253,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>DEFAULT BACKGROUND WHEN FANART NOT AVAILABLE</description>
   <id>0</id>
   <type>multiimage</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <imagepath>music</imagepath>
@@ -271,8 +271,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 1</description>
   <id>897688</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop1. selected </texture>
@@ -285,8 +285,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 2</description>
   <id>897689</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop2.selected</texture>
@@ -299,7 +299,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 == An Example - Random Images ==
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR RANDOM FANART 1 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919297</id>
   <posX>0</posX>
@@ -308,7 +308,7 @@ The fanart availabel controls can be used in a skin if you need to know if curre
 </control>
   
 <control>
-  <description>DUMMY CONTROLL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR RANDOM FANART 2 VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919298</id>
   <posX>0</posX>
@@ -320,8 +320,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 1</description>
   <id>897688</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop1.any</texture>
@@ -334,8 +334,8 @@ The fanart availabel controls can be used in a skin if you need to know if curre
   <description>FANART IMAGE 2</description>
   <id>897689</id>
   <type>image</type>
-  <posx>0</posx>
-  <posy>0</posy>
+  <posX>0</posX>
+  <posY>0</posY>
   <width>1280</width>
   <height>720</height>
   <texture>#fanarthandler.music.backdrop2.any</texture>
@@ -357,13 +357,13 @@ To get even more examples you can look at these x-factor skin files using this p
 
 ----
 =Scraper Controls=
-==Scraper is Running (Will be availeble in version 1.1 of this plugin==
-The scraper is running control can be used in a skin if want to display when the scraper is running.
+==Scraper is Running (will be available in version 1.1 of this plugin)==
+The 'scraper is running' control can be used in a skin if want to display when the scraper is running.
 
 *This control will be visible when the scraper is running*
 {{{
 <control>
-  <description>DUMMY CONTROLL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
+  <description>DUMMY CONTROL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
   <type>label</type>
   <id>91919280</id>
   <posX>0</posX>
@@ -381,7 +381,7 @@ This example will show a running animation and dispay the percent completed when
   <controls>
   
 		<control>
-			<description>DUMMY CONTROLL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
+			<description>DUMMY CONTROL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
 			<type>label</type>
 			<id>91919280</id>
 			<posX>0</posX>
@@ -472,7 +472,7 @@ This example will show a running animation and dispay the percent completed when
 ----
 
 = Add Support For Random Images To A Skin File =
-By default no random images are loaded. The reason for this is to save memory in MP. If all random images for all supported paths (games, ,ovies, moving pictures, music, pictures and tvseries) where loaded in all skin files this would mean unnecessary use of memory. To enable random images to be pushed to a skin file you add "define" tags in the skin file header. See example below.
+By default no random images are loaded. The reason for this is to save memory in MP. If all random images for all supported paths (games, movies, moving pictures, music, pictures and tvseries) where loaded in all skin files this would mean unnecessary use of memory. To enable random images to be pushed to a skin file you add "define" tags in the skin file header. See example below.
 {{{
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <window>
@@ -510,15 +510,15 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.games.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\games" folder.||
 ||#fanarthandler.movie.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
 ||#fanarthandler.movie.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
-||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\games" folder.||
-||#fanarthandler.movie.backdrop2.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\games" folder.||
+||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\moviess" folder.||
+||#fanarthandler.movie.backdrop2.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\movies" folder.||
 ||#fanarthandler.movingpicture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
 ||#fanarthandler.movingpicture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
 ||#fanarthandler.music.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
 ||#fanarthandler.music.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
 ||#fanarthandler.music.overlay.play||a||
-||#fanarthandler.music.backdrop1.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now played music (artist).||
-||#fanarthandler.music.backdrop2.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now played music (artist).||
+||#fanarthandler.music.backdrop1.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now playing music (artist).||
+||#fanarthandler.music.backdrop2.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now playing music (artist).||
 ||#fanarthandler.music.backdrop1.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\music" folder.||
 ||#fanarthandler.music.backdrop2.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\music" folder.||
 ||#fanarthandler.picture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\pictures" folder.||
