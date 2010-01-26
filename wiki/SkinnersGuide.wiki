@@ -13,7 +13,7 @@ Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP
     # push fanart for selected music or movie
     # push random images from selected folders
 
-This is the *Skin Designer's Guide* to the "FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
+This is the *Skin Designer's Guide* to the "!FanartHandler" plugin. This guide describes the skin tags that you can use in your skin to display fanart (backdrops).
 
 The scope of this plugin is to;
   # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
@@ -373,7 +373,7 @@ The 'scraper is running' control can be used in a skin if want to display when t
 </control> 
 }}}
 
-== An Example Of A common.overlay.fanart.xml file that can be included for example in BasicHome.xml==
+== An Example of a common.overlay.fanart.xml file that can be included for example in BasicHome.xml==
 This example will show a running animation and dispay the percent completed when the scraper is running.
 {{{
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
