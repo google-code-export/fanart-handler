@@ -24,4 +24,4 @@ If you have installed the Beta or Release Candidate versions of this skin, pleas
 ==Uninstall==
 Just run the MPI installer which will remove the files it installed, such as the fanarthandler.dll in !MediaPortal program plugins folder, and the temporary files stored in the thumbs\Skin Fanart folders.
 
-*NOTE!* You must delete the the fanarthandler.db3 file manually from the [userdata]\database folder since it is not installed by the MPI installer but created by the plugin after installation.
+*NOTE!* You must delete the the fanarthandler.db3 file manually from the `[userdata]\database` folder since it is not installed by the MPI installer but created by the plugin after installation.
