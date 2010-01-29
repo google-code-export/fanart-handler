@@ -76,40 +76,7 @@ If you add music or video fanart that you want the skin to use when you select a
 
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin.jpg
 
-==Enable Fanart for Music== 
-Click on the "Common Settings" tab.
-<br>
-===Music Fanart Options===
-*Selected Fanart Sources - MP Artist Thumbs*<br>
-Check this option if you want the artist thumbnail images that MediaPortal automatically downloads for an artist to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the "Minimum Resolution For Images" option can solve this problem.
-
-*Selected Fanart Sources - MP Album Thumbs*<br>
-Check this option if you want the album thumbnail images that MediaPortal automatically downloads for an albun to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the  "Minimum Resolution For Images" option can solve this problem.
-
-*Selected Fanart Sources - Music Fanart Directory*<br>
-Check this option if you want the fanart/backdrop images that you have donwloaded/created and put in the "/thumbs/Skin Fanart/music" folder or the fanart/backdrops that this plugin downloads (if scraper is enabled) to be used when you select a music artist/album/track in MediaPortal. Enabling this option is recommended.
-
-*Use Fanart In Now Playing Overlay - Use Fanart In Overlay*<br>
-This option enables fanart as background in the now playing window in MediaPortal if your current skin supports it.
-
-*Disable Fanart Sources (Random Images) - MP Artist Thumbs*
-Check this opton if you have enabled the option "MP Artist Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that artist thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
-
-*Disable Fanart Sources (Random Images) - MP Album Thumbs*<br>
-Check this opton if you have enabled the option "MP Album Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that album thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
-
-===Music Plugin Fanart Option===
-*Enable Fanart For Selected Items*<br>
-Check this option to enable fanart for selected items anywhere in a skin when browsing your music collection. Like in myMusic plugin, music playlist, Music Videos or Last FM. Checking this option is highly recommended.
-
-===Video Plugin Fanart Option===
-*Enable Fanart For Selected Items*<br>
-Check this option to enable fanart for selected items when browsing your movies using the myVideos plugin.
-
-===ScoreCenter Plugin Fanart Option===
-*Enable Fanart For Selected Genres*<br>
-Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.
-
+==General Options==
 ===Minimum Resolution For Images===
 Select the  minimum image resolution (quality) you want for fanart/backdrops/thumbs. Setting this to "0x0" will allow all images. If you have enabled "MP Artist Thumbs" 
 or "MP Album Thumbs" you may want to leave this to "400x400" (because most of these thumbs are below "600x600" in resolution).
@@ -118,10 +85,43 @@ or "MP Album Thumbs" you may want to leave this to "400x400" (because most of th
 Select the number of seconds each image will be displayed before trying to switch to next image for selected or played artist (or next randomg image or next selected move and so on).
 
 ----
-==Scraper Settings==
-Click on the "Common Settings" tab. You will now see a small dialog window that looks like in the picture below.
 
+==Music Fanart==
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin1.jpg
+==Fanart Settings== 
+<br>
+===Music Fanart Options===
+*Select Music Fanart Sources - MP Artist Thumbs*<br>
+Check this option if you want the artist thumbnail images that MediaPortal automatically downloads for an artist to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the "Minimum Resolution For Images" option can solve this problem.
+
+*Select Music Fanart Sources - MP Album Thumbs*<br>
+Check this option if you want the album thumbnail images that MediaPortal automatically downloads for an albun to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the  "Minimum Resolution For Images" option can solve this problem.
+
+*Select Music Fanart Sources - Music Fanart Matches (High Resolution)*<br>
+Check this option if you want the fanart/backdrop images that you have donwloaded/created and put in the "/thumbs/Skin Fanart/music" folder or the fanart/backdrops that this plugin downloads (if scraper is enabled) to be used when you select a music artist/album/track in MediaPortal. Enabling this option is recommended.
+
+*Select Music Fanart Sources - Skip MP Thumbs When High Resolution Fanart Available*<br>
+Check this option if you do not want to display the MP thumb images for artists that has high resolution fanart. For artists missing high resolution artists the MP thumb images will still be shown.
+
+*Select Music Fanart Sources - Skip MP Thumbs When Displaying Random Fanart*<br>
+Check this opton if you have enabled the option "MP Artist Thumbs" or "MP Album Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that artist thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
+
+*Use Fanart In Now Playing Overlay - Use Fanart In Overlay*<br>
+This option enables fanart as background in the now playing window in MediaPortal if your current skin supports it.
+
+===Default Backdrop When Fanart Not Available===
+*Use Specific Image When Music Fanart Is Not Available*<br>
+Check this option to select a specific image that will be displayed if fanart is not available for the current artist.
+
+*Use Folder When Music Fanart Is Not Available*<br>
+Check this option to select a folder containing one or several images that will be displayed if fanart is not available for the current artist.
+
+===Music Plugin Fanart Option===
+*Enable Fanart For Selected Items*<br>
+Check this option to enable fanart for selected items anywhere in a skin when browsing your music collection. Like in myMusic plugin, music playlist, Music Videos or Last FM. Checking this option is highly recommended.
+
+==Scraper Settings==
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
 ===Scraper Options===
 *Enable Automatic Download Of Music Fanart For Artists In Your MP MusicDatabase*<br>
@@ -165,8 +165,26 @@ will consume more harddisk space.
 *Scraper Interval X (Hours)*<br>
 Select the  number of hours between each new scraper attempt.
 
-*Reset Scraper Button*<br>
-The first time you open MediaPortal after enabling the scraper
+==Manage Fanart==
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin3.jpg
+
+===Enable/Disable Selected Fanart Button===
+Press this button to enable or disable the use of the selected fanart/backdrop. Enabled means that the image will be used by the plugin in MediaPortal. Disabled means that MediaPortal will not use the image. The difference between pressing this button and the "Delete Selected Fanart" is that this button keeps the image on your harddrive but also in the fanart database and this also means that the scraper will NOT download it again. Pressing the delete button will delete the image but it can re-appear because the scraper can find the image on a future scrape.
+
+===Delete Selected Fanart Button===
+Press this button to delete the selected fanart/backdrop from the fanart database but also from your harddrive. The difference between pressing this button and the "Enable/Disable Selected Fanart" button is that this button deletes the image from your harddrive and
+the fanart database and this saves harddisk space but the image can re-appear because the scraper can find the image on a future scrape.
+
+===Delete All Fanart Button===
+WARNING: Pressing this button will delete all images stored on your harddrive in the "thumbs/Skin Fanart/music" folder and also from the fanart database.
+
+
+===Cleanup Missing Fanart Button===
+Press this button to sync fanart database and images on your harddrive. Any entries in the fanart database that has no matching image stored on your harddrive will be removed.
+
+
+===Reset Scraper Button===
+The purpose of this button is to reset everything and allow for a complete new initial scrape. The first time you open MediaPortal after enabling the scraper
 will cause a big search for fanart matching every artist you
 have in your MediaPortal music database. This is only done once.
 After this MediaPortal will perorm this "initial scrape" only for
@@ -176,26 +194,23 @@ you will have to press this button to initiate a new intitial scrape
 the next time you start MediaPortal. After the initial scrape this
 plugin will only scrape the htbackdrop site for new images.
 
+===Start Scraper Button===
+Initiates a new scrape.
+
 ----
-==Manage Fanart==
-Click on the "Manage Fanart" tab. You will now see a small dialog window that looks like in the picture below.
+==Video Fanart==
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin4.jpg
+===Video Plugin Fanart Option===
+*Enable Fanart For Selected Items*<br>
+Check this option to enable fanart for selected items when browsing your movies using the myVideos plugin.
 
-http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
-===Enable/Disable Selected Fanart Button===
-Press this button to enable or disable the use of the selected fanart/backdrop. Enabled means that the image will be used by the plugin in MediaPortal. Disabled means that MediaPortal will not use the image. The difference between pressing this button and the "Delete Selected Fanart" is that this button keeps the image on your harddrive but also in the fanart database and this also means that the scraper will NOT download it again. Pressing the delete button will delete the image but it can re-appear because the scraper can find the image on a future scrape.
-
-===Cleanup Missing Fanart Button===
-Press this button to sync fanart database and images on your harddrive. Any entries in the fanart database that has no matching image stored on your harddrive will be removed.
-
-===Delete Selected Fanart Button===
-Press this button to delete the selected fanart/backdrop from the fanart database but also from your harddrive. The difference between pressing this button and the "Enable/Disable Selected Fanart" button is that this button deletes the image from your harddrive and
-the fanart database and this saves harddisk space but the image can re-appear because the scraper can find the image on a future scrape.
-
-===Delete All Fanart Button===
-WARNING: Pressing this button will delete all images stored on your harddrive in the "thumbs/Skin Fanart/music" folder and also from the fanart database.
-
-The purpose of this button is to reset everything and allow for a complete new initial scrape. 
+----
+==ScoreCenter Fanart==
+http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin5.jpg
+===ScoreCenter Plugin Fanart Option===
+*Enable Fanart For Selected Genres*<br>
+Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.
 
 
 ----
