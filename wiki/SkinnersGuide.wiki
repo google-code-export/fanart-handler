@@ -45,7 +45,7 @@ The scope of this plugin is to;
 
 ----
 
-= Add Support For Fanart Handler A Skin File =
+= Enable Fanart Handler Support In A Skin File =
 == Add Support For "Selected" Images To A Skin File ==
 By default no fanart for selected artist/title is loaded. The reason for this is to save memory in MP. To enable fanart for selected artist/title to be pushed to a skin file you add "define" tags in the skin file header. See example below.
 {{{
