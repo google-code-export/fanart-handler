@@ -98,6 +98,8 @@ By default no random images are loaded. The reason for this is to save memory in
 
 
 == Available Define Tags ==
+||useSelectedFanart||Enables fanart for the "selected" properties like "#fanarthandler.music.backdrop1.selected" and "#fanarthandler.movie.backdrop1.selected"||
+||usePlayFanart||Enables fanart for the tags "#fanarthandler.music.backdrop1.play" and "#fanarthandler.music.backdrop1.play"||
 ||useRandomGamesFanart||Enables cycling fanart from the tags "#fanarthandler.games.backdrop1.any" and "#fanarthandler.games.backdrop2.any"||
 ||useRandomMoviesFanart||Enables cycling fanart from the tags "#fanarthandler.movie.backdrop1.any" and "#fanarthandler.movie.backdrop2.any"||
 ||useRandomMovingPicturesFanart||Enables cycling fanart from the tags "#fanarthandler.movingpicture.backdrop1.any" and "#fanarthandler.movingpicture.backdrop2.any"||
