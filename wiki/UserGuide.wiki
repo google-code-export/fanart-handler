@@ -125,11 +125,6 @@ http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
 ===Scraper Options===
 *Enable Automatic Download Of Music Fanart For Artists In Your MP MusicDatabase*<br>
-Check this option if you want the artist thumbnail images that
-MediaPortal automatically downloads for an artist to be used
-when you select a music artist/album/track in MediaPortal. These
-images are often in low resolution (=bad quality) but setting the 
-"Minimum Resolution For Images" option can solve this problem.
 Check this option if you want this plugin to automatically
 search the internet site www.htbackdrops.com for
 fanart/backdrops mathing all the artists that you have 
@@ -146,7 +141,7 @@ collection can use quite alot of harddisk space.
 *Enable Automatic Download Of Music Fanart For Artists Now Being Played*<br>
 Check this option if you want this plugin to automatically
 search the internet site www.htbackdrops.com for
-fanart/backdrops mathing evry song you play in
+fanart/backdrops mathing every song you play in
 MediaPortal and then downloading the found images 
 to your harddrive (to the "thumbs/Skin Fanart/music" 
 folder). Leaving this option unchecked will disable 
