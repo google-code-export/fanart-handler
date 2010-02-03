@@ -21,7 +21,7 @@ New tag that you have to include in every skin file that wants to use any of the
 <define>#usePlayFanart:Yes</define>
 }}}
 New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
-}}}
+
 
 ===New Property: #useRandomScoreCenterFanart===
 {{{
