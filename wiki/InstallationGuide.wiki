@@ -19,6 +19,7 @@
 ==Change Log (version 1.0 to 1.1)==
   * new feature: New Configuration GUI including many, many new options
   * new feature: Scraping indicator in skin, including progress in percent
+  * new feature: Added support to display random Scorecentre images
   * bug fixed: Random image contains an apostrophe caused errors in log
   * bug fixed: Jumping to now playing window doesn't cause fanart to update
   * bug fixed: Delete all images in image manager only deletes half at a time
