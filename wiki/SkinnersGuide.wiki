@@ -2,6 +2,14 @@
 #labels Featured
 <wiki:toc max_depth="2" />
 
+----
+=Change Logs=
+This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 1.1 to 1.2==
+
+==Change Log - Version 1.0 to 1.1==
+
+----
 = Introduction =
 Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
   * Search and download music fanart (scrape) from the [http://htbackdrops.com/ htbackdrops] site.
