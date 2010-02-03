@@ -6,6 +6,7 @@
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 1.1 to 1.2==
+No changes needed in skin files to support version 1.2 if your skin previously supported version 1.1 of this plugin.
 
 ==Change Log - Version 1.0 to 1.1==
 
