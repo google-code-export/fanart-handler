@@ -16,8 +16,7 @@ New tag that you have to include in every skin file that wants to use any of the
 ...... Read more on this property in chapter below.
 
 ===<define>#useRandomScoreCenterFanart:Yes</define>===
-New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images.
- See more on using this tag in the chapter below.
+New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images. See more on using this tag in the chapter below.
 ----
 = Introduction =
 Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
