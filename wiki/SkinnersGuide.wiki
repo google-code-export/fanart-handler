@@ -4,19 +4,16 @@
 
 ----
 =Change Logs=
-This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
-==Change Log - Version 1.1 to 1.2==
-No changes needed in skin files to support version 1.2 if your skin previously supported version 1.1 of this plugin.
-
-==Change Log - Version 1.0 to 1.1==
-===<define>#useSelectedFanart:Yes</define>===
-New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). The reason for this change is that the plugin must know what windows that are using these ...... Read more on this property in chapter below.
+{{{===<define>#useSelectedFanart:Yes</define>===
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
 
 ===<define>#usePlayFanart:Yes</define>===
-...... Read more on this property in chapter below.
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
 
 ===<define>#useRandomScoreCenterFanart:Yes</define>===
 New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images. See more on using this tag in the chapter below.
+}}}
+
 ----
 = Introduction =
 Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
