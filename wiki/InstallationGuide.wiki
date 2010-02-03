@@ -3,6 +3,36 @@
 
 <wiki:toc max_depth="2" />
 
+----
+=Change Logs=
+==Change Log (version 1.1 to 1.2)==
+  * bug fixed: artist names using "the" prefix didn't work properly
+  * bug fixed: System.Data.ContraintException error
+  * bug fixed: GUIWindowManager: Could not find window
+  * bug fixed: Crash on scraping
+  * bug fixed: Default backdrop should not be stored in the config template
+  * bug fixed: Default backdrop supplied with config template pointed to wrong file (.png instead of .jpg)
+  * bug fixed: Max images per artist setting ignored until you restart the program
+  * bug fixed: Manage Fanart scrollbar issue and unresponsive GUI
+  * bug fixed: Closing configuration now as if you want to save settings 
+
+==Change Log (version 1.0 to 1.1)==
+  * new feature: New Configuration GUI including many, many new options
+  * new feature: Scraping indicator in skin, including progress in percent
+  * bug fixed: Random image contains an apostrophe caused errors in log
+  * bug fixed: Jumping to now playing window doesn't cause fanart to update
+  * bug fixed: Delete all images in image manager only deletes half at a time
+  * bug fixed: Enabling/disabling options in configuration not applied until you save/close and re-open config tool
+  * bug fixed: Default backdrop was set to xfactor skin image
+  * bug fixed: Fanart preview Image does not always get displayed in 'Management' tab
+  * bug fixed: Settings are not saved if you manually enter in values
+  * bug fixed: Saving configuration now also shows warning that user also need to press ok in MP configuration to save data
+  * bug fixed: Selected artist in playlist is buggy (displaying fanart)
+  * bug fixed: Turning circle with a % sign in the middle, but no progress number
+  * bug fixed: Several tooltip texts was wrong in configuration
+  * bug fixed: Configuration window and it's controls did not rezise when dialog changed size
+
+----
 =Installation=
 ==First Time Installation==
 Just download the MPI file from the Download page (link), double click and the installation is done. Follow the user guide to configure the plugin.
