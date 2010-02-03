@@ -146,13 +146,13 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.games.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\games" folder.||
 ||#fanarthandler.movie.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
 ||#fanarthandler.movie.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\movies" folder.||
-||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\moviess" folder.||
+||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\movies" folder.||
 ||#fanarthandler.movie.backdrop2.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\movies" folder.||
 ||#fanarthandler.movingpicture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
 ||#fanarthandler.movingpicture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
 ||#fanarthandler.music.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
 ||#fanarthandler.music.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\music" folder.||
-||#fanarthandler.music.overlay.play||a||
+||#fanarthandler.music.overlay.play||Can be used if you want a "small" fanart available in the background of the now playing overlay in MP. Using this instead of ".play" property allows end users to enable/disable this fanart in the MP configuration||
 ||#fanarthandler.music.backdrop1.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now playing music (artist).||
 ||#fanarthandler.music.backdrop2.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\music" folder for now playing music (artist).||
 ||#fanarthandler.music.backdrop1.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\music" folder.||
