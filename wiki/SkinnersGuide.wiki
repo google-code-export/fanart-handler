@@ -1,6 +1,6 @@
 #summary Use Fanart Handler Plugin In Your Skin.
 #labels Featured
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="3" />
 
 ----
 =Change Logs=
