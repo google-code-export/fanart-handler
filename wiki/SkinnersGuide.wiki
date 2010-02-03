@@ -9,16 +9,26 @@ This chapter describes changes that skinners need to consider when versions of t
 No changes needed in skin files to support version 1.2 if your skin previously supported version 1.1 of this plugin.
 
 ==Change Log - Version 1.0 to 1.1==
+===New Property: #useSelectedFanart===
 {{{
 <define>#useSelectedFanart:Yes</define>
-New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
-
-<define>#usePlayFanart:Yes</define>
-New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
-
-<define>#useRandomScoreCenterFanart:Yes</define>
-New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images. See more on using this tag in the chapter below.
 }}}
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
+
+
+===New Property: #usePlayFanart===
+{{{
+<define>#usePlayFanart:Yes</define>
+}}}
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
+}}}
+
+===New Property: #useRandomScoreCenterFanart===
+{{{
+<define>#useRandomScoreCenterFanart:Yes</define>
+}}}
+New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images. See more on using this tag in the chapter below.
+
 
 ----
 = Introduction =
