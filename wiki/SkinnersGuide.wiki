@@ -10,7 +10,10 @@ No changes needed in skin files to support version 1.2 if your skin previously s
 
 ==Change Log - Version 1.0 to 1.1==
 ===<define>#useSelectedFanart:Yes</define>===
-New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). The reason for this change is that the plugin must know what windows that are using these 
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). The reason for this change is that the plugin must know what windows that are using these ...... Read more on this property in chapter below.
+
+===<define>#usePlayFanart:Yes</define>===
+...... Read more on this property in chapter below.
 
 ----
 = Introduction =
