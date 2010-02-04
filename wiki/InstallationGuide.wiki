@@ -10,6 +10,7 @@
   * bug fixed: Plugin incorrectly renames several artist names
   * bug fixed: Configuration GUI buggy and sometimes becomes unresponsive during a scrape
   * bug fixed: Max images per artist setting ignored until you restart the program
+  * bug fixed: The #fanarthandler.scorecenter.backdrop1.any was never filled with any value
 
 ==Change Log (version 1.1 to 1.2)==
   * bug fixed: artist names using "the" prefix didn't work properly
