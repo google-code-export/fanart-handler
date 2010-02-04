@@ -5,6 +5,12 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.2 to 1.3)==
+  * bug fixed: Delay in showing "skin default" backdrop when music played stops.
+  * bug fixed: Plugin incorrectly renames several artist names
+  * bug fixed: Configuration GUI buggy and sometimes becomes unresponsive during a scrape
+  * bug fixed: Max images per artist setting ignored until you restart the program
+
 ==Change Log (version 1.1 to 1.2)==
   * bug fixed: artist names using "the" prefix didn't work properly
   * bug fixed: System.Data.ContraintException error
@@ -12,7 +18,6 @@
   * bug fixed: Crash on scraping
   * bug fixed: Default backdrop should not be stored in the config template
   * bug fixed: Default backdrop supplied with config template pointed to wrong file (.png instead of .jpg)
-  * bug fixed: Max images per artist setting ignored until you restart the program
   * bug fixed: Manage Fanart scrollbar issue and unresponsive GUI
   * bug fixed: Closing configuration now as if you want to save settings 
 
