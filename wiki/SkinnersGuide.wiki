@@ -78,7 +78,9 @@ No changes needed in skin files to support version 1.2 if your skin previously s
 ===New control and property to display scrape progress in MP===
 This 'scraper is running' control can be used in a skin if want to display when the scraper is running.
 
-*This control will be visible when the scraper is running*
+
+===New Control: Is Visible When The Scraper Is Running===
+This control will be visible when the scraper is running
 {{{
 <control>
   <description>DUMMY CONTROL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
@@ -90,7 +92,11 @@ This 'scraper is running' control can be used in a skin if want to display when 
   <visible>no</visible>
 </control> 
 }}}
-*This property keeps scrape progress number in percent*
+Read more on this in chapter "Scraper Controls".
+
+
+===New Property: Displays Scrape Progress In Percent In MP===
+This property holdsscrape progress number in percent
 {{{
 #fanarthandler.scraper.percent.completed
 }}}
