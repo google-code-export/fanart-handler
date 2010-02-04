@@ -75,6 +75,28 @@ No changes needed in skin files to support version 1.2 if your skin previously s
  New tag to enable the use of Random images from the thumb\Skin fanart\scorecenter folder. This tag must be included in each skin file where you wish to display these random images. See more on using this tag in the chapter below.
 
 
+===New control and property to display scrape progress in MP===
+This 'scraper is running' control can be used in a skin if want to display when the scraper is running.
+
+*This control will be visible when the scraper is running*
+{{{
+<control>
+  <description>DUMMY CONTROL FOR FANART HANDLER IS SCRAPING VISIBILITY CONDITION</description>
+  <type>label</type>
+  <id>91919280</id>
+  <posX>0</posX>
+  <posY>0</posY>
+  <width>1</width>
+  <visible>no</visible>
+</control> 
+}}}
+*This property keeps scrape progress number in percent*
+{{{
+#fanarthandler.scraper.percent.completed
+}}}
+Read more on this in chapter "Scraper Controls".
+
+
 ----
 
 = Enable Fanart Handler Support In A Skin File =
