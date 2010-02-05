@@ -46,7 +46,6 @@ Just download the MPI file from the Download page (link), double click and the i
 
 *NOTE!* If you are using latest SVN of !MediaPortal you will have to locate the old MPIInstaller in the Mediaportal directory. Start the MPIInstaller and locate the installer file. The reason for this is that SVN version of MP includes the new MPEInstaller that is not compatible with the old one and associated MPI files with it.
 
-----
 ==Upgrading (from previous stable version) ==
 If you are upgrading from a previous stable version of Fanart Handler (e.g ver 1.0) you do not need to rescrape your fanart.
 
@@ -54,7 +53,6 @@ A lot of bugs have been fixed so you may have some duplicates or wrong artist na
 
 Of course, to get a 'clean' database and ensure all fanart is named correctly, it is recommended to delete all your fanart and rescrape it.
 
----- 
 ==Installation If You Have A Beta Or Release Candidate Version Already Installed==
 If you have installed A Beta or Release Candidate version of this skin, please follow these steps to install.
  # copy your fanart in the /thumbs/skin fanart/music to a backup location
@@ -65,7 +63,6 @@ If you have installed A Beta or Release Candidate version of this skin, please f
 
 *NOTE!* If you are using latest SVN of !MediaPortal you will have to locate the old MPIInstaller in the Mediaportal directory. Start the MPIInstaller and locate the installer file. The reason for this is that SVN version of MP includes the new MPEInstaller that is not compatible with the old one and assisiated MPI files with it.
 
----- 
 ==Uninstall==
 Just run the MPI installer which will remove the files it installed, such as the fanarthandler.dll in !MediaPortal program plugins folder, and the temporary files stored in the thumbs\Skin Fanart folders.
 
