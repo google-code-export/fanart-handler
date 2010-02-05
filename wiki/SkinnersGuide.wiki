@@ -575,7 +575,6 @@ This example will show a running animation and dispay the percent completed when
 			<font>fontLowerCase14</font>
 			<label>scraping</label>
 			<align>center</align>
-			<animation effect="fade" start="0" end="50" time="10" reversible="false">WindowOpen</animation>
 			<visible>control.isvisible(91919280)</visible>
 		</control>
 		<control>
@@ -601,11 +600,10 @@ This example will show a running animation and dispay the percent completed when
 			<posX>593</posX>
 			<posY>129</posY>
 			<width>96</width>
-			<textcolor>ff000000</textcolor>
+			<textcolor>90000000</textcolor>
 			<font>font14</font>
 			<label>#fanarthandler.scraper.percent.completed %</label>
 			<align>center</align>
-			<animation effect="fade" start="0" end="50" time="10" reversible="false">WindowOpen</animation>
 			<visible>control.isvisible(91919280)</visible>
 		</control>
 		
@@ -616,11 +614,10 @@ This example will show a running animation and dispay the percent completed when
 			<posX>592</posX>
 			<posY>128</posY>
 			<width>96</width>
-			<textcolor>ffffffff</textcolor>
+                        <textcolor>90ffffff</textcolor>
 			<font>font14</font>
 			<label>#fanarthandler.scraper.percent.completed %</label>
 			<align>center</align>
-			<animation effect="fade" start="0" end="50" time="10" reversible="false">WindowOpen</animation>
 			<visible>control.isvisible(91919280)</visible>
 		</control>
 	
