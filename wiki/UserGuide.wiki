@@ -4,7 +4,7 @@
 <wiki:toc max_depth="2" />
 
 = Introduction =
-Fanart Handler is a plugin for [http://www.team-mediaportal.com/ !MediaPortal (MP)]. The plugin has two main purposes;
+Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
   * Search and download music fanart (scrape) from the [http://htbackdrops.com/ htbackdrops] site.
     # for all artists stored in your MP music database.
     # for any artist currently being played (on the fly).
@@ -39,7 +39,7 @@ The scope of this plugin is to;
     * thumbs\Skin Fanart\tv
 
 == Requirements ==
-  * MediaPortal 1.0.2 or later
+  * !MediaPortal 1.0.2 or later
   * Fanart Handler Plugin
   * A skin that supports the Fanart Handler.
 *NOTE* This plugin only supports JPG images.
@@ -57,9 +57,9 @@ To add you fanart (backdrops) that you yourself has downloaded or made to be use
   # thumbs\Skin Fanart\tv (used for pushing random tv images to a skin)
 
 The *thumb* directory is located in;
-  # Windows Vista: C:\ProgramData\Team MediaPortal\MediaPortal\
-  # Windows XP: C:\Documents and Settings\All Users\Application Data\Team MediaPortal\MediaPortal\
-You can find this folder by clicking Start button in Windows and the "Programs\Team MediaPortal\MediaPortal\User Files".
+  # Windows Vista: `C:\ProgramData\Team MediaPortal\MediaPortal\`
+  # Windows XP: `C:\Documents and Settings\All Users\Application Data\Team MediaPortal\MediaPortal\`
+You can find this folder by clicking Start button in Windows and the "`Programs\Team MediaPortal\MediaPortal\User Files`".
  
 
 ==Naming Convention for your custom fanart==
@@ -124,16 +124,16 @@ Check this option to enable fanart for selected items anywhere in a skin when br
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
 ===Scraper Options===
-*Enable Automatic Download Of Music Fanart For Artists In Your MP MusicDatabase*<br>
+*Enable Automatic Download Of Music Fanart For Artists In Your MP Music Database*<br>
 Check this option if you want this plugin to automatically
 search the internet site www.htbackdrops.com for
-fanart/backdrops mathing all the artists that you have 
-allready in your MediaPortal music database and then 
+fanart backdrops matching all the artists that you have 
+already in your !MediaPortal music database and then 
 downloading the found images to your harddrive (to 
-the "thumbs/Skin Fanart/music" folder). Leaving this 
+the `thumbs/Skin Fanart/music` folder). Leaving this 
 option unchecked will disable scraping and you will 
 have to manually add your fanart images to the
-"thumbs/Skin Fanart/music" folder.
+`thumbs/Skin Fanart/music` folder.
 
 Warning; Using this option if you have a large music
 collection can use quite alot of harddisk space.
@@ -141,12 +141,12 @@ collection can use quite alot of harddisk space.
 *Enable Automatic Download Of Music Fanart For Artists Now Being Played*<br>
 Check this option if you want this plugin to automatically
 search the internet site www.htbackdrops.com for
-fanart/backdrops mathing every song you play in
-MediaPortal and then downloading the found images 
-to your harddrive (to the "thumbs/Skin Fanart/music" 
+fanart backdrops matching every song you play in
+!MediaPortal and then downloading the found images 
+to your harddrive (to the `thumbs/Skin Fanart/music` 
 folder). Leaving this option unchecked will disable 
 now playing scraping and you will have to manually 
-add your fanart images to the "thumbs/Skin Fanart/music" 
+add your fanart images to the `thumbs/Skin Fanart/music` 
 folder.
 
 Warning; Using this option if you have a large music
@@ -164,30 +164,25 @@ Select the  number of hours between each new scraper attempt.
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin3.jpg
 
 ===Enable/Disable Selected Fanart Button===
-Press this button to enable or disable the use of the selected fanart/backdrop. Enabled means that the image will be used by the plugin in MediaPortal. Disabled means that MediaPortal will not use the image. The difference between pressing this button and the "Delete Selected Fanart" is that this button keeps the image on your harddrive but also in the fanart database and this also means that the scraper will NOT download it again. Pressing the delete button will delete the image but it can re-appear because the scraper can find the image on a future scrape.
+Press this button to enable or disable the use of the selected fanart backdrop. Enabled means that the image will be used by the plugin in !MediaPortal. Disabled means that !MediaPortal will not use the image. The difference between pressing this button and the "Delete Selected Fanart" is that this button keeps the image on your harddrive and also in the fanart database. This also means that the scraper will NOT download it again. Pressing the delete button will delete the image but it can re-appear because the scraper can find the image on a future scrape.
 
 ===Delete Selected Fanart Button===
-Press this button to delete the selected fanart/backdrop from the fanart database but also from your harddrive. The difference between pressing this button and the "Enable/Disable Selected Fanart" button is that this button deletes the image from your harddrive and
-the fanart database and this saves harddisk space but the image can re-appear because the scraper can find the image on a future scrape.
+Press this button to delete the selected fanart backdrop from the fanart database but also from your harddrive. The difference between pressing this button and the "Enable/Disable Selected Fanart" button is that this button deletes the image from your harddrive and the fanart database. This saves harddisk space but the image can re-appear because the scraper can find the image on a future scrape.
 
 ===Delete All Fanart Button===
-WARNING: Pressing this button will delete all images stored on your harddrive in the "thumbs/Skin Fanart/music" folder and also from the fanart database.
+WARNING: Pressing this button will delete all images stored on your harddrive in the `thumbs/Skin Fanart/music` folder and also from the fanart database.
 
 
 ===Cleanup Missing Fanart Button===
-Press this button to sync fanart database and images on your harddrive. Any entries in the fanart database that has no matching image stored on your harddrive will be removed.
+Press this button to sync the fanart database and images on your harddrive. Any entries in the fanart database that do not have a matching image stored on your harddrive will be removed.
 
 
 ===Reset Scraper Button===
-The purpose of this button is to reset everything and allow for a complete new initial scrape. The first time you open MediaPortal after enabling the scraper
+The purpose of this button is to reset everything and allow for a complete new initial scrape. The first time you open !MediaPortal after enabling the scraper
 will cause a big search for fanart matching every artist you
-have in your MediaPortal music database. This is only done once.
-After this MediaPortal will perorm this "initial scrape" only for
-new added artists. If you at a later stage decided that you for 
-example want to increase the number of imges per artis
-you will have to press this button to initiate a new intitial scrape
-the next time you start MediaPortal. After the initial scrape this
-plugin will only scrape the htbackdrop site for new images.
+have in your !MediaPortal music database. This is only done once.
+After this !MediaPortal will perorm this "initial scrape" only for
+newly added artists. If, at a later stage, you decide that you want to increase the number of imges per artist, you will have to press this button to initiate a new intitial scrape the next time you start !MediaPortal. After the initial scrape this plugin will only scrape the !htbackdrop site for new images.
 
 ===Start Scraper Button===
 Initiates a new scrape.
@@ -201,9 +196,9 @@ Check this option to enable fanart for selected items when browsing your movies 
 
 
 ----
-==ScoreCenter Fanart==
+==!ScoreCenter Fanart==
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin5.jpg
-===ScoreCenter Plugin Fanart Option===
+===!ScoreCenter Plugin Fanart Option===
 *Enable Fanart For Selected Genres*<br>
 Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.
 
