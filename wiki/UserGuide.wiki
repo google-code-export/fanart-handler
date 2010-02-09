@@ -4,7 +4,7 @@
 <wiki:toc max_depth="2" />
 
 = Introduction =
-Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP)]. The plugin has two main purposes;
+Fanart Handler is a plugin for [http://www.team-mediaportal.com/ !MediaPortal (MP)]. The plugin has two main purposes;
   * Search and download music fanart (scrape) from the [http://htbackdrops.com/ htbackdrops] site.
     # for all artists stored in your MP music database.
     # for any artist currently being played (on the fly).
@@ -14,7 +14,7 @@ Fanart Handler is a plugin for [http://www.team-mediaportal.com/ MediaPortal (MP
     # push fanart for selected music or movie
     # push random images from selected folders
 
-This is the end user guide to the "FanartHandler" plugin. 
+This is the end user guide to the "!FanartHandler" plugin. 
 
 The scope of this plugin is to;
   # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
@@ -22,10 +22,10 @@ The scope of this plugin is to;
   # push music fanart for now played music track (artist images)
   # push music fanart for browsed music artist in myMusic plugin
   # push music fanart for browsed/played music artist in myMusicPlaylist plugin
-  # push music fanart for browsed music artist in GlobalSearch plugin
+  # push music fanart for browsed music artist in !GlobalSearch plugin
   # push music fanart for browsed music artist in Music Videos plugin
   # push music fanart for browsed music artist in mVidsplugin
-  # push music fanart for browsed music artist in YouTube.FM plugin
+  # push music fanart for browsed music artist in !YouTube.FM plugin
   # push movie fanart for browsed video title in myVideo plugin
   # push scorecenter fanart for browsed category in myScoreCenter plugin
   # push cycling fanart from the following folders for use anywhere in a skin for
@@ -106,8 +106,8 @@ Check this option if you do not want to display the MP thumb images for artists 
 *Select Music Fanart Sources - Skip MP Thumbs When Displaying Random Fanart*<br>
 Check this opton if you have enabled the option "MP Artist Thumbs" or "MP Album Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that artist thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
 
-*Use Fanart In Now Playing Overlay - Use Fanart In Overlay*<br>
-This option enables fanart as background in the now playing window in MediaPortal if your current skin supports it.
+*Use Fanart In Music (Now Playing) Overlay - Use Fanart In Overlay*<br>
+This option enables music fanart as background in the music overlay (now playing window) in !MediaPortal, if your current skin supports it.
 
 ===Default Backdrop When Fanart Not Available===
 *Use Specific Image When Music Fanart Is Not Available*<br>
@@ -212,5 +212,5 @@ Check this option to enable fanart for selected genres when browsing your sports
 ==Disable Fanart for Music==
   # Open MP Configuration
   # Click on Plugins
-  # Scroll all the way down in the list of plugins and under the headline Process Plugins you will find a plugin called XFactor Fanart Handler. Right click in this plugin and make sure it is disabled.
+  # Scroll all the way down in the list of plugins and under the headline Process Plugins you will find a plugin called Fanart Handler. Right click in this plugin and make sure it is disabled.
 ----
