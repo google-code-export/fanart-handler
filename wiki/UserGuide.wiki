@@ -29,14 +29,14 @@ The scope of this plugin is to;
   # push movie fanart for browsed video title in myVideo plugin
   # push scorecenter fanart for browsed category in myScoreCenter plugin
   # push cycling fanart from the following folders for use anywhere in a skin for
-    * thumbs\MovingPictures\Backdrops\FullSize
-    * thumbs\Fan Art\fanart\original
-    * thumbs\Skin Fanart\games
-    * thumbs\Skin Fanart\movies
-    * thumbs\Skin Fanart\music
-    * thumbs\Skin Fanart\pictures
-    * thumbs\Skin Fanart\plugins
-    * thumbs\Skin Fanart\tv
+    * `thumbs\MovingPictures\Backdrops\FullSize`
+    * `thumbs\Fan Art\fanart\original`
+    * `thumbs\Skin Fanart\games`
+    * `thumbs\Skin Fanart\movies`
+    * `thumbs\Skin Fanart\music`
+    * `thumbs\Skin Fanart\pictures`
+    * `thumbs\Skin Fanart\plugins`
+    * `thumbs\Skin Fanart\tv`
 
 == Requirements ==
   * !MediaPortal 1.0.2 or later
@@ -56,14 +56,14 @@ To add you fanart (backdrops) that you yourself has downloaded or made to be use
   # thumbs\Skin Fanart\scorecenter (used for pushing images of selected genre in the scorecenter plugin to a skin).
   # thumbs\Skin Fanart\tv (used for pushing random tv images to a skin)
 
-The *thumb* directory is located in;
+The *thumbs* folder, or directory, is located in;
   # Windows Vista: `C:\ProgramData\Team MediaPortal\MediaPortal\`
   # Windows XP: `C:\Documents and Settings\All Users\Application Data\Team MediaPortal\MediaPortal\`
 You can find this folder by clicking Start button in Windows and the "`Programs\Team MediaPortal\MediaPortal\User Files`".
  
 
 ==Naming Convention for your custom fanart==
-If you add music or video fanart that you want the skin to use when you select a video or music (or play music) you should follow the following naming convention. If the current played artist in MP is Madonna that will be matched in the fanart folder for any image that starts with "madonna" followed by n umbers and a file extenstion. This means a file named "madonna1.jpg" will be a match. This means a file named "This Is A Madonna Image.jpg" will not be a match. And a file named madoXnna.jpg will not be a match. And Madonna010.jpg will be a match.
+If you add music or video fanart that you want the skin to use when you select a video or music (or play music) you should use the following naming convention. If the current played artist in MP is Madonna that will be matched in the fanart folder with any image that starts with "madonna", followed by numbers and a file extenstion. This means a file named "madonna1.jpg" will be a match. And Madonna010.jpg will be a match. However, a file named "This Is A Madonna Image.jpg" will not be a match, and a file named madoXnna.jpg will not be a match. 
 
 ----
 
@@ -92,19 +92,19 @@ http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin1.jpg
 <br>
 ===Music Fanart Options===
 *Select Music Fanart Sources - MP Artist Thumbs*<br>
-Check this option if you want the artist thumbnail images that MediaPortal automatically downloads for an artist to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the "Minimum Resolution For Images" option can solve this problem.
+Check this option if you want the artist thumbnail images that !MediaPortal automatically downloads for an artist to be used when you select a music artist/album/track in !MediaPortal. These images are often in low resolution (=bad quality) but setting the "Minimum Resolution For Images" option can solve this problem.
 
 *Select Music Fanart Sources - MP Album Thumbs*<br>
-Check this option if you want the album thumbnail images that MediaPortal automatically downloads for an albun to be used when you select a music artist/album/track in MediaPortal. These images are often in low resolution (=bad quality) but setting the  "Minimum Resolution For Images" option can solve this problem.
+Check this option if you want the album thumbnail images that !MediaPortal automatically downloads for an albun to be used when you select a music artist/album/track in !MediaPortal. These images are often in low resolution (=bad quality) but setting the  "Minimum Resolution For Images" option can solve this problem.
 
 *Select Music Fanart Sources - Music Fanart Matches (High Resolution)*<br>
-Check this option if you want the fanart/backdrop images that you have donwloaded/created and put in the "/thumbs/Skin Fanart/music" folder or the fanart/backdrops that this plugin downloads (if scraper is enabled) to be used when you select a music artist/album/track in MediaPortal. Enabling this option is recommended.
+Check this option if you want the fanart/backdrop images that you have donwloaded/created and put in the "/thumbs/Skin Fanart/music" folder or the fanart/backdrops that this plugin downloads (if scraper is enabled) to be used when you select a music artist/album/track in !MediaPortal. Enabling this option is recommended.
 
 *Select Music Fanart Sources - Skip MP Thumbs When High Resolution Fanart Available*<br>
-Check this option if you do not want to display the MP thumb images for artists that has high resolution fanart. For artists missing high resolution artists the MP thumb images will still be shown.
+Check this option if you do not want to display the MP thumb images for artists that have high resolution fanart. For artists missing high resolution fanart the MP thumb images will still be shown.
 
 *Select Music Fanart Sources - Skip MP Thumbs When Displaying Random Fanart*<br>
-Check this opton if you have enabled the option "MP Artist Thumbs" or "MP Album Thumbs" above but does not want these images available when a skin puts random images as backdrops for example when selecting a menu like pictures. This option exists because some may think that artist thumb are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
+Check this opton if you have enabled the option "MP Artist Thumbs" or "MP Album Thumbs" above but do not want these images available when a skin displays random images as backdrops. For example when selecting a menu like pictures. This option exists because some may think that artist thumbs are of good enough quality when browsing the music collection but not good enough when displaying random music images for their music menu.
 
 *Use Fanart In Music (Now Playing) Overlay - Use Fanart In Overlay*<br>
 This option enables music fanart as background in the music overlay (now playing window) in !MediaPortal, if your current skin supports it.
@@ -125,37 +125,19 @@ http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin2.jpg
 
 ===Scraper Options===
 *Enable Automatic Download Of Music Fanart For Artists In Your MP Music Database*<br>
-Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart backdrops matching all the artists that you have 
-already in your !MediaPortal music database and then 
-downloading the found images to your harddrive (to 
-the `thumbs/Skin Fanart/music` folder). Leaving this 
-option unchecked will disable scraping and you will 
-have to manually add your fanart images to the
-`thumbs/Skin Fanart/music` folder.
+Check this option if you want this plugin to automatically search the internet site www.htbackdrops.com for fanart backdrops matching all the artists that you have already in your !MediaPortal music database and then downloading the found images to your  harddrive (to the `thumbs/Skin Fanart/music` folder). Leaving this option unchecked will disable scraping and you will have to manually add your fanart images to the `thumbs/Skin Fanart/music` folder.
 
-Warning; Using this option if you have a large music
-collection can use quite alot of harddisk space.
+Warning; Using this option if you have a large music collection can use quite alot of harddisk space.
 
 *Enable Automatic Download Of Music Fanart For Artists Now Being Played*<br>
-Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart backdrops matching every song you play in
-!MediaPortal and then downloading the found images 
-to your harddrive (to the `thumbs/Skin Fanart/music` 
-folder). Leaving this option unchecked will disable 
-now playing scraping and you will have to manually 
-add your fanart images to the `thumbs/Skin Fanart/music` 
-folder.
+Check this option if you want this plugin to automatically search the internet site www.htbackdrops.com for fanart backdrops matching every song you play in !MediaPortal and then downloading the found images to your harddrive (to the `thumbs/Skin Fanart/music` 
+folder). Leaving this option unchecked will disable now playing scraping and you will have to manually add your fanart images to the `thumbs/Skin Fanart/music` folder.
 
 Warning; Using this option if you have a large music
 collection can use quite alot of harddisk space.
 
 *Download Max X Images Per Artist*<br>
-Choose how many images the scraper will try to
-download for every artist. Choosing a higher number
-will consume more harddisk space. 
+Choose how many images the scraper will try to download for every artist. Choosing a higher number will consume more harddisk space. 
 
 *Scraper Interval X (Hours)*<br>
 Select the  number of hours between each new scraper attempt.
@@ -179,8 +161,8 @@ Press this button to sync the fanart database and images on your harddrive. Any 
 
 ===Reset Scraper Button===
 The purpose of this button is to reset everything and allow for a complete new initial scrape. The first time you open !MediaPortal after enabling the scraper
-will cause a big search for fanart matching every artist you
-have in your !MediaPortal music database. This is only done once.
+will cause a big search for fanart matching every artist you have in your !MediaPortal music database. This is only done once.
+
 After this !MediaPortal will perorm this "initial scrape" only for
 newly added artists. If, at a later stage, you decide that you want to increase the number of imges per artist, you will have to press this button to initiate a new intitial scrape the next time you start !MediaPortal. After the initial scrape this plugin will only scrape the !htbackdrop site for new images.
 
