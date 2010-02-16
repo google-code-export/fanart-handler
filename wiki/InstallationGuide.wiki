@@ -5,6 +5,11 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.3 to 1.4)==
+  * new feature: Basic proxy support.
+  * bug fixed: Some character sets was handled wrong causing some fanart not to be downloaded.
+  * bug fixed: Corrupt images was created on disk in some situations.
+  * bug fixed: Resolution info striped from image name for better matching (some images on htbackdrops ends like _1080P).
 ==Change Log (version 1.2 to 1.3)==
   * new feature: Fanart now also works in shared view in myMusic plugin (where artist,album or track is available).
   * bug fixed: Delay in showing "skin default" backdrop when music played stops.
