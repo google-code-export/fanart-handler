@@ -182,7 +182,7 @@ Check this option to enable fanart for selected items when browsing your movies 
 http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin5.jpg
 ===!ScoreCenter Plugin Fanart Option===
 *Enable Fanart For Selected Genres*<br>
-Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.
+Check this option to enable fanart for selected genres when browsing your sports results in the myScoreCenter plugin.  Note: make sure you have not enabled fanart/backdrops in the Scorecenter plugin itself, or you may get duplicate images displaying.
 
 
 ----
