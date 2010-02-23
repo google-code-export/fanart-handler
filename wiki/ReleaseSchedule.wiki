@@ -1,8 +1,6 @@
 #summary Release Schedule.
 #labels Featured
 
-<wiki:toc max_depth="2" />
-
 = Introduction =
 This page is an attempt to announce new releases of the Fanart Handler plugin so that skinners, testers and others know when to expect a new release. I always try to keep the dates I put here but it is only my best guess ;)
 
