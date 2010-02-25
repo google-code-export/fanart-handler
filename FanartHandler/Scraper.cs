@@ -29,7 +29,7 @@ namespace FanartHandler
             {
                 try
                 {
-                    logger.Debug("Scrape for new images is starting...");
+                    logger.Info("Scrape for new images is starting...");
                     Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
                     string strResult = null;
                     string dbArtist = null;
@@ -68,7 +68,7 @@ namespace FanartHandler
                     }
                     if (sPages != null && sPages.Length > 0)
                     {
-                        logger.Debug("Found " + sPages + " pages with new images on htbackdrops.com");
+                        logger.Info("Found " + sPages + " pages with new images on htbackdrops.com");
                         int iPages = Convert.ToInt32(sPages);
 
                         dbm.totArtistsBeingScraped = iPages;
@@ -152,9 +152,9 @@ namespace FanartHandler
                     }
                     else
                     {
-                        logger.Debug("Found no new images on htbackdrops.com");
+                        logger.Info("Found no new images on htbackdrops.com");
                     }
-                    logger.Debug("Scrape for new images is done.");
+                    logger.Info("Scrape for new images is done.");
                 }
                 catch (Exception ex)
                 {

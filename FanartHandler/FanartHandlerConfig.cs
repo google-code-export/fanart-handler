@@ -196,7 +196,7 @@ namespace FanartHandler
                 {                    
                     DoSave();
                 }
-                logger.Debug("Fanart Handler configuration is stopped.");          
+                logger.Info("Fanart Handler configuration is stopped.");          
                 this.Close();
             }
         }

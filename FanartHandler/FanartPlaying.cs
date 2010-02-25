@@ -24,13 +24,27 @@ namespace FanartHandler
         public bool hasUpdatedCurrCountPlay = false; // CurrCountPlay have allready been updated this run
         public Hashtable windowsUsingFanartPlay;  //used to know what skin files that supports play fanart
         public Hashtable currentArtistsImageNames = null;
-        public Random currentArtistsRandomizer;
         #endregion
 
         public FanartPlaying()
         {
             currentArtistsImageNames = new Hashtable();
-            currentArtistsRandomizer = new Random();
+        }
+
+        /// <summary>
+        /// Get Hashtable with all filenames for current artist
+        /// </summary>
+        public Hashtable GetCurrentArtistsImageNames()
+        {
+            return currentArtistsImageNames;
+        }
+
+        /// <summary>
+        /// Set Hashtable with all filenames for current artist
+        /// </summary>
+        public void SetCurrentArtistsImageNames(Hashtable ht)
+        {
+            currentArtistsImageNames = ht;
         }
 
         /// <summary>
@@ -90,7 +104,8 @@ namespace FanartHandler
                 {
                     currPlayMusic = "";
                     prevPlayMusic = -1;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", this, true);
+                    SetCurrentArtistsImageNames(null);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", true);
                     if (sFilename.Length == 0)
                     {
                         sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
@@ -125,7 +140,7 @@ namespace FanartHandler
                 else if (currCountPlay >= FanartHandlerSetup.maxCountImage)
                 {
                     string sFilenamePrev = currPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", this, false);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false);
                     if (sFilename.Length == 0)
                     {
                         sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
