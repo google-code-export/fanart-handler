@@ -7,6 +7,7 @@ using MediaPortal.GUI.Library;
 using System.Collections;
 using System.Xml;
 using System.Xml.XPath;
+using MediaPortal.Configuration;
 using System.IO;
 
 namespace FanartHandler
@@ -550,7 +551,7 @@ namespace FanartHandler
         {
             XPathDocument myXPathDocument;
             windowsUsingFanartRandom = new Hashtable();
-            string path = GUIGraphicsContext.Skin + @"\";
+            string path = GUIGraphicsContext.Skin + @"\";            
             string windowId = "";
             string sNodeValue = "";
             DirectoryInfo di = new DirectoryInfo(path);

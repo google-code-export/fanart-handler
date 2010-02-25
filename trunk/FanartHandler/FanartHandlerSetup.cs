@@ -331,19 +331,11 @@ namespace FanartHandler
                     {
                         SetupFilenames(path, "*.jpg", ref i, "Game");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("Game");
-                    }
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
                     i = 0;
                     if (useVideoFanart.Equals("True") || fr.useAnyMovies)
                     {
                         SetupFilenames(path, "*.jpg", ref i, "Movie");
-                    }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("Movie");
                     }
                     //Add music images
                     path = "";
@@ -353,27 +345,15 @@ namespace FanartHandler
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
                         SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("MusicAlbum");
-                    }
                     if (useArtist.Equals("True"))
                     {
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
                         SetupFilenames(path, "*L.jpg", ref i, "MusicArtist");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("MusicArtist");
-                    }
                     if (useFanart.Equals("True") || fr.useAnyMusic)
                     {
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
                         SetupFilenames(path, "*.jpg", ref i, "MusicFanart");
-                    }
-                    else
-                    {
-                        //dbm.DeleteAllFanart("MusicFanart");
                     }
                     //Add pictures images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
@@ -382,20 +362,12 @@ namespace FanartHandler
                     {
                         SetupFilenames(path, "*.jpg", ref i, "Picture");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("Picture");
-                    }
                     //Add games images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
                     i = 0;
                     if (useScoreCenterFanart.Equals("True") || fr.useAnyScoreCenter)
                     {
                         SetupFilenames(path, "*.jpg", ref i, "ScoreCenter");
-                    }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("ScoreCenter");
                     }
                     //Add moving pictures images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\MovingPictures\Backdrops\FullSize";
@@ -404,20 +376,12 @@ namespace FanartHandler
                     {
                         SetupFilenames(path, "*.jpg", ref i, "MovingPicture");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("MovingPicture");
-                    }
                     //Add tvseries images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
                     i = 0;
                     if (fr.useAnyTVSeries)
                     {
                         SetupFilenames(path, "*.jpg", ref i, "TVSeries");
-                    }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("TVSeries");
                     }
                     //Add tv images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
@@ -426,20 +390,12 @@ namespace FanartHandler
                     {
                         SetupFilenames(path, "*.jpg", ref i, "TV");
                     }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("TV");
-                    }
                     //Add plugins images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
                     i = 0;
                     if (fr.useAnyPlugins)
                     {
                         SetupFilenames(path, "*.jpg", ref i, "Plugin");
-                    }
-                    else
-                    {
-                        Utils.GetDbm().DeleteAllFanart("Plugin");
                     }
                 }
                 catch (Exception ex)
@@ -1627,21 +1583,24 @@ namespace FanartHandler
                         {
                             refreshTimer.Start();
                         }
-                        if (fs.doShowImageOne)
-                        {
-                            fs.ShowImageTwo();
-                        }
                         else
                         {
-                            fs.ShowImageOne();
-                        }
-                        if (fs.fanartAvailable)
-                        {
-                            fs.FanartIsAvailable();
-                        }
-                        else
-                        {
-                            fs.FanartIsNotAvailable();
+                            if (fs.doShowImageOne)
+                            {
+                                fs.ShowImageTwo();
+                            }
+                            else
+                            {
+                                fs.ShowImageOne();
+                            }
+                            if (fs.fanartAvailable)
+                            {
+                                fs.FanartIsAvailable();
+                            }
+                            else
+                            {
+                                fs.FanartIsNotAvailable();
+                            }
                         }
                     }
                     if ((fp.windowsUsingFanartPlay.ContainsKey(windowId) || (useOverlayFanart != null && useOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
@@ -1651,21 +1610,24 @@ namespace FanartHandler
                         {
                             refreshTimer.Start();
                         }
-                        if (fp.doShowImageOnePlay)
-                        {
-                            fp.ShowImageTwoPlay();
-                        }
                         else
                         {
-                            fp.ShowImageOnePlay();
-                        }
-                        if (fp.fanartAvailablePlay)
-                        {
-                            fp.FanartIsAvailablePlay();
-                        }
-                        else
-                        {
-                            fp.FanartIsNotAvailablePlay();
+                            if (fp.doShowImageOnePlay)
+                            {
+                                fp.ShowImageTwoPlay();
+                            }
+                            else
+                            {
+                                fp.ShowImageOnePlay();
+                            }
+                            if (fp.fanartAvailablePlay)
+                            {
+                                fp.FanartIsAvailablePlay();
+                            }
+                            else
+                            {
+                                fp.FanartIsNotAvailablePlay();
+                            }
                         }
                     }
                     if (fr.windowsUsingFanartRandom.ContainsKey(windowId))
@@ -1674,13 +1636,16 @@ namespace FanartHandler
                         {
                             refreshTimer.Start();
                         }
-                        if (fr.doShowImageOneRandom)
-                        {
-                            fr.ShowImageTwoRandom();
-                        }
                         else
                         {
-                            fr.ShowImageOneRandom();
+                            if (fr.doShowImageOneRandom)
+                            {
+                                fr.ShowImageTwoRandom();
+                            }
+                            else
+                            {
+                                fr.ShowImageOneRandom();
+                            }
                         }
                     }
                 }
@@ -1707,11 +1672,12 @@ namespace FanartHandler
                 {
                     stopScraperNowPlaying();
                     EmptyAllImages(ref fp.listPlayMusic);
+                    fp.SetCurrentArtistsImageNames(null);
                     fp.currPlayMusic = "";
                     fp.currPlayMusicArtist = "";
                     fp.fanartAvailablePlay = false;
                     fp.FanartIsNotAvailablePlay();
-                    fp.SetCurrentArtistsImageNames(null);
+                    fp.prevPlayMusic = -1;
                     SetProperty("#fanarthandler.music.overlay.play", "");
                     SetProperty("#fanarthandler.music.backdrop1.play", "");
                     SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -1781,11 +1747,12 @@ namespace FanartHandler
                 {
                     stopScraperNowPlaying();
                     EmptyAllImages(ref fp.listPlayMusic);
+                    fp.SetCurrentArtistsImageNames(null);
                     fp.currPlayMusic = "";
                     fp.currPlayMusicArtist = "";
                     fp.fanartAvailablePlay = false;
                     fp.FanartIsNotAvailablePlay();
-                    fp.SetCurrentArtistsImageNames(null);
+                    fp.prevPlayMusic = -1;
                     SetProperty("#fanarthandler.music.overlay.play", "");
                     SetProperty("#fanarthandler.music.backdrop1.play", "");
                     SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -1841,11 +1808,12 @@ namespace FanartHandler
                         {
                             stopScraperNowPlaying();
                             EmptyAllImages(ref fp.listPlayMusic);
+                            fp.SetCurrentArtistsImageNames(null);
                             fp.currPlayMusic = "";
                             fp.currPlayMusicArtist = "";
                             fp.fanartAvailablePlay = false;
                             fp.FanartIsNotAvailablePlay();
-                            fp.SetCurrentArtistsImageNames(null);
+                            fp.prevPlayMusic = -1;
                             SetProperty("#fanarthandler.music.overlay.play", "");
                             SetProperty("#fanarthandler.music.backdrop1.play", "");
                             SetProperty("#fanarthandler.music.backdrop2.play", "");
