@@ -59,7 +59,7 @@ namespace FanartHandler
                 dbClient = new SQLiteClient(path);
                 dbClient.Execute("PRAGMA synchronous=OFF");                
                 m_db = MusicDatabase.Instance;
-                logger.Debug("Successfully Opened Database: " + dbFilename);
+                logger.Info("Successfully Opened Database: " + dbFilename);
                 CheckIfToUpgradeDatabase();
                 UpgradeDbMain();
                 isInitialized = true;
@@ -165,7 +165,7 @@ namespace FanartHandler
         /// </summary>
         public void UpgradeDatabase()
         {
-            logger.Debug("Upgrading Database: " + dbFilename);
+            logger.Info("Upgrading Database: " + dbFilename);
             string sqlQuery = "BEGIN TRANSACTION;";
             SQLiteResultSet result = dbClient.Execute(sqlQuery);
             try
@@ -300,8 +300,8 @@ namespace FanartHandler
             result = dbClient.Execute(sqlQuery);
             sqlQuery = "COMMIT;";
             result = dbClient.Execute(sqlQuery);
-            logger.Debug("Upgrade of database is completed successfully.");
-            logger.Debug("Database version is verified: " + dbFilename);
+            logger.Info("Upgrade of database is completed successfully.");
+            logger.Info("Database version is verified: " + dbFilename);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace FanartHandler
             {
                 string sqlQuery = "SELECT count(Artist) FROM Music_Fanart Where Enabled = 'True';";
                 SQLiteResultSet result = dbClient.Execute(sqlQuery);
-                logger.Debug("Database version is verified: " + dbFilename);
+                logger.Info("Database version is verified: " + dbFilename);
             }
             catch (SQLiteException sle)
             {

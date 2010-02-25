@@ -36,13 +36,27 @@ namespace FanartHandler
         public int currCount = 0;
         public Hashtable properties; //used to hold properties to be updated (Selected or Any)                            
         public Hashtable currentArtistsImageNames = null;
-        public Random currentArtistsRandomizer;
         #endregion
 
         public FanartSelected()
         {
             currentArtistsImageNames = new Hashtable();
-            currentArtistsRandomizer = new Random();
+        }
+
+        /// <summary>
+        /// Get Hashtable with all filenames for current artist
+        /// </summary>
+        public Hashtable GetCurrentArtistsImageNames()
+        {
+            return currentArtistsImageNames;
+        }
+
+        /// <summary>
+        /// Set Hashtable with all filenames for current artist
+        /// </summary>
+        public void SetCurrentArtistsImageNames(Hashtable ht)
+        {
+            currentArtistsImageNames = ht;
         }
 
         /// <summary>
@@ -78,7 +92,8 @@ namespace FanartHandler
                     {
                         currSelectedGeneric = "";
                         prevSelectedGeneric = -1;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedGeneric, ref prevSelectedGeneric, type, this, true);
+                        SetCurrentArtistsImageNames(null);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedGeneric, ref prevSelectedGeneric, type, "FanartSelected", true);
                         if (sFilename.Length == 0)
                         {
                             if (property.Equals("music"))
@@ -117,7 +132,7 @@ namespace FanartHandler
                     else if (currCount >= FanartHandlerSetup.maxCountImage)
                     {      
                         string sFilenamePrev = currSelectedGeneric;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedGeneric, ref prevSelectedGeneric, type, this, false);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedGeneric, ref prevSelectedGeneric, type, "FanartSelected", false);
                         if (sFilename.Length == 0)
                         {
                             if (property.Equals("music"))
@@ -161,6 +176,7 @@ namespace FanartHandler
                 else
                 {
                     currSelectedGeneric = "";
+                    prevSelectedGeneric = -1;
                     fanartAvailable = false;
                     if (doShowImageOne)
                         AddProperty("#fanarthandler." + property + ".backdrop1.selected", "", ref listSelectedMusic, type);
@@ -168,6 +184,7 @@ namespace FanartHandler
                         AddProperty("#fanarthandler." + property + ".backdrop2.selected", "", ref listSelectedMusic, type);
                     ResetCurrCount();
                     currSelectedGenericTitle = "";
+                    SetCurrentArtistsImageNames(null);
                 }
             }
             catch (Exception ex)
@@ -213,7 +230,8 @@ namespace FanartHandler
                     {
                         currSelectedScorecenter = "";
                         prevSelectedScorecenter = -1;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedScorecenter, ref prevSelectedScorecenter, "ScoreCenter", this, true);
+                        SetCurrentArtistsImageNames(null);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedScorecenter, ref prevSelectedScorecenter, "ScoreCenter", "FanartSelected", true);
                         if (sFilename.Length == 0)
                         {
                             fanartAvailable = false;
@@ -237,7 +255,7 @@ namespace FanartHandler
                     else if (currCount >= FanartHandlerSetup.maxCountImage)
                     {
                         string sFilenamePrev = currSelectedScorecenter;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedScorecenter, ref prevSelectedScorecenter, "ScoreCenter", this, false);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedScorecenter, ref prevSelectedScorecenter, "ScoreCenter", "FanartSelected", false);
                         if (sFilename.Length == 0)
                         {
                             fanartAvailable = false;
@@ -267,6 +285,8 @@ namespace FanartHandler
                 {
                     currSelectedScorecenter = "";
                     currSelectedScorecenterGenre = "";
+                    prevSelectedScorecenter = -1;
+                    SetCurrentArtistsImageNames(null);
                 }
             }
             catch (Exception ex)
@@ -395,7 +415,6 @@ namespace FanartHandler
             try
             {
                 FanartHandlerSetup.m_SelectedItem = getMusicArtistFromListControl();
-
                 if (FanartHandlerSetup.m_SelectedItem != null && FanartHandlerSetup.m_SelectedItem.Equals("..") == false && FanartHandlerSetup.m_SelectedItem.Length > 0)
                 {
 
@@ -403,7 +422,8 @@ namespace FanartHandler
                     {
                         currSelectedMusic = "";
                         prevSelectedMusic = -1;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", this, true);
+                        SetCurrentArtistsImageNames(null);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", "FanartSelected", true);
                         if (sFilename.Length == 0)
                         {
                             sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
@@ -435,7 +455,7 @@ namespace FanartHandler
                     else if (currCount >= FanartHandlerSetup.maxCountImage)
                     {
                         string sFilenamePrev = currSelectedMusic;
-                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", this, false);
+                        string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.m_SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", "FanartSelected", false);
                         if (sFilename.Length == 0)
                         {
                             sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
@@ -477,6 +497,7 @@ namespace FanartHandler
                 else
                 {
                     currSelectedMusic = "";
+                    prevSelectedMusic = -1;
                     fanartAvailable = false;
                     if (doShowImageOne)
                         AddProperty("#fanarthandler.music.backdrop1.selected", "", ref listSelectedMusic, "MusicFanart");
@@ -484,6 +505,7 @@ namespace FanartHandler
                         AddProperty("#fanarthandler.music.backdrop2.selected", "", ref listSelectedMusic, "MusicFanart");
                     ResetCurrCount();
                     currSelectedMusicArtist = "";
+                    SetCurrentArtistsImageNames(null);
                 }
             }
             catch (Exception ex)

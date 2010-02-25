@@ -90,9 +90,9 @@ namespace FanartHandler
         public static MusicDatabase m_db = null;  //handle to MP Music database                
         public static int maxCountImage = 30;          
         public static string m_SelectedItem = null; //artist, album, title        
-        private FanartPlaying fp = null;
-        private FanartSelected fs = null;
-        private FanartRandom fr = null;
+        private static FanartPlaying fp = null;
+        private static FanartSelected fs = null;
+        private static FanartRandom fr = null;
 
         #endregion  
         
@@ -175,7 +175,6 @@ namespace FanartHandler
                     Utils.GetDbm().DeleteFanart(filename, type);
                     return false;
                 }
-
                 Image checkImage = Image.FromFile(filename);
                 double mWidth = Convert.ToInt32(minResolution.Substring(0, minResolution.IndexOf("x")));
                 double mHeight = Convert.ToInt32(minResolution.Substring(minResolution.IndexOf("x") + 1));
@@ -489,26 +488,25 @@ namespace FanartHandler
         /// <summary>
         /// Get next filename to return as property to skin
         /// </summary>
-        public static string GetFilename(string key, ref string currFile, ref int iFilePrev, string type, object obj, bool newArtist)
+        public static string GetFilename(string key, ref string currFile, ref int iFilePrev, string type, string obj, bool newArtist)
         {
             string sout = currFile;
             try
-            {
+            {                
                 if (Utils.GetIsStopping() == false)
-                {                    
-                    key = Utils.GetArtist(key, type);                    
+                {
+                    key = Utils.GetArtist(key, type);
                     Hashtable tmp = null;
-                    if (obj is FanartPlaying)
+                    if (obj.Equals("FanartPlaying"))
                     {
-                        tmp = ((FanartPlaying)obj).currentArtistsImageNames;
+                        tmp = fp.GetCurrentArtistsImageNames();
                     }
                     else
                     {
-                        tmp = ((FanartSelected)obj).currentArtistsImageNames;
+                        tmp = fs.GetCurrentArtistsImageNames();
                     }
                     if (newArtist || tmp == null || tmp.Count == 0)
                     {
-                        Random r = null;
                         if (skipWhenHighResAvailable != null && skipWhenHighResAvailable.Equals("True"))
                         {
                             tmp = Utils.GetDbm().getHigResFanart(key, type);
@@ -521,24 +519,16 @@ namespace FanartHandler
                         {
                             tmp = Utils.GetDbm().getFanart(key, type);
                         }
-                        if (obj is FanartPlaying)
+                        Utils.Shuffle(ref tmp);
+                        if (obj.Equals("FanartPlaying"))
                         {
-                            r = ((FanartPlaying)obj).currentArtistsRandomizer;
+                            fp.SetCurrentArtistsImageNames(tmp);
                         }
                         else
                         {
-                            r = ((FanartSelected)obj).currentArtistsRandomizer;
+                            fs.SetCurrentArtistsImageNames(tmp);
                         }
-                        Utils.Shuffle(ref tmp, r);
-                        if (obj is FanartPlaying)
-                        {
-                            ((FanartPlaying)obj).currentArtistsImageNames = tmp;
-                        }
-                        else
-                        {
-                            ((FanartSelected)obj).currentArtistsImageNames = tmp;
-                        }
-                    }                    
+                    }
                     if (tmp != null && tmp.Count > 0)
                     {
                         ICollection valueColl = tmp.Values;
@@ -567,7 +557,7 @@ namespace FanartHandler
                             iFile = 0;
                             iStop = 0;
                             foreach (DatabaseManager.FanartImage s in valueColl)
-                            {                                
+                            {
                                 if (((iFile > iFilePrev) || (iFilePrev == -1)) && (iStop == 0))
                                 {
                                     if (checkImageResolution(s.disk_image, type, useAspectRatio))
@@ -583,6 +573,17 @@ namespace FanartHandler
                             }
                         }
                         valueColl = null;
+                    }
+                }
+                else
+                {
+                    if (obj.Equals("FanartPlaying"))
+                    {
+                        fp.SetCurrentArtistsImageNames(null);
+                    }
+                    else
+                    {
+                        fs.SetCurrentArtistsImageNames(null);
                     }
                 }
             }
@@ -593,87 +594,7 @@ namespace FanartHandler
             return sout;
         }
 
-        /*
-        /// <summary>
-        /// Get next filename to return as property to skin
-        /// </summary>
-        public static string GetFilename(string key, ref string currFile, ref int iFilePrev, string type)
-        {
-            string sout = currFile;
-            try
-            {
-                if (Utils.GetIsStopping() == false)
-                {
-                    key = Utils.GetArtist(key, type);
-                    Hashtable tmp = null;
-                    if (skipWhenHighResAvailable != null && skipWhenHighResAvailable.Equals("True"))
-                    {
-                        tmp = Utils.GetDbm().getHigResFanart(key, type);
-                    }
-                    if (tmp != null && tmp.Count > 0)
-                    {
-                        //do nothing
-                    }
-                    else
-                    {
-                        tmp = Utils.GetDbm().getFanart(key, type);
-                    }
-                    if (tmp != null && tmp.Count > 0)
-                    {
-                        ICollection valueColl = tmp.Values;
-                        int iFile = 0;
-                        int iStop = 0;
-                        foreach (DatabaseManager.FanartImage s in valueColl)
-                        {
-                            if (((iFile > iFilePrev) || (iFilePrev == -1)) && (iStop == 0))
-                            {
-                                if (checkImageResolution(s.disk_image, type, useAspectRatio))
-                                {
-                                    sout = s.disk_image;
-                                    iFilePrev = iFile;
-                                    currFile = s.disk_image;
-                                    iStop = 1;
-                                    break;
-                                }
-                            }
-                            iFile++;
-                        }
-                        valueColl = null;
-                        if (iStop == 0)
-                        {
-                            valueColl = tmp.Values;
-                            iFilePrev = -1;
-                            iFile = 0;
-                            iStop = 0;
-                            foreach (DatabaseManager.FanartImage s in valueColl)
-                            {
-                                if (((iFile > iFilePrev) || (iFilePrev == -1)) && (iStop == 0))
-                                {
-                                    if (checkImageResolution(s.disk_image, type, useAspectRatio))
-                                    {
-                                        sout = s.disk_image;
-                                        iFilePrev = iFile;
-                                        currFile = s.disk_image;
-                                        iStop = 1;
-                                        break;
-                                    }
-                                }
-                                iFile++;
-                            }
-                        }
-                        valueColl = null;                                            
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("GetFilename: " + ex.ToString());
-            }
-            return sout;
-        }*/
-
-
-       
+        
 
           /// <summary>
         /// Get next filename to return as property to skin
@@ -947,10 +868,6 @@ namespace FanartHandler
             }
         }
 
-    
-
-       
-
 
 
         public void InitRandomProperties()
@@ -993,6 +910,7 @@ namespace FanartHandler
                     if (scraperMPDatabase != null && scraperMPDatabase.Equals("True") && scraperWorkerObject != null && scraperWorkerObject.getRefreshFlag())
                     {
                         fs.currCount = maxCountImage;
+                        fs.SetCurrentArtistsImageNames(null);
                         scraperWorkerObject.setRefreshFlag(false);
                     }
                     if (m_CurrentTrackTag != null && m_CurrentTrackTag.Length > 0)   // music is playing
@@ -1001,6 +919,7 @@ namespace FanartHandler
                         if (scraperMusicPlaying != null && scraperMusicPlaying.Equals("True") && scraperWorkerObjectNowPlaying != null && scraperWorkerObjectNowPlaying.getRefreshFlag())
                         {
                             fp.currCountPlay = maxCountImage;
+                            fp.SetCurrentArtistsImageNames(null);
                             scraperWorkerObjectNowPlaying.setRefreshFlag(false);
                         }
                         if (fp.currPlayMusicArtist.Equals(m_CurrentTrackTag) == false)
@@ -1021,10 +940,12 @@ namespace FanartHandler
                         {
                             stopScraperNowPlaying();
                             EmptyAllImages(ref fp.listPlayMusic);
+                            fp.SetCurrentArtistsImageNames(null);
                             fp.currPlayMusic = "";
                             fp.currPlayMusicArtist = "";
                             fp.fanartAvailablePlay = false;
                             fp.FanartIsNotAvailablePlay();
+                            fp.prevPlayMusic = -1;
                             SetProperty("#fanarthandler.music.overlay.play", "");
                             SetProperty("#fanarthandler.music.backdrop1.play", "");
                             SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -1082,6 +1003,9 @@ namespace FanartHandler
                                 EmptyAllImages(ref fs.listSelectedMusic);
                                 fs.currSelectedMusic = "";
                                 fs.currSelectedMusicArtist = "";
+                                fs.prevSelectedMusic = -1;
+                                fs.prevSelectedGeneric = -1;
+                                fs.SetCurrentArtistsImageNames(null);
                                 SetProperty("#fanarthandler.music.backdrop1.selected", "");
                                 SetProperty("#fanarthandler.music.backdrop2.selected", "");
                                 isSelectedMusic = false;
@@ -1104,6 +1028,8 @@ namespace FanartHandler
                                 EmptyAllImages(ref fs.listSelectedMovies);
                                 fs.currSelectedMovie = "";
                                 fs.currSelectedMovieTitle = "";
+                                fs.SetCurrentArtistsImageNames(null);
+                                fs.prevSelectedGeneric = -1;
                                 SetProperty("#fanarthandler.movie.backdrop1.selected", "");
                                 SetProperty("#fanarthandler.movie.backdrop2.selected", "");
                                 isSelectedVideo = false;
@@ -1125,6 +1051,8 @@ namespace FanartHandler
                                 EmptyAllImages(ref fs.listSelectedScorecenter);
                                 fs.currSelectedScorecenter = "";
                                 fs.currSelectedScorecenterGenre = "";
+                                fs.SetCurrentArtistsImageNames(null);
+                                fs.prevSelectedScorecenter = -1;
                                 SetProperty("#fanarthandler.scorecenter.backdrop1.selected", "");
                                 SetProperty("#fanarthandler.scorecenter.backdrop2.selected", "");
                                 isSelectedScoreCenter = false;
@@ -1641,7 +1569,7 @@ namespace FanartHandler
                     int i = 0;
                     SetupDefaultBackdrops(defaultBackdrop, ref i);
                 }
-                logger.Debug("Fanart Handler is using Fanart: " + useFanart + ", Album Thumbs: " + useAlbum + ", Artist Thumbs: " + useArtist + ".");
+                logger.Info("Fanart Handler is using Fanart: " + useFanart + ", Album Thumbs: " + useAlbum + ", Artist Thumbs: " + useArtist + ".");
                 Utils.SetUseProxy(useProxy);
                 Utils.SetProxyHostname(proxyHostname);
                 Utils.SetProxyPort(proxyPort);
@@ -1678,7 +1606,6 @@ namespace FanartHandler
                 {
                     refreshTimer.Start();
                 }
-//                refreshTimer.Enabled = true;
                 logger.Info("Fanart Handler is started.");
             }
             catch (Exception ex)
@@ -1784,6 +1711,7 @@ namespace FanartHandler
                     fp.currPlayMusicArtist = "";
                     fp.fanartAvailablePlay = false;
                     fp.FanartIsNotAvailablePlay();
+                    fp.SetCurrentArtistsImageNames(null);
                     SetProperty("#fanarthandler.music.overlay.play", "");
                     SetProperty("#fanarthandler.music.backdrop1.play", "");
                     SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -1794,6 +1722,7 @@ namespace FanartHandler
                     EmptyAllImages(ref fs.listSelectedMusic);
                     fs.currSelectedMusic = "";
                     fs.currSelectedMusicArtist = "";
+                    fs.SetCurrentArtistsImageNames(null);
                     SetProperty("#fanarthandler.music.backdrop1.selected", "");
                     SetProperty("#fanarthandler.music.backdrop2.selected", "");
                     isSelectedMusic = false;
@@ -1803,6 +1732,7 @@ namespace FanartHandler
                     EmptyAllImages(ref fs.listSelectedMovies);
                     fs.currSelectedMovie = "";
                     fs.currSelectedMovieTitle = "";
+                    fs.SetCurrentArtistsImageNames(null);
                     SetProperty("#fanarthandler.movie.backdrop1.selected", "");
                     SetProperty("#fanarthandler.movie.backdrop2.selected", "");
                     isSelectedVideo = false;
@@ -1812,6 +1742,7 @@ namespace FanartHandler
                     EmptyAllImages(ref fs.listSelectedScorecenter);
                     fs.currSelectedScorecenter = "";
                     fs.currSelectedScorecenterGenre = "";
+                    fs.SetCurrentArtistsImageNames(null);
                     SetProperty("#fanarthandler.scorecenter.backdrop1.selected", "");
                     SetProperty("#fanarthandler.scorecenter.backdrop2.selected", "");
                     isSelectedScoreCenter = false;
@@ -1854,6 +1785,7 @@ namespace FanartHandler
                     fp.currPlayMusicArtist = "";
                     fp.fanartAvailablePlay = false;
                     fp.FanartIsNotAvailablePlay();
+                    fp.SetCurrentArtistsImageNames(null);
                     SetProperty("#fanarthandler.music.overlay.play", "");
                     SetProperty("#fanarthandler.music.backdrop1.play", "");
                     SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -1913,6 +1845,7 @@ namespace FanartHandler
                             fp.currPlayMusicArtist = "";
                             fp.fanartAvailablePlay = false;
                             fp.FanartIsNotAvailablePlay();
+                            fp.SetCurrentArtistsImageNames(null);
                             SetProperty("#fanarthandler.music.overlay.play", "");
                             SetProperty("#fanarthandler.music.backdrop1.play", "");
                             SetProperty("#fanarthandler.music.backdrop2.play", "");
@@ -2197,16 +2130,19 @@ namespace FanartHandler
                 EmptyAllImages(ref fs.listSelectedScorecenter);
                 EmptyAllImages(ref fr.listAnyTVSeries);
                 EmptyAllImages(ref fr.listAnyTV);
-                EmptyAllImages(ref fr.listAnyPlugins);
+                EmptyAllImages(ref fr.listAnyPlugins);                
                 GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
                 g_Player.PlayBackStopped -= new g_Player.StoppedHandler(OnPlayBackStopped);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
+                fp = null;
+                fs = null;
+                fr = null;
             }
             catch (Exception ex)
             {
                 logger.Error("Stop: " + ex.ToString());
             }
-            logger.Debug("Fanart Handler is stopped.");          
+            logger.Info("Fanart Handler is stopped.");          
         }
      
 

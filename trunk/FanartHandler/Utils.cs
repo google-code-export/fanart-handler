@@ -556,8 +556,9 @@ namespace FanartHandler
         /// <summary>
         /// Returns a shuffled list. 
         /// </summary>
-        public static void Shuffle(ref Hashtable filenames, Random r)
+        public static void Shuffle(ref Hashtable filenames)
         {
+            Random r = new Random();
             if (filenames != null && r != null)
             {
                 for (int n = filenames.Count - 1; n > 0; --n)
