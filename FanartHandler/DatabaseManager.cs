@@ -393,6 +393,21 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Get total scorecenter images in the Fanart Handler database
+        /// </summary>
+        public int GetTotalRandomInFanartDatabase(string type)
+        {
+            string sqlQuery = "SELECT count(Artist) FROM " + getTableName(type) + ";";
+            SQLiteResultSet result = dbClient.Execute(sqlQuery);
+            int i = 0;
+            if (result != null)
+            {
+                i = Int32.Parse(result.GetField(0, 0));
+            }
+            return i;
+        }
+
+        /// <summary>
         /// Get total uninitilised artists in the Fanart Handler database
         /// </summary>
         public int GetTotalArtistsUnInitialisedInFanartDatabase()
@@ -786,6 +801,30 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Sets the enabled column in the database. Controls if fanart is enabled or disabled.
+        /// </summary>
+        public void EnableFanartRandom(string disk_image, bool action, string type)
+        {
+            try
+            {
+                string sqlQuery;
+                if (action == true)
+                {
+                    sqlQuery = "UPDATE " + getTableName(type) + " SET Enabled = 'True' WHERE Disk_Image = '" + Utils.PatchSQL(disk_image) + "';";
+                }
+                else
+                {
+                    sqlQuery = "UPDATE " + getTableName(type) + " SET Enabled = 'False' WHERE Disk_Image = '" + Utils.PatchSQL(disk_image) + "';";
+                }
+                lock (dbClient) dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("EnableFanartRandom: " + ex.ToString());
+            }
+        }
+
+        /// <summary>
         /// Delete a specific image from the database.
         /// </summary>
         public void DeleteFanart(string disk_image, string type)
@@ -822,7 +861,7 @@ namespace FanartHandler
         }
 
         /// <summary>
-        /// Returns all data used by datagridview in the "Scraper Settings" tab for Movies (In MP configuration).
+        /// Returns all data used by datagridview in the "Scraper Settings" tab for Scorecenter (In MP configuration).
         /// </summary>
         public SQLiteResultSet getDataForTableMovie(int lastID)
         {
@@ -856,7 +895,24 @@ namespace FanartHandler
             }
             return result;
         }
-        
+
+        /// <summary>
+        /// Returns all data used by datagridview in the "Scraper Settings" tab for Random Fanart (In MP configuration).
+        /// </summary>
+        public SQLiteResultSet getDataForTableRandom(int lastID, string type)
+        {
+            SQLiteResultSet result = null;
+            try
+            {
+                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM " + getTableName(type) + " WHERE Id > " + lastID + " order by Artist, Disk_Image;";
+                result = dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("getDataForTableRandom: " + ex.ToString());
+            }
+            return result;
+        }
 
         /// <summary>
         /// Returns all images for an artist.
