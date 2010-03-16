@@ -59,7 +59,7 @@ namespace FanartHandler
         private bool isSelectedVideo = false;
         private bool isSelectedScoreCenter = false;
         private bool isRandom = false;        
-        private static Hashtable defaultBackdropImages;  //used to hold all the default backdrop images        
+        public static Hashtable defaultBackdropImages;  //used to hold all the default backdrop images        
         private static Random randDefaultBackdropImages = null;  //For getting random default backdrops
         private FanartHandlerConfig xconfig = null;
         public static string scraperMaxImages = null;  // Holds info read from fanarthandler.xml settings file
@@ -93,7 +93,7 @@ namespace FanartHandler
         private static FanartPlaying fp = null;
         private static FanartSelected fs = null;
         private static FanartRandom fr = null;
-
+        private static int syncPoint = 0;
         #endregion  
         
 
@@ -653,26 +653,27 @@ namespace FanartHandler
             {
                 //something has gone wrong
                 ResetCounters();
+                int windowId = GUIWindowManager.ActiveWindow;
                 if (fs.updateVisibilityCount == 2)  //after 2 sek
                 {
                     fs.UpdateProperties();
                     if (fs.doShowImageOne)
                     {
-                        fs.ShowImageOne();
+                        fs.ShowImageOne(windowId);
                         fs.doShowImageOne = false;
                     }
                     else
                     {
-                        fs.ShowImageTwo();
+                        fs.ShowImageTwo(windowId);
                         fs.doShowImageOne = true;
                     }
                     if (fs.fanartAvailable)
                     {
-                        fs.FanartIsAvailable();
+                        fs.FanartIsAvailable(windowId);
                     }
                     else
                     {
-                        fs.FanartIsNotAvailable();
+                        fs.FanartIsNotAvailable(windowId);
                     }                    
                 }
                 else if (fs.updateVisibilityCount == 5) //after 4 sek
@@ -688,21 +689,21 @@ namespace FanartHandler
                     fp.UpdatePropertiesPlay();
                     if (fp.doShowImageOnePlay)
                     {
-                        fp.ShowImageOnePlay();
+                        fp.ShowImageOnePlay(windowId);
                         fp.doShowImageOnePlay = false;
                     }
                     else
                     {
-                        fp.ShowImageTwoPlay();
+                        fp.ShowImageTwoPlay(windowId);
                         fp.doShowImageOnePlay = true;
                     }
                     if (fp.fanartAvailablePlay)
                     {
-                        fp.FanartIsAvailablePlay();
+                        fp.FanartIsAvailablePlay(windowId);
                     }
                     else
                     {
-                        fp.FanartIsNotAvailablePlay();
+                        fp.FanartIsNotAvailablePlay(windowId);
                     }
 
                 }
@@ -717,12 +718,12 @@ namespace FanartHandler
                     fr.UpdatePropertiesRandom();
                     if (fr.doShowImageOneRandom)
                     {
-                        fr.ShowImageOneRandom();
+                        fr.ShowImageOneRandom(windowId);
                         fr.doShowImageOneRandom = false;
                     }
                     else
                     {
-                        fr.ShowImageTwoRandom();
+                        fr.ShowImageTwoRandom(windowId);
                         fr.doShowImageOneRandom = true;
                     }                    
                 }
@@ -739,7 +740,18 @@ namespace FanartHandler
                     HandleOldImages(ref fr.listAnyPlugins);
                     HandleOldImages(ref fr.listAnyTV);
                     HandleOldImages(ref fr.listAnyTVSeries);
-                }       
+                }
+                /*
+                logger.Debug("listAnyGames: " + fr.listAnyGames.Count);
+                logger.Debug("listAnyMovies: " + fr.listAnyMovies.Count);
+                logger.Debug("listAnyMovingPictures: " + fr.listAnyMovingPictures.Count);
+                logger.Debug("listAnyMusic: " + fr.listAnyMusic.Count);
+                logger.Debug("listAnyPictures: " + fr.listAnyPictures.Count);
+                logger.Debug("listAnyScorecenter: " + fr.listAnyScorecenter.Count);
+                logger.Debug("listAnyTVSeries: " + fr.listAnyTVSeries.Count);
+                logger.Debug("listAnyTV: " + fr.listAnyTV.Count);
+                logger.Debug("listAnyPlugins: " + fr.listAnyPlugins.Count); 
+                */
             }
             catch (Exception ex)
             {
@@ -862,6 +874,7 @@ namespace FanartHandler
                     bool resetFanartAvailableFlags = true;
                     fs.hasUpdatedCurrCount = false;
                     fp.hasUpdatedCurrCountPlay = false;
+                    int windowId = GUIWindowManager.ActiveWindow;
                     m_CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
                     if (scraperMPDatabase != null && scraperMPDatabase.Equals("True") && scraperWorkerObject != null && scraperWorkerObject.getRefreshFlag())
                     {
@@ -869,9 +882,8 @@ namespace FanartHandler
                         fs.SetCurrentArtistsImageNames(null);
                         scraperWorkerObject.setRefreshFlag(false);
                     }
-                    if (m_CurrentTrackTag != null && m_CurrentTrackTag.Length > 0)   // music is playing
+                    if (m_CurrentTrackTag != null && m_CurrentTrackTag.Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
                     {
-                        isPlaying = true;
                         if (scraperMusicPlaying != null && scraperMusicPlaying.Equals("True") && scraperWorkerObjectNowPlaying != null && scraperWorkerObjectNowPlaying.getRefreshFlag())
                         {
                             fp.currCountPlay = maxCountImage;
@@ -880,12 +892,9 @@ namespace FanartHandler
                         }
                         if (fp.currPlayMusicArtist.Equals(m_CurrentTrackTag) == false)
                         {
-                            if (m_CurrentTrackTag != null)
+                            if (scraperMusicPlaying != null && scraperMusicPlaying.Equals("True") && Utils.GetDbm().GetIsScraping() == false && ((scrapeWorkerThreadNowPlaying != null && scrapeWorkerThreadNowPlaying.IsAlive == false) || scrapeWorkerThreadNowPlaying == null))
                             {
-                                if (scraperMusicPlaying != null && scraperMusicPlaying.Equals("True") && Utils.GetDbm().GetIsScraping() == false && ((scrapeWorkerThreadNowPlaying != null && scrapeWorkerThreadNowPlaying.IsAlive == false) || scrapeWorkerThreadNowPlaying == null))
-                                {
-                                    startScraperNowPlaying(m_CurrentTrackTag);
-                                }
+                                startScraperNowPlaying(m_CurrentTrackTag);
                             }
                         }
                         fp.RefreshMusicPlayingProperties();
@@ -900,7 +909,7 @@ namespace FanartHandler
                             fp.currPlayMusic = "";
                             fp.currPlayMusicArtist = "";
                             fp.fanartAvailablePlay = false;
-                            fp.FanartIsNotAvailablePlay();
+                            fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                             fp.prevPlayMusic = -1;
                             SetProperty("#fanarthandler.music.overlay.play", "");
                             SetProperty("#fanarthandler.music.backdrop1.play", "");
@@ -910,42 +919,42 @@ namespace FanartHandler
                     }
                     if (useMusicFanart.Equals("True"))
                     {
-                        if (GUIWindowManager.ActiveWindow == 504 || GUIWindowManager.ActiveWindow == 501)
+                        if (windowId == 504 || windowId == 501)
                         {
                             //User are in myMusicGenres window
                             isSelectedMusic = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshMusicSelectedProperties();
                         }
-                        else if (GUIWindowManager.ActiveWindow == 500)
+                        else if (windowId == 500)
                         {
                             //User are in music playlist
                             isSelectedMusic = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("music", ref fs.listSelectedMusic, "Music Playlist", ref fs.currSelectedMusic, ref fs.currSelectedMusicArtist);
                         }
-                        else if (GUIWindowManager.ActiveWindow == 29050 || GUIWindowManager.ActiveWindow == 29051 || GUIWindowManager.ActiveWindow == 29052)
+                        else if (windowId == 29050 || windowId == 29051 || windowId == 29052)
                         {
                             //User are in youtubefm search window
                             isSelectedMusic = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("music", ref fs.listSelectedMusic, "Youtube.FM", ref fs.currSelectedMusic, ref fs.currSelectedMusicArtist);
                         }
-                        else if (GUIWindowManager.ActiveWindow == 880)
+                        else if (windowId == 880)
                         {
                             //User are in music videos window
                             isSelectedMusic = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("music", ref fs.listSelectedMusic, "Music Videos", ref fs.currSelectedMusic, ref fs.currSelectedMusicArtist);
                         }
-                        else if (GUIWindowManager.ActiveWindow == 6623)
+                        else if (windowId == 6623)
                         {
                             //User are in mvids window
                             isSelectedMusic = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("music", ref fs.listSelectedMusic, "mVids", ref fs.currSelectedMusic, ref fs.currSelectedMusicArtist);
                         }
-                        else if (GUIWindowManager.ActiveWindow == 30885)
+                        else if (windowId == 30885)
                         {
                             //User are in global search window
                             isSelectedMusic = true;
@@ -970,7 +979,7 @@ namespace FanartHandler
                     }
                     if (useVideoFanart.Equals("True"))
                     {
-                        if (GUIWindowManager.ActiveWindow == 6 || GUIWindowManager.ActiveWindow == 25)
+                        if (windowId == 6 || windowId == 25)
                         {
                             //User are in myVideo, myVideoTitle window
                             isSelectedVideo = true;
@@ -994,7 +1003,7 @@ namespace FanartHandler
                     }
                     if (useScoreCenterFanart.Equals("True"))
                     {
-                        if (GUIWindowManager.ActiveWindow == 42000)  //User are in myScorecenter window
+                        if (windowId == 42000)  //User are in myScorecenter window
                         {
                             isSelectedScoreCenter = true;
                             resetFanartAvailableFlags = false;
@@ -1018,17 +1027,36 @@ namespace FanartHandler
                     if (resetFanartAvailableFlags)
                     {
                         fs.fanartAvailable = false;
-                        fs.FanartIsNotAvailable();
+                        fs.FanartIsNotAvailable(windowId);
                     }
-                    if (fr.windowsUsingFanartRandom.ContainsKey(GUIWindowManager.ActiveWindow.ToString()))
+                    if (fr.windowsUsingFanartRandom.ContainsKey(windowId.ToString()))
                     {
-                        isRandom = true;
+                        isRandom = true;                        
                         fr.RefreshRandomImageProperties();
                     }
                     else
                     {
                         if (isRandom)
                         {
+                            SetProperty("#fanarthandler.games.backdrop1.any", "");
+                            SetProperty("#fanarthandler.movie.backdrop1.any", "");
+                            SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
+                            SetProperty("#fanarthandler.music.backdrop1.any", "");
+                            SetProperty("#fanarthandler.picture.backdrop1.any", "");
+                            SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
+                            SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
+                            SetProperty("#fanarthandler.tv.backdrop1.any", "");
+                            SetProperty("#fanarthandler.plugins.backdrop1.any", "");
+                            SetProperty("#fanarthandler.games.backdrop2.any", "");
+                            SetProperty("#fanarthandler.movie.backdrop2.any", "");
+                            SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
+                            SetProperty("#fanarthandler.music.backdrop2.any", "");
+                            SetProperty("#fanarthandler.picture.backdrop2.any", "");
+                            SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
+                            SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
+                            SetProperty("#fanarthandler.tv.backdrop2.any", "");
+                            SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                            fr.currCountRandom = 0;
                             EmptyAllImages(ref fr.listAnyGames);
                             EmptyAllImages(ref fr.listAnyMovies);
                             EmptyAllImages(ref fr.listAnyMovingPictures);
@@ -1054,6 +1082,7 @@ namespace FanartHandler
                         fr.updateVisibilityCountRandom = fr.updateVisibilityCountRandom + 1;
                     }
                     UpdateDummyControls();
+   
                 }
                 catch (Exception ex)
                 {
@@ -1062,7 +1091,7 @@ namespace FanartHandler
             }
         }
 
-        private readonly object lockObject = new object();
+        
 
         /// <summary>
         /// Run new check and return updated images to user
@@ -1073,21 +1102,19 @@ namespace FanartHandler
             {
                 try
                 {
-                    if (Monitor.TryEnter(lockObject))
+                    int sync = Interlocked.CompareExchange(ref syncPoint, 1, 0);
+                    if (sync == 0)
                     {
-                        try
-                        {
-                            UpdateImageTimer();
-                        }
-                        finally
-                        {
-                            Monitor.Exit(lockObject);
-                        }
+                        // No other event was executing.
+                        UpdateImageTimer();
+
+                        // Release control of syncPoint.
+                        syncPoint = 0;
                     }
                 }
                 catch (Exception ex)
                 {
-                    refreshTimer.Start();
+                    syncPoint = 0;
                     logger.Error("UpdateImageTimer: " + ex.ToString());
                 }
             }
@@ -1116,12 +1143,12 @@ namespace FanartHandler
             fs.currCount = 0;
             fp.currCountPlay = 0;
             fr.currCountRandom = 0;
-            fs.ShowImageOne();
-            fr.ShowImageOneRandom();
-            fp.ShowImageOnePlay();
-            fs.FanartIsNotAvailable();
+            fs.ShowImageOne(35);
+            fr.ShowImageOneRandom(35);
+            fp.ShowImageOnePlay(35);
+            fs.FanartIsNotAvailable(35);
             SetProperty("#fanarthandler.scraper.percent.completed", "");
-            GUIControl.HideControl(GUIWindowManager.ActiveWindow, 91919280);            
+            GUIControl.HideControl(35, 91919280);            
             maxCountImage = Convert.ToInt32(imageInterval);
             fs.hasUpdatedCurrCount = false;
             fp.hasUpdatedCurrCountPlay = false;
@@ -1265,7 +1292,6 @@ namespace FanartHandler
 
             LogManager.Configuration = config;
         }
-
 
 
         /// <summary>
@@ -1551,13 +1577,13 @@ namespace FanartHandler
                 }
                 myDirectoryTimer = new TimerCallback(UpdateDirectoryTimer);
                 directoryTimer = new System.Threading.Timer(myDirectoryTimer, null, 3600000, 3600000);
+                Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
                 GUIWindowManager.OnActivateWindow += new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
-                g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStopped);
                 g_Player.PlayBackStarted += new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 refreshTimer = new System.Timers.Timer(1000);
                 refreshTimer.Elapsed += new ElapsedEventHandler(UpdateImageTimer);
                 refreshTimer.Interval = 1000;
-                string windowId = GUIWindowManager.ActiveWindow.ToString();
+                string windowId = "35";// GUIWindowManager.ActiveWindow.ToString();
                 if (fr.windowsUsingFanartRandom.ContainsKey(windowId) || fs.windowsUsingFanartSelected.ContainsKey(windowId) || (fp.windowsUsingFanartPlay.ContainsKey(windowId) || (useOverlayFanart != null && useOverlayFanart.Equals("True"))))
                 {
                     refreshTimer.Start();
@@ -1568,14 +1594,30 @@ namespace FanartHandler
             {
                 logger.Error("Start: " + ex.ToString());                
             }
+        }               
+
+
+            
+        private void onSystemPowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e) 
+        {
+            if (e.Mode == Microsoft.Win32.PowerModes.Resume) 
+            {
+                logger.Info("Fanart Handler is resuming from standby/hibernate.");
+                Start();
+            }
+            else if (e.Mode == Microsoft.Win32.PowerModes.Suspend) 
+            {
+                logger.Info("Fanart Handler is suspending/hibernating.");
+                Stop();                
+            }
         }
 
         public void GUIWindowManager_OnActivateWindow(int activeWindowId)
         {
             try
             {
-                string windowId = GUIWindowManager.ActiveWindow.ToString();
-                if ((fr.windowsUsingFanartRandom.ContainsKey(windowId) || fs.windowsUsingFanartSelected.ContainsKey(windowId) || (fp.windowsUsingFanartPlay.ContainsKey(windowId))) && AllowFanartInThisWindow(windowId))
+                string windowId = ""+activeWindowId;
+                if ((fr.windowsUsingFanartRandom.ContainsKey(windowId) || fs.windowsUsingFanartSelected.ContainsKey(windowId) || fp.windowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
                 {
                     if (fs.windowsUsingFanartSelected.ContainsKey(windowId))
                     {
@@ -1587,64 +1629,107 @@ namespace FanartHandler
                         {
                             if (fs.doShowImageOne)
                             {
-                                fs.ShowImageTwo();
+                                fs.ShowImageTwo(activeWindowId);
                             }
                             else
                             {
-                                fs.ShowImageOne();
+                                fs.ShowImageOne(activeWindowId);
                             }
                             if (fs.fanartAvailable)
                             {
-                                fs.FanartIsAvailable();
+                                fs.FanartIsAvailable(activeWindowId);
                             }
                             else
                             {
-                                fs.FanartIsNotAvailable();
+                                fs.FanartIsNotAvailable(activeWindowId);
                             }
                         }
                     }
                     if ((fp.windowsUsingFanartPlay.ContainsKey(windowId) || (useOverlayFanart != null && useOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
                     {
-                        string currentArtist = GUIPropertyManager.GetProperty("#Play.Current.Artist");
-                        if (refreshTimer != null && !refreshTimer.Enabled && (g_Player.Playing && (currentArtist != null && currentArtist.Length > 0)))
+                        if (refreshTimer != null && !refreshTimer.Enabled && ((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (m_CurrentTrackTag != null && m_CurrentTrackTag.Length > 0))))
                         {
                             refreshTimer.Start();
                         }
-                        else
+                        else if (refreshTimer != null && refreshTimer.Enabled)
                         {
                             if (fp.doShowImageOnePlay)
                             {
-                                fp.ShowImageTwoPlay();
+                                fp.ShowImageTwoPlay(activeWindowId);
                             }
                             else
                             {
-                                fp.ShowImageOnePlay();
+                                fp.ShowImageOnePlay(activeWindowId);
                             }
                             if (fp.fanartAvailablePlay)
                             {
-                                fp.FanartIsAvailablePlay();
+                                fp.FanartIsAvailablePlay(activeWindowId);
                             }
                             else
                             {
-                                fp.FanartIsNotAvailablePlay();
+                                fp.FanartIsNotAvailablePlay(activeWindowId);
+                            }
+                        }
+                        else
+                        {
+                            if (fp.fanartAvailablePlay)
+                            {
+                                fp.FanartIsAvailablePlay(activeWindowId);
+                            }
+                            else
+                            {
+                                fp.FanartIsNotAvailablePlay(activeWindowId);
+                            }
+                            if (isPlaying)
+                            {
+                                stopScraperNowPlaying();
+                                EmptyAllImages(ref fp.listPlayMusic);
+                                fp.SetCurrentArtistsImageNames(null);
+                                fp.currPlayMusic = "";
+                                fp.currPlayMusicArtist = "";
+                                fp.fanartAvailablePlay = false;
+                                fp.FanartIsNotAvailablePlay(activeWindowId);
+                                fp.prevPlayMusic = -1;
+                                SetProperty("#fanarthandler.music.overlay.play", "");
+                                SetProperty("#fanarthandler.music.backdrop1.play", "");
+                                SetProperty("#fanarthandler.music.backdrop2.play", "");
+                                isPlaying = false;
                             }
                         }
                     }
                     if (fr.windowsUsingFanartRandom.ContainsKey(windowId))
                     {
                         if (refreshTimer != null && !refreshTimer.Enabled)
-                        {
+                        {                            
                             refreshTimer.Start();
                         }
                         else
                         {
                             if (fr.doShowImageOneRandom)
                             {
-                                fr.ShowImageTwoRandom();
+                                SetProperty("#fanarthandler.games.backdrop1.any", "");
+                                SetProperty("#fanarthandler.movie.backdrop1.any", "");
+                                SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
+                                SetProperty("#fanarthandler.music.backdrop1.any", "");
+                                SetProperty("#fanarthandler.picture.backdrop1.any", "");
+                                SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
+                                SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
+                                SetProperty("#fanarthandler.tv.backdrop1.any", "");
+                                SetProperty("#fanarthandler.plugins.backdrop1.any", "");
+                                fr.ShowImageTwoRandom(activeWindowId);
                             }
                             else
                             {
-                                fr.ShowImageOneRandom();
+                                SetProperty("#fanarthandler.games.backdrop2.any", "");
+                                SetProperty("#fanarthandler.movie.backdrop2.any", "");
+                                SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
+                                SetProperty("#fanarthandler.music.backdrop2.any", "");
+                                SetProperty("#fanarthandler.picture.backdrop2.any", "");
+                                SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
+                                SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
+                                SetProperty("#fanarthandler.tv.backdrop2.any", "");
+                                SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                                fr.ShowImageOneRandom(activeWindowId);
                             }
                         }
                     }
@@ -1676,7 +1761,7 @@ namespace FanartHandler
                     fp.currPlayMusic = "";
                     fp.currPlayMusicArtist = "";
                     fp.fanartAvailablePlay = false;
-                    fp.FanartIsNotAvailablePlay();
+                    fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                     fp.prevPlayMusic = -1;
                     SetProperty("#fanarthandler.music.overlay.play", "");
                     SetProperty("#fanarthandler.music.backdrop1.play", "");
@@ -1715,6 +1800,25 @@ namespace FanartHandler
                 }
                 if (isRandom)
                 {
+                    SetProperty("#fanarthandler.games.backdrop1.any", "");
+                    SetProperty("#fanarthandler.movie.backdrop1.any", "");
+                    SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
+                    SetProperty("#fanarthandler.music.backdrop1.any", "");
+                    SetProperty("#fanarthandler.picture.backdrop1.any", "");
+                    SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
+                    SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
+                    SetProperty("#fanarthandler.tv.backdrop1.any", "");
+                    SetProperty("#fanarthandler.plugins.backdrop1.any", "");
+                    SetProperty("#fanarthandler.games.backdrop2.any", "");
+                    SetProperty("#fanarthandler.movie.backdrop2.any", "");
+                    SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
+                    SetProperty("#fanarthandler.music.backdrop2.any", "");
+                    SetProperty("#fanarthandler.picture.backdrop2.any", "");
+                    SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
+                    SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
+                    SetProperty("#fanarthandler.tv.backdrop2.any", "");
+                    SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                    fr.currCountRandom = 0;
                     EmptyAllImages(ref fr.listAnyGames);
                     EmptyAllImages(ref fr.listAnyMovies);
                     EmptyAllImages(ref fr.listAnyMovingPictures);
@@ -1733,37 +1837,7 @@ namespace FanartHandler
             }
         }
 
-
-        public void OnPlayBackStopped(g_Player.MediaType type, int stoptime, string filename)
-        {
-            try
-            {
-                string windowId = GUIWindowManager.ActiveWindow.ToString();
-                if (refreshTimer != null && refreshTimer.Enabled && (!fr.windowsUsingFanartRandom.ContainsKey(windowId) && !fs.windowsUsingFanartSelected.ContainsKey(windowId)))
-                {
-                    refreshTimer.Stop();
-                }
-                if (isPlaying)
-                {
-                    stopScraperNowPlaying();
-                    EmptyAllImages(ref fp.listPlayMusic);
-                    fp.SetCurrentArtistsImageNames(null);
-                    fp.currPlayMusic = "";
-                    fp.currPlayMusicArtist = "";
-                    fp.fanartAvailablePlay = false;
-                    fp.FanartIsNotAvailablePlay();
-                    fp.prevPlayMusic = -1;
-                    SetProperty("#fanarthandler.music.overlay.play", "");
-                    SetProperty("#fanarthandler.music.backdrop1.play", "");
-                    SetProperty("#fanarthandler.music.backdrop2.play", "");
-                    isPlaying = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("OnPlayBackStopped: " + ex.ToString());
-            }
-        }
+ 
 
         private bool AllowFanartInThisWindow(string windowId)
         {            
@@ -1773,8 +1847,6 @@ namespace FanartHandler
                 return false;
             else if (windowId != null && windowId.Equals("602"))
                 return false;
-            else if (windowId == null)
-                return false;            
             else
                 return true;
         }
@@ -1783,46 +1855,15 @@ namespace FanartHandler
         {
             try
             {
-                string windowId = GUIWindowManager.ActiveWindow.ToString();
-                string currentArtist = GUIPropertyManager.GetProperty("#Play.Current.Artist");
-                if (refreshTimer != null && !refreshTimer.Enabled && fp.windowsUsingFanartPlay.ContainsKey(windowId) && AllowFanartInThisWindow(windowId))
+                string windowId = GUIWindowManager.ActiveWindow.ToString();                                
+                isPlaying = true;
+                if ((fp.windowsUsingFanartPlay.ContainsKey(windowId) || (useOverlayFanart != null && useOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
                 {
-                    if (g_Player.Playing && (currentArtist != null && currentArtist.Length > 0))
+                    if (refreshTimer != null && !refreshTimer.Enabled && (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio || MediaPortal.Util.Utils.IsLastFMStream(filename)))
                     {
                         refreshTimer.Start();
                     }
-                }
-                else if (refreshTimer != null && !refreshTimer.Enabled && useOverlayFanart.Equals("True") && AllowFanartInThisWindow(windowId))
-                {
-                    if (g_Player.Playing && (currentArtist != null && currentArtist.Length > 0))
-                    {
-                        refreshTimer.Start();
-                    }
-                }
-                else if (AllowFanartInThisWindow(windowId) == false)
-                {
-                    if (refreshTimer != null && refreshTimer.Enabled)
-                    {
-                        refreshTimer.Stop();
-                        if (isPlaying)
-                        {
-                            stopScraperNowPlaying();
-                            EmptyAllImages(ref fp.listPlayMusic);
-                            fp.SetCurrentArtistsImageNames(null);
-                            fp.currPlayMusic = "";
-                            fp.currPlayMusicArtist = "";
-                            fp.fanartAvailablePlay = false;
-                            fp.FanartIsNotAvailablePlay();
-                            fp.prevPlayMusic = -1;
-                            SetProperty("#fanarthandler.music.overlay.play", "");
-                            SetProperty("#fanarthandler.music.backdrop1.play", "");
-                            SetProperty("#fanarthandler.music.backdrop2.play", "");
-                            isPlaying = false;
-                        }
-                        EmptyAllFanartHandlerProperties();
-                    }
-                }
-                
+                }                    
             }
             catch (Exception ex)
             {
@@ -2099,8 +2140,8 @@ namespace FanartHandler
                 EmptyAllImages(ref fr.listAnyTVSeries);
                 EmptyAllImages(ref fr.listAnyTV);
                 EmptyAllImages(ref fr.listAnyPlugins);                
+                Microsoft.Win32.SystemEvents.PowerModeChanged -= new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
                 GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
-                g_Player.PlayBackStopped -= new g_Player.StoppedHandler(OnPlayBackStopped);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 fp = null;
                 fs = null;
