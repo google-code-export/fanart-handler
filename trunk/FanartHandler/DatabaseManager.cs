@@ -524,6 +524,7 @@ namespace FanartHandler
                     lock (dbClient) dbClient.Execute("BEGIN TRANSACTION;");
                     if (artist != null && artist.Trim().Length > 0)
                     {
+                        
                         InsertNewMusicArtist(dbArtist, "MusicFanart");
                         sqlQuery = "SELECT Successful_Scrape FROM Music_Artist WHERE Artist = '" + Utils.PatchSQL(dbArtist) + "';";
                         SQLiteResultSet result = dbClient.Execute(sqlQuery);
@@ -571,11 +572,11 @@ namespace FanartHandler
                         {
                             logger.Debug("Artist " + artist + " has already maximum number of images. Will not download anymore images for this artist.");
                         }
-                        setSuccessfulScrape(dbArtist);
-                        lock (dbClient) dbClient.Execute("COMMIT;");
-                        scraper = null;
-                        return totalImages;
+                        setSuccessfulScrape(dbArtist);                        
+                        scraper = null;                        
                     }
+                    lock (dbClient) dbClient.Execute("COMMIT;");
+                    return totalImages;
                 }
                 catch (Exception ex)
                 {

@@ -18,7 +18,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w]";
-        public const string GetMajorMinorVersionNumber = "1.5";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "1.6";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -590,12 +590,13 @@ namespace FanartHandler
                     if (isStopping == false)
                     {
                         logger.Error("LoadImage: " + ex.ToString());
-                        if (!IsFileValid(filename))
+/*                        if (!IsFileValid(filename))
                         {
                             if (File.Exists(filename)) File.Delete(filename);
                             dbm.DeleteFanart(filename, type);
                             logger.Error("LoadImage: Deleting downloaded file because it is corrupt.");
                         }
+ */ 
                     }
 
                 }

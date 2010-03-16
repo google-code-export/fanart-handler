@@ -583,35 +583,35 @@ namespace FanartHandler
         /// <summary>
         /// Set visibility on dummy controls that is used in skins for deciding if fanart is available
         /// </summary>
-        public void FanartIsAvailable()
+        public void FanartIsAvailable(int windowId)
         {
-            GUIControl.ShowControl(GUIWindowManager.ActiveWindow, 91919293);
+            GUIControl.ShowControl(windowId, 91919293);
         }
 
         /// <summary>
         /// Set visibility on dummy controls that is used in skins for deciding if fanart is available
         /// </summary>
-        public void FanartIsNotAvailable()
+        public void FanartIsNotAvailable(int windowId)
         {
-            GUIControl.HideControl(GUIWindowManager.ActiveWindow, 91919293);
+            GUIControl.HideControl(windowId, 91919293);
         }
 
         /// <summary>
         /// Set visibility on dummy controls that is used in skins for fading of images
         /// </summary>
-        public void ShowImageOne()
+        public void ShowImageOne(int windowId)
         {
-            GUIControl.ShowControl(GUIWindowManager.ActiveWindow, 91919291);
-            GUIControl.HideControl(GUIWindowManager.ActiveWindow, 91919292);
+            GUIControl.ShowControl(windowId, 91919291);
+            GUIControl.HideControl(windowId, 91919292);
         }
 
         /// <summary>
         /// Set visibility on dummy controls that is used in skins for fading of images
         /// </summary>
-        public void ShowImageTwo()
+        public void ShowImageTwo(int windowId)
         {
-            GUIControl.ShowControl(GUIWindowManager.ActiveWindow, 91919292);
-            GUIControl.HideControl(GUIWindowManager.ActiveWindow, 91919291);
+            GUIControl.ShowControl(windowId, 91919292);
+            GUIControl.HideControl(windowId, 91919291);
         }
     }
 }
