@@ -27,7 +27,7 @@
         <Author>cul8er</Author>
         <HomePage>http://code.google.com/p/fanart-handler/</HomePage>
         <ForumPage>http://forum.team-mediaportal.com/mediaportal-plugins-47/fanart-handler-plugin-v1-3-music-fanart-scraper-76535/</ForumPage>
-        <UpdateUrl>http://fanart-handler.googlecode.com/files/fanarthandler.xml</UpdateUrl>
+        <UpdateUrl>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>1</Major>
           <Minor>6</Minor>
