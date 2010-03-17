@@ -37,9 +37,11 @@
         <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal.</ExtensionDescription>
         <VersionDescription>Improved performance and async loading of images.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>http://fanart-handler.googlecode.com/files/fanarthandler.mpe1</OnlineLocation>
+        <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2010-02-23T15:04:24.1976731+01:00</ReleaseDate>
-        <Tags />
+        <Tags>fanart
+music
+scraper</Tags>
         <Location>C:\Skin\release\fanarthandler.mpe1</Location>
         <Params>
           <Items>
