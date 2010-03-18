@@ -13,6 +13,14 @@
               <Items />
             </Files>
           </GroupItem>
+          <GroupItem Name="Images">
+            <DisplayName>Images</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>Images</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
         </Items>
       </Groups>
       <Sections>
