@@ -5,6 +5,8 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.5 to 1.6)==
+  * No new features but the new version includes optimization in how random images was handled. Usage of memory has also gone down due to this optimization.
 ==Change Log (version 1.4 to 1.5)==
   * new feature: Manage Video Fanart support.
   * new feature: Manage Scorecenter Fanart support.
