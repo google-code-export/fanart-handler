@@ -18,7 +18,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w]";
-        public const string GetMajorMinorVersionNumber = "1.6";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "1.7";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -28,6 +28,7 @@ namespace FanartHandler
         private static bool isStopping = false;  //is the plugin about to stop, then this will be true
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
+        private static bool delayStop = false;
         #endregion
 
         /// <summary>
@@ -45,6 +46,22 @@ namespace FanartHandler
         {
             dbm = new DatabaseManager();
             dbm.initDB();
+        }        
+
+        /// <summary>
+        /// Return value.
+        /// </summary>
+        public static bool GetDelayStop()
+        {
+            return delayStop;
+        }
+
+        /// <summary>
+        /// Set value.
+        /// </summary>
+        public static void SetDelayStop(bool b)
+        {
+            delayStop = b;
         }
 
         /// <summary>
@@ -606,7 +623,7 @@ namespace FanartHandler
         /// <summary>
         /// Decide if image is corropt or not
         /// </summary>
-        private static bool IsFileValid(string filename)
+        public static bool IsFileValid(string filename)
         {
             if (filename == null) return false;
             Image checkImage = null;
