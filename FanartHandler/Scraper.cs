@@ -406,7 +406,7 @@ namespace FanartHandler
                             }
                         }
                         else
-                        {
+                        { 
                             logger.Debug("Will not download fanart image as it already exist an image in your fanart database with this source image name.");
                         }
                     }
