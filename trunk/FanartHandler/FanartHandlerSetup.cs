@@ -1416,6 +1416,7 @@ namespace FanartHandler
                 initLogger();             
                 logger.Info("Fanart Handler is starting.");
                 logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());
+                System.Net.ServicePointManager.Expect100Continue = false;
                 setupConfigFile();
                 using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "FanartHandler.xml")))
                 {
