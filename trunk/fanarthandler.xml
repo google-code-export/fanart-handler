@@ -73,7 +73,7 @@ scraper</Tags>
  If have .dll extension used like MP plugin configuration</Description>
             </SectionParam>
             <SectionParam Name="Online Screenshots">
-              <Value />
+              <Value>http://x-factor.googlecode.com/svn/wiki/img/xfactorfanarthandler_plugin3.jpg</Value>
               <ValueType>String</ValueType>
               <Description>Online stored screenshot urls separated by ; </Description>
             </SectionParam>
