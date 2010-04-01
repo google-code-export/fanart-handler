@@ -60,7 +60,8 @@ namespace FanartHandler
         private bool isSelectedVideo = false;
         private bool isSelectedScoreCenter = false;
         private bool isRandom = false;
-        private bool isActivatingWindow = false;
+        //private bool isActivatingWindow = false;
+        public bool preventRefresh = false;
         public static Hashtable defaultBackdropImages;  //used to hold all the default backdrop images        
         private static Random randDefaultBackdropImages = null;  //For getting random default backdrops
         private FanartHandlerConfig xconfig = null;
@@ -1185,15 +1186,18 @@ namespace FanartHandler
                     int sync = Interlocked.CompareExchange(ref syncPointUpdate, 1, 0);
                     if (sync == 0)
                     {
+                        preventRefresh = true;
                         // No other event was executing.
                         UpdateDummyControlsRandom();
 
                         // Release control of syncPoint.
                         syncPointUpdate = 0;
+                        preventRefresh = false;
                     }
                 }
                 catch (Exception ex)
                 {
+                    preventRefresh = false;
                     syncPointUpdate = 0;
                     logger.Error("UpdateDummyControls: " + ex.ToString());
                 }
@@ -1206,21 +1210,18 @@ namespace FanartHandler
         /// </summary>
         public void UpdateImageTimer(Object stateInfo, ElapsedEventArgs e)
         {
-            if (Utils.GetIsStopping() == false)
+            if (Utils.GetIsStopping() == false && !preventRefresh)
             {
                 try
                 {
-                    if (!isActivatingWindow)
+                    int sync = Interlocked.CompareExchange(ref syncPointRefresh, 1, 0);
+                    if (sync == 0)
                     {
-                        int sync = Interlocked.CompareExchange(ref syncPointRefresh, 1, 0);
-                        if (sync == 0)
-                        {
-                            // No other event was executing.
-                            UpdateImageTimer();
+                        // No other event was executing.
+                        UpdateImageTimer();
 
-                            // Release control of syncPoint.
-                            syncPointRefresh = 0;
-                        }
+                        // Release control of syncPoint.
+                        syncPointRefresh = 0;
                     }
                 }
                 catch (Exception ex)
@@ -1237,6 +1238,7 @@ namespace FanartHandler
         private void SetupVariables()
         {
             Utils.SetIsStopping(false);
+            preventRefresh = false;
             isPlaying = false;
             isSelectedMusic = false;
             isSelectedVideo = false;
@@ -1415,8 +1417,7 @@ namespace FanartHandler
                 Utils.SetIsStopping(false); 
                 initLogger();             
                 logger.Info("Fanart Handler is starting.");
-                logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());
-                System.Net.ServicePointManager.Expect100Continue = false;
+                logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());                
                 setupConfigFile();
                 using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "FanartHandler.xml")))
                 {
@@ -1739,7 +1740,7 @@ namespace FanartHandler
                     ix++;
                 }
                 string windowId = ""+activeWindowId;
-                isActivatingWindow = true;
+                preventRefresh = true;
                 if ((fr.windowsUsingFanartRandom.ContainsKey(windowId) || fs.windowsUsingFanartSelected.ContainsKey(windowId) || fp.windowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
                 {
                     if (fs.windowsUsingFanartSelected.ContainsKey(windowId))
@@ -1845,11 +1846,11 @@ namespace FanartHandler
                         updateTimer.Stop();
                     }
                 }
-                isActivatingWindow = false;
+                preventRefresh = false;
             }
             catch (Exception ex)
             {
-                isActivatingWindow = false;
+                preventRefresh = false;
                 logger.Error("GUIWindowManager_OnActivateWindow: " + ex.ToString());
             }
         }
@@ -1979,7 +1980,7 @@ namespace FanartHandler
                     {
                         refreshTimer.Start();
                     }
-                }                    
+                }
             }
             catch (Exception ex)
             {

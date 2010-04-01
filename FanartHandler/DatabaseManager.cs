@@ -880,6 +880,25 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Returns all data used by datagridview in the "Scraper Settings" tab for Music Fanart Overview (In MP configuration).
+        /// </summary>
+        public SQLiteResultSet getDataForTableMusicOverview()
+        {
+            SQLiteResultSet result = null;
+            try
+            {
+                string sqlQuery = "select t1.artist, count(t2.artist) from music_artist t1 LEFT OUTER JOIN music_fanart t2  ON t1.artist = t2.artist group by t1.artist;";
+                result = dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("getDataForTableMusicOverview: " + ex.ToString());
+            }
+            return result;
+        }
+        
+
+        /// <summary>
         /// Returns all data used by datagridview in the "Scraper Settings" tab for Movies (In MP configuration).
         /// </summary>
         public SQLiteResultSet getDataForTableScoreCenter(int lastID)

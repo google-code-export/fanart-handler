@@ -177,65 +177,6 @@ or "MP Album Thumbs" you may want to leave this to
 with the "Display Only Wide Images (Aspect Ratio &gt;= 1.55)" 
 property.</value>
   </data>
-  <data name="button35.ToolTip" xml:space="preserve">
-    <value>Press this button to enable or disable the use of the
-selected fanart/backdrop. Enabled means that the
-image will be used by the plugin in MediaPortal.
-Disabled means that MediaPortal will not use the
-image. The difference between pressing this button
-and the "Delete Selected Fanart" is that this button
-keeps the image on your harddrive but also in the
-fanart database and this also means that the scraper
-will NOT download it again. Pressing the delete button
-will delete the image but it can re-appear because the
-scraper can find the image on a future scrape.</value>
-  </data>
-  <data name="button36.ToolTip" xml:space="preserve">
-    <value>WARNING: Pressing this button will delete all images
-stored on your harddrive in the "thumbs/Skin Fanart/music"
-folder and also from the fanart database.
-
-The purpose of this button is to reset everything and
-allow for a complete new initial scrape. </value>
-  </data>
-  <data name="button37.ToolTip" xml:space="preserve">
-    <value>Press this button to delete the selected fanart/backdrop
-from the fanart database but also from your harddrive. 
-The difference between pressing this button
-and the "Enable/Disable Selected Fanart" button is that 
-this button deletes the image from your harddrive and
-the fanart database and this saves harddisk space but 
-the image can re-appear because the scraper can find 
-the image on a future scrape.</value>
-  </data>
-  <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
-    <value>Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart/backdrops mathing every song you play in
-MediaPortal and then downloading the found images 
-to your harddrive (to the "thumbs/Skin Fanart/music" 
-folder). Leaving this option unchecked will disable 
-now playing scraping and you will have to manually 
-add your fanart images to the "thumbs/Skin Fanart/music" 
-folder.
-
-Warning; Using this option if you have a large music
-collection can use quite alot of harddisk space.</value>
-  </data>
-  <data name="checkBoxEnableScraperMPDatabase.ToolTip" xml:space="preserve">
-    <value>Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart/backdrops mathing all the artists that you have 
-allready in your MediaPortal music database and then 
-downloading the found images to your harddrive (to 
-the "thumbs/Skin Fanart/music" folder). Leaving this 
-option unchecked will disable scraping and you will 
-have to manually add your fanart images to the
-"thumbs/Skin Fanart/music" folder.
-
-Warning; Using this option if you have a large music
-collection can use quite alot of harddisk space.</value>
-  </data>
   <data name="button4.ToolTip" xml:space="preserve">
     <value>Press this button to enable or disable the use of the
 selected fanart/backdrop. Enabled means that the
@@ -268,6 +209,45 @@ the image can re-appear because the scraper can find
 the image on a future scrape.</value>
   </data>
   <data name="button1.ToolTip" xml:space="preserve">
+    <value>The first time you open MediaPortal after enabling the scraper
+will cause a big search for fanart matching every artist you
+have in your MediaPortal music database. This is only done once.
+After this MediaPortal will perorm this "initial scrape" only for
+new added artists. If you at a later stage decided that you for 
+example want to increase the number of imges per artis
+you will have to press this button to initiate a new intitial scrape
+the next time you start MediaPortal. After the initial scrape this
+plugin will only scrape the htbackdrop site for new images.</value>
+  </data>
+  <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
+    <value>Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing every song you play in
+MediaPortal and then downloading the found images 
+to your harddrive (to the "thumbs/Skin Fanart/music" 
+folder). Leaving this option unchecked will disable 
+now playing scraping and you will have to manually 
+add your fanart images to the "thumbs/Skin Fanart/music" 
+folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.</value>
+  </data>
+  <data name="checkBoxEnableScraperMPDatabase.ToolTip" xml:space="preserve">
+    <value>Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing all the artists that you have 
+allready in your MediaPortal music database and then 
+downloading the found images to your harddrive (to 
+the "thumbs/Skin Fanart/music" folder). Leaving this 
+option unchecked will disable scraping and you will 
+have to manually add your fanart images to the
+"thumbs/Skin Fanart/music" folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.</value>
+  </data>
+  <data name="button38.ToolTip" xml:space="preserve">
     <value>The first time you open MediaPortal after enabling the scraper
 will cause a big search for fanart matching every artist you
 have in your MediaPortal music database. This is only done once.
@@ -339,35 +319,6 @@ this button deletes the image from your harddrive and
 the fanart database and this saves harddisk space but 
 the image can re-appear because the scraper can find 
 the image on a future scrape.</value>
-  </data>
-  <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Fanart Handler is a plugin for MediaPortal (MP). The plugin has two main purposes;
-* Search and download music fanart (scrape) from the htbackdrops site (link).
-   * for all artists stored in your MP music database, for any artist currently being played (on the fly).
-* Push fanart that you store on your local harddrive to the current used MP skin.
-   * push fanart for now played music, push fanart for selected music or movie,  push random images from selected folders
-
-The scope of this plugin are
-* scrape htbackdrops site for music fanart for all artists stored in your MP music database.
-* scrape htbackdrops site for music fanart for currently played artist.
-* Push music fanart for now played music track (artist images)
-* Push music fanart for browsed music artist in myMusic plugin
-* Push music fanart for browsed music artist in GlobalSearch plugin
-* Push music fanart for browsed music artist in Music Videos plugin
-* Push music fanart for browsed music artist in mVidsplugin
-* Push music fanart for browsed music artist in YouTube.FM plugin
-* Push movie fanart for browsed video title in myVideo plugin
-* Push scorecenter fanart for browsed category in myScoreCenter plugin
-* Push cycling fanart from the following folders for use anywhere in a skin for
-   * thumbs\MovingPictures\Backdrops\FullSize
-   * thumbs\Fan Art\fanart\original
-   * thumbs\Skin Fanart\games
-   * thumbs\Skin Fanart\movies
-   * thumbs\Skin Fanart\music
-   * thumbs\Skin Fanart\pictures
-   * thumbs\Skin Fanart\plugins
-   * thumbs\Skin Fanart\scorecenter
-   * thumbs\Skin Fanart\tv</value>
   </data>
   <data name="button20.ToolTip" xml:space="preserve">
     <value>Press this button to enable or disable the use of the
@@ -462,7 +413,67 @@ the fanart database and this saves harddisk space but
 the image can re-appear because the scraper can find 
 the image on a future scrape.</value>
   </data>
+  <data name="button35.ToolTip" xml:space="preserve">
+    <value>Press this button to enable or disable the use of the
+selected fanart/backdrop. Enabled means that the
+image will be used by the plugin in MediaPortal.
+Disabled means that MediaPortal will not use the
+image. The difference between pressing this button
+and the "Delete Selected Fanart" is that this button
+keeps the image on your harddrive but also in the
+fanart database and this also means that the scraper
+will NOT download it again. Pressing the delete button
+will delete the image but it can re-appear because the
+scraper can find the image on a future scrape.</value>
+  </data>
+  <data name="button36.ToolTip" xml:space="preserve">
+    <value>WARNING: Pressing this button will delete all images
+stored on your harddrive in the "thumbs/Skin Fanart/music"
+folder and also from the fanart database.
+
+The purpose of this button is to reset everything and
+allow for a complete new initial scrape. </value>
+  </data>
+  <data name="button37.ToolTip" xml:space="preserve">
+    <value>Press this button to delete the selected fanart/backdrop
+from the fanart database but also from your harddrive. 
+The difference between pressing this button
+and the "Enable/Disable Selected Fanart" button is that 
+this button deletes the image from your harddrive and
+the fanart database and this saves harddisk space but 
+the image can re-appear because the scraper can find 
+the image on a future scrape.</value>
+  </data>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Fanart Handler is a plugin for MediaPortal (MP). The plugin has two main purposes;
+* Search and download music fanart (scrape) from the htbackdrops site (link).
+   * for all artists stored in your MP music database, for any artist currently being played (on the fly).
+* Push fanart that you store on your local harddrive to the current used MP skin.
+   * push fanart for now played music, push fanart for selected music or movie,  push random images from selected folders
+
+The scope of this plugin are
+* scrape htbackdrops site for music fanart for all artists stored in your MP music database.
+* scrape htbackdrops site for music fanart for currently played artist.
+* Push music fanart for now played music track (artist images)
+* Push music fanart for browsed music artist in myMusic plugin
+* Push music fanart for browsed music artist in GlobalSearch plugin
+* Push music fanart for browsed music artist in Music Videos plugin
+* Push music fanart for browsed music artist in mVidsplugin
+* Push music fanart for browsed music artist in YouTube.FM plugin
+* Push movie fanart for browsed video title in myVideo plugin
+* Push scorecenter fanart for browsed category in myScoreCenter plugin
+* Push cycling fanart from the following folders for use anywhere in a skin for
+   * thumbs\MovingPictures\Backdrops\FullSize
+   * thumbs\Fan Art\fanart\original
+   * thumbs\Skin Fanart\games
+   * thumbs\Skin Fanart\movies
+   * thumbs\Skin Fanart\music
+   * thumbs\Skin Fanart\pictures
+   * thumbs\Skin Fanart\plugins
+   * thumbs\Skin Fanart\scorecenter
+   * thumbs\Skin Fanart\tv</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>32</value>
+    <value>34</value>
   </metadata>
 </root>
