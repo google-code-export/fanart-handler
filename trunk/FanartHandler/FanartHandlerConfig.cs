@@ -30,6 +30,7 @@ namespace FanartHandler
         private DataTable myDataTable5 = null;
         private DataTable myDataTable6 = null;
         private DataTable myDataTable7 = null;
+        private DataTable myDataTable8 = null;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string logFileName = "fanarthandler_config.log";
         private const string oldLogFileName = "fanarthandler_config.old.log";
@@ -573,6 +574,7 @@ namespace FanartHandler
                 try
                 {
                     initLogger();
+                    //System.Net.ServicePointManager.Expect100Continue = false;
                     logger.Info("Fanart Handler configuration is starting.");
                     logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());                                        
                     Utils.SetUseProxy(useProxy);
@@ -767,7 +769,27 @@ namespace FanartHandler
                     myDataTable7.Columns.Add("Image Path");
                     dataGridView7.DataSource = myDataTable7;
                     dataGridView7.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }         
+                }
+                try
+                {
+                    myDataTable8 = new DataTable();
+                    myDataTable8.Columns.Add("Artist");
+                    myDataTable8.Columns.Add("Fanart Images (#)");
+                    dataGridView8.DataSource = myDataTable8;
+                    UpdateFanartTableMusicOverview();
+                    dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridView8.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    dataGridView8.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("FanartHandlerConfig_Load: " + ex.ToString());
+                    myDataTable8 = new DataTable();
+                    myDataTable8.Columns.Add("Artist");
+                    myDataTable8.Columns.Add("Fanart Images (#)");
+                    dataGridView8.DataSource = myDataTable8;
+                    dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
         }
 
         
@@ -892,20 +914,23 @@ namespace FanartHandler
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ResetScrape();            
+        }
+
+        private void ResetScrape()
+        {
             DialogResult result = MessageBox.Show("Are you sure you want to reset the initial scrap flag? This will cause a complete new music scrape on next MP startup.", "Reset Initial Scrape", MessageBoxButtons.YesNo);
-            if (result == DialogResult.No) 
+            if (result == DialogResult.No)
             {
                 MessageBox.Show("Operation was aborted!");
             }
 
-            if (result == DialogResult.Yes) 
+            if (result == DialogResult.Yes)
             {
                 Utils.GetDbm().ResetInitialScrape();
                 MessageBox.Show("Done!");
             }
-            
         }
-
      
 
         private void DataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -916,6 +941,7 @@ namespace FanartHandler
                 {
                     DataGridView dgv = (DataGridView)sender;
                     Bitmap img = (Bitmap)Image.FromFile(dataGridView1[3, dgv.CurrentRow.Index].Value.ToString());
+                    label30.Text = "Resolution: " + img.Width + "x" + img.Height;
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -923,10 +949,10 @@ namespace FanartHandler
                     gfx.Dispose();
                     pictureBox1.Image = null;
                     pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-                    pictureBox1.Image = finalImg;
+                    pictureBox1.Image = finalImg;                    
                     img.Dispose();
                     img = null;
-                    gfx = null;
+                    gfx = null;                    
                 }
                 else
                 {
@@ -1122,6 +1148,11 @@ namespace FanartHandler
 
         private void button2_Click(object sender, EventArgs e)
         {
+            DeleteSelectedFanart();                          
+        }
+
+        private void DeleteSelectedFanart()
+        {
             try
             {
                 if (dataGridView1.CurrentRow.Index >= 0)
@@ -1138,11 +1169,16 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                logger.Error("button2_Click: " + ex.ToString());                
-            }                        
+                logger.Error("DeleteSelectedFanart: " + ex.ToString());
+            } 
         }
 
         private void button3_Click(object sender, EventArgs e)
+        {
+            DeleteAllFanart();
+        }
+
+        private void DeleteAllFanart()
         {
             try
             {
@@ -1177,16 +1213,53 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                logger.Error("button3_Click: " + ex.ToString());
+                logger.Error("DeleteAllFanart: " + ex.ToString());
+            }
+        }
+
+        private void DataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {                
+                EnableDisableFanart();
+            }
+            else if (e.KeyData == Keys.Delete)
+            {
+                DeleteSelectedFanart();
+            }
+            else if (e.KeyData == Keys.X)
+            {
+                DeleteAllFanart();
+            }
+            else if (e.KeyData == Keys.C)
+            {
+                CleanupMusicFanart();
+            }
+            else if (e.KeyData == Keys.R)
+            {
+                ResetScrape();
+            }
+            else if (e.KeyData == Keys.S)
+            {
+                StartScrape();
+            }
+            else if (e.KeyData == Keys.I)
+            {
+                ImportMusicFanart();
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            EnableDisableFanart();
+        }
+
+        private void EnableDisableFanart()
+        {
             try
             {
                 if (dataGridView1.CurrentRow.Index >= 0)
-                {                    
+                {
                     string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView1.CurrentRow.Cells[1].Value.ToString();
                     if (enabled != null && enabled.Equals("True"))
@@ -1203,11 +1276,16 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                logger.Error("button4_Click: " + ex.ToString());
+                logger.Error("EnableDisableFanart: " + ex.ToString());
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+            CleanupMusicFanart();
+        }
+
+        private void CleanupMusicFanart()
         {
             try
             {
@@ -1216,7 +1294,7 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                logger.Error("button5_Click: " + ex.ToString());
+                logger.Error("CleanupMusicFanart: " + ex.ToString());
             }
         }
 
@@ -1310,6 +1388,11 @@ namespace FanartHandler
 
         private void button6_Click(object sender, EventArgs e)
         {
+            StartScrape();
+        }
+
+        private void StartScrape()
+        {
             try
             {
                 if (scraperMPDatabase != null && scraperMPDatabase.Equals("True"))
@@ -1323,7 +1406,7 @@ namespace FanartHandler
                             SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart");
                         }
                         dataGridView1.Enabled = false;
-                        button6.Text = "Stop Scraper";                        
+                        button6.Text = "Stop Scraper";
                         button1.Enabled = false;
                         button2.Enabled = false;
                         button3.Enabled = false;
@@ -1332,14 +1415,14 @@ namespace FanartHandler
                         button15.Enabled = false;
                         progressBar1.Minimum = 0;
                         progressBar1.Maximum = 0;
-                        progressBar1.Value = 0;                                                 
+                        progressBar1.Value = 0;
                         UpdateScraperTimer();
                         Thread progressTimer = new Thread(new ThreadStart(AddToDataGridView));
                         progressTimer.Start();
                         dataGridView1.Enabled = true;
                     }
                     else
-                    {                        
+                    {
                         button6.Text = "Start Scraper";
                         dataGridView1.Enabled = false;
                         stopScraper();
@@ -1355,12 +1438,12 @@ namespace FanartHandler
                         progressBar1.Maximum = 0;
                         progressBar1.Value = 0;
                         dataGridView1.Enabled = true;
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error("button6_Click: " + ex.ToString());
+                logger.Error("StartScrape: " + ex.ToString());
                 dataGridView1.Enabled = true;
             }
         }
@@ -1593,6 +1676,39 @@ namespace FanartHandler
                 d.Columns.Add("Image Path");
                 dataGridView7.DataSource = d;
                 dataGridView7.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+            }
+        }
+
+        private void UpdateFanartTableMusicOverview()
+        {
+            try
+            {
+                SQLiteResultSet result = Utils.GetDbm().getDataForTableMusicOverview();
+                if (result != null)
+                {
+                    if (result.Rows.Count > 0)
+                    {
+                        myDataTable8.Rows.Clear();
+                        for (int i = 0; i < result.Rows.Count; i++)
+                        {
+                            DataRow myDataRow = myDataTable8.NewRow();
+                            myDataRow["Artist"] = result.GetField(i, 0);
+                            myDataRow["Fanart Images (#)"] = result.GetField(i, 1);
+                            myDataTable8.Rows.Add(myDataRow);
+                        }
+                    }
+                }
+                result = null;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("UpdateFanartTableMusicOverview: " + ex.ToString());
+                dataGridView8.DataSource = null;
+                DataTable d = new DataTable();
+                d.Columns.Add("Artist");
+                d.Columns.Add("Fanart Images (#)");
+                dataGridView8.DataSource = d;
+                dataGridView8.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
             }
         }
 
@@ -2280,6 +2396,11 @@ namespace FanartHandler
         private void button15_Click(object sender, EventArgs e)
         {
             //import local fanart music
+            ImportMusicFanart();
+        }
+
+        private void ImportMusicFanart()
+        {
             try
             {
                 if (isScraping == false)
@@ -2289,14 +2410,14 @@ namespace FanartHandler
                     {
                         ImportLocalFanart("MusicFanart");
                         ImportLocalFanartAtStartup();
-                        UpdateFanartTableOnStartup();                        
+                        UpdateFanartTableOnStartup();
                     }
                     isScraping = false;
                 }
             }
             catch (Exception ex)
             {
-                logger.Error("button15_Click: " + ex.ToString());
+                logger.Error("ImportMusicFanart: " + ex.ToString());
             }
         }
 
@@ -2802,6 +2923,30 @@ namespace FanartHandler
             catch (Exception ex)
             {
                 logger.Error("button33_Click: " + ex.ToString());
+            }
+        }
+
+        private void button38_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                myDataTable8 = new DataTable();
+                myDataTable8.Columns.Add("Artist");
+                myDataTable8.Columns.Add("Fanart Images (#)");
+                dataGridView8.DataSource = myDataTable8;
+                UpdateFanartTableMusicOverview();
+                dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView8.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView8.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("button38_Click: " + ex.ToString());
+                myDataTable8 = new DataTable();
+                myDataTable8.Columns.Add("Artist");
+                myDataTable8.Columns.Add("Fanart Images (#)");
+                dataGridView8.DataSource = myDataTable8;
+                dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
     }

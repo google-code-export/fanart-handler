@@ -103,6 +103,7 @@ namespace FanartHandler
             this.checkBoxScraperMusicPlaying = new System.Windows.Forms.CheckBox();
             this.checkBoxEnableScraperMPDatabase = new System.Windows.Forms.CheckBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label30 = new System.Windows.Forms.Label();
             this.button15 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.labelTotalFanartArtistUnInitCount = new System.Windows.Forms.Label();
@@ -122,6 +123,9 @@ namespace FanartHandler
             this.button6 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.button38 = new System.Windows.Forms.Button();
+            this.dataGridView8 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage9 = new System.Windows.Forms.TabPage();
@@ -149,18 +153,8 @@ namespace FanartHandler
             this.button14 = new System.Windows.Forms.Button();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.tabPage13 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl5 = new System.Windows.Forms.TabControl();
             this.tabPage14 = new System.Windows.Forms.TabPage();
-            this.tabPage15 = new System.Windows.Forms.TabPage();
-            this.tabPage16 = new System.Windows.Forms.TabPage();
-            this.tabPage17 = new System.Windows.Forms.TabPage();
             this.button18 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -170,6 +164,7 @@ namespace FanartHandler
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.button22 = new System.Windows.Forms.Button();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
             this.button23 = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -179,6 +174,7 @@ namespace FanartHandler
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.button27 = new System.Windows.Forms.Button();
             this.dataGridView5 = new System.Windows.Forms.DataGridView();
+            this.tabPage16 = new System.Windows.Forms.TabPage();
             this.button28 = new System.Windows.Forms.Button();
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -188,6 +184,7 @@ namespace FanartHandler
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.button32 = new System.Windows.Forms.Button();
             this.dataGridView6 = new System.Windows.Forms.DataGridView();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
             this.button33 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -197,6 +194,13 @@ namespace FanartHandler
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.button37 = new System.Windows.Forms.Button();
             this.dataGridView7 = new System.Windows.Forms.DataGridView();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -215,6 +219,8 @@ namespace FanartHandler
             this.tabPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage18.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView8)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage9.SuspendLayout();
@@ -228,21 +234,21 @@ namespace FanartHandler
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.tabPage13.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl5.SuspendLayout();
             this.tabPage14.SuspendLayout();
-            this.tabPage15.SuspendLayout();
-            this.tabPage16.SuspendLayout();
-            this.tabPage17.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
+            this.tabPage15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
+            this.tabPage16.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
+            this.tabPage17.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView7)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBoxThumbsArtist
@@ -687,6 +693,7 @@ namespace FanartHandler
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tabPage6);
             this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Controls.Add(this.tabPage18);
             this.tabControl2.Location = new System.Drawing.Point(6, 5);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -955,6 +962,7 @@ namespace FanartHandler
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.label30);
             this.tabPage7.Controls.Add(this.button15);
             this.tabPage7.Controls.Add(this.label8);
             this.tabPage7.Controls.Add(this.labelTotalFanartArtistUnInitCount);
@@ -982,6 +990,18 @@ namespace FanartHandler
             this.tabPage7.Text = "Manage Fanart";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // label30
+            // 
+            this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label30.AutoSize = true;
+            this.label30.BackColor = System.Drawing.Color.Transparent;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label30.ForeColor = System.Drawing.Color.Teal;
+            this.label30.Location = new System.Drawing.Point(555, 455);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(0, 13);
+            this.label30.TabIndex = 17;
+            // 
             // button15
             // 
             this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -989,7 +1009,7 @@ namespace FanartHandler
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(174, 22);
             this.button15.TabIndex = 16;
-            this.button15.Text = "Import Local Fanart";
+            this.button15.Text = "Import Local Fanart [I]";
             this.toolTip1.SetToolTip(this.button15, "Press this button to import local images.");
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.button15_Click);
@@ -1091,7 +1111,7 @@ namespace FanartHandler
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(174, 22);
             this.button5.TabIndex = 5;
-            this.button5.Text = "Cleanup Missing Fanart";
+            this.button5.Text = "Cleanup Missing Fanart [C]";
             this.toolTip1.SetToolTip(this.button5, "Press this button to sync fanart database and images \r\non your harddrive. Any ent" +
                     "ries in the fanart database\r\nthat has no matching image stored on your harddrive" +
                     "\r\nwill be removed.");
@@ -1117,7 +1137,7 @@ namespace FanartHandler
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(174, 22);
             this.button3.TabIndex = 3;
-            this.button3.Text = "Delete All Fanart";
+            this.button3.Text = "Delete All Fanart [X]";
             this.toolTip1.SetToolTip(this.button3, resources.GetString("button3.ToolTip"));
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -1140,7 +1160,7 @@ namespace FanartHandler
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(174, 22);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Delete Selected Fanart";
+            this.button2.Text = "Delete Selected Fanart [Del]";
             this.toolTip1.SetToolTip(this.button2, resources.GetString("button2.ToolTip"));
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -1152,7 +1172,7 @@ namespace FanartHandler
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 22);
             this.button1.TabIndex = 11;
-            this.button1.Text = "Reset Scraper";
+            this.button1.Text = "Reset Scraper [R]";
             this.toolTip1.SetToolTip(this.button1, resources.GetString("button1.ToolTip"));
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -1164,7 +1184,7 @@ namespace FanartHandler
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(103, 22);
             this.button6.TabIndex = 13;
-            this.button6.Text = "Start Scraper";
+            this.button6.Text = "Start Scraper [S]";
             this.toolTip1.SetToolTip(this.button6, "Initiates a new scrape.");
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
@@ -1200,7 +1220,57 @@ namespace FanartHandler
             this.dataGridView1.Size = new System.Drawing.Size(731, 350);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.VirtualMode = true;
+            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView1_KeyDown);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.DataGridView1_SelectionChanged);
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.Controls.Add(this.button38);
+            this.tabPage18.Controls.Add(this.dataGridView8);
+            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage18.Size = new System.Drawing.Size(743, 481);
+            this.tabPage18.TabIndex = 3;
+            this.tabPage18.Text = "Fanart Overview";
+            this.tabPage18.UseVisualStyleBackColor = true;
+            // 
+            // button38
+            // 
+            this.button38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button38.Location = new System.Drawing.Point(654, 452);
+            this.button38.Name = "button38";
+            this.button38.Size = new System.Drawing.Size(83, 22);
+            this.button38.TabIndex = 12;
+            this.button38.Text = "Refresh";
+            this.toolTip1.SetToolTip(this.button38, resources.GetString("button38.ToolTip"));
+            this.button38.UseVisualStyleBackColor = true;
+            this.button38.Click += new System.EventHandler(this.button38_Click);
+            // 
+            // dataGridView8
+            // 
+            this.dataGridView8.AllowUserToAddRows = false;
+            this.dataGridView8.AllowUserToDeleteRows = false;
+            this.dataGridView8.AllowUserToResizeColumns = false;
+            this.dataGridView8.AllowUserToResizeRows = false;
+            this.dataGridView8.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView8.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView8.CausesValidation = false;
+            this.dataGridView8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView8.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView8.MultiSelect = false;
+            this.dataGridView8.Name = "dataGridView8";
+            this.dataGridView8.ReadOnly = true;
+            this.dataGridView8.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView8.ShowCellErrors = false;
+            this.dataGridView8.ShowCellToolTips = false;
+            this.dataGridView8.ShowEditingIcon = false;
+            this.dataGridView8.ShowRowErrors = false;
+            this.dataGridView8.Size = new System.Drawing.Size(737, 443);
+            this.dataGridView8.TabIndex = 0;
+            this.dataGridView8.VirtualMode = true;
             // 
             // tabPage2
             // 
@@ -1552,81 +1622,6 @@ namespace FanartHandler
             this.tabPage13.Text = "Manage Random Fanart";
             this.tabPage13.UseVisualStyleBackColor = true;
             // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.pictureBox2);
-            this.tabPage4.Controls.Add(this.label11);
-            this.tabPage4.Controls.Add(this.label10);
-            this.tabPage4.Controls.Add(this.label9);
-            this.tabPage4.Controls.Add(this.richTextBox1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(760, 516);
-            this.tabPage4.TabIndex = 4;
-            this.tabPage4.Text = "About";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::FanartHandler.Properties.Resources.FanartHandler_Icon;
-            this.pictureBox2.Location = new System.Drawing.Point(6, 3);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(116, 103);
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(611, 6);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(65, 16);
-            this.label11.TabIndex = 3;
-            this.label11.Text = "Version X";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(262, 47);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(158, 24);
-            this.label10.TabIndex = 2;
-            this.label10.Text = "Created by cul8er";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Arial Black", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(201, 3);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(293, 44);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "Fanart Handler";
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.BackColor = System.Drawing.Color.White;
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox1.Location = new System.Drawing.Point(6, 112);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(748, 378);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 30000;
-            this.toolTip1.InitialDelay = 500;
-            this.toolTip1.ReshowDelay = 100;
-            // 
             // tabControl5
             // 
             this.tabControl5.Controls.Add(this.tabPage14);
@@ -1658,63 +1653,6 @@ namespace FanartHandler
             this.tabPage14.TabIndex = 0;
             this.tabPage14.Text = "Game Fanart";
             this.tabPage14.UseVisualStyleBackColor = true;
-            // 
-            // tabPage15
-            // 
-            this.tabPage15.Controls.Add(this.button23);
-            this.tabPage15.Controls.Add(this.label24);
-            this.tabPage15.Controls.Add(this.label25);
-            this.tabPage15.Controls.Add(this.button24);
-            this.tabPage15.Controls.Add(this.button25);
-            this.tabPage15.Controls.Add(this.button26);
-            this.tabPage15.Controls.Add(this.pictureBox6);
-            this.tabPage15.Controls.Add(this.button27);
-            this.tabPage15.Controls.Add(this.dataGridView5);
-            this.tabPage15.Location = new System.Drawing.Point(4, 22);
-            this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(746, 484);
-            this.tabPage15.TabIndex = 1;
-            this.tabPage15.Text = "Picture Fanart";
-            this.tabPage15.UseVisualStyleBackColor = true;
-            // 
-            // tabPage16
-            // 
-            this.tabPage16.Controls.Add(this.button28);
-            this.tabPage16.Controls.Add(this.label26);
-            this.tabPage16.Controls.Add(this.label27);
-            this.tabPage16.Controls.Add(this.button29);
-            this.tabPage16.Controls.Add(this.button30);
-            this.tabPage16.Controls.Add(this.button31);
-            this.tabPage16.Controls.Add(this.pictureBox7);
-            this.tabPage16.Controls.Add(this.button32);
-            this.tabPage16.Controls.Add(this.dataGridView6);
-            this.tabPage16.Location = new System.Drawing.Point(4, 22);
-            this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(746, 484);
-            this.tabPage16.TabIndex = 2;
-            this.tabPage16.Text = "Plugin Fanart";
-            this.tabPage16.UseVisualStyleBackColor = true;
-            // 
-            // tabPage17
-            // 
-            this.tabPage17.Controls.Add(this.button33);
-            this.tabPage17.Controls.Add(this.label28);
-            this.tabPage17.Controls.Add(this.label29);
-            this.tabPage17.Controls.Add(this.button34);
-            this.tabPage17.Controls.Add(this.button35);
-            this.tabPage17.Controls.Add(this.button36);
-            this.tabPage17.Controls.Add(this.pictureBox8);
-            this.tabPage17.Controls.Add(this.button37);
-            this.tabPage17.Controls.Add(this.dataGridView7);
-            this.tabPage17.Location = new System.Drawing.Point(4, 22);
-            this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage17.Size = new System.Drawing.Size(746, 484);
-            this.tabPage17.TabIndex = 3;
-            this.tabPage17.Text = "TV Fanart";
-            this.tabPage17.UseVisualStyleBackColor = true;
             // 
             // button18
             // 
@@ -1833,6 +1771,25 @@ namespace FanartHandler
             this.dataGridView4.VirtualMode = true;
             this.dataGridView4.SelectionChanged += new System.EventHandler(this.DataGridView4_SelectionChanged);
             // 
+            // tabPage15
+            // 
+            this.tabPage15.Controls.Add(this.button23);
+            this.tabPage15.Controls.Add(this.label24);
+            this.tabPage15.Controls.Add(this.label25);
+            this.tabPage15.Controls.Add(this.button24);
+            this.tabPage15.Controls.Add(this.button25);
+            this.tabPage15.Controls.Add(this.button26);
+            this.tabPage15.Controls.Add(this.pictureBox6);
+            this.tabPage15.Controls.Add(this.button27);
+            this.tabPage15.Controls.Add(this.dataGridView5);
+            this.tabPage15.Location = new System.Drawing.Point(4, 22);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage15.Size = new System.Drawing.Size(746, 484);
+            this.tabPage15.TabIndex = 1;
+            this.tabPage15.Text = "Picture Fanart";
+            this.tabPage15.UseVisualStyleBackColor = true;
+            // 
             // button23
             // 
             this.button23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1949,6 +1906,25 @@ namespace FanartHandler
             this.dataGridView5.TabIndex = 24;
             this.dataGridView5.VirtualMode = true;
             this.dataGridView5.SelectionChanged += new System.EventHandler(this.DataGridView5_SelectionChanged);
+            // 
+            // tabPage16
+            // 
+            this.tabPage16.Controls.Add(this.button28);
+            this.tabPage16.Controls.Add(this.label26);
+            this.tabPage16.Controls.Add(this.label27);
+            this.tabPage16.Controls.Add(this.button29);
+            this.tabPage16.Controls.Add(this.button30);
+            this.tabPage16.Controls.Add(this.button31);
+            this.tabPage16.Controls.Add(this.pictureBox7);
+            this.tabPage16.Controls.Add(this.button32);
+            this.tabPage16.Controls.Add(this.dataGridView6);
+            this.tabPage16.Location = new System.Drawing.Point(4, 22);
+            this.tabPage16.Name = "tabPage16";
+            this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage16.Size = new System.Drawing.Size(746, 484);
+            this.tabPage16.TabIndex = 2;
+            this.tabPage16.Text = "Plugin Fanart";
+            this.tabPage16.UseVisualStyleBackColor = true;
             // 
             // button28
             // 
@@ -2067,6 +2043,25 @@ namespace FanartHandler
             this.dataGridView6.VirtualMode = true;
             this.dataGridView6.SelectionChanged += new System.EventHandler(this.DataGridView6_SelectionChanged);
             // 
+            // tabPage17
+            // 
+            this.tabPage17.Controls.Add(this.button33);
+            this.tabPage17.Controls.Add(this.label28);
+            this.tabPage17.Controls.Add(this.label29);
+            this.tabPage17.Controls.Add(this.button34);
+            this.tabPage17.Controls.Add(this.button35);
+            this.tabPage17.Controls.Add(this.button36);
+            this.tabPage17.Controls.Add(this.pictureBox8);
+            this.tabPage17.Controls.Add(this.button37);
+            this.tabPage17.Controls.Add(this.dataGridView7);
+            this.tabPage17.Location = new System.Drawing.Point(4, 22);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage17.Size = new System.Drawing.Size(746, 484);
+            this.tabPage17.TabIndex = 3;
+            this.tabPage17.Text = "TV Fanart";
+            this.tabPage17.UseVisualStyleBackColor = true;
+            // 
             // button33
             // 
             this.button33.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -2184,6 +2179,81 @@ namespace FanartHandler
             this.dataGridView7.VirtualMode = true;
             this.dataGridView7.SelectionChanged += new System.EventHandler(this.DataGridView7_SelectionChanged);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.pictureBox2);
+            this.tabPage4.Controls.Add(this.label11);
+            this.tabPage4.Controls.Add(this.label10);
+            this.tabPage4.Controls.Add(this.label9);
+            this.tabPage4.Controls.Add(this.richTextBox1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(760, 516);
+            this.tabPage4.TabIndex = 4;
+            this.tabPage4.Text = "About";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::FanartHandler.Properties.Resources.FanartHandler_Icon;
+            this.pictureBox2.Location = new System.Drawing.Point(6, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(116, 103);
+            this.pictureBox2.TabIndex = 4;
+            this.pictureBox2.TabStop = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(611, 6);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 16);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Version X";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(262, 47);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(158, 24);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Created by cul8er";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Arial Black", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(201, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(279, 45);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Fanart Handler";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BackColor = System.Drawing.Color.White;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Location = new System.Drawing.Point(6, 112);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(748, 378);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 30000;
+            this.toolTip1.InitialDelay = 500;
+            this.toolTip1.ReshowDelay = 100;
+            // 
             // FanartHandlerConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2227,6 +2297,8 @@ namespace FanartHandler
             this.tabPage7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabPage18.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView8)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
@@ -2242,26 +2314,26 @@ namespace FanartHandler
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.tabPage13.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tabControl5.ResumeLayout(false);
             this.tabPage14.ResumeLayout(false);
             this.tabPage14.PerformLayout();
-            this.tabPage15.ResumeLayout(false);
-            this.tabPage15.PerformLayout();
-            this.tabPage16.ResumeLayout(false);
-            this.tabPage16.PerformLayout();
-            this.tabPage17.ResumeLayout(false);
-            this.tabPage17.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
+            this.tabPage15.ResumeLayout(false);
+            this.tabPage15.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
+            this.tabPage16.ResumeLayout(false);
+            this.tabPage16.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
+            this.tabPage17.ResumeLayout(false);
+            this.tabPage17.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView7)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2420,5 +2492,9 @@ namespace FanartHandler
         private System.Windows.Forms.PictureBox pictureBox8;
         private System.Windows.Forms.Button button37;
         private System.Windows.Forms.DataGridView dataGridView7;
+        private System.Windows.Forms.TabPage tabPage18;
+        private System.Windows.Forms.DataGridView dataGridView8;
+        private System.Windows.Forms.Button button38;
+        private System.Windows.Forms.Label label30;
     }
 }

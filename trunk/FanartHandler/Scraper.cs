@@ -30,18 +30,20 @@ namespace FanartHandler
                 try
                 {
                     logger.Info("Scrape for new images is starting...");
+                    System.Net.ServicePointManager.Expect100Continue = false;
                     Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
                     string strResult = null;
                     string dbArtist = null;
                     string path = null;
                     string filename = null;
-                    WebRequest objRequest = WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1");
+                    HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1");
                     if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True"))
                     {
                         WebProxy proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                         proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
                         WebRequest.DefaultWebProxy = proxy;
                     }
+                    objRequest.ServicePoint.Expect100Continue = false; 
                     //Found: 529 image(s) on 18 page(s). Displayed:
                     //"http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=1"
                     string sReg = @"Found: [0-9]+ image\(s\) on [0-9]+ page\(s\). Displayed:";
@@ -81,7 +83,8 @@ namespace FanartHandler
                                 break;
                             }
                             logger.Debug("Scanning page " + (x + 1));
-                            objRequest = WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=" + (x + 1));
+                            objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=" + (x + 1));
+                            objRequest.ServicePoint.Expect100Continue = false; 
                             sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
 
                             //The WebResponse object gets the Request's response (the HTML) 
@@ -187,6 +190,7 @@ namespace FanartHandler
                     if (File.Exists(filename)) position = new FileInfo(filename).Length;
                     maxCount++;                    
                     requestPic = (HttpWebRequest)WebRequest.Create(sourceFilename);
+                    requestPic.ServicePoint.Expect100Continue = false; 
                     requestPic.AddRange((int)position);
                     requestPic.Timeout = 5000 + (1000 * maxCount);
                     requestPic.ReadWriteTimeout = 20000;
@@ -336,7 +340,8 @@ namespace FanartHandler
         {
             try
             {
-                Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
+                Encoding enc = Encoding.GetEncoding("iso-8859-1");
+                System.Net.ServicePointManager.Expect100Continue = false;
                 string dbArtist = null;
                 string strResult = null;
                 string path = null;
@@ -348,6 +353,7 @@ namespace FanartHandler
                     proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
                     WebRequest.DefaultWebProxy = proxy;
                 }
+                objRequest.ServicePoint.Expect100Continue = false; 
                 string sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
                 string values = "search_terms=all";
                 values += "&cat_id=1";
@@ -360,7 +366,7 @@ namespace FanartHandler
                     writer.Write(values);
                 }
 
-                WebResponse objResponse = objRequest.GetResponse();
+                WebResponse objResponse = objRequest.GetResponse();                
 
                 using (StreamReader sr = new StreamReader(objResponse.GetResponseStream(), enc))
                 {
