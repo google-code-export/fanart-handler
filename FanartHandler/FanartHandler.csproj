@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExternalDatabaseManager.cs" />
     <Compile Include="FanartHandlerSetup.cs">
     </Compile>
     <Compile Include="DatabaseManager.cs" />

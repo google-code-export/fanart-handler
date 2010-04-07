@@ -424,7 +424,7 @@ namespace FanartHandler
             {
                 logger.Error("getImages: " + ex.ToString());  
             }
-            return 0;
+            return 9999;
         }
     }
 }

@@ -9,6 +9,8 @@ using NLog;
 using MediaPortal.GUI.Library;
 using System.Drawing;
 using System.IO;
+using MediaPortal.Configuration;
+using SQLite.NET;
 
 
 namespace FanartHandler
@@ -17,8 +19,8 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private const string rxMatchNonWordCharacters = @"[^\w]";
-        public const string GetMajorMinorVersionNumber = "1.7";  //Holds current pluginversion.
+        private const string rxMatchNonWordCharacters = @"[^\w|;]";
+        public const string GetMajorMinorVersionNumber = "1.8";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -371,8 +373,35 @@ namespace FanartHandler
             }
             key = RemoveTrailingDigits(key);
             key = key.Equalize();
-            key = key.MovePrefixToFront();
+            key = key.MovePrefixToFront();            
             return key;
+        }
+
+
+
+        /// <summary>
+        /// Split artist names based on MP artist pipe (| artist |) in artist name
+        /// </summary>    
+        public static string HandleMultipleArtistNamesForDBQuery(string s)
+        {
+            if (s == null) return string.Empty;
+            s = s.Replace(";","|");
+            string[] words = s.Split('|');
+            string sout = "";
+            string tmpWord = "";
+            foreach (string word in words)
+            {
+                tmpWord = word.Trim();
+                if (sout.Length == 0 && tmpWord.Length > 0)
+                {
+                    sout = "'" + tmpWord + "'";
+                }
+                else
+                {
+                    sout = sout + ",'" + tmpWord + "'";
+                }
+            }
+            return sout;
         }
 
         /// <summary>
@@ -381,9 +410,89 @@ namespace FanartHandler
         public static string RemoveMPArtistPipes(string s)
         {
             if (s == null) return string.Empty;
-            s = s.Replace("|","");
-            s = s.Trim();
+//            s = s.Replace("|","");
+//            s = s.Trim();
             return s;
+        }
+
+        /// <summary>
+        /// Get music videos artists.
+        /// </summary> 
+        public static ArrayList GetMusicVideoArtists(string dbName)
+        {
+            ExternalDatabaseManager edbm = null;
+            string type = "Music Videos";
+            ArrayList musicDatabaseArtists = new ArrayList();
+            try
+            {
+                edbm = new ExternalDatabaseManager();
+                string artist = "";
+                edbm.initDB(dbName);
+                SQLiteResultSet result = edbm.getData(type);
+                if (result != null)
+                {
+                    if (result.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < result.Rows.Count; i++)
+                        {
+                            artist = Utils.GetArtist(result.GetField(i, 0), type);
+                            musicDatabaseArtists.Add(artist);
+                        }
+                    }
+                }
+                result = null;
+                edbm.close();
+                edbm = null;
+                return musicDatabaseArtists;
+            }
+            catch (Exception ex)
+            {
+                edbm.close();
+                edbm = null;
+                logger.Error("GetMusicVideoArtists: " + ex.ToString());
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Import moving picture and tvseries fanart into the database.
+        /// </summary> 
+        public static void ImportExternalDbFanart(string dbName, string type)
+        {
+            ExternalDatabaseManager edbm = null;
+            try
+            {
+                edbm = new ExternalDatabaseManager();
+                string artist = "";
+                string fanart = "";
+                edbm.initDB(dbName);
+                SQLiteResultSet result = edbm.getData(type);
+                if (result != null)
+                {
+                    if (result.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < result.Rows.Count; i++)
+                        {
+                            artist = Utils.GetArtist(result.GetField(i, 0), type);
+                            fanart = result.GetField(i, 1);
+                            if (type.Equals("TVSeries"))
+                            {
+                                fanart = Config.GetFolder(Config.Dir.Thumbs) + fanart;
+                            }
+                            Utils.GetDbm().loadFanart(artist, fanart, fanart, "Movie");
+                        }
+                    }
+                }
+                result = null;
+                edbm.close();
+                edbm = null;
+            }
+            catch (Exception ex)
+            {
+                edbm.close();
+                edbm = null;
+                logger.Error("ImportExternalDbFanart: " + ex.ToString());
+            }
         }
 
         /// <summary>
