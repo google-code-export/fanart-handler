@@ -586,6 +586,8 @@ namespace FanartHandler
                     Utils.SetScraperMaxImages(scraperMaxImages);
                     Utils.InitiateDbm();
                     ImportLocalFanartAtStartup();
+                    Utils.ImportExternalDbFanart("movingpictures.db3", "MovingPicture");
+                    Utils.ImportExternalDbFanart("TVSeriesDatabase4.db3", "TVSeries");
                     myDataTable = new DataTable();
                     myDataTable.Columns.Add("Artist");
                     myDataTable.Columns.Add("Enabled");
@@ -2291,27 +2293,13 @@ namespace FanartHandler
             }
         }
 
+
+
+
         private void ImportLocalFanartAtStartup()
         {
             try
             {
-                /*int i = 0;
-                if (useMusicFanart.Equals("True"))
-                {
-                    i = 0;
-                    SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart");
-                }
-                if (useScoreCenterFanart.Equals("True"))
-                {
-                    i = 0;
-                    SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter", "*.jpg", ref i, "ScoreCenter");
-                }
-                if (useVideoFanart.Equals("True"))
-                {
-                    i = 0;
-                    SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies", "*.jpg", ref i, "Movie");
-                }
-                 */
                 //Add games images
                 string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
                 int i = 0;

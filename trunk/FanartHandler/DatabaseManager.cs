@@ -572,7 +572,10 @@ namespace FanartHandler
                         {
                             logger.Debug("Artist " + artist + " has already maximum number of images. Will not download anymore images for this artist.");
                         }
-                        setSuccessfulScrape(dbArtist);                        
+                        if (totalImages != 99)
+                        {
+                            setSuccessfulScrape(dbArtist);                           
+                        }                        
                         scraper = null;                        
                     }
                     lock (dbClient) dbClient.Execute("COMMIT;");
@@ -600,7 +603,12 @@ namespace FanartHandler
                 bool firstRun = true;
                 isScraping = true;                
                 musicDatabaseArtists = new ArrayList();
-                m_db.GetAllArtists(ref musicDatabaseArtists);                
+                m_db.GetAllArtists(ref musicDatabaseArtists);  
+                ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
+                if (al != null && al.Count > 0)
+                {
+                    musicDatabaseArtists.AddRange(al);
+                }
                 string artist;
                 totArtistsBeingScraped = musicDatabaseArtists.Count;
                 if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
@@ -942,7 +950,8 @@ namespace FanartHandler
             Hashtable ht = new Hashtable();
             try
             {
-                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + getTableName(type) + " WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True';";
+                //string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + getTableName(type) + " WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True';";
+                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + getTableName(type) + " WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSQL(artist)) + ") AND Enabled = 'True';";
                 SQLiteResultSet result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
                 {
@@ -967,7 +976,8 @@ namespace FanartHandler
             Hashtable ht = new Hashtable();
             try
             {
-                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
+                //string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
+                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSQL(artist)) + ") AND Enabled = 'True' AND Type = 'MusicFanart';";
                 SQLiteResultSet result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
                 {
@@ -996,6 +1006,8 @@ namespace FanartHandler
                 return "Movie_Fanart";
             else if (type.Equals("myVideos"))
                 return "Movie_Fanart";
+            else if (type.Equals("Online Videos"))
+                return "Movie_Fanart";                
             else if (type.Equals("MusicAlbum"))
                 return "Music_Fanart";
             else if (type.Equals("MusicArtist"))

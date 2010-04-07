@@ -1062,13 +1062,20 @@ namespace FanartHandler
                     }
                     if (useVideoFanart.Equals("True"))
                     {
-                        if (windowId == 6 || windowId == 25)
+                        if (windowId == 6 || windowId == 25 || windowId == 28)
                         {
-                            //User are in myVideo, myVideoTitle window
+                            //User are in myVideo, myVideoTitle window or myvideoplaylist
                             isSelectedVideo = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("movie", ref fs.listSelectedMovies, "myVideos", ref fs.currSelectedMovie, ref fs.currSelectedMovieTitle);
                         }
+                        else if (windowId == 4755)
+                        {
+                            //User are in myonlinevideos
+                            isSelectedVideo = true;
+                            resetFanartAvailableFlags = false;
+                            fs.RefreshGenericSelectedProperties("movie", ref fs.listSelectedMovies, "Online Videos", ref fs.currSelectedMovie, ref fs.currSelectedMovieTitle);
+                        }                            
                         else
                         {
                             if (isSelectedVideo)
@@ -1676,6 +1683,8 @@ namespace FanartHandler
                 m_db = MusicDatabase.Instance;
                 ManageScraperProperties();                
                 UpdateDirectoryTimer();
+                Utils.ImportExternalDbFanart("movingpictures.db3", "MovingPicture");
+                Utils.ImportExternalDbFanart("TVSeriesDatabase4.db3", "TVSeries");
                 //UpdateImageTimer();
                 InitRandomProperties();
                 if (scraperMPDatabase != null && scraperMPDatabase.Equals("True"))
