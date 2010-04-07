@@ -5,6 +5,14 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.7 to 1.8)==
+  * new feature: Support for multi-artist files.
+  * new feature: Mouse and Keyboard shortcuts for image management in Configuration.
+  * new feature: Show resolution of fanart in manage fanart tab for selected image.
+  * new feature: Support for movie fanart in onlinevideos plugin.
+  * bug fixed: Fixed issue with "The remote server returned an error: (417)
+Expectation failed.".
+
 ==Change Log (version 1.6 to 1.7)==
   * bug fixed: Includes optimization in how random images was handled. 
   * bug fixed: Plugin now should support standby/hibernation. 
