@@ -49,6 +49,13 @@ The scope of this plugin is to;
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 1.7 to 1.8==
 No changes needed in skin files to support version 1.8 if your skin previously supported version 1.1 - 1.7 of this plugin. This version adds optional support for movie fanart in onlinevideos plugin. 
+
+If you use Random Fanart on Basic Home, you should change the default animations to:
+{{{ 
+<animation effect="fade" start="10" end="100" time="850">VisibleChange</animation> 
+}}}
+
+Using the old hidden animation makes MP show all fanart images like a slide show on window open and it does not look that good. Using visiblechange instead makes it smooth when opening Basic Home containing many image controls being loaded async.
 ==Change Log - Version 1.6 to 1.7==
 No changes needed in skin files to support version 1.7 if your skin previously supported version 1.1, 1.2, 1.3, 1.4, 1.5 or 1.6 of this plugin.
 ==Change Log - Version 1.5 to 1.6==
