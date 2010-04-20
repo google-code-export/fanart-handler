@@ -20,7 +20,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "1.8";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "1.9";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -427,21 +427,27 @@ namespace FanartHandler
             {
                 edbm = new ExternalDatabaseManager();
                 string artist = "";
-                edbm.initDB(dbName);
-                SQLiteResultSet result = edbm.getData(type);
-                if (result != null)
+                if (edbm.initDB(dbName))
                 {
-                    if (result.Rows.Count > 0)
+                    SQLiteResultSet result = edbm.getData(type);
+                    if (result != null)
                     {
-                        for (int i = 0; i < result.Rows.Count; i++)
+                        if (result.Rows.Count > 0)
                         {
-                            artist = Utils.GetArtist(result.GetField(i, 0), type);
-                            musicDatabaseArtists.Add(artist);
+                            for (int i = 0; i < result.Rows.Count; i++)
+                            {
+                                artist = Utils.GetArtist(result.GetField(i, 0), type);
+                                musicDatabaseArtists.Add(artist);
+                            }
                         }
                     }
+                    result = null;
                 }
-                result = null;
-                edbm.close();
+                try
+                {
+                    edbm.close();
+                }
+                catch { }
                 edbm = null;
                 return musicDatabaseArtists;
             }
@@ -465,26 +471,32 @@ namespace FanartHandler
                 edbm = new ExternalDatabaseManager();
                 string artist = "";
                 string fanart = "";
-                edbm.initDB(dbName);
-                SQLiteResultSet result = edbm.getData(type);
-                if (result != null)
+                if (edbm.initDB(dbName))
                 {
-                    if (result.Rows.Count > 0)
+                    SQLiteResultSet result = edbm.getData(type);
+                    if (result != null)
                     {
-                        for (int i = 0; i < result.Rows.Count; i++)
+                        if (result.Rows.Count > 0)
                         {
-                            artist = Utils.GetArtist(result.GetField(i, 0), type);
-                            fanart = result.GetField(i, 1);
-                            if (type.Equals("TVSeries"))
+                            for (int i = 0; i < result.Rows.Count; i++)
                             {
-                                fanart = Config.GetFolder(Config.Dir.Thumbs) + fanart;
+                                artist = Utils.GetArtist(result.GetField(i, 0), type);
+                                fanart = result.GetField(i, 1);
+                                if (type.Equals("TVSeries"))
+                                {
+                                    fanart = Config.GetFolder(Config.Dir.Thumbs) + fanart;
+                                }
+                                Utils.GetDbm().loadFanart(artist, fanart, fanart, "Movie");
                             }
-                            Utils.GetDbm().loadFanart(artist, fanart, fanart, "Movie");
                         }
                     }
+                    result = null;
                 }
-                result = null;
-                edbm.close();
+                try
+                {
+                    edbm.close();
+                }
+                catch { }
                 edbm = null;
             }
             catch (Exception ex)
@@ -708,7 +720,7 @@ namespace FanartHandler
                 {
                     if (filename != null && filename.Length > 0)
                     {                        
-                        GUITextureManager.Load(filename, 0, 0, 0, false);
+                        GUITextureManager.Load(filename, 0, 0, 0, true);
                     }
                 }
                 catch (Exception ex)
