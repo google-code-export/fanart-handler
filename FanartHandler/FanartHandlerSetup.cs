@@ -1725,6 +1725,7 @@ namespace FanartHandler
             
         private void onSystemPowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e) 
         {
+            logger.Debug("Fanart Handler has received a power mode change event.");
             if (e.Mode == Microsoft.Win32.PowerModes.Resume) 
             {
                 logger.Info("Fanart Handler is resuming from standby/hibernate.");
