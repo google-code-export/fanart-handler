@@ -47,6 +47,8 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 1.8 to 1.9==
+No changes needed in skin files to support version 1.9 if your skin previously supported version 1.1 - 1.8 of this plugin. This version is reintroducing the possibility to use HIDDEN and VISIBLE animations for backdrops. I found a fix that tricks MP so that these animations now work. The good with these animations compared to VISIBLECHANGE animations is that fading in and out is working and gives a much smother experiense in MP. No more of the old "slideshow" effect on windowopen ;) 
 ==Change Log - Version 1.7 to 1.8==
 No changes needed in skin files to support version 1.8 if your skin previously supported version 1.1 - 1.7 of this plugin. This version adds optional support for movie fanart in onlinevideos plugin. 
 
