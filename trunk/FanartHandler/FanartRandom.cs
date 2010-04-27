@@ -25,6 +25,8 @@ namespace FanartHandler
         public Hashtable windowsUsingFanartRandom; //used to know what skin files that supports random fanart
         public Hashtable propertiesRandom; //used to hold properties to be updated (Random)
 
+        private string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";
+
         public Random randAnyGames = null;
         public Random randAnyMovies = null;
         public Random randAnyMovingPictures = null;
@@ -84,16 +86,18 @@ namespace FanartHandler
         }
  
 
+
+
         /// <summary>
         /// Get and set properties for random images
         /// </summary>
         public void RefreshRandomImageProperties()
         {
             try
-            {
+            {                
                 if ((currCountRandom >= FanartHandlerSetup.maxCountImage) || firstRandom || currCountRandom == 0)
                 {
-                    string sFilename = "";                                        
+                    string sFilename = "";                    
                     if (supportsRandomImages("useRandomMoviesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyMovies, ref randAnyMovies, "Movie");
@@ -120,15 +124,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyMovies);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomMovingPicturesFanart").Equals("True"))
                     {
@@ -156,15 +160,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
                         }                        
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyMovingPictures);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomMusicFanart").Equals("True"))
                     {
@@ -192,15 +196,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyMusic);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
                     }                    
                     if (supportsRandomImages("useRandomTVFanart").Equals("True"))
                     {
@@ -228,15 +232,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyTV);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomTVSeriesFanart").Equals("True"))
                     {
@@ -264,15 +268,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyTVSeries);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomPicturesFanart").Equals("True"))
                     {
@@ -300,15 +304,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyPictures);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomGamesFanart").Equals("True"))
                     {
@@ -336,15 +340,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyGames);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
                     }
                     if (supportsRandomImages("useRandomScoreCenterFanart").Equals("True"))
                     {
@@ -372,15 +376,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyScorecenter);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
                     }                    
                     if (supportsRandomImages("useRandomPluginsFanart").Equals("True"))
                     {
@@ -408,15 +412,15 @@ namespace FanartHandler
                         }
                         else
                         {
-                            FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop1.any", "");
-                            FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                            FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop1.any", tmpImage);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
                         }
                     }
                     else
                     {
                         FanartHandlerSetup.EmptyAllImages(ref listAnyPlugins);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop1.any", "");
-                        FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                        FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop1.any", tmpImage);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
                     }
                     ResetCurrCountRandom();
                     firstRandom = false;
@@ -470,6 +474,7 @@ namespace FanartHandler
                     value = " ";
                 if (String.IsNullOrEmpty(value))
                     value = " ";
+
                 if (propertiesRandom.Contains(property))
                 {
                     propertiesRandom[property] = value;
@@ -496,7 +501,7 @@ namespace FanartHandler
                             Utils.LoadImage(value, type);
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -819,6 +824,7 @@ namespace FanartHandler
                 }
             }
         }
+
 
         /// <summary>
         /// Get value from xml node

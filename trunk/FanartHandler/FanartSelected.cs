@@ -9,6 +9,7 @@ using MediaPortal.Music.Database;
 using MediaPortal.Player;
 using MediaPortal.Services;
 using MediaPortal.TagReader;
+using MediaPortal.Configuration;
 
 namespace FanartHandler
 {
@@ -24,6 +25,7 @@ namespace FanartHandler
         public string currSelectedMovieTitle = null;
         public string currSelectedMusicArtist = null;
         public string currSelectedScorecenterGenre = null;
+        private string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";
         public int prevSelectedGeneric = 0;
         public int prevSelectedMusic = 0;
         public int prevSelectedScorecenter = 0;
@@ -77,6 +79,10 @@ namespace FanartHandler
                 else if (GUIWindowManager.ActiveWindow == 510)
                 {
                     FanartHandlerSetup.m_SelectedItem = GUIPropertyManager.GetProperty("#artist");
+                }
+                else if (GUIWindowManager.ActiveWindow == 35)
+                {
+                    FanartHandlerSetup.m_SelectedItem = GUIPropertyManager.GetProperty("#Play.Current.Title");
                 }
                 else
                 {
@@ -191,9 +197,9 @@ namespace FanartHandler
                     prevSelectedGeneric = -1;
                     fanartAvailable = false;
                     if (doShowImageOne)
-                        AddProperty("#fanarthandler." + property + ".backdrop1.selected", "", ref listSelectedMusic, type);
+                        AddProperty("#fanarthandler." + property + ".backdrop1.selected", tmpImage, ref listSelectedMusic, type);
                     else
-                        AddProperty("#fanarthandler." + property + ".backdrop2.selected", "", ref listSelectedMusic, type);
+                        AddProperty("#fanarthandler." + property + ".backdrop2.selected", tmpImage, ref listSelectedMusic, type);
                     ResetCurrCount();
                     currSelectedGenericTitle = "";
                     SetCurrentArtistsImageNames(null);
@@ -513,9 +519,9 @@ namespace FanartHandler
                     prevSelectedMusic = -1;
                     fanartAvailable = false;
                     if (doShowImageOne)
-                        AddProperty("#fanarthandler.music.backdrop1.selected", "", ref listSelectedMusic, "MusicFanart");
+                        AddProperty("#fanarthandler.music.backdrop1.selected", tmpImage, ref listSelectedMusic, "MusicFanart");
                     else
-                        AddProperty("#fanarthandler.music.backdrop2.selected", "", ref listSelectedMusic, "MusicFanart");
+                        AddProperty("#fanarthandler.music.backdrop2.selected", tmpImage, ref listSelectedMusic, "MusicFanart");
                     ResetCurrCount();
                     currSelectedMusicArtist = "";
                     SetCurrentArtistsImageNames(null);

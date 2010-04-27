@@ -484,7 +484,7 @@ namespace FanartHandler
                                 fanart = result.GetField(i, 1);
                                 if (type.Equals("TVSeries"))
                                 {
-                                    fanart = Config.GetFolder(Config.Dir.Thumbs) + fanart;
+                                    fanart = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\" + fanart;
                                 }
                                 Utils.GetDbm().loadFanart(artist, fanart, fanart, "Movie");
                             }
