@@ -60,6 +60,7 @@ namespace FanartHandler
         private bool isSelectedVideo = false;
         private bool isSelectedScoreCenter = false;
         private bool isRandom = false;
+        private string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";
         //private bool isActivatingWindow = false;
         public bool preventRefresh = false;
         public static Hashtable defaultBackdropImages;  //used to hold all the default backdrop images        
@@ -716,7 +717,7 @@ namespace FanartHandler
                     //release unused image resources
                     HandleOldImages(ref fp.listPlayMusic);
                 }
-                if (fr.windowOpen == false)
+                if (fr.windowOpen == false) 
                 {
                     if (fr.updateVisibilityCountRandom == 2)  //after 2 sek
                     {
@@ -747,9 +748,9 @@ namespace FanartHandler
                         HandleOldImages(ref fr.listAnyTV);
                         HandleOldImages(ref fr.listAnyTVSeries);
                     }
-                }
-/*                
-                logger.Debug("listAnyGames: " + fr.listAnyGames.Count);
+                }                
+               
+/*                logger.Debug("listAnyGames: " + fr.listAnyGames.Count);
                 logger.Debug("listAnyMovies: " + fr.listAnyMovies.Count);
                 logger.Debug("listAnyMovingPictures: " + fr.listAnyMovingPictures.Count);
                 logger.Debug("listAnyMusic: " + fr.listAnyMusic.Count);
@@ -778,7 +779,8 @@ namespace FanartHandler
                 {
                     fr.countSetVisibility = 2;
                     fr.UpdatePropertiesRandom();
-                    if (fr.doShowImageOneRandom)
+                    
+                    if (fr.doShowImageOneRandom) 
                     {
                         fr.ShowImageOneRandom(windowId);
                     }
@@ -786,12 +788,12 @@ namespace FanartHandler
                     {
                         fr.ShowImageTwoRandom(windowId);
                     }
+                    
                 }
                 else if (fr.updateVisibilityCountRandom > 2 && fr.GetPropertiesRandom() > 0) //after 2 sek
                 {
-                    fr.UpdatePropertiesRandom();
+                    fr.UpdatePropertiesRandom(); 
                 }
-                //else if (fr.updateVisibilityCountRandom == 5) //after 4 sek
                 else if (fr.updateVisibilityCountRandom >= 5 && fr.GetPropertiesRandom() == 0) //after 4 sek
                 {
                     if (updateTimer != null && updateTimer.Enabled)
@@ -807,7 +809,7 @@ namespace FanartHandler
                         fr.doShowImageOneRandom = true;
                     }
                     fr.countSetVisibility = 0;
-                    fr.updateVisibilityCountRandom = 0;
+                    fr.updateVisibilityCountRandom = 0;                                     
                     //release unused image resources
                     HandleOldImages(ref fr.listAnyGames);
                     HandleOldImages(ref fr.listAnyMovies);
@@ -992,9 +994,9 @@ namespace FanartHandler
                             fp.fanartAvailablePlay = false;
                             fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                             fp.prevPlayMusic = -1;
-                            SetProperty("#fanarthandler.music.overlay.play", "");
-                            SetProperty("#fanarthandler.music.backdrop1.play", "");
-                            SetProperty("#fanarthandler.music.backdrop2.play", "");
+                            SetProperty("#fanarthandler.music.overlay.play", tmpImage);
+                            SetProperty("#fanarthandler.music.backdrop1.play", tmpImage);
+                            SetProperty("#fanarthandler.music.backdrop2.play", tmpImage);
                             fp.currCountPlay = 0;
                             fp.updateVisibilityCountPlay = 0;
                             isPlaying = false;
@@ -1054,8 +1056,8 @@ namespace FanartHandler
                                 fs.prevSelectedMusic = -1;
                                 fs.prevSelectedGeneric = -1;
                                 fs.SetCurrentArtistsImageNames(null);
-                                SetProperty("#fanarthandler.music.backdrop1.selected", "");
-                                SetProperty("#fanarthandler.music.backdrop2.selected", "");
+                                SetProperty("#fanarthandler.music.backdrop1.selected", tmpImage);
+                                SetProperty("#fanarthandler.music.backdrop2.selected", tmpImage);
                                 isSelectedMusic = false;
                             }
                         }
@@ -1075,7 +1077,14 @@ namespace FanartHandler
                             isSelectedVideo = true;
                             resetFanartAvailableFlags = false;
                             fs.RefreshGenericSelectedProperties("movie", ref fs.listSelectedMovies, "Online Videos", ref fs.currSelectedMovie, ref fs.currSelectedMovieTitle);
-                        }                            
+                        }
+                        else if (windowId == 35)
+                        {
+                            //User are in basichome
+                            isSelectedVideo = true;
+                            resetFanartAvailableFlags = false;
+                            fs.RefreshGenericSelectedProperties("movie", ref fs.listSelectedMovies, "myVideos", ref fs.currSelectedMovie, ref fs.currSelectedMovieTitle);
+                        }
                         else
                         {
                             if (isSelectedVideo)
@@ -1085,8 +1094,8 @@ namespace FanartHandler
                                 fs.currSelectedMovieTitle = "";
                                 fs.SetCurrentArtistsImageNames(null);
                                 fs.prevSelectedGeneric = -1;
-                                SetProperty("#fanarthandler.movie.backdrop1.selected", "");
-                                SetProperty("#fanarthandler.movie.backdrop2.selected", "");
+                                SetProperty("#fanarthandler.movie.backdrop1.selected", tmpImage);
+                                SetProperty("#fanarthandler.movie.backdrop2.selected", tmpImage);
                                 isSelectedVideo = false;
                             }
                         }
@@ -1108,8 +1117,8 @@ namespace FanartHandler
                                 fs.currSelectedScorecenterGenre = "";
                                 fs.SetCurrentArtistsImageNames(null);
                                 fs.prevSelectedScorecenter = -1;
-                                SetProperty("#fanarthandler.scorecenter.backdrop1.selected", "");
-                                SetProperty("#fanarthandler.scorecenter.backdrop2.selected", "");
+                                SetProperty("#fanarthandler.scorecenter.backdrop1.selected", tmpImage);
+                                SetProperty("#fanarthandler.scorecenter.backdrop2.selected", tmpImage);
                                 isSelectedScoreCenter = false;
                             }
                         }
@@ -1128,24 +1137,24 @@ namespace FanartHandler
                     {
                         if (isRandom)
                         {
-                            SetProperty("#fanarthandler.games.backdrop1.any", "");
-                            SetProperty("#fanarthandler.movie.backdrop1.any", "");
-                            SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
-                            SetProperty("#fanarthandler.music.backdrop1.any", "");
-                            SetProperty("#fanarthandler.picture.backdrop1.any", "");
-                            SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
-                            SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
-                            SetProperty("#fanarthandler.tv.backdrop1.any", "");
-                            SetProperty("#fanarthandler.plugins.backdrop1.any", "");
-                            SetProperty("#fanarthandler.games.backdrop2.any", "");
-                            SetProperty("#fanarthandler.movie.backdrop2.any", "");
-                            SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
-                            SetProperty("#fanarthandler.music.backdrop2.any", "");
-                            SetProperty("#fanarthandler.picture.backdrop2.any", "");
-                            SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
-                            SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
-                            SetProperty("#fanarthandler.tv.backdrop2.any", "");
-                            SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                            SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.plugins.backdrop1.any", tmpImage);
+                            SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
+                            SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
                             fr.currCountRandom = 0;
                             EmptyAllImages(ref fr.listAnyGames);
                             EmptyAllImages(ref fr.listAnyMovies);
@@ -1284,34 +1293,34 @@ namespace FanartHandler
             fp.currPlayMusic = "";
             fs.currSelectedMusic = "";
             fs.currSelectedScorecenter = "";
-            SetProperty("#fanarthandler.scraper.percent.completed", "");
-            SetProperty("#fanarthandler.games.backdrop1.any", "");
-            SetProperty("#fanarthandler.games.backdrop2.any", "");
-            SetProperty("#fanarthandler.movie.backdrop1.any", "");
-            SetProperty("#fanarthandler.movie.backdrop2.any", "");
-            SetProperty("#fanarthandler.movie.backdrop1.selected", "");
-            SetProperty("#fanarthandler.movie.backdrop2.selected", "");
-            SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
-            SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
-            SetProperty("#fanarthandler.music.backdrop1.any", "");
-            SetProperty("#fanarthandler.music.backdrop2.any", "");
-            SetProperty("#fanarthandler.music.overlay.play", "");
-            SetProperty("#fanarthandler.music.backdrop1.play", "");
-            SetProperty("#fanarthandler.music.backdrop2.play", "");            
-            SetProperty("#fanarthandler.music.backdrop1.selected", "");
-            SetProperty("#fanarthandler.music.backdrop2.selected", "");
-            SetProperty("#fanarthandler.picture.backdrop1.any", "");
-            SetProperty("#fanarthandler.picture.backdrop2.any", "");
-            SetProperty("#fanarthandler.scorecenter.backdrop1.selected", "");
-            SetProperty("#fanarthandler.scorecenter.backdrop2.selected", "");
-            SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
-            SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
-            SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
-            SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
-            SetProperty("#fanarthandler.tv.backdrop1.any", "");
-            SetProperty("#fanarthandler.tv.backdrop2.any", "");
-            SetProperty("#fanarthandler.plugins.backdrop1.any", "");
-            SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+            SetProperty("#fanarthandler.scraper.percent.completed", tmpImage);
+            SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.movie.backdrop1.selected", tmpImage);
+            SetProperty("#fanarthandler.movie.backdrop2.selected", tmpImage);
+            SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.music.overlay.play", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop1.play", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop2.play", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop1.selected", tmpImage);
+            SetProperty("#fanarthandler.music.backdrop2.selected", tmpImage);
+            SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.scorecenter.backdrop1.selected", tmpImage);
+            SetProperty("#fanarthandler.scorecenter.backdrop2.selected", tmpImage);
+            SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
+            SetProperty("#fanarthandler.plugins.backdrop1.any", tmpImage);
+            SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
             fs.properties = new Hashtable();
             fp.propertiesPlay = new Hashtable();
             fr.propertiesRandom = new Hashtable();
@@ -1725,7 +1734,6 @@ namespace FanartHandler
             
         private void onSystemPowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e) 
         {
-            logger.Debug("Fanart Handler has received a power mode change event.");
             if (e.Mode == Microsoft.Win32.PowerModes.Resume) 
             {
                 logger.Info("Fanart Handler is resuming from standby/hibernate.");
@@ -1814,9 +1822,9 @@ namespace FanartHandler
                                 fp.fanartAvailablePlay = false;
                                 fp.FanartIsNotAvailablePlay(activeWindowId);
                                 fp.prevPlayMusic = -1;
-                                SetProperty("#fanarthandler.music.overlay.play", "");
-                                SetProperty("#fanarthandler.music.backdrop1.play", "");
-                                SetProperty("#fanarthandler.music.backdrop2.play", "");
+                                SetProperty("#fanarthandler.music.overlay.play", tmpImage);
+                                SetProperty("#fanarthandler.music.backdrop1.play", tmpImage);
+                                SetProperty("#fanarthandler.music.backdrop2.play", tmpImage);
                                 fp.currCountPlay = 0;
                                 fp.updateVisibilityCountPlay = 0;
                                 isPlaying = false;
@@ -1825,7 +1833,7 @@ namespace FanartHandler
                     }
                     if (fr.windowsUsingFanartRandom.ContainsKey(windowId))
                     {
-                        fr.windowOpen = true;                        
+                        fr.windowOpen = true;
                         if (fr.doShowImageOneRandom)
                         {
                             fr.ShowImageTwoRandom(activeWindowId);
@@ -1879,9 +1887,9 @@ namespace FanartHandler
                     fp.fanartAvailablePlay = false;
                     fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                     fp.prevPlayMusic = -1;
-                    SetProperty("#fanarthandler.music.overlay.play", "");
-                    SetProperty("#fanarthandler.music.backdrop1.play", "");
-                    SetProperty("#fanarthandler.music.backdrop2.play", "");
+                    SetProperty("#fanarthandler.music.overlay.play", tmpImage);
+                    SetProperty("#fanarthandler.music.backdrop1.play", tmpImage);
+                    SetProperty("#fanarthandler.music.backdrop2.play", tmpImage);
                     fp.currCountPlay = 0;
                     fp.updateVisibilityCountPlay = 0;
                     isPlaying = false;
@@ -1894,8 +1902,8 @@ namespace FanartHandler
                     fs.SetCurrentArtistsImageNames(null);
                     fs.currCount = 0;
                     fs.updateVisibilityCount = 0;
-                    SetProperty("#fanarthandler.music.backdrop1.selected", "");
-                    SetProperty("#fanarthandler.music.backdrop2.selected", "");
+                    SetProperty("#fanarthandler.music.backdrop1.selected", tmpImage);
+                    SetProperty("#fanarthandler.music.backdrop2.selected", tmpImage);
                     isSelectedMusic = false;
                 }
                 if (isSelectedVideo)
@@ -1906,8 +1914,8 @@ namespace FanartHandler
                     fs.SetCurrentArtistsImageNames(null);
                     fs.currCount = 0;
                     fs.updateVisibilityCount = 0;
-                    SetProperty("#fanarthandler.movie.backdrop1.selected", "");
-                    SetProperty("#fanarthandler.movie.backdrop2.selected", "");
+                    SetProperty("#fanarthandler.movie.backdrop1.selected", tmpImage);
+                    SetProperty("#fanarthandler.movie.backdrop2.selected", tmpImage);
                     isSelectedVideo = false;
                 }
                 if (isSelectedScoreCenter)
@@ -1918,30 +1926,30 @@ namespace FanartHandler
                     fs.SetCurrentArtistsImageNames(null);
                     fs.currCount = 0;
                     fs.updateVisibilityCount = 0;
-                    SetProperty("#fanarthandler.scorecenter.backdrop1.selected", "");
-                    SetProperty("#fanarthandler.scorecenter.backdrop2.selected", "");
+                    SetProperty("#fanarthandler.scorecenter.backdrop1.selected", tmpImage);
+                    SetProperty("#fanarthandler.scorecenter.backdrop2.selected", tmpImage);
                     isSelectedScoreCenter = false;
                 }
                 if (isRandom)
                 {
-                    SetProperty("#fanarthandler.games.backdrop1.any", "");
-                    SetProperty("#fanarthandler.movie.backdrop1.any", "");
-                    SetProperty("#fanarthandler.movingpicture.backdrop1.any", "");
-                    SetProperty("#fanarthandler.music.backdrop1.any", "");
-                    SetProperty("#fanarthandler.picture.backdrop1.any", "");
-                    SetProperty("#fanarthandler.scorecenter.backdrop1.any", "");
-                    SetProperty("#fanarthandler.tvseries.backdrop1.any", "");
-                    SetProperty("#fanarthandler.tv.backdrop1.any", "");
-                    SetProperty("#fanarthandler.plugins.backdrop1.any", "");
-                    SetProperty("#fanarthandler.games.backdrop2.any", "");
-                    SetProperty("#fanarthandler.movie.backdrop2.any", "");
-                    SetProperty("#fanarthandler.movingpicture.backdrop2.any", "");
-                    SetProperty("#fanarthandler.music.backdrop2.any", "");
-                    SetProperty("#fanarthandler.picture.backdrop2.any", "");
-                    SetProperty("#fanarthandler.scorecenter.backdrop2.any", "");
-                    SetProperty("#fanarthandler.tvseries.backdrop2.any", "");
-                    SetProperty("#fanarthandler.tv.backdrop2.any", "");
-                    SetProperty("#fanarthandler.plugins.backdrop2.any", "");
+                    SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.plugins.backdrop1.any", tmpImage);
+                    SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
+                    SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
                     fr.currCountRandom = 0;
                     fr.countSetVisibility = 0;
                     fr.ClearPropertiesRandom();
