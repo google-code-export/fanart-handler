@@ -1,19 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Web;
-using MediaPortal.Configuration;
-using System.Net;
-using NLog;
-using System.Management;
-using System.Threading;
+﻿//-----------------------------------------------------------------------
+// Open Source software licensed under the GNU/GPL agreement.
+// 
+// Author: Cul8er
+//-----------------------------------------------------------------------
 
 namespace FanartHandler
 {
+    using MediaPortal.Configuration;
+    using NLog;
+    using System;    
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Management;
+    using System.Net;
+    using System.Text;    
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Web;
+
+    /// <summary>
+    /// Class handling scraping of fanart from htbackdrops.com.
+    /// </summary>
     class Scraper
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -23,9 +32,9 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes the "new" pages on htbackdrops.com.
         /// </summary>
-        public void getNewImages(int iMax, DatabaseManager dbm)
+        public void GetNewImages(int iMax, DatabaseManager dbm)
         {
-            if (dbm.stopScraper == false)
+            if (dbm.StopScraper == false)
             {
                 try
                 {
@@ -73,12 +82,12 @@ namespace FanartHandler
                         logger.Info("Found " + sPages + " pages with new images on htbackdrops.com");
                         int iPages = Convert.ToInt32(sPages);
 
-                        dbm.totArtistsBeingScraped = iPages;
-                        dbm.currArtistsBeingScraped = 0;
+                        dbm.TotArtistsBeingScraped = iPages;
+                        dbm.CurrArtistsBeingScraped = 0;
 
                         for (int x = 0; x < iPages; x++)
                         {
-                            if (dbm.stopScraper == true)
+                            if (dbm.StopScraper == true)
                             {
                                 break;
                             }
@@ -86,7 +95,6 @@ namespace FanartHandler
                             objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=" + (x + 1));
                             objRequest.ServicePoint.Expect100Continue = false; 
                             sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
-
                             //The WebResponse object gets the Request's response (the HTML) 
                             objResponse = objRequest.GetResponse();
 
@@ -107,7 +115,7 @@ namespace FanartHandler
                             int iCount = 0;
                             for (m = reg.Match(strResult); m.Success; m = m.NextMatch())
                             {
-                                if (dbm.stopScraper == true)
+                                if (dbm.StopScraper == true)
                                 {
                                     break;
                                 }
@@ -130,7 +138,7 @@ namespace FanartHandler
                                         if (DownloadImage(ref sArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic))
                                         {
                                             iCount = iCount + 1;
-                                            dbm.loadMusicFanart(dbArtist, filename, sourceFilename, "MusicFanart");
+                                            dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicFanart");
                                         }
                                     }
                                     else
@@ -150,7 +158,7 @@ namespace FanartHandler
                                     }
                                 }
                             }
-                            dbm.currArtistsBeingScraped++;
+                            dbm.CurrArtistsBeingScraped++;
                         }
                     }
                     else
@@ -336,7 +344,7 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int getImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
+        public int GetImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
         {
             try
             {
@@ -353,7 +361,7 @@ namespace FanartHandler
                     proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
                     WebRequest.DefaultWebProxy = proxy;
                 }
-                objRequest.ServicePoint.Expect100Continue = false; 
+                objRequest.ServicePoint.Expect100Continue = false;                 
                 string sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
                 string values = "search_terms=all";
                 values += "&cat_id=1";
@@ -392,7 +400,7 @@ namespace FanartHandler
                     sArtist = Utils.RemoveResolutionFromArtistName(sArtist);
                     dbArtist = Utils.GetArtist(artist, "MusicFanart");
                     sArtist = Utils.GetArtist(sArtist, "MusicFanart");
-                    if (Utils.isMatch(dbArtist, sArtist))
+                    if (Utils.IsMatch(dbArtist, sArtist))
                     {
                         logger.Debug("Found fanart for artist " + artist + ".");
                         picUri = picUri.Substring(picUri.IndexOf("img src=\".") + 10);
@@ -404,10 +412,10 @@ namespace FanartHandler
                             if (DownloadImage(ref sArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic))
                             {
                                 iCount = iCount + 1;
-                                dbm.loadMusicFanart(dbArtist, filename, sourceFilename, "MusicFanart");
+                                dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicFanart");
                                 if (swnp != null)
                                 {
-                                    swnp.setRefreshFlag(true);
+                                    swnp.SetRefreshFlag(true);
                                 }
                             }
                         }

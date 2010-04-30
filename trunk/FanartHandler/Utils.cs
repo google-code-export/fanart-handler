@@ -1,26 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Globalization;
-using NLog;
-using MediaPortal.GUI.Library;
-using System.Drawing;
-using System.IO;
-using MediaPortal.Configuration;
-using SQLite.NET;
-
+﻿//-----------------------------------------------------------------------
+// Open Source software licensed under the GNU/GPL agreement.
+// 
+// Author: Cul8er
+//-----------------------------------------------------------------------
 
 namespace FanartHandler
 {
+    using MediaPortal.Configuration;
+    using MediaPortal.GUI.Library;
+    using NLog;
+    using SQLite.NET;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;    
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
+    /// <summary>
+    /// Utility class used by the Fanart Handler plugin.
+    /// </summary>
     static class Utils
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "1.9";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "1.10";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -47,7 +55,7 @@ namespace FanartHandler
         public static void InitiateDbm()
         {
             dbm = new DatabaseManager();
-            dbm.initDB();
+            dbm.InitDB();
         }        
 
         /// <summary>
@@ -218,7 +226,7 @@ namespace FanartHandler
             newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
 
             // Remove the number 1 from the end of a title string
-            newTitle = Regex.Replace(newTitle, @"\s(1)$", "");
+            newTitle = Regex.Replace(newTitle, @"\s(1)$", String.Empty);
 
 
             // Remove double spaces and return the cleaned title
@@ -281,7 +289,7 @@ namespace FanartHandler
         /// <summary>
         /// Matches two strings (artists or titles)
         /// </summary>        
-        public static bool isMatch(string s1, string s2)
+        public static bool IsMatch(string s1, string s2)
         {
             if (s1 == null) return false;
             int i = 0;
@@ -347,7 +355,7 @@ namespace FanartHandler
         public static string RemoveUnderline(string key)
         {
             if (key == null) return string.Empty;
-            return Regex.Replace(key, @"_", "");
+            return Regex.Replace(key, @"_", String.Empty);
         }
 
         /// <summary>
@@ -358,10 +366,10 @@ namespace FanartHandler
             if (key == null) return string.Empty;
             key = GetFilenameNoPath(key);
             key = Utils.RemoveExtension(key);
-            key = Regex.Replace(key, @"\(\d{5}\)", "").Trim();
+            key = Regex.Replace(key, @"\(\d{5}\)", String.Empty).Trim();
             if (type.Equals("MusicArtist"))
             {
-                key = Regex.Replace(key, "[L]$", "").Trim();
+                key = Regex.Replace(key, "[L]$", String.Empty).Trim();
             }
             key = Utils.RemoveUnderline(key);
             if (type.Equals("MusicAlbum"))
@@ -387,8 +395,8 @@ namespace FanartHandler
             if (s == null) return string.Empty;
             s = s.Replace(";","|");
             string[] words = s.Split('|');
-            string sout = "";
-            string tmpWord = "";
+            string sout = String.Empty;
+            string tmpWord = String.Empty;
             foreach (string word in words)
             {
                 tmpWord = word.Trim();
@@ -410,7 +418,7 @@ namespace FanartHandler
         public static string RemoveMPArtistPipes(string s)
         {
             if (s == null) return string.Empty;
-//            s = s.Replace("|","");
+//            s = s.Replace("|",String.Empty);
 //            s = s.Trim();
             return s;
         }
@@ -426,10 +434,10 @@ namespace FanartHandler
             try
             {
                 edbm = new ExternalDatabaseManager();
-                string artist = "";
-                if (edbm.initDB(dbName))
+                string artist = String.Empty;
+                if (edbm.InitDB(dbName))
                 {
-                    SQLiteResultSet result = edbm.getData(type);
+                    SQLiteResultSet result = edbm.GetData(type);
                     if (result != null)
                     {
                         if (result.Rows.Count > 0)
@@ -469,11 +477,11 @@ namespace FanartHandler
             try
             {
                 edbm = new ExternalDatabaseManager();
-                string artist = "";
-                string fanart = "";
-                if (edbm.initDB(dbName))
+                string artist = String.Empty;
+                string fanart = String.Empty;
+                if (edbm.InitDB(dbName))
                 {
-                    SQLiteResultSet result = edbm.getData(type);
+                    SQLiteResultSet result = edbm.GetData(type);
                     if (result != null)
                     {
                         if (result.Rows.Count > 0)
@@ -486,7 +494,7 @@ namespace FanartHandler
                                 {
                                     fanart = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\" + fanart;
                                 }
-                                Utils.GetDbm().loadFanart(artist, fanart, fanart, "Movie");
+                                Utils.GetDbm().LoadFanart(artist, fanart, fanart, "Movie");
                             }
                         }
                     }
@@ -541,16 +549,16 @@ namespace FanartHandler
         {
             if (key == null) return string.Empty;
             //key = key.ToLowerInvariant();
-            key = Regex.Replace(key, @".jpg", "");
-            key = Regex.Replace(key, @".JPG", "");
-            key = Regex.Replace(key, @".png", "");
-            key = Regex.Replace(key, @".PNG", "");
-            key = Regex.Replace(key, @".bmp", "");
-            key = Regex.Replace(key, @".BMP", "");
-            key = Regex.Replace(key, @".tif", "");
-            key = Regex.Replace(key, @".TIF", "");
-            key = Regex.Replace(key, @".gif", "");
-            key = Regex.Replace(key, @".GIF", "");
+            key = Regex.Replace(key, @".jpg", String.Empty);
+            key = Regex.Replace(key, @".JPG", String.Empty);
+            key = Regex.Replace(key, @".png", String.Empty);
+            key = Regex.Replace(key, @".PNG", String.Empty);
+            key = Regex.Replace(key, @".bmp", String.Empty);
+            key = Regex.Replace(key, @".BMP", String.Empty);
+            key = Regex.Replace(key, @".tif", String.Empty);
+            key = Regex.Replace(key, @".TIF", String.Empty);
+            key = Regex.Replace(key, @".gif", String.Empty);
+            key = Regex.Replace(key, @".GIF", String.Empty);
             return key;
         }
 
@@ -560,7 +568,7 @@ namespace FanartHandler
         public static string RemoveDigits(string key)
         {
             if (key == null) return string.Empty;
-            return Regex.Replace(key, @"\d", "");            
+            return Regex.Replace(key, @"\d", String.Empty);            
         }
 
         /// <summary>
@@ -579,40 +587,40 @@ namespace FanartHandler
         public static string RemoveResolutionFromArtistName(string s)
         {
             if (s == null) return string.Empty;
-            s = s.Replace("-(1080P)", "");
-            s = s.Replace("-(720P)", "");
-            s = s.Replace("-[1080P]", "");
-            s = s.Replace("-[720P]", "");
-            s = s.Replace("_(1080P)", "");
-            s = s.Replace("_(720P)", "");
-            s = s.Replace("_[1080P]", "");
-            s = s.Replace("_[720P]", "");
-            s = s.Replace(" (1080P)", "");
-            s = s.Replace(" (720P)", "");
-            s = s.Replace(" [1080P]", "");
-            s = s.Replace(" [720P]", "");
-            s = s.Replace("(1080P)", "");
-            s = s.Replace("(720P)", "");
-            s = s.Replace("[1080P]", "");
-            s = s.Replace("[720P]", "");
-            s = s.Replace("-1080P", "");
-            s = s.Replace("-720P", "");
-            s = s.Replace("-1080", "");
-            s = s.Replace("-720", "");
-            s = s.Replace("_1080P", "");
-            s = s.Replace("_720P", "");
-            s = s.Replace("_1080", "");
-            s = s.Replace("_720", "");
-            s = s.Replace(" 1080P", "");
-            s = s.Replace(" 720P", "");
-            s = s.Replace(" 1080", "");
-            s = s.Replace(" 720", "");
-            s = s.Replace("1080P", "");
-            s = s.Replace("720P", "");
-            s = s.Replace("1080", "");
-            s = s.Replace("720", "");
-            s = s.Replace("1920x1080", "");
-            s = s.Replace("_1920", "");
+            s = s.Replace("-(1080P)", String.Empty);
+            s = s.Replace("-(720P)", String.Empty);
+            s = s.Replace("-[1080P]", String.Empty);
+            s = s.Replace("-[720P]", String.Empty);
+            s = s.Replace("_(1080P)", String.Empty);
+            s = s.Replace("_(720P)", String.Empty);
+            s = s.Replace("_[1080P]", String.Empty);
+            s = s.Replace("_[720P]", String.Empty);
+            s = s.Replace(" (1080P)", String.Empty);
+            s = s.Replace(" (720P)", String.Empty);
+            s = s.Replace(" [1080P]", String.Empty);
+            s = s.Replace(" [720P]", String.Empty);
+            s = s.Replace("(1080P)", String.Empty);
+            s = s.Replace("(720P)", String.Empty);
+            s = s.Replace("[1080P]", String.Empty);
+            s = s.Replace("[720P]", String.Empty);
+            s = s.Replace("-1080P", String.Empty);
+            s = s.Replace("-720P", String.Empty);
+            s = s.Replace("-1080", String.Empty);
+            s = s.Replace("-720", String.Empty);
+            s = s.Replace("_1080P", String.Empty);
+            s = s.Replace("_720P", String.Empty);
+            s = s.Replace("_1080", String.Empty);
+            s = s.Replace("_720", String.Empty);
+            s = s.Replace(" 1080P", String.Empty);
+            s = s.Replace(" 720P", String.Empty);
+            s = s.Replace(" 1080", String.Empty);
+            s = s.Replace(" 720", String.Empty);
+            s = s.Replace("1080P", String.Empty);
+            s = s.Replace("720P", String.Empty);
+            s = s.Replace("1080", String.Empty);
+            s = s.Replace("720", String.Empty);
+            s = s.Replace("1920x1080", String.Empty);
+            s = s.Replace("_1920", String.Empty);
             return s;
         }
 
@@ -622,22 +630,22 @@ namespace FanartHandler
         public static string PatchFilename(string s)
         {
             if (s == null) return string.Empty;
-            s = s.Replace("?", "");
-            s = s.Replace("[", "");
-            s = s.Replace("]", "");
-            s = s.Replace("/", "");
-            s = s.Replace("\\", "");
-            s = s.Replace("=", "");
-            s = s.Replace("+", "");
-            s = s.Replace("<", "");
-            s = s.Replace(">", "");
-            s = s.Replace(":", "");
-            s = s.Replace(";", "");
-            s = s.Replace("\"", "");
-            s = s.Replace(",", "");
-            s = s.Replace("*", "");
-            s = s.Replace("|", "");
-            return s.Replace("^", "");                          
+            s = s.Replace("?", String.Empty);
+            s = s.Replace("[", String.Empty);
+            s = s.Replace("]", String.Empty);
+            s = s.Replace("/", String.Empty);
+            s = s.Replace("\\", String.Empty);
+            s = s.Replace("=", String.Empty);
+            s = s.Replace("+", String.Empty);
+            s = s.Replace("<", String.Empty);
+            s = s.Replace(">", String.Empty);
+            s = s.Replace(":", String.Empty);
+            s = s.Replace(";", String.Empty);
+            s = s.Replace("\"", String.Empty);
+            s = s.Replace(",", String.Empty);
+            s = s.Replace("*", String.Empty);
+            s = s.Replace("|", String.Empty);
+            return s.Replace("^", String.Empty);                          
         }
 
         /// <summary>
@@ -652,7 +660,7 @@ namespace FanartHandler
             }
             else
             {
-                return Regex.Replace(s, "[0-9]*$", "").Trim();
+                return Regex.Replace(s, "[0-9]*$", String.Empty).Trim();
             }
         }
 
@@ -707,6 +715,51 @@ namespace FanartHandler
                     filenames[k] = temp;
                 }
             }
+        }
+
+        /// <summary>
+        /// User has been "idle" for a short time. Method used to prevent loading
+        /// images during a fast scroll of selected items
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsIdle()
+        {
+            try
+            {
+                TimeSpan ts = DateTime.Now - GUIGraphicsContext.LastActivity;
+                if (ts.TotalMilliseconds >= 250)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("IsIdle: " + ex.ToString());
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// User has been "idle" for a short time. Method used to see if
+        /// to fade basichome when music or movie is playing
+        /// </summary>
+        /// <param name="basichomeFadeTime"></param>
+        /// <returns></returns>
+        public static bool IsIdle(int basichomeFadeTime)
+        {
+            try
+            {
+                TimeSpan ts = DateTime.Now - GUIGraphicsContext.LastActivity;
+                if (ts.TotalSeconds >= basichomeFadeTime)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("IsIdle: " + ex.ToString());
+            }
+            return false;
         }
 
         /// <summary>

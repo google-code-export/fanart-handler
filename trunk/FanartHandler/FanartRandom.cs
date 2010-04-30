@@ -1,29 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NLog;
-using MediaPortal.GUI.Library;
-using System.Collections;
-using System.Xml;
-using System.Xml.XPath;
-using MediaPortal.Configuration;
-using System.IO;
+﻿//-----------------------------------------------------------------------
+// Open Source software licensed under the GNU/GPL agreement.
+// 
+// Author: Cul8er
+//-----------------------------------------------------------------------
 
 namespace FanartHandler
 {
+    using MediaPortal.Configuration;
+    using MediaPortal.GUI.Library;
+    using NLog;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Xml;
+    using System.Xml.XPath;   
+
+    /// <summary>
+    /// Class handling fanart for random backdrops.
+    /// </summary>
     class FanartRandom
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public int currCountRandom = 0;
-        public int updateVisibilityCountRandom = 0;
-        public int countSetVisibility = 0;
-        public bool firstRandom = true;  //Special case on first random
-        public bool windowOpen = false;
-        public bool doShowImageOneRandom = true; // Decides if property .1 or .2 should be set on next run
-        public Hashtable windowsUsingFanartRandom; //used to know what skin files that supports random fanart
-        public Hashtable propertiesRandom; //used to hold properties to be updated (Random)
+        private int updateVisibilityCountRandom = 0;
+        private int countSetVisibility = 0;
+        private bool firstRandom = true;  //Special case on first random        
+        private bool windowOpen = false;
+        private bool doShowImageOneRandom = true; // Decides if property .1 or .2 should be set on next run        
+        private Hashtable windowsUsingFanartRandom; //used to know what skin files that supports random fanart        
+        private Hashtable propertiesRandom; //used to hold properties to be updated (Random)        
 
         private string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";
 
@@ -37,15 +46,15 @@ namespace FanartHandler
         public Random randAnyTV = null;
         public Random randAnyPlugins = null;
 
-        public bool useAnyGames = false;
-        public bool useAnyMusic = false;
-        public bool useAnyMovies = false;
-        public bool useAnyMovingPictures = false;
-        public bool useAnyPictures = false;
-        public bool useAnyScoreCenter = false;
-        public bool useAnyTVSeries = false;
-        public bool useAnyTV = false;
-        public bool useAnyPlugins = false;
+        private bool useAnyGames = false;
+        private bool useAnyMusic = false;
+        private bool useAnyMovies = false;
+        private bool useAnyMovingPictures = false;
+        private bool useAnyPictures = false;
+        private bool useAnyScoreCenter = false;
+        private bool useAnyTVSeries = false;
+        private bool useAnyTV = false;
+        private bool useAnyPlugins = false;        
 
         private string currAnyGames = null;
         private string currAnyMovies = null;
@@ -67,6 +76,102 @@ namespace FanartHandler
         public ArrayList listAnyTV = null;
         public ArrayList listAnyPlugins = null;
         #endregion
+
+        public bool UseAnyPlugins
+        {
+            get { return useAnyPlugins; }
+            set { useAnyPlugins = value; }
+        }
+
+        public bool UseAnyTV
+        {
+            get { return useAnyTV; }
+            set { useAnyTV = value; }
+        }
+
+        public bool UseAnyTVSeries
+        {
+            get { return useAnyTVSeries; }
+            set { useAnyTVSeries = value; }
+        }
+
+        public bool UseAnyScoreCenter
+        {
+            get { return useAnyScoreCenter; }
+            set { useAnyScoreCenter = value; }
+        }
+
+        public bool UseAnyPictures
+        {
+            get { return useAnyPictures; }
+            set { useAnyPictures = value; }
+        }
+
+        public bool UseAnyMovingPictures
+        {
+            get { return useAnyMovingPictures; }
+            set { useAnyMovingPictures = value; }
+        }
+
+        public bool UseAnyMovies
+        {
+            get { return useAnyMovies; }
+            set { useAnyMovies = value; }
+        }
+
+        public bool UseAnyMusic
+        {
+            get { return useAnyMusic; }
+            set { useAnyMusic = value; }
+        }
+
+        public bool UseAnyGames
+        {
+            get { return useAnyGames; }
+            set { useAnyGames = value; }
+        }
+
+        public Hashtable PropertiesRandom
+        {
+            get { return propertiesRandom; }
+            set { propertiesRandom = value; }
+        }
+
+        public Hashtable WindowsUsingFanartRandom
+        {
+            get { return windowsUsingFanartRandom; }
+            set { windowsUsingFanartRandom = value; }
+        }
+
+        public bool DoShowImageOneRandom
+        {
+            get { return doShowImageOneRandom; }
+            set { doShowImageOneRandom = value; }
+        }
+
+        public bool WindowOpen
+        {
+            get { return windowOpen; }
+            set { windowOpen = value; }
+        }
+
+        public bool FirstRandom
+        {
+            get { return firstRandom; }
+            set { firstRandom = value; }
+        }
+
+        public int CountSetVisibility
+        {
+            get { return countSetVisibility; }
+            set { countSetVisibility = value; }
+        }
+
+        public int UpdateVisibilityCountRandom
+        {
+            get { return updateVisibilityCountRandom; }
+            set { updateVisibilityCountRandom = value; }
+        }
 
         /// <summary>
         /// Class for the skin define tags
@@ -95,15 +200,15 @@ namespace FanartHandler
         {
             try
             {                
-                if ((currCountRandom >= FanartHandlerSetup.maxCountImage) || firstRandom || currCountRandom == 0)
+                if ((currCountRandom >= FanartHandlerSetup.MaxCountImage) || FirstRandom || currCountRandom == 0)
                 {
-                    string sFilename = "";                    
-                    if (supportsRandomImages("useRandomMoviesFanart").Equals("True"))
+                    string sFilename = String.Empty;                    
+                    if (SupportsRandomImages("useRandomMoviesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyMovies, ref randAnyMovies, "Movie");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.movie.backdrop1.any", sFilename, ref listAnyMovies, "Movie");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.movie.backdrop2.any");
@@ -134,12 +239,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomMovingPicturesFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomMovingPicturesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyMovingPictures, ref randAnyMovingPictures, "MovingPicture");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.movingpicture.backdrop1.any", sFilename, ref listAnyMovingPictures, "MovingPicture");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.movingpicture.backdrop2.any");
@@ -170,12 +275,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomMusicFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomMusicFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyMusic, ref randAnyMusic, "MusicFanart");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.music.backdrop1.any", sFilename, ref listAnyMusic, "MusicFanart");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop2.any");
@@ -206,12 +311,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.any", tmpImage);
                     }                    
-                    if (supportsRandomImages("useRandomTVFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomTVFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyTV, ref randAnyTV, "TV");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.tv.backdrop1.any", sFilename, ref listAnyTV, "TV");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.tv.backdrop2.any");
@@ -242,12 +347,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomTVSeriesFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomTVSeriesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyTVSeries, ref randAnyTVSeries, "TVSeries");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.tvseries.backdrop1.any", sFilename, ref listAnyTVSeries, "TVSeries");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.tvseries.backdrop2.any");
@@ -278,12 +383,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomPicturesFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomPicturesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyPictures, ref randAnyPictures, "Picture");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.picture.backdrop1.any", sFilename, ref listAnyPictures, "Picture");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.picture.backdrop2.any");
@@ -314,12 +419,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.picture.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomGamesFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomGamesFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyGames, ref randAnyGames, "Game");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.games.backdrop1.any", sFilename, ref listAnyGames, "Game");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.games.backdrop2.any");
@@ -350,12 +455,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.games.backdrop2.any", tmpImage);
                     }
-                    if (supportsRandomImages("useRandomScoreCenterFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomScoreCenterFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyScorecenter, ref randAnyScorecenter, "ScoreCenter");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.scorecenter.backdrop1.any", sFilename, ref listAnyScorecenter, "ScoreCenter");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.scorecenter.backdrop2.any");
@@ -386,12 +491,12 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.any", tmpImage);
                         FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.any", tmpImage);
                     }                    
-                    if (supportsRandomImages("useRandomPluginsFanart").Equals("True"))
+                    if (SupportsRandomImages("useRandomPluginsFanart").Equals("True"))
                     {
                         sFilename = GetRandomFilename(ref currCountRandom, ref currAnyPlugins, ref randAnyPlugins, "Plugin");
                         if (sFilename != null && sFilename.Length > 0)
                         {
-                            if (doShowImageOneRandom)
+                            if (DoShowImageOneRandom)
                             {
                                 AddPropertyRandom("#fanarthandler.plugins.backdrop1.any", sFilename, ref listAnyPlugins, "Plugin");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.plugins.backdrop2.any");
@@ -423,7 +528,7 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", tmpImage);
                     }
                     ResetCurrCountRandom();
-                    firstRandom = false;
+                    FirstRandom = false;
                 }
                 IncreaseCurrCountRandom();
             }
@@ -436,9 +541,9 @@ namespace FanartHandler
         /// <summary>
         /// Check if current skin file supports random images
         /// </summary>
-        private String supportsRandomImages(string type)
+        private String SupportsRandomImages(string type)
         {
-            SkinFile sf = (SkinFile)windowsUsingFanartRandom[GUIWindowManager.ActiveWindow.ToString()];
+            SkinFile sf = (SkinFile)WindowsUsingFanartRandom[GUIWindowManager.ActiveWindow.ToString()];
             if (sf != null)
             {
                 if (type.Equals("useRandomGamesFanart"))
@@ -475,13 +580,13 @@ namespace FanartHandler
                 if (String.IsNullOrEmpty(value))
                     value = " ";
 
-                if (propertiesRandom.Contains(property))
+                if (PropertiesRandom.Contains(property))
                 {
-                    propertiesRandom[property] = value;
+                    PropertiesRandom[property] = value;
                 }
                 else
                 {
-                    propertiesRandom.Add(property, value);
+                    PropertiesRandom.Add(property, value);
                 }
 
                 if (value != null && value.Length > 0)
@@ -514,30 +619,30 @@ namespace FanartHandler
         /// </summary>
         public string GetRandomFilename(ref int randomCounter, ref string prevImage, ref Random randNum, string type)
         {
-            string sout = "";
+            string sout = String.Empty;
             try
             {
                 if (Utils.GetIsStopping() == false)
                 {
                     sout = prevImage;
-                    string types = "";
+                    string types = String.Empty;
                     if (type.Equals("MusicFanart"))
                     {
-                        if (FanartHandlerSetup.useAlbum.Equals("True") && FanartHandlerSetup.disableMPTumbsForRandom.Equals("False"))
+                        if (FanartHandlerSetup.UseAlbum.Equals("True") && FanartHandlerSetup.DisableMPTumbsForRandom.Equals("False"))
                         {
                             if (types.Length > 0)
                                 types = types + ",'MusicAlbum'";
                             else
                                 types = "'MusicAlbum'";
                         }
-                        if (FanartHandlerSetup.useArtist.Equals("True") && FanartHandlerSetup.disableMPTumbsForRandom.Equals("False"))
+                        if (FanartHandlerSetup.UseArtist.Equals("True") && FanartHandlerSetup.DisableMPTumbsForRandom.Equals("False"))
                         {
                             if (types.Length > 0)
                                 types = types + ",'MusicArtist'";
                             else
                                 types = "'MusicArtist'";
                         }
-                        if (FanartHandlerSetup.useFanart.Equals("True"))
+                        if (FanartHandlerSetup.UseFanart.Equals("True"))
                         {
                             if (types.Length > 0)
                                 types = types + ",'MusicFanart'";
@@ -549,7 +654,7 @@ namespace FanartHandler
                     {
                         types = null;
                     }
-                    Hashtable ht = Utils.GetDbm().getAnyFanart(type, types);
+                    Hashtable ht = Utils.GetDbm().GetAnyFanart(type, types);
                     if (ht != null && ht.Count > 0)
                     {
                         bool doRun = true;
@@ -559,13 +664,13 @@ namespace FanartHandler
                             int iHt = randNum.Next(0, ht.Count);
                             DatabaseManager.FanartImage imgFile = (DatabaseManager.FanartImage)ht[iHt];
                             sout = imgFile.disk_image;
-                            if (FanartHandlerSetup.checkImageResolution(sout, type, FanartHandlerSetup.useAspectRatio) && Utils.IsFileValid(sout))
+                            if (FanartHandlerSetup.CheckImageResolution(sout, type, FanartHandlerSetup.UseAspectRatio) && Utils.IsFileValid(sout))
                             {
                                 prevImage = sout;
                                 //ResetCurrCountRandom();
-                                if (countSetVisibility == 0)
+                                if (CountSetVisibility == 0)
                                 {
-                                    countSetVisibility = 1;
+                                    CountSetVisibility = 1;
                                 }
                                 doRun = false;
                             }
@@ -587,7 +692,7 @@ namespace FanartHandler
         public void ResetCurrCountRandom()
         {
             currCountRandom = 0;
-            updateVisibilityCountRandom = 1;
+            UpdateVisibilityCountRandom = 1;
         }
 
         /// <summary>
@@ -603,9 +708,9 @@ namespace FanartHandler
         /// </summary>
         public int GetPropertiesRandom()
         {
-            if (propertiesRandom == null) return 0;
+            if (PropertiesRandom == null) return 0;
 
-            return propertiesRandom.Count;
+            return PropertiesRandom.Count;
         }
 
         /// <summary>
@@ -613,9 +718,9 @@ namespace FanartHandler
         /// </summary>
         public void ClearPropertiesRandom()
         {
-            if (propertiesRandom != null)
+            if (PropertiesRandom != null)
             {
-                propertiesRandom.Clear();
+                PropertiesRandom.Clear();
             }
         }
 
@@ -629,7 +734,7 @@ namespace FanartHandler
             {
                 Hashtable ht = new Hashtable();
                 int x = 0;
-                foreach (DictionaryEntry de in propertiesRandom)
+                foreach (DictionaryEntry de in PropertiesRandom)
                 {
                     FanartHandlerSetup.SetProperty(de.Key.ToString(), de.Value.ToString());
                     ht.Add(x, de.Key.ToString());
@@ -637,7 +742,7 @@ namespace FanartHandler
                 }
                 for (int i = 0; i < ht.Count; i++)
                 {
-                    propertiesRandom.Remove(ht[i].ToString());
+                    PropertiesRandom.Remove(ht[i].ToString());
                 }                
                 ht = null;
                 //propertiesRandom.Clear();
@@ -651,16 +756,16 @@ namespace FanartHandler
         /// <summary>
         /// checks all xml files in the current skin directory to see if it uses random property
         /// </summary>
-        public void setupWindowsUsingRandomImages()
+        public void SetupWindowsUsingRandomImages()
         {
             XPathDocument myXPathDocument;
-            windowsUsingFanartRandom = new Hashtable();
+            WindowsUsingFanartRandom = new Hashtable();
             string path = GUIGraphicsContext.Skin + @"\";            
-            string windowId = "";
-            string sNodeValue = "";
+            string windowId = String.Empty;
+            string sNodeValue = String.Empty;
             DirectoryInfo di = new DirectoryInfo(path);
             FileInfo[] rgFiles = di.GetFiles("*.xml");
-            string s = "";
+            string s = String.Empty;
             foreach (FileInfo fi in rgFiles)
             {
                 try
@@ -669,7 +774,7 @@ namespace FanartHandler
                     myXPathDocument = new XPathDocument(fi.FullName);
                     XPathNavigator myXPathNavigator = myXPathDocument.CreateNavigator();
                     XPathNodeIterator myXPathNodeIterator = myXPathNavigator.Select("/window/id");
-                    windowId = getNodeValue(myXPathNodeIterator);
+                    windowId = GetNodeValue(myXPathNodeIterator);
                     if (windowId != null && windowId.Length > 0)
                     {
                         SkinFile sf = new SkinFile();
@@ -681,29 +786,29 @@ namespace FanartHandler
                             {
                                 sNodeValue = myXPathNodeIterator.Current.Value;
                                 if (sNodeValue.StartsWith("#useRandomGamesFanart"))
-                                    sf.useRandomGamesFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomGamesFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomMoviesFanart"))
-                                    sf.useRandomMoviesFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomMoviesFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomMovingPicturesFanart"))
-                                    sf.useRandomMovingPicturesFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomMovingPicturesFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomMusicFanart"))
-                                    sf.useRandomMusicFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomMusicFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomPicturesFanart"))
-                                    sf.useRandomPicturesFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomPicturesFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomScoreCenterFanart"))
-                                    sf.useRandomScoreCenterFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomScoreCenterFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomTVSeriesFanart"))
-                                    sf.useRandomTVSeriesFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomTVSeriesFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomTVFanart"))
-                                    sf.useRandomTVFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomTVFanart = ParseNodeValue(sNodeValue);
                                 if (sNodeValue.StartsWith("#useRandomPluginsFanart"))
-                                    sf.useRandomPluginsFanart = parseNodeValue(sNodeValue);
+                                    sf.useRandomPluginsFanart = ParseNodeValue(sNodeValue);
                             }
                             if (sf.useRandomGamesFanart != null && sf.useRandomGamesFanart.Length > 0)
                             {
                                 if (sf.useRandomGamesFanart.Equals("True"))
                                 {
-                                    useAnyGames = true;
+                                    UseAnyGames = true;
                                 }
                             }
                             else
@@ -714,7 +819,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomMoviesFanart.Equals("True"))
                                 {
-                                    useAnyMovies = true;
+                                    UseAnyMovies = true;
                                 }
                             }
                             else
@@ -725,7 +830,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomMovingPicturesFanart.Equals("True"))
                                 {
-                                    useAnyMovingPictures = true;
+                                    UseAnyMovingPictures = true;
                                 }
                             }
                             else
@@ -736,7 +841,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomMusicFanart.Equals("True"))
                                 {
-                                    useAnyMusic = true;
+                                    UseAnyMusic = true;
                                 }
                             }
                             else
@@ -747,7 +852,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomPicturesFanart.Equals("True"))
                                 {
-                                    useAnyPictures = true;
+                                    UseAnyPictures = true;
                                 }
                             }
                             else
@@ -758,7 +863,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomScoreCenterFanart.Equals("True"))
                                 {
-                                    useAnyScoreCenter = true;
+                                    UseAnyScoreCenter = true;
                                 }
                             }
                             else
@@ -769,7 +874,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomTVSeriesFanart.Equals("True"))
                                 {
-                                    useAnyTVSeries = true;
+                                    UseAnyTVSeries = true;
                                 }
                             }
                             else
@@ -780,7 +885,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomTVFanart.Equals("True"))
                                 {
-                                    useAnyTV = true;
+                                    UseAnyTV = true;
                                 }
                             }
                             else
@@ -791,7 +896,7 @@ namespace FanartHandler
                             {
                                 if (sf.useRandomPluginsFanart.Equals("True"))
                                 {
-                                    useAnyPlugins = true;
+                                    UseAnyPlugins = true;
                                 }
                             }
                             else
@@ -809,7 +914,7 @@ namespace FanartHandler
                             }
                             else
                             {
-                                windowsUsingFanartRandom.Add(windowId, sf);
+                                WindowsUsingFanartRandom.Add(windowId, sf);
                             }
                         }
                         catch
@@ -829,14 +934,14 @@ namespace FanartHandler
         /// <summary>
         /// Get value from xml node
         /// </summary>
-        private string getNodeValue(XPathNodeIterator myXPathNodeIterator)
+        private string GetNodeValue(XPathNodeIterator myXPathNodeIterator)
         {
             if (myXPathNodeIterator.Count > 0)
             {
                 myXPathNodeIterator.MoveNext();
                 return myXPathNodeIterator.Current.Value;
             }
-            return "";
+            return String.Empty;
         }
 
 
@@ -844,7 +949,7 @@ namespace FanartHandler
         /// <summary>
         /// Parse node value
         /// </summary>
-        private string parseNodeValue(string s)
+        private string ParseNodeValue(string s)
         {
             if (s != null && s.Length > 0)
             {

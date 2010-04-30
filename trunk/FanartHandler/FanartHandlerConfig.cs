@@ -253,31 +253,31 @@ namespace FanartHandler
             using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "FanartHandler.xml")))
             {
 
-                useFanart = xmlreader.GetValueAsString("FanartHandler", "useFanart", "");
-                useAlbum = xmlreader.GetValueAsString("FanartHandler", "useAlbum", "");
-                useArtist = xmlreader.GetValueAsString("FanartHandler", "useArtist", "");
-                skipWhenHighResAvailable = xmlreader.GetValueAsString("FanartHandler", "skipWhenHighResAvailable", "");
-                disableMPTumbsForRandom = xmlreader.GetValueAsString("FanartHandler", "disableMPTumbsForRandom", "");
-                useOverlayFanart = xmlreader.GetValueAsString("FanartHandler", "useOverlayFanart", "");
-                useMusicFanart = xmlreader.GetValueAsString("FanartHandler", "useMusicFanart", "");
-                useVideoFanart = xmlreader.GetValueAsString("FanartHandler", "useVideoFanart", "");
-                useScoreCenterFanart = xmlreader.GetValueAsString("FanartHandler", "useScoreCenterFanart", "");
-                imageInterval = xmlreader.GetValueAsString("FanartHandler", "imageInterval", "");
-                minResolution = xmlreader.GetValueAsString("FanartHandler", "minResolution", "");
-                defaultBackdrop = xmlreader.GetValueAsString("FanartHandler", "defaultBackdrop", "");
-                scraperMaxImages = xmlreader.GetValueAsString("FanartHandler", "scraperMaxImages", "");
-                scraperMusicPlaying = xmlreader.GetValueAsString("FanartHandler", "scraperMusicPlaying", "");
-                scraperMPDatabase = xmlreader.GetValueAsString("FanartHandler", "scraperMPDatabase", "");
-                scraperInterval = xmlreader.GetValueAsString("FanartHandler", "scraperInterval", "");                         
-                useAspectRatio = xmlreader.GetValueAsString("FanartHandler", "useAspectRatio", "");
-                defaultBackdropIsImage = xmlreader.GetValueAsString("FanartHandler", "defaultBackdropIsImage", "");
-                useDefaultBackdrop = xmlreader.GetValueAsString("FanartHandler", "useDefaultBackdrop", "");
-                proxyHostname = xmlreader.GetValueAsString("FanartHandler", "proxyHostname", "");
-                proxyPort = xmlreader.GetValueAsString("FanartHandler", "proxyPort", "");
-                proxyUsername = xmlreader.GetValueAsString("FanartHandler", "proxyUsername", "");
-                proxyPassword = xmlreader.GetValueAsString("FanartHandler", "proxyPassword", "");
-                proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", "");
-                useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", "");        
+                useFanart = xmlreader.GetValueAsString("FanartHandler", "useFanart", String.Empty);
+                useAlbum = xmlreader.GetValueAsString("FanartHandler", "useAlbum", String.Empty);
+                useArtist = xmlreader.GetValueAsString("FanartHandler", "useArtist", String.Empty);
+                skipWhenHighResAvailable = xmlreader.GetValueAsString("FanartHandler", "skipWhenHighResAvailable", String.Empty);
+                disableMPTumbsForRandom = xmlreader.GetValueAsString("FanartHandler", "disableMPTumbsForRandom", String.Empty);
+                useOverlayFanart = xmlreader.GetValueAsString("FanartHandler", "useOverlayFanart", String.Empty);
+                useMusicFanart = xmlreader.GetValueAsString("FanartHandler", "useMusicFanart", String.Empty);
+                useVideoFanart = xmlreader.GetValueAsString("FanartHandler", "useVideoFanart", String.Empty);
+                useScoreCenterFanart = xmlreader.GetValueAsString("FanartHandler", "useScoreCenterFanart", String.Empty);
+                imageInterval = xmlreader.GetValueAsString("FanartHandler", "imageInterval", String.Empty);
+                minResolution = xmlreader.GetValueAsString("FanartHandler", "minResolution", String.Empty);
+                defaultBackdrop = xmlreader.GetValueAsString("FanartHandler", "defaultBackdrop", String.Empty);
+                scraperMaxImages = xmlreader.GetValueAsString("FanartHandler", "scraperMaxImages", String.Empty);
+                scraperMusicPlaying = xmlreader.GetValueAsString("FanartHandler", "scraperMusicPlaying", String.Empty);
+                scraperMPDatabase = xmlreader.GetValueAsString("FanartHandler", "scraperMPDatabase", String.Empty);
+                scraperInterval = xmlreader.GetValueAsString("FanartHandler", "scraperInterval", String.Empty);                         
+                useAspectRatio = xmlreader.GetValueAsString("FanartHandler", "useAspectRatio", String.Empty);
+                defaultBackdropIsImage = xmlreader.GetValueAsString("FanartHandler", "defaultBackdropIsImage", String.Empty);
+                useDefaultBackdrop = xmlreader.GetValueAsString("FanartHandler", "useDefaultBackdrop", String.Empty);
+                proxyHostname = xmlreader.GetValueAsString("FanartHandler", "proxyHostname", String.Empty);
+                proxyPort = xmlreader.GetValueAsString("FanartHandler", "proxyPort", String.Empty);
+                proxyUsername = xmlreader.GetValueAsString("FanartHandler", "proxyUsername", String.Empty);
+                proxyPassword = xmlreader.GetValueAsString("FanartHandler", "proxyPassword", String.Empty);
+                proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", String.Empty);
+                useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);        
             }
                 if (useFanart != null && useFanart.Length > 0)
                 {
@@ -483,7 +483,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    textBoxProxyHostname.Text = "";
+                    textBoxProxyHostname.Text = String.Empty;
                 }
                 if (proxyPort != null && proxyPort.Length > 0)
                 {
@@ -491,7 +491,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    textBoxProxyPort.Text = "";
+                    textBoxProxyPort.Text = String.Empty;
                 }
                 if (proxyUsername != null && proxyUsername.Length > 0)
                 {
@@ -499,7 +499,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    textBoxProxyUsername.Text = "";
+                    textBoxProxyUsername.Text = String.Empty;
                 }
                 if (proxyPassword != null && proxyPassword.Length > 0)
                 {
@@ -507,7 +507,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    textBoxProxyPassword.Text = "";
+                    textBoxProxyPassword.Text = String.Empty;
                 }
                 if (proxyDomain != null && proxyDomain.Length > 0)
                 {
@@ -515,7 +515,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    textBoxProxyDomain.Text = "";
+                    textBoxProxyDomain.Text = String.Empty;
                 }
                 if (scraperMaxImages != null && scraperMaxImages.Length > 0)
                 {
@@ -908,7 +908,7 @@ namespace FanartHandler
         private void comboBoxMaxImages_SelectedIndexChanged(object sender, EventArgs e)
         {
             scraperMaxImages = comboBoxMaxImages.SelectedItem.ToString();
-            if (Utils.GetDbm() != null && Utils.GetDbm().isInitialized)
+            if (Utils.GetDbm() != null && Utils.GetDbm().IsInitialized)
             {
                 Utils.SetScraperMaxImages(scraperMaxImages);
             }            
@@ -1206,10 +1206,10 @@ namespace FanartHandler
                     Utils.GetDbm().ResetInitialScrape();
                     myDataTable.Rows.Clear();
                     myDataTable.AcceptChanges();
-                    labelTotalMPArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
-                    labelTotalFanartArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
-                    labelTotalFanartArtistInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                    labelTotalFanartArtistUnInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                    labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
+                    labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
+                    labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
+                    labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
                     MessageBox.Show("Done!");
                 }
             }
@@ -1291,7 +1291,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("MusicFanart");
+                int i = Utils.GetDbm().SyncDatabase("MusicFanart");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -1335,7 +1335,7 @@ namespace FanartHandler
         /// </summary>
         public void SetupFilenames(string s, string filter, ref int i, string type)
         {
-            string artist = "";
+            string artist = String.Empty;
             string typeOrg = type;
             try
             {
@@ -1354,12 +1354,12 @@ namespace FanartHandler
                                 {
                                     type = "Default";
                                 }
-                                Utils.GetDbm().loadMusicFanart(artist, dir, dir, type);
+                                Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type);
                                 type = typeOrg;
                             }
                             else
                             {
-                                Utils.GetDbm().loadFanart(artist, dir, dir, type);
+                                Utils.GetDbm().LoadFanart(artist, dir, dir, type);
                             }
                         }
                         catch (Exception ex)
@@ -1435,7 +1435,7 @@ namespace FanartHandler
                         button4.Enabled = true;
                         button5.Enabled = true;
                         button15.Enabled = true;
-                        Utils.GetDbm().stopScraper = false;
+                        Utils.GetDbm().StopScraper = false;
                         progressBar1.Minimum = 0;
                         progressBar1.Maximum = 0;
                         progressBar1.Value = 0;
@@ -1470,7 +1470,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableScoreCenter(lastIDScoreCenter);
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableScoreCenter(lastIDScoreCenter);
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1490,7 +1490,7 @@ namespace FanartHandler
                             }
                             myDataTable3.Rows.Add(myDataRow);
                         }
-                        labelTotalScoreCenterFanartImages.Text = "" + Utils.GetDbm().GetTotalScoreCenterInFanartDatabase();
+                        labelTotalScoreCenterFanartImages.Text = String.Empty + Utils.GetDbm().GetTotalScoreCenterInFanartDatabase();
                     }
                 }
                 result = null;
@@ -1513,7 +1513,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableRandom(lastIDGame, "Game");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDGame, "Game");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1533,7 +1533,7 @@ namespace FanartHandler
                             }
                             myDataTable4.Rows.Add(myDataRow);
                         }
-                        label22.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
+                        label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
                     }
                 }
                 result = null;
@@ -1556,7 +1556,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableRandom(lastIDPicture, "Picture");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPicture, "Picture");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1576,7 +1576,7 @@ namespace FanartHandler
                             }
                             myDataTable5.Rows.Add(myDataRow);
                         }
-                        label24.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
+                        label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
                     }
                 }
                 result = null;
@@ -1599,7 +1599,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableRandom(lastIDPlugin, "Plugin");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPlugin, "Plugin");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1619,7 +1619,7 @@ namespace FanartHandler
                             }
                             myDataTable6.Rows.Add(myDataRow);
                         }
-                        label26.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
+                        label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
                     }
                 }
                 result = null;
@@ -1642,7 +1642,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableRandom(lastIDTV, "TV");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDTV, "TV");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1662,7 +1662,7 @@ namespace FanartHandler
                             }
                             myDataTable7.Rows.Add(myDataRow);
                         }
-                        label28.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
+                        label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
                     }
                 }
                 result = null;
@@ -1685,7 +1685,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableMusicOverview();
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableMusicOverview();
                 if (result != null)
                 {
                     if (result.Rows.Count > 0)
@@ -1718,7 +1718,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTableMovie(lastIDMovie);
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableMovie(lastIDMovie);
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1738,7 +1738,7 @@ namespace FanartHandler
                             }
                             myDataTable2.Rows.Add(myDataRow);
                         }
-                        labelTotalMovieFanartImages.Text = "" + Utils.GetDbm().GetTotalMoviesInFanartDatabase();                        
+                        labelTotalMovieFanartImages.Text = String.Empty + Utils.GetDbm().GetTotalMoviesInFanartDatabase();                        
                     }
                 }
                 result = null;
@@ -1770,7 +1770,7 @@ namespace FanartHandler
                     this.BeginInvoke(new UpdateFanartTableDelegate(UpdateFanartTable));
                     return;
                 }
-                SQLiteResultSet result = Utils.GetDbm().getDataForTable(lastID);
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTable(lastID);
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1790,16 +1790,16 @@ namespace FanartHandler
                             }
                             myDataTable.Rows.Add(myDataRow);
                         }
-                        labelTotalMPArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
-                        labelTotalFanartArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
-                        labelTotalFanartArtistInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                        labelTotalFanartArtistUnInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                        labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
+                        labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
+                        labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
+                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
                     }
                 }
                 result = null;
                 progressBar1.Minimum = 0;
-                progressBar1.Maximum = Utils.GetDbm().totArtistsBeingScraped;
-                progressBar1.Value = Utils.GetDbm().currArtistsBeingScraped;
+                progressBar1.Maximum = Utils.GetDbm().TotArtistsBeingScraped;
+                progressBar1.Value = Utils.GetDbm().CurrArtistsBeingScraped;
             }
             catch (Exception ex)
             {
@@ -1819,7 +1819,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().getDataForTable(lastID);
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTable(lastID);
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1839,10 +1839,10 @@ namespace FanartHandler
                             }
                             myDataTable.Rows.Add(myDataRow);
                         }
-                        labelTotalMPArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
-                        labelTotalFanartArtistCount.Text = "" + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
-                        labelTotalFanartArtistInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                        labelTotalFanartArtistUnInitCount.Text = "" + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                        labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
+                        labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
+                        labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
+                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
                     }
                 }
                 result = null;
@@ -1900,9 +1900,9 @@ namespace FanartHandler
                 isScraping = false;
                 if (Utils.GetDbm() != null)
                 {
-                    Utils.GetDbm().totArtistsBeingScraped = 0;
-                    Utils.GetDbm().currArtistsBeingScraped = 0;
-                    Utils.GetDbm().stopScraper = false;
+                    Utils.GetDbm().TotArtistsBeingScraped = 0;
+                    Utils.GetDbm().CurrArtistsBeingScraped = 0;
+                    Utils.GetDbm().StopScraper = false;
                 }
                 if (progressBar1 != null)
                 {
@@ -1935,8 +1935,8 @@ namespace FanartHandler
             try
             {
                 button6.Enabled = false;
-                Utils.GetDbm().totArtistsBeingScraped = 0;
-                Utils.GetDbm().currArtistsBeingScraped = 0;
+                Utils.GetDbm().TotArtistsBeingScraped = 0;
+                Utils.GetDbm().CurrArtistsBeingScraped = 0;
                 scraperWorkerObject = new FanartHandlerSetup.ScraperWorker();
                 scrapeWorkerThread = new Thread(scraperWorkerObject.DoWork);
 
@@ -2177,7 +2177,7 @@ namespace FanartHandler
                     }
                     myDataTable2.Rows.Clear();
                     myDataTable2.AcceptChanges();
-                    labelTotalMovieFanartImages.Text = "" + Utils.GetDbm().GetTotalMoviesInFanartDatabase();                        
+                    labelTotalMovieFanartImages.Text = String.Empty + Utils.GetDbm().GetTotalMoviesInFanartDatabase();                        
                     MessageBox.Show("Done!");
                 }
             }
@@ -2191,7 +2191,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("Movie");
+                int i = Utils.GetDbm().SyncDatabase("Movie");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2270,7 +2270,7 @@ namespace FanartHandler
                     }
                     myDataTable3.Rows.Clear();
                     myDataTable3.AcceptChanges();
-                    labelTotalScoreCenterFanartImages.Text = "" + Utils.GetDbm().GetTotalScoreCenterInFanartDatabase();
+                    labelTotalScoreCenterFanartImages.Text = String.Empty + Utils.GetDbm().GetTotalScoreCenterInFanartDatabase();
                     MessageBox.Show("Done!");
                 }
             }
@@ -2284,7 +2284,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("ScoreCenter");
+                int i = Utils.GetDbm().SyncDatabase("ScoreCenter");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2311,7 +2311,7 @@ namespace FanartHandler
                     SetupFilenames(path, "*.jpg", ref i, "Movie");
                 }
                 //Add music images
-                path = "";
+                path = String.Empty;
                 i = 0;
                 if (useAlbum.Equals("True"))
                 {
@@ -2556,7 +2556,7 @@ namespace FanartHandler
                     }
                     myDataTable4.Rows.Clear();
                     myDataTable4.AcceptChanges();
-                    label22.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
+                    label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2570,7 +2570,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("Game");
+                int i = Utils.GetDbm().SyncDatabase("Game");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2663,7 +2663,7 @@ namespace FanartHandler
                     }
                     myDataTable5.Rows.Clear();
                     myDataTable5.AcceptChanges();
-                    label24.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
+                    label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2677,7 +2677,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("Picture");
+                int i = Utils.GetDbm().SyncDatabase("Picture");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2770,7 +2770,7 @@ namespace FanartHandler
                     }
                     myDataTable6.Rows.Clear();
                     myDataTable6.AcceptChanges();
-                    label26.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
+                    label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2784,7 +2784,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("Plugin");
+                int i = Utils.GetDbm().SyncDatabase("Plugin");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2877,7 +2877,7 @@ namespace FanartHandler
                     }
                     myDataTable7.Rows.Clear();
                     myDataTable7.AcceptChanges();
-                    label28.Text = "" + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
+                    label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2891,7 +2891,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().syncDatabase("TV");
+                int i = Utils.GetDbm().SyncDatabase("TV");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)

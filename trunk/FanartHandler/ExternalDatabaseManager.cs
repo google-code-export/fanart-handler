@@ -1,24 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using SQLite.NET;
-using MediaPortal.Configuration;
-using NLog;
-
+﻿//-----------------------------------------------------------------------
+// Open Source software licensed under the GNU/GPL agreement.
+// 
+// Author: Cul8er
+//-----------------------------------------------------------------------
 
 namespace FanartHandler
 {
+    using MediaPortal.Configuration;
+    using NLog;
+    using SQLite.NET;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;   
+    using System.Text;
+    
+    /// <summary>
+    /// Class handling all external (not fanart handler db) database access.
+    /// </summary>
     class ExternalDatabaseManager
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetCurrentClassLogger(); 
         private SQLiteClient dbClient;
 
         /// <summary>
         /// Initiation of the DatabaseManager.
         /// </summary>
-        public bool initDB(string dbFilename)
+        /// <param name="dbFilename">Database filename</param>
+        /// <returns>if database was successfully or not</returns>
+        public bool InitDB(string dbFilename)
         {
             try
             {
@@ -29,16 +39,13 @@ namespace FanartHandler
                     dbClient.Execute("PRAGMA synchronous=OFF");
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
             }
             catch //(Exception e)
             {
                 //logger.Error("initDB: Could Not Open Database: " + dbFilename + ". " + e.ToString());
                 dbClient = null;
             }
+
             return false;
         }
 
@@ -53,6 +60,7 @@ namespace FanartHandler
                 {
                     dbClient.Close();
                 }
+
                 dbClient = null;
             }
             catch (Exception ex)
@@ -61,11 +69,12 @@ namespace FanartHandler
             }
         }
 
-
         /// <summary>
         /// Returns movie fanart data from Moving Picture or TVSeries db.
         /// </summary>
-        public SQLiteResultSet getData(string type)
+        /// <param name="type">Type of data to fetch</param>
+        /// <returns>Resultset of matching data</returns>
+        public SQLiteResultSet GetData(string type)
         {
             SQLiteResultSet result = null;
             string sqlQuery = null;
