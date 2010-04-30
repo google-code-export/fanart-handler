@@ -20,7 +20,7 @@ namespace FanartHandler
             {
                 isStopping = true;
                 stopScraper();
-                Utils.GetDbm().close();
+                Utils.GetDbm().Close();
                 if (scraperTimer != null)
                 {
                     scraperTimer.Dispose();
@@ -2196,7 +2196,7 @@ namespace FanartHandler
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::FanartHandler.Properties.Resources.FanartHandler_Icon;
+            this.pictureBox2.ErrorImage = global::FanartHandler.Properties.Resources.FanartHandler_Icon;
             this.pictureBox2.Location = new System.Drawing.Point(6, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(116, 103);

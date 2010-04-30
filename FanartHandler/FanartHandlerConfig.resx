@@ -177,6 +177,34 @@ or "MP Album Thumbs" you may want to leave this to
 with the "Display Only Wide Images (Aspect Ratio &gt;= 1.55)" 
 property.</value>
   </data>
+  <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
+    <value>Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing every song you play in
+MediaPortal and then downloading the found images 
+to your harddrive (to the "thumbs/Skin Fanart/music" 
+folder). Leaving this option unchecked will disable 
+now playing scraping and you will have to manually 
+add your fanart images to the "thumbs/Skin Fanart/music" 
+folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.</value>
+  </data>
+  <data name="checkBoxEnableScraperMPDatabase.ToolTip" xml:space="preserve">
+    <value>Check this option if you want this plugin to automatically
+search the internet site www.htbackdrops.com for
+fanart/backdrops mathing all the artists that you have 
+allready in your MediaPortal music database and then 
+downloading the found images to your harddrive (to 
+the "thumbs/Skin Fanart/music" folder). Leaving this 
+option unchecked will disable scraping and you will 
+have to manually add your fanart images to the
+"thumbs/Skin Fanart/music" folder.
+
+Warning; Using this option if you have a large music
+collection can use quite alot of harddisk space.</value>
+  </data>
   <data name="button4.ToolTip" xml:space="preserve">
     <value>Press this button to enable or disable the use of the
 selected fanart/backdrop. Enabled means that the
@@ -218,34 +246,6 @@ example want to increase the number of imges per artis
 you will have to press this button to initiate a new intitial scrape
 the next time you start MediaPortal. After the initial scrape this
 plugin will only scrape the htbackdrop site for new images.</value>
-  </data>
-  <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
-    <value>Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart/backdrops mathing every song you play in
-MediaPortal and then downloading the found images 
-to your harddrive (to the "thumbs/Skin Fanart/music" 
-folder). Leaving this option unchecked will disable 
-now playing scraping and you will have to manually 
-add your fanart images to the "thumbs/Skin Fanart/music" 
-folder.
-
-Warning; Using this option if you have a large music
-collection can use quite alot of harddisk space.</value>
-  </data>
-  <data name="checkBoxEnableScraperMPDatabase.ToolTip" xml:space="preserve">
-    <value>Check this option if you want this plugin to automatically
-search the internet site www.htbackdrops.com for
-fanart/backdrops mathing all the artists that you have 
-allready in your MediaPortal music database and then 
-downloading the found images to your harddrive (to 
-the "thumbs/Skin Fanart/music" folder). Leaving this 
-option unchecked will disable scraping and you will 
-have to manually add your fanart images to the
-"thumbs/Skin Fanart/music" folder.
-
-Warning; Using this option if you have a large music
-collection can use quite alot of harddisk space.</value>
   </data>
   <data name="button38.ToolTip" xml:space="preserve">
     <value>The first time you open MediaPortal after enabling the scraper
