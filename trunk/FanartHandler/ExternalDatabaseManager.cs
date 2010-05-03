@@ -32,12 +32,16 @@ namespace FanartHandler
         {
             try
             {
-                String path = Config.GetFolder(Config.Dir.Database) + @"\"+ dbFilename;
+                String path = Config.GetFolder(Config.Dir.Database) + @"\"+ dbFilename;                
                 if (File.Exists(path))
                 {
-                    dbClient = new SQLiteClient(path);
-                    dbClient.Execute("PRAGMA synchronous=OFF");
-                    return true;
+                    FileInfo f = new FileInfo(path);
+                    if (f.Length > 0)
+                    {
+                        dbClient = new SQLiteClient(path);
+                        dbClient.Execute("PRAGMA synchronous=OFF");
+                        return true;
+                    }
                 }
             }
             catch //(Exception e)

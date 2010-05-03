@@ -1107,7 +1107,7 @@ namespace FanartHandler
                         fs.SetCurrentArtistsImageNames(null);
                         scraperWorkerObject.SetRefreshFlag(false);
                     }
-                    if (CurrentTrackTag != null && CurrentTrackTag.Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
+                    if (CurrentTrackTag != null && CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
                     {
                         if (ScraperMusicPlaying != null && ScraperMusicPlaying.Equals("True") && scraperWorkerObjectNowPlaying != null && scraperWorkerObjectNowPlaying.GetRefreshFlag())
                         {
@@ -1144,10 +1144,10 @@ namespace FanartHandler
                             isPlaying = false;
                         }
                     }
-                    if (GUIWindowManager.ActiveWindow == 35)
+                    if (GUIWindowManager.ActiveWindow == 35 && UseBasichomeFade)
                     {
                         CurrentTitleTag = GUIPropertyManager.GetProperty("#Play.Current.Title");
-                        if (((CurrentTrackTag != null && CurrentTrackTag.Length > 0) || (CurrentTitleTag != null && CurrentTitleTag.Length > 0)) && Utils.IsIdle(BasichomeFadeTime))
+                        if (((CurrentTrackTag != null && CurrentTrackTag.Trim().Length > 0) || (CurrentTitleTag != null && CurrentTitleTag.Trim().Length > 0)) && Utils.IsIdle(BasichomeFadeTime))
                         {
                             GUIButtonControl.ShowControl(GUIWindowManager.ActiveWindow, 98761234);
                         }
@@ -1617,36 +1617,45 @@ namespace FanartHandler
                     proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", String.Empty);
                     useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);                   
                 }
-
-                using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "XFactor.xml")))
+                
+                string tmpFile = Config.GetFolder(Config.Dir.Config) + @"\XFactor.xml";
+                if (File.Exists(tmpFile))
                 {
+                    using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "XFactor.xml")))
+                    {
 
-                    string tmpUse = xmlreader.GetValueAsString("XFactor", "useBasichomeFade", "");
-                    if (tmpUse == null || tmpUse.Length < 1)
-                    {
-                        UseBasichomeFade = true;
-                    }
-                    else
-                    {
-                        if (tmpUse.Equals("Enabled"))
+                        string tmpUse = xmlreader.GetValueAsString("XFactor", "useBasichomeFade", "");
+                        if (tmpUse == null || tmpUse.Length < 1)
                         {
                             UseBasichomeFade = true;
                         }
                         else
                         {
-                            UseBasichomeFade = false;
+                            if (tmpUse.Equals("Enabled"))
+                            {
+                                UseBasichomeFade = true;
+                            }
+                            else
+                            {
+                                UseBasichomeFade = false;
+                            }
+                        }
+
+                        string tmpFadeTime = xmlreader.GetValueAsString("XFactor", "basichomeFadeTime", "");
+                        if (tmpFadeTime == null || tmpFadeTime.Length < 1)
+                        {
+                            BasichomeFadeTime = 5;
+                        }
+                        else
+                        {
+                            BasichomeFadeTime = Int32.Parse(tmpFadeTime);
                         }
                     }
-
-                    string tmpFadeTime = xmlreader.GetValueAsString("XFactor", "basichomeFadeTime", "");
-                    if (tmpFadeTime == null || tmpFadeTime.Length < 1)
-                    {
-                        BasichomeFadeTime = 5;
-                    }
-                    else
-                    {
-                        BasichomeFadeTime = Int32.Parse(tmpFadeTime);
-                    }
+                }
+                else
+                {
+                    UseBasichomeFade = false;
+                    BasichomeFadeTime = 5;
                 }
 
                 if (UseFanart != null && UseFanart.Length > 0)
@@ -2402,9 +2411,9 @@ namespace FanartHandler
         private void SetupConfigFile()
         {
             try
-            {
-                String path = Config.GetFile(Config.Dir.Config, "FanartHandler.xml");
-                String pathOrg = Config.GetFile(Config.Dir.Config, "FanartHandler.org");
+            {                
+                String path = Config.GetFolder(Config.Dir.Config) + @"\FanartHandler.xml";
+                String pathOrg = Config.GetFolder(Config.Dir.Config) + @"\FanartHandler.org";
                 if (File.Exists(path))
                 {
                     //do nothing

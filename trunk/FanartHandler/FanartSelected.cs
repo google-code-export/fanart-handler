@@ -153,7 +153,7 @@ namespace FanartHandler
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
                 }
-                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Length > 0)
+                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Trim().Length > 0)
                 {
                     if ((GUIWindowManager.ActiveWindow == 4755 && GUIWindowManager.GetWindow(4755).GetControl(51).IsVisible) || ((GUIWindowManager.ActiveWindow == 6 || GUIWindowManager.ActiveWindow == 25) && FanartHandlerSetup.SelectedItem.Equals("..") == true))
                     {
@@ -307,7 +307,7 @@ namespace FanartHandler
             try
             {
                 FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#ScoreCenter.Category");
-                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Equals("..") == false && FanartHandlerSetup.SelectedItem.Length > 0)
+                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Equals("..") == false && FanartHandlerSetup.SelectedItem.Trim().Length > 0)
                 {
                     if (CurrSelectedScorecenterGenre.Equals(FanartHandlerSetup.SelectedItem) == false)
                     {
@@ -498,7 +498,7 @@ namespace FanartHandler
             try
             {
                 FanartHandlerSetup.SelectedItem = GetMusicArtistFromListControl();
-                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Equals("..") == false && FanartHandlerSetup.SelectedItem.Length > 0)
+                if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Equals("..") == false && FanartHandlerSetup.SelectedItem.Trim().Length > 0)
                 {
 
                     if (currSelectedMusicArtist.Equals(FanartHandlerSetup.SelectedItem) == false)
