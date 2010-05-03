@@ -49,7 +49,7 @@ The scope of this plugin is to;
 =Add Your Own Custom Fanart (Backdrops) To Be Used In The Skin=
 To add you fanart (backdrops) that you yourself has downloaded or made to be used by the fanart handler plugin you should use these folders
   # thumbs\Skin Fanart\games (used for pushing random game images to a skin)
-  # thumbs\Skin Fanart\movies (used for pushing random movie images to a skin)
+  # thumbs\Skin Fanart\movies (used for pushing random movie images to a skin, also used for providing fanart for now played title or selected title in your movie library)
   # thumbs\Skin Fanart\music (used for pushing random music images to a skin, also used for providing fanart for now played artist or selected artist in your music library)
   # thumbs\Skin Fanart\pictures (used for pushing random picture images to a skin)
   # thumbs\Skin Fanart\plugins (used for pushing random plugins images to a skin)
