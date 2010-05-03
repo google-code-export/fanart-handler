@@ -400,7 +400,7 @@ namespace FanartHandler
             foreach (string word in words)
             {
                 tmpWord = word.Trim();
-                if (sout.Length == 0 && tmpWord.Length > 0)
+                if (sout.Length == 0)
                 {
                     sout = "'" + tmpWord + "'";
                 }
@@ -493,8 +493,8 @@ namespace FanartHandler
                                 if (type.Equals("TVSeries"))
                                 {
                                     fanart = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\" + fanart;
-                                }
-                                Utils.GetDbm().LoadFanart(artist, fanart, fanart, "Movie");
+                                }                                
+                                Utils.GetDbm().LoadFanartExternal(artist, fanart, fanart, type); //20100503
                             }
                         }
                     }

@@ -140,7 +140,7 @@ namespace FanartHandler
         public void InitDB()
         {
             try
-            {
+            {                
                 this.isScraping = false;
                 String path = Config.GetFile(Config.Dir.Database, dbFilename);
                 SetupDatabase();                
@@ -513,7 +513,7 @@ namespace FanartHandler
         /// <returns>Total number of movies in the fanart handler database</returns>
         public int GetTotalMoviesInFanartDatabase()
         {
-            string sqlQuery = "SELECT count(Artist) FROM Movie_Fanart;";
+            string sqlQuery = "SELECT count(Artist) FROM Movie_Fanart where type = 'Movie';";
             SQLiteResultSet result = dbClient.Execute(sqlQuery);
             int i = 0;
             if (result != null)
@@ -849,8 +849,28 @@ namespace FanartHandler
             DateTime saveNow = DateTime.Now;
             try
             {
-                string sqlQuery = "SELECT count(Version) FROM Version;";
-                SQLiteResultSet result = dbClient.Execute(sqlQuery);                
+                string sqlQuery = "SELECT Version FROM Version;";
+                SQLiteResultSet result = dbClient.Execute(sqlQuery);
+                string tmpS = String.Empty;
+                for (int i = 0; i < result.Rows.Count; i++)
+                {
+                    tmpS = result.GetField(i, 0);
+                }
+                if (tmpS != null && !tmpS.Equals("1.3"))
+                {
+                    logger.Info("Upgrading Database to version 1.3");
+                    sqlQuery = "DELETE FROM Movie_Fanart;";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    sqlQuery = "DELETE FROM TVSeries_Fanart;";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    sqlQuery = "DELETE FROM MovingPicture_Fanart;";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    sqlQuery = "UPDATE Version SET Version = '1.3'";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                }                               
+                result = null;
+                sqlQuery = null;
+                tmpS = null;             
             }
             catch (SQLiteException sle)
             {                
@@ -1071,7 +1091,7 @@ namespace FanartHandler
             SQLiteResultSet result = null;
             try
             {
-                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Movie_Fanart WHERE Id > " + lastID + " order by Artist, Disk_Image;";
+                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Movie_Fanart WHERE Id > " + lastID + " AND type = 'Movie' order by Artist, Disk_Image;";
                 result = dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
@@ -1487,6 +1507,37 @@ namespace FanartHandler
                     lock (dbClient) dbClient.Execute(sqlQuery);
                     logger.Debug("Importing local fanart into fanart handler database (" + disk_image + ").");
                 }                                            
+            }
+            catch (Exception ex)
+            {
+                logger.Error("loadFanart: " + ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Inserts new fanart into the database.
+        /// </summary>
+        /// <param name="artist">The artis name</param>
+        /// <param name="disk_image">Filename on disk</param>
+        /// <param name="source_image">Filename at source</param>
+        /// <param name="type">The type to run the query on</param>
+        public void LoadFanartExternal(string artist, string disk_image, string source_image, string type)
+        {
+            try
+            {
+                string sqlQuery = String.Empty;
+                DateTime saveNow = DateTime.Now;
+                sqlQuery = "SELECT COUNT(Artist) FROM Movie_Fanart WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND SOURCE_IMAGE = '" + Utils.PatchSQL(source_image) + "';";
+                if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
+                {
+                    //do not allow updates
+                }
+                else
+                {
+                    sqlQuery = "INSERT INTO Movie_Fanart (Id, Artist, Disk_Image, Source_Image, Type, Source, Enabled, Time_Stamp) VALUES(null, '" + Utils.PatchSQL(artist) + "','" + Utils.PatchSQL(disk_image) + "','" + Utils.PatchSQL(source_image) + "','" + Utils.PatchSQL(type) + "','" + Utils.PatchSQL(type) + "', 'True', '" + saveNow.ToString(@"yyyyMMdd") + "');";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    logger.Debug("Importing external fanart into fanart handler database (" + disk_image + ").");
+                }
             }
             catch (Exception ex)
             {
