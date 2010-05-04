@@ -39,7 +39,7 @@ namespace FanartHandler
                 try
                 {
                     logger.Info("Scrape for new images is starting...");
-                    System.Net.ServicePointManager.Expect100Continue = false;
+                    //System.Net.ServicePointManager.Expect100Continue = false; 20100504
                     Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
                     string strResult = null;
                     string dbArtist = null;
@@ -349,7 +349,7 @@ namespace FanartHandler
             try
             {
                 Encoding enc = Encoding.GetEncoding("iso-8859-1");
-                System.Net.ServicePointManager.Expect100Continue = false;
+                //System.Net.ServicePointManager.Expect100Continue = false; 20100504
                 string dbArtist = null;
                 string strResult = null;
                 string path = null;

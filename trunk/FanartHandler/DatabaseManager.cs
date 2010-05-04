@@ -41,12 +41,18 @@ namespace FanartHandler
         private Hashtable htAnyPluginFanart;        
         private ArrayList musicDatabaseArtists;
         private MusicDatabase m_db = null;
-        private bool isScraping = false;
+        private bool isScraping = false;        
         private Scraper scraper;
         private int totArtistsBeingScraped = 0;
         private int currArtistsBeingScraped = 0;
         private bool isInitialized = false;        
         #endregion
+
+        public bool IsScraping
+        {
+            get { return isScraping; }
+            set { isScraping = value; }
+        }
 
         public bool IsInitialized
         {
@@ -131,7 +137,7 @@ namespace FanartHandler
         /// <returns>True if scraping is running</returns>
         public bool GetIsScraping()
         {
-            return isScraping;
+            return IsScraping;
         }
         
         /// <summary>
@@ -141,7 +147,7 @@ namespace FanartHandler
         {
             try
             {                
-                this.isScraping = false;
+                this.IsScraping = false;
                 String path = Config.GetFile(Config.Dir.Database, dbFilename);
                 SetupDatabase();                
                 dbClient = new SQLiteClient(path);
@@ -215,7 +221,7 @@ namespace FanartHandler
         {
             try
             {
-                isScraping = true;
+                IsScraping = true;
                 logger.Info("NowPlayingScrape is starting for artist " + artist + ".");
                 TotArtistsBeingScraped = 2;
                 CurrArtistsBeingScraped = 0;
@@ -224,19 +230,19 @@ namespace FanartHandler
                 {
                     CurrArtistsBeingScraped++;
                     logger.Info("NowPlayingScrape is done.");
-                    isScraping = false;
+                    IsScraping = false;
                     return true;
                 }
                 else
                 {
                     logger.Info("NowPlayingScrape is done.");
-                    isScraping = false;
+                    IsScraping = false;
                     return false;
                 }    
             }
             catch (Exception ex)
             {
-                isScraping = false;
+                IsScraping = false;
                 logger.Error("NowPlayingScrape: " + ex.ToString());
                 return false;
             }
@@ -617,19 +623,19 @@ namespace FanartHandler
             {
                 try
                 {
-                    isScraping = true;
+                    IsScraping = true;
                     scraper = new Scraper();                    
                     scraper.GetNewImages(Convert.ToInt32(Utils.GetScraperMaxImages()), this);
                     scraper = null;
-                    isScraping = false;
+                    IsScraping = false;
                 }
                 catch (Exception ex)
                 {
-                    isScraping = false;
+                    IsScraping = false;
                     logger.Error("doNewScrape: " + ex.ToString());
                 }
             }
-        }
+        }      
 
         /// <summary>
         /// /// Deletes any entries in the fanarthandler database when the disk_image
@@ -771,7 +777,7 @@ namespace FanartHandler
             {
                 logger.Info("InitialScrape is starting...");
                 bool firstRun = true;
-                isScraping = true;                
+                IsScraping = true;                
                 musicDatabaseArtists = new ArrayList();
                 m_db.GetAllArtists(ref musicDatabaseArtists);  
                 ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
@@ -807,13 +813,13 @@ namespace FanartHandler
                 }
 
                 logger.Info("InitialScrape is done.");
-                isScraping = false;
+                IsScraping = false;
                 musicDatabaseArtists = null;
                 AddScapedFanartToAnyHash();                
             }
             catch (Exception ex)
             {
-                isScraping = false;
+                IsScraping = false;
                 logger.Error("InitialScrape: " + ex.ToString());
             }
         }

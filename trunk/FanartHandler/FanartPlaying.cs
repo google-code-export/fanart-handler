@@ -17,7 +17,7 @@ namespace FanartHandler
     /// <summary>
     /// Class handling fanart for now playing music.
     /// </summary>
-    class FanartPlaying
+    public class FanartPlaying
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -169,7 +169,7 @@ namespace FanartHandler
                     prevPlayMusic = -1;
                     UpdateVisibilityCountPlay = 0;
                     SetCurrentArtistsImageNames(null);
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", true);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", true, true);
                     if (sFilename.Length == 0)
                     {
                         sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
@@ -214,7 +214,7 @@ namespace FanartHandler
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
                     string sFilenamePrev = currPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);
                     if (sFilename.Length == 0)
                     {
                         sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
