@@ -225,10 +225,10 @@ namespace FanartHandler
                 logger.Info("NowPlayingScrape is starting for artist " + artist + ".");
                 TotArtistsBeingScraped = 2;
                 CurrArtistsBeingScraped = 0;
-                CurrArtistsBeingScraped++;
+                //CurrArtistsBeingScraped++;
                 if (DoScrape(artist, false, false, swnp) > 0)
                 {
-                    CurrArtistsBeingScraped++;
+                  //  CurrArtistsBeingScraped++;
                     logger.Info("NowPlayingScrape is done.");
                     IsScraping = false;
                     return true;
@@ -734,7 +734,7 @@ namespace FanartHandler
 
                         if (maxScrapes > 0)
                         {
-                            totalImages = scraper.GetImages(artist, maxScrapes, this, swnp);
+                            totalImages = scraper.GetImages(artist, maxScrapes, this, swnp, useSuccessfulScrape);
                             if (totalImages == 0)
                             {
                                 logger.Debug("No fanart found for artist " + artist + ".");
@@ -843,6 +843,7 @@ namespace FanartHandler
 
                 result = null;
                 sqlQuery = null;
+                Utils.Shuffle(ref htTmp);
                 HtAnyMusicFanart = htTmp;              
             }
         }
@@ -1327,7 +1328,7 @@ namespace FanartHandler
         /// </summary>
         /// <param name="type">The type to run the query on</param>
         /// <returns>A hashtable with fanart data</returns>
-        private Hashtable getAnyHashtable(string type)
+        public Hashtable GetAnyHashtable(string type)
         {
             if (type.Equals("Game"))
             {
@@ -1449,7 +1450,7 @@ namespace FanartHandler
         /// <returns>A hashtable with random fanart</returns>
         public Hashtable GetAnyFanart(string type, string types)
         {
-            Hashtable ht = getAnyHashtable(type);
+            Hashtable ht = GetAnyHashtable(type);
             try
             {
                 if (ht != null)
@@ -1466,17 +1467,16 @@ namespace FanartHandler
                     }
                     else
                     {
-                        sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + GetTableName(type) + " WHERE Enabled = 'True';";
-                    }                 
-   
+                            sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + GetTableName(type) + " WHERE Enabled = 'True' AND Type = '"+Utils.PatchSQL(type)+"';";
+                    }
                     SQLiteResultSet result = dbClient.Execute(sqlQuery);
 
                     for (int i = 0; i < result.Rows.Count; i++)
                     {
                         FanartImage fi = new FanartImage(result.GetField(i, 0), result.GetField(i, 1), result.GetField(i, 2), result.GetField(i, 3), result.GetField(i, 4), result.GetField(i, 5));
-                        ht.Add(i, fi);
+                        ht.Add(i, fi);                        
                     }
-
+                    Utils.Shuffle(ref ht);
                     result = null;
                     AddToAnyHashtable(type, ht);
                     return ht;

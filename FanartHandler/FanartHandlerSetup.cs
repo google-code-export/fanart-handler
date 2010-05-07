@@ -102,7 +102,7 @@ namespace FanartHandler
         public static FanartPlaying fp = null;
         public static FanartSelected fs = null;
         public static FanartRandom fr = null;
-        private static int syncPointRefresh = 0;
+        public static int syncPointRefresh = 0;
         private static int basichomeFadeTime = 5;        
         private static bool useBasichomeFade = true;
         private static string m_CurrentTitleTag = null;        
@@ -1079,7 +1079,7 @@ namespace FanartHandler
                         MyRefreshWorker.RunWorkerAsync();  
 
                         // Release control of syncPoint.
-                        syncPointRefresh = 0;
+                        //syncPointRefresh = 0;
                     }
                 }
                 catch (Exception ex)

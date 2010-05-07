@@ -163,7 +163,7 @@ namespace FanartHandler
                 {
                     if ((GUIWindowManager.ActiveWindow == 4755 && GUIWindowManager.GetWindow(4755).GetControl(51).IsVisible) || ((GUIWindowManager.ActiveWindow == 6 || GUIWindowManager.ActiveWindow == 25) && FanartHandlerSetup.SelectedItem.Equals("..") == true))
                     {
-                        //online videos or myvideo, do not update if in details view
+                        //online videos or myvideo, do not update if in details view                        
                     }
                     else
                     {
@@ -214,7 +214,7 @@ namespace FanartHandler
                             ResetCurrCount();
                         }
                         else if (CurrCount >= FanartHandlerSetup.MaxCountImage)
-                        {
+                        {                            
                             string sFilenamePrev = currSelectedGeneric;
                             string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedGeneric, ref prevSelectedGeneric, type, "FanartSelected", false, isMusic);
                             if (sFilename.Length == 0)

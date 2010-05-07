@@ -35,11 +35,11 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
-            bool isIdle = Utils.IsIdle();
+            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;            
             Utils.SetDelayStop(true);
             if (Utils.GetIsStopping() == false)
             {
+                bool isIdle = Utils.IsIdle();
                 try
                 {
                     bool resetFanartAvailableFlags = true;
@@ -94,14 +94,20 @@
                     }
                     if (GUIWindowManager.ActiveWindow == 35 && FanartHandlerSetup.UseBasichomeFade)
                     {
-                        FanartHandlerSetup.CurrentTitleTag = GUIPropertyManager.GetProperty("#Play.Current.Title");
-                        if (((FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0) || (FanartHandlerSetup.CurrentTitleTag != null && FanartHandlerSetup.CurrentTitleTag.Trim().Length > 0)) && Utils.IsIdle(FanartHandlerSetup.BasichomeFadeTime))
+                        try
                         {
-                            GUIButtonControl.ShowControl(GUIWindowManager.ActiveWindow, 98761234);
+                            FanartHandlerSetup.CurrentTitleTag = GUIPropertyManager.GetProperty("#Play.Current.Title");
+                            if (((FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0) || (FanartHandlerSetup.CurrentTitleTag != null && FanartHandlerSetup.CurrentTitleTag.Trim().Length > 0)) && Utils.IsIdle(FanartHandlerSetup.BasichomeFadeTime))
+                            {
+                                GUIButtonControl.ShowControl(35, 98761234);
+                            }
+                            else
+                            {
+                                GUIButtonControl.HideControl(35, 98761234);
+                            }
                         }
-                        else
+                        catch
                         {
-                            GUIButtonControl.HideControl(GUIWindowManager.ActiveWindow, 98761234);
                         }
                     }
                     if (FanartHandlerSetup.UseMusicFanart.Equals("True") && isIdle)
@@ -300,9 +306,12 @@
                     Utils.SetDelayStop(false);
                     Report(e);
                     e.Result = 0;
+                    // Release control of syncPoint.
+                    FanartHandlerSetup.syncPointRefresh = 0;
                 }
                 catch (Exception ex)
                 {
+                    FanartHandlerSetup.syncPointRefresh = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }
             }
@@ -314,66 +323,69 @@
         {
             try
             {
-                int sync = Interlocked.CompareExchange(ref syncPointProgressChange, 1, 0);
-                if (sync == 0)
+                if (Utils.GetIsStopping() == false)
                 {
-                    FanartHandlerSetup.PreventRefresh = true;
-                    int windowId = GUIWindowManager.ActiveWindow;
-                    if (FanartHandlerSetup.fr.CountSetVisibility == 1 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0)  //after 2 sek
+                    int sync = Interlocked.CompareExchange(ref syncPointProgressChange, 1, 0);
+                    if (sync == 0)
                     {
-                        FanartHandlerSetup.fr.CountSetVisibility = 2;
-                        FanartHandlerSetup.fr.UpdatePropertiesRandom();
+                        FanartHandlerSetup.PreventRefresh = true;
+                        int windowId = GUIWindowManager.ActiveWindow;
+                        if (FanartHandlerSetup.fr.CountSetVisibility == 1 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0)  //after 2 sek
+                        {
+                            FanartHandlerSetup.fr.CountSetVisibility = 2;
+                            FanartHandlerSetup.fr.UpdatePropertiesRandom();
 
-                        if (FanartHandlerSetup.fr.DoShowImageOneRandom)
-                        {
-                            FanartHandlerSetup.fr.ShowImageOneRandom(windowId);
-                        }
-                        else
-                        {
-                            FanartHandlerSetup.fr.ShowImageTwoRandom(windowId);
-                        }
+                            if (FanartHandlerSetup.fr.DoShowImageOneRandom)
+                            {
+                                FanartHandlerSetup.fr.ShowImageOneRandom(windowId);
+                            }
+                            else
+                            {
+                                FanartHandlerSetup.fr.ShowImageTwoRandom(windowId);
+                            }
 
-                    }
-                    else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom > 2 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0) //after 2 sek
-                    {
-                        FanartHandlerSetup.fr.UpdatePropertiesRandom();
-                    }
-                    else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom >= 5 && FanartHandlerSetup.fr.GetPropertiesRandom() == 0) //after 4 sek
-                    {
-                        if (FanartHandlerSetup.fr.DoShowImageOneRandom)
-                        {
-                            FanartHandlerSetup.fr.DoShowImageOneRandom = false;
                         }
-                        else
+                        else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom > 2 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0) //after 2 sek
                         {
-                            FanartHandlerSetup.fr.DoShowImageOneRandom = true;
+                            FanartHandlerSetup.fr.UpdatePropertiesRandom();
                         }
-                        FanartHandlerSetup.fr.CountSetVisibility = 0;
-                        FanartHandlerSetup.fr.UpdateVisibilityCountRandom = 0;
-                        //release unused image resources
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyGames);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovies);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovingPictures);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMusic);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPictures);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyScorecenter);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPlugins);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTV);
-                        FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTVSeries);
-                        FanartHandlerSetup.fr.WindowOpen = false;
-                        /*                    logger.Debug("listAnyGames: " + FanartHandlerSetup.fr.listAnyGames.Count);
-                                            logger.Debug("listAnyMovies: " + FanartHandlerSetup.fr.listAnyMovies.Count);
-                                            logger.Debug("listAnyMovingPictures: " + FanartHandlerSetup.fr.listAnyMovingPictures.Count);
-                                            logger.Debug("listAnyMusic: " + FanartHandlerSetup.fr.listAnyMusic.Count);
-                                            logger.Debug("listAnyPictures: " + FanartHandlerSetup.fr.listAnyPictures.Count);
-                                            logger.Debug("listAnyScorecenter: " + FanartHandlerSetup.fr.listAnyScorecenter.Count);
-                                            logger.Debug("listAnyTVSeries: " + FanartHandlerSetup.fr.listAnyTVSeries.Count);
-                                            logger.Debug("listAnyTV: " + FanartHandlerSetup.fr.listAnyTV.Count);
-                                            logger.Debug("listAnyPlugins: " + FanartHandlerSetup.fr.listAnyPlugins.Count);
-                          */
+                        else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom >= 5 && FanartHandlerSetup.fr.GetPropertiesRandom() == 0) //after 4 sek
+                        {
+                            if (FanartHandlerSetup.fr.DoShowImageOneRandom)
+                            {
+                                FanartHandlerSetup.fr.DoShowImageOneRandom = false;
+                            }
+                            else
+                            {
+                                FanartHandlerSetup.fr.DoShowImageOneRandom = true;
+                            }
+                            FanartHandlerSetup.fr.CountSetVisibility = 0;
+                            FanartHandlerSetup.fr.UpdateVisibilityCountRandom = 0;
+                            //release unused image resources
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyGames);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovies);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovingPictures);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMusic);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPictures);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyScorecenter);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPlugins);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTV);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTVSeries);
+                            FanartHandlerSetup.fr.WindowOpen = false;
+                            /*                    logger.Debug("listAnyGames: " + FanartHandlerSetup.fr.listAnyGames.Count);
+                                                logger.Debug("listAnyMovies: " + FanartHandlerSetup.fr.listAnyMovies.Count);
+                                                logger.Debug("listAnyMovingPictures: " + FanartHandlerSetup.fr.listAnyMovingPictures.Count);
+                                                logger.Debug("listAnyMusic: " + FanartHandlerSetup.fr.listAnyMusic.Count);
+                                                logger.Debug("listAnyPictures: " + FanartHandlerSetup.fr.listAnyPictures.Count);
+                                                logger.Debug("listAnyScorecenter: " + FanartHandlerSetup.fr.listAnyScorecenter.Count);
+                                                logger.Debug("listAnyTVSeries: " + FanartHandlerSetup.fr.listAnyTVSeries.Count);
+                                                logger.Debug("listAnyTV: " + FanartHandlerSetup.fr.listAnyTV.Count);
+                                                logger.Debug("listAnyPlugins: " + FanartHandlerSetup.fr.listAnyPlugins.Count);
+                              */
+                        }
+                        FanartHandlerSetup.PreventRefresh = false;
+                        syncPointProgressChange = 0;
                     }
-                    FanartHandlerSetup.PreventRefresh = false;
-                    syncPointProgressChange = 0;
                 }
             }
             catch (Exception ex)
