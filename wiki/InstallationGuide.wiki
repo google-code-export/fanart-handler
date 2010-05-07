@@ -5,6 +5,13 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.9 to 1.10)==
+I have made some big changes in how the fanart handler plugin works (optimizations and overall improvements). A big part of the plugin has been re-coded in this release.
+  * new feature: Added a delay between fanart selected item changes
+  * new feature: Loading of initial tasks (like loading local fanart) are now a separate thing and will not be done as now prior to loading the plugin resulting is faster start of MP.
+  * new feature: The "Random Movie" property now only push images from the movie folder (previous version concatenated images from movie, tvseries and moving pictures).
+  * bug fixed: Proxy handling redone to fix the issue when users has proxy enabled in fanarthandler even when not behind a proxy. Now this will only prevent fanart  handler from working and does not affect other plugins like online videos and myWeather.
+  * bug fixed: SQLite.NET.SQLiteException, ERROR detailed:near "," bug is fixed.
 ==Change Log (version 1.8 to 1.9)==
   * improvement: Loading of backdrops improved and fix to support MP animations better included.
   * bug fixed: Improved handling of suspend/resume handling
