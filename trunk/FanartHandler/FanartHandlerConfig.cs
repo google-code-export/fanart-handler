@@ -1150,10 +1150,10 @@ namespace FanartHandler
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DeleteSelectedFanart();                          
+            DeleteSelectedFanart(true);                          
         }
 
-        private void DeleteSelectedFanart()
+        private void DeleteSelectedFanart(bool doRemove)
         {
             try
             {
@@ -1161,12 +1161,16 @@ namespace FanartHandler
                 {
                     pictureBox1.Image = null;
                     string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+                    
                     Utils.GetDbm().DeleteFanart(sFileName, "MusicFanart");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
                     }
-                    dataGridView1.Rows.Remove(dataGridView1.CurrentRow);
+                    if (doRemove)
+                    {
+                        dataGridView1.Rows.Remove(dataGridView1.CurrentRow);
+                    }
                 }
             }
             catch (Exception ex)
@@ -1226,8 +1230,8 @@ namespace FanartHandler
                 EnableDisableFanart();
             }
             else if (e.KeyData == Keys.Delete)
-            {
-                DeleteSelectedFanart();
+            {                
+                DeleteSelectedFanart(false);
             }
             else if (e.KeyData == Keys.X)
             {

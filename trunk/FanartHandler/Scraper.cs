@@ -27,6 +27,7 @@ namespace FanartHandler
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private Random randNumber = new Random();
+        private WebProxy proxy = null;
         
 
         /// <summary>
@@ -48,17 +49,19 @@ namespace FanartHandler
                     HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1");
                     if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True"))
                     {
-                        WebProxy proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
+                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                         proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                        WebRequest.DefaultWebProxy = proxy;
+                        //WebRequest.DefaultWebProxy = proxy;
+                        objRequest.Proxy = proxy;
                     }
-                    objRequest.ServicePoint.Expect100Continue = false; 
+                    objRequest.ServicePoint.Expect100Continue = false;
+                    
                     //Found: 529 image(s) on 18 page(s). Displayed:
                     //"http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=1"
                     string sReg = @"Found: [0-9]+ image\(s\) on [0-9]+ page\(s\). Displayed:";
 
                     //The WebResponse object gets the Request's response (the HTML) 
-                    WebResponse objResponse = objRequest.GetResponse();
+                    WebResponse objResponse = objRequest.GetResponse();                    
 
                     using (StreamReader sr = new StreamReader(objResponse.GetResponseStream(), enc))
                     {
@@ -93,7 +96,11 @@ namespace FanartHandler
                             }
                             logger.Debug("Scanning page " + (x + 1));
                             objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?search_terms=all&cat_id=1&search_keywords=*&search_new_images=1&page=" + (x + 1));
-                            objRequest.ServicePoint.Expect100Continue = false; 
+                            objRequest.ServicePoint.Expect100Continue = false;
+                            if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True"))
+                            {
+                                objRequest.Proxy = proxy;
+                            }
                             sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
                             //The WebResponse object gets the Request's response (the HTML) 
                             objResponse = objRequest.GetResponse();
@@ -198,7 +205,11 @@ namespace FanartHandler
                     if (File.Exists(filename)) position = new FileInfo(filename).Length;
                     maxCount++;                    
                     requestPic = (HttpWebRequest)WebRequest.Create(sourceFilename);
-                    requestPic.ServicePoint.Expect100Continue = false; 
+                    requestPic.ServicePoint.Expect100Continue = false;
+                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True"))
+                    {
+                        requestPic.Proxy = proxy;
+                    }
                     requestPic.AddRange((int)position);
                     requestPic.Timeout = 5000 + (1000 * maxCount);
                     requestPic.ReadWriteTimeout = 20000;
@@ -344,7 +355,7 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int GetImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
+        public int GetImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp, bool reportProgress)
         {
             try
             {
@@ -357,9 +368,10 @@ namespace FanartHandler
                 HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://www.htbackdrops.com/search.php?");
                 if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True"))
                 {
-                    WebProxy proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
+                    proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                     proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                    WebRequest.DefaultWebProxy = proxy;
+                    //WebRequest.DefaultWebProxy = proxy;
+                    objRequest.Proxy = proxy;
                 }
                 objRequest.ServicePoint.Expect100Continue = false;                 
                 string sReg = @"-->\n<a href=\""./details.php((.|\n)*?)mode=search&amp;sessionid=((.|\n)*?)img src=""./data/thumbnails/((.|\n)*?)alt=""((.|\n)*?)"" />";
@@ -392,8 +404,23 @@ namespace FanartHandler
                 reg = new Regex(sReg, RegexOptions.IgnoreCase | RegexOptions.Compiled);
                 int iCount = 0;
                 logger.Debug("Trying to find fanart for artist " + artist + ".");
+                if (!reportProgress)
+                {
+                    MatchCollection matches = reg.Matches(strResult);
+                    int iMatchesCount = matches.Count;
+                    if (iMatchesCount > iMax)
+                    {
+                        dbm.TotArtistsBeingScraped = iMax;
+                    }
+                    else
+                    {
+                        dbm.TotArtistsBeingScraped = iMatchesCount;
+                    }
+                    dbm.CurrArtistsBeingScraped = 0;
+                }
                 for (m = reg.Match(strResult); m.Success && iCount < iMax; m = m.NextMatch())
                 {
+                    
                     picUri = m.Groups[0].ToString();
                     sArtist = picUri.Substring(picUri.IndexOf("alt=\"") + 5);
                     sArtist = sArtist.Substring(0, sArtist.LastIndexOf("\" />"));
@@ -424,6 +451,7 @@ namespace FanartHandler
                             logger.Debug("Will not download fanart image as it already exist an image in your fanart database with this source image name.");
                         }
                     }
+                    dbm.CurrArtistsBeingScraped++;
                 }
                 objRequest = null;
                 return iCount;

@@ -191,7 +191,7 @@ namespace FanartHandler
                     {                        
                         AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref listPlayMusic, "MusicFanart");
                         string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop2.play");
-                        if (sTag == null || sTag.Length < 2)
+                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png"))
                         {
                             AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref listPlayMusic, "MusicFanart");
                         }
@@ -200,7 +200,7 @@ namespace FanartHandler
                     {
                         AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref listPlayMusic, "MusicFanart");
                         string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop1.play");
-                        if (sTag == null || sTag.Length < 2)
+                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png"))
                         {
                             AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref listPlayMusic, "MusicFanart");
                         }

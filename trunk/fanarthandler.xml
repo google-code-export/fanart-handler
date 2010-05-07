@@ -38,21 +38,12 @@
         <UpdateUrl>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>1</Major>
-          <Minor>9</Minor>
+          <Minor>10</Minor>
           <Build>0</Build>
           <Revision>0</Revision>
         </Version>
         <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal.</ExtensionDescription>
-        <VersionDescription>New Features
-* Support for multi-artist files.
-* Mouse and Keyboard shortcuts for image management in Configuration.
-* Show resolution of fanart in manage fanart tab for selected image.
-* Support for movie fanart in onlinevideos plugin.
-
-Fixes Issues
-* Fixed issue with "The remote server returned an error: (417)
-Expectation failed.".
-</VersionDescription>
+        <VersionDescription>Bug fixes &amp; Speed improvements.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2010-02-23T15:04:24.1976731+01:00</ReleaseDate>
