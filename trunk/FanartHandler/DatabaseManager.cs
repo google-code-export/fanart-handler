@@ -863,7 +863,8 @@ namespace FanartHandler
                 {
                     tmpS = result.GetField(i, 0);
                 }
-                if (tmpS != null && !tmpS.Equals("1.3"))
+                
+                if (tmpS != null && (tmpS.Equals("1.0") || tmpS.Equals("1.1") || tmpS.Equals("1.2")))
                 {
                     logger.Info("Upgrading Database to version 1.3");
                     sqlQuery = "DELETE FROM Movie_Fanart;";
@@ -874,7 +875,15 @@ namespace FanartHandler
                     lock (dbClient) dbClient.Execute(sqlQuery);
                     sqlQuery = "UPDATE Version SET Version = '1.3'";
                     lock (dbClient) dbClient.Execute(sqlQuery);
-                }                               
+                }
+                if (tmpS != null && tmpS.Equals("1.3"))
+                {
+                    logger.Info("Upgrading Database to version 1.4");
+                    sqlQuery = "CREATE TABLE TimeStamps (Id INTEGER PRIMARY KEY, Key TEXT, Value TEXT, Time_Stamp TEXT);";
+                    result = dbClient.Execute(sqlQuery);
+                    sqlQuery = "UPDATE Version SET Version = '1.4'";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                }                
                 result = null;
                 sqlQuery = null;
                 tmpS = null;             
@@ -1171,6 +1180,63 @@ namespace FanartHandler
 
             return result;
         }
+
+        /// <summary>
+        /// Sets the timestamp for a given key
+        /// </summary>
+        /// <param name="key">Name of the key</param>
+        /// <param name="value">Timestamp to set</param>
+        public void SetTimeStamp(string key, string value)
+        {
+            try
+            {
+                string sqlQuery = "SELECT COUNT(Value) FROM TimeStamps WHERE Key = '" + Utils.PatchSQL(key) + "';";
+                DateTime saveNow = DateTime.Now;
+                if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
+                {
+                    sqlQuery = "UPDATE TimeStamps SET Value = '" + Utils.PatchSQL(value) + "', Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd") + "' WHERE Key = '" + Utils.PatchSQL(key) + "';";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    sqlQuery = null;
+                }
+                else
+                {
+                    sqlQuery = "INSERT INTO TimeStamps (Id, Key, Value, Time_Stamp) VALUES(null, '" + Utils.PatchSQL(key) + "','" + Utils.PatchSQL(value) + "','" + saveNow.ToString(@"yyyyMMdd") + "');";
+                    lock (dbClient) dbClient.Execute(sqlQuery);
+                    sqlQuery = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("SetTimeStamp: " + ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Get timestamp from a given key
+        /// </summary>
+        /// <param name="key">The name of the key</param>
+        /// <returns>A string containing the timestamp value</returns>
+        public string GetTimeStamp(string key)
+        {
+            try
+            {
+                string sqlQuery = "SELECT Value FROM TimeStamps WHERE Key = '"+Utils.PatchSQL(key)+"';";
+                SQLiteResultSet result = dbClient.Execute(sqlQuery);
+                for (int i = 0; i < result.Rows.Count; i++)
+                {
+                    return result.GetField(i, 0);
+                }
+
+                result = null;
+                sqlQuery = null;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("GetTimeStamp: " + ex.ToString());
+            }
+
+            return null;
+        }        
 
         /// <summary>
         /// Returns all images for an artist.
@@ -1477,6 +1543,7 @@ namespace FanartHandler
                         ht.Add(i, fi);                        
                     }
                     Utils.Shuffle(ref ht);
+
                     result = null;
                     AddToAnyHashtable(type, ht);
                     return ht;

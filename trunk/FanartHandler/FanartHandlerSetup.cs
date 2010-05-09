@@ -50,15 +50,14 @@ namespace FanartHandler
         private static ScraperWorkerNowPlaying scraperWorkerObjectNowPlaying;        
         private Thread scrapeWorkerThread;
         private static Thread scrapeWorkerThreadNowPlaying;        
-        private System.Timers.Timer refreshTimer = null;        
-        //private static System.Timers.Timer updateTimer = null;        
+        private System.Timers.Timer refreshTimer = null;
         private TimerCallback myDirectoryTimer = null;
         private System.Threading.Timer directoryTimer = null;
         private TimerCallback myScraperTimer = null;
-        private static ThreadPriority threadPriority = ThreadPriority.BelowNormal;        
+        private static ThreadPriority threadPriority = ThreadPriority.Lowest;        
         private System.Threading.Timer scraperTimer = null;
-        private static ProgressWorker myProgressWorker = null;
-        private static RefreshWorker myRefreshWorker = null;   
+//        private static ProgressWorker myProgressWorker = null;
+//        private static RefreshWorker myRefreshWorker = null;   
 
         private static string m_CurrentTrackTag = null;  //is music playing and if so this holds current artist name                        
         private static bool isPlaying = false; //hold true if MP plays music        
@@ -103,6 +102,7 @@ namespace FanartHandler
         public static FanartSelected fs = null;
         public static FanartRandom fr = null;
         public static int syncPointRefresh = 0;
+        public static int syncPointDirectory = 0;        
         private static int basichomeFadeTime = 5;        
         private static bool useBasichomeFade = true;
         private static string m_CurrentTitleTag = null;        
@@ -180,7 +180,7 @@ namespace FanartHandler
             set { scraperWorkerObject = value; }
         }
 
-        internal static ProgressWorker MyProgressWorker
+/*        internal static ProgressWorker MyProgressWorker
         {
             get { return FanartHandlerSetup.myProgressWorker; }
             set { FanartHandlerSetup.myProgressWorker = value; }
@@ -190,7 +190,7 @@ namespace FanartHandler
         {
             get { return FanartHandlerSetup.myRefreshWorker; }
             set { FanartHandlerSetup.myRefreshWorker = value; }
-        }
+        }*/
 
         public static ThreadPriority ThreadPriority
         {
@@ -433,6 +433,48 @@ namespace FanartHandler
         /// <summary>
         /// Add files in directory to hashtable
         /// </summary>
+        public static void SetupFilenames(string s, string filter, ref int i, string type)
+        {
+            string artist = String.Empty;
+            string typeOrg = type;
+            try
+            {
+                string useFilter = Utils.GetDbm().GetTimeStamp("Directory - " + s);
+                if (useFilter == null || useFilter.Length < 2)
+                {
+                    useFilter = new DateTime(1970,1,1,1,1,1).ToString();
+                }
+                DirectoryInfo Dir = new DirectoryInfo(s);
+                DateTime dt = Convert.ToDateTime(useFilter);
+                FileInfo[] FileList = Dir.GetFiles(filter, SearchOption.AllDirectories);
+                var query = from FI in FileList
+                            where FI.CreationTime >= dt
+                            select FI.FullName;
+                foreach (string dir in query)
+                {                       
+                    artist = Utils.GetArtist(dir, type);
+                    if (type.Equals("MusicAlbum") || type.Equals("MusicArtist") || type.Equals("MusicFanart"))
+                    {
+                        if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default"))
+                        {
+                            type = "Default";
+                        }
+                        Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type);
+                        type = typeOrg;
+                    }
+                    else
+                    {
+                        Utils.GetDbm().LoadFanart(artist, dir, dir, type);
+                    }
+                }
+                Utils.GetDbm().SetTimeStamp("Directory - " + s, DateTime.Now.ToString());                
+            }
+            catch (Exception ex)
+            {
+                logger.Error("SetupFilenames: " + ex.ToString());                
+            }
+        }
+/*
         public void SetupFilenames(string s, string filter, ref int i, string type)
         {
             string artist = String.Empty;
@@ -486,7 +528,7 @@ namespace FanartHandler
             {
                 logger.Error("SetupFilenames: " + ex.ToString());                
             }
-        }
+        }*/
 
         /// <summary>
         /// Add files in directory to hashtable
@@ -537,7 +579,7 @@ namespace FanartHandler
         /// <summary>
         /// Update the filenames keept by the plugin if files are added since start of MP
         /// </summary>
-        public void UpdateDirectoryTimer()
+/*        public void UpdateDirectoryTimer()
         {
             if (Utils.GetIsStopping() == false)
             {
@@ -642,7 +684,7 @@ namespace FanartHandler
                     logger.Error("UpdateDirectoryTimer: " + ex.ToString());
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Update the filenames keept by the plugin if files are added since start of MP
@@ -653,10 +695,17 @@ namespace FanartHandler
             {
                 try
                 {
-                    UpdateDirectoryTimer();
+                    int sync = Interlocked.CompareExchange(ref syncPointDirectory, 1, 0);
+                    if (sync == 0)
+                    {
+                        // No other event was executing.                        
+                        DirectoryWorker MyDirectoryWorker = new DirectoryWorker();
+                        MyDirectoryWorker.RunWorkerAsync();
+                    }
                 }
                 catch (Exception ex)
                 {
+                    syncPointDirectory = 0;
                     logger.Error("UpdateDirectoryTimer: " + ex.ToString());
                 }
             }
@@ -1073,7 +1122,7 @@ namespace FanartHandler
                     if (sync == 0)
                     {
                         // No other event was executing.                        
-                        MyRefreshWorker = new RefreshWorker();
+                        RefreshWorker MyRefreshWorker = new RefreshWorker();
                         MyRefreshWorker.ProgressChanged += MyRefreshWorker.OnProgressChanged;
                         //MyRefreshWorker.RunWorkerCompleted += MyRefreshWorker.OnRunWorkerCompleted;
                         MyRefreshWorker.RunWorkerAsync();  
@@ -1085,6 +1134,14 @@ namespace FanartHandler
                 catch (Exception ex)
                 {
                     syncPointRefresh = 0;
+                    /*try
+                    {
+                        MyRefreshWorker.CancelAsync();
+                    }
+                    catch
+                    {
+                    }
+                    MyRefreshWorker.Dispose();*/
                     logger.Error("UpdateImageTimer: " + ex.ToString());
                 }
             }
@@ -1229,13 +1286,18 @@ namespace FanartHandler
             MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
 
             string myThreadPriority = xmlreader.GetValue("general", "ThreadPriority");
-            if (myThreadPriority != null && myThreadPriority.Equals("High"))
+/*            if (myThreadPriority != null && myThreadPriority.Equals("High"))
                 ThreadPriority = ThreadPriority.AboveNormal;
             else if (myThreadPriority != null && myThreadPriority.Equals("AboveNormal"))
                 ThreadPriority = ThreadPriority.Normal;
             else
-                ThreadPriority = ThreadPriority.BelowNormal;
-
+                ThreadPriority = ThreadPriority.BelowNormal;*/
+            if (myThreadPriority != null && myThreadPriority.Equals("Normal"))
+                ThreadPriority = ThreadPriority.Lowest;
+            else if (myThreadPriority != null && myThreadPriority.Equals("BelowNormal"))
+                ThreadPriority = ThreadPriority.Lowest;    
+            else
+                ThreadPriority = ThreadPriority.Normal;
 
             switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0))
             {
@@ -1572,8 +1634,7 @@ namespace FanartHandler
                 Utils.SetProxyDomain(proxyDomain);
                 Utils.SetScraperMaxImages(ScraperMaxImages);
                 Utils.InitiateDbm();
-                M_Db = MusicDatabase.Instance;
-                ManageScraperProperties();                             
+                M_Db = MusicDatabase.Instance;                             
                 myDirectoryTimer = new TimerCallback(UpdateDirectoryTimer);
                 directoryTimer = new System.Threading.Timer(myDirectoryTimer, null, 500, 3600000); 
                 InitRandomProperties();
@@ -1635,6 +1696,17 @@ namespace FanartHandler
                 PreventRefresh = true;
                 if ((fr.WindowsUsingFanartRandom.ContainsKey(windowId) || fs.WindowsUsingFanartSelected.ContainsKey(windowId) || fp.WindowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
                 {
+                    if (Utils.GetDbm().GetIsScraping())
+                    {
+                        GUIControl.ShowControl(GUIWindowManager.ActiveWindow, 91919280);
+                    }
+                    else
+                    {
+                        GUIPropertyManager.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty);
+                        GUIControl.HideControl(GUIWindowManager.ActiveWindow, 91919280);
+                        Utils.GetDbm().TotArtistsBeingScraped = 0;
+                        Utils.GetDbm().CurrArtistsBeingScraped = 0;
+                    }
                     if (fs.WindowsUsingFanartSelected.ContainsKey(windowId))
                     {                        
                         if (fs.DoShowImageOne)
@@ -1955,7 +2027,7 @@ namespace FanartHandler
                     // until the object's thread terminates.
                     scrapeWorkerThread.Join();
                 }
-                //progressTimer.Stop();
+                //progressTimer.Stop();                
                 ScraperWorkerObject = null;
                 scrapeWorkerThread = null;
             }
@@ -2049,7 +2121,7 @@ namespace FanartHandler
                 if (Utils.GetDbm().GetIsScraping())
                 {
                     GUIControl.ShowControl(GUIWindowManager.ActiveWindow, 91919280);
-                    MyProgressWorker = new ProgressWorker();
+                    ProgressWorker MyProgressWorker = new ProgressWorker();
                     MyProgressWorker.ProgressChanged += MyProgressWorker.OnProgressChanged;
                     MyProgressWorker.RunWorkerCompleted += MyProgressWorker.OnRunWorkerCompleted;
                     MyProgressWorker.RunWorkerAsync();                    
@@ -2128,24 +2200,23 @@ namespace FanartHandler
                 {
                     scraperTimer.Dispose();
                 }
-                if (MyProgressWorker != null)
+                /*if (MyProgressWorker != null)
                 {
                     MyProgressWorker.CancelAsync();
                     MyProgressWorker.Dispose();
-                }
+                }*/
                 if (refreshTimer != null)
                 {
                     refreshTimer.Stop();
                     refreshTimer.Dispose();
                 }
-                if (MyRefreshWorker != null)
+                /*if (MyRefreshWorker != null)
                 {
                     MyRefreshWorker.CancelAsync();
                     MyRefreshWorker.Dispose();
-                }
+                }*/
                 if (directoryTimer != null)
                 {
-                    directoryTimer.Dispose();
                     directoryTimer.Dispose();
                 }
                 EmptyAllImages(ref fr.listAnyGames);
@@ -2276,12 +2347,27 @@ namespace FanartHandler
                     FanartHandlerSetup.ManageScraperProperties();
                     Utils.GetDbm().InitialScrape(this);
                     Thread.Sleep(2000);
+/*                    try
+                    {
+                        myProgressWorker.CancelAsync();
+                    }
+                    catch
+                    {
+                    }
+                    myProgressWorker.Dispose();*/
                     Utils.GetDbm().IsScraping = true;
                     FanartHandlerSetup.ManageScraperProperties();
                     Utils.GetDbm().DoNewScrape();                    
                     RequestStop();
                     Utils.GetDbm().StopScraper = false;
-                    //ProgressTimer.Stop();
+/*                    try
+                    {
+                        myProgressWorker.CancelAsync();
+                    }
+                    catch
+                    {
+                    }
+                    myProgressWorker.Dispose();*/
                 }
             }
 
@@ -2336,7 +2422,14 @@ namespace FanartHandler
                     FanartHandlerSetup.ManageScraperProperties();
                     Utils.GetDbm().NowPlayingScrape(artist, this);
                     RequestStop();
-                    //ProgressTimer.Stop();
+/*                    try
+                    {
+                        myProgressWorker.CancelAsync();
+                    }
+                    catch
+                    {
+                    }
+                    myProgressWorker.Dispose();*/
                 }
             }
             public void RequestStop()

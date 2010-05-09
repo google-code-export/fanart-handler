@@ -28,7 +28,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "1.10";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.0";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -713,6 +713,15 @@ namespace FanartHandler
                     object temp = filenames[n];
                     filenames[n] = filenames[k];
                     filenames[k] = temp;
+                }
+            }
+            object[] keys = new object[filenames.Keys.Count];
+            filenames.Keys.CopyTo(keys, 0);
+            for(int i = 0; i < keys.Length; i++)
+            {
+                if (i > 50)
+                {
+                    filenames.Remove(keys[i]);
                 }
             }
         }
