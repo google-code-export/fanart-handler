@@ -86,11 +86,15 @@ namespace FanartHandler
             {
                 if (type.Equals("MovingPicture"))
                 {
-                    sqlQuery = "select title, backdropfullpath from movie_info;";
+                    sqlQuery = "select title, backdropfullpath from movie_info where date_added >= '"+Utils.GetDbm().GetTimeStamp(type)+"';";
+                    Utils.GetDbm().SetTimeStamp(type, DateTime.Now.ToString());
                 }
                 else if (type.Equals("TVSeries"))
                 {
                     sqlQuery = "select SortName, fanart from online_series;";
+  //                  sqlQuery = "select SortName, fanart from online_series where lastupdated >= '" + Utils.GetDbm().GetTimeStamp(type) + "';";
+//                    double l = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+//                    Utils.GetDbm().SetTimeStamp(type, l.ToString());                    
                 }
                 else
                 {

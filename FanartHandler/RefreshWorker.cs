@@ -35,7 +35,8 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;            
+            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
+            Thread.CurrentThread.Name = "RefreshWorker";
             Utils.SetDelayStop(true);
             if (Utils.GetIsStopping() == false)
             {
@@ -308,6 +309,14 @@
                     e.Result = 0;
                     // Release control of syncPoint.
                     FanartHandlerSetup.syncPointRefresh = 0;
+/*                    try
+                    {
+                        FanartHandlerSetup.MyRefreshWorker.CancelAsync();
+                    }
+                    catch
+                    {
+                    }
+                    FanartHandlerSetup.MyRefreshWorker.Dispose();*/
                 }
                 catch (Exception ex)
                 {

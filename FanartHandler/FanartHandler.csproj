@@ -74,6 +74,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryWorker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ExternalDatabaseManager.cs" />
     <Compile Include="FanartHandlerSetup.cs">
     </Compile>

@@ -27,6 +27,7 @@
                 if (Utils.GetIsStopping() == false)
                 {
                     Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
+                    Thread.CurrentThread.Name = "ProgressWorker";
                     double iTot = Utils.GetDbm().TotArtistsBeingScraped;
                     double iCurr = Utils.GetDbm().CurrArtistsBeingScraped;
                     ReportProgress(0, "Starting");
