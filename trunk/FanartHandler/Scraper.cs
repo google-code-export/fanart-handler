@@ -87,6 +87,11 @@ namespace FanartHandler
 
                         dbm.TotArtistsBeingScraped = iPages;
                         dbm.CurrArtistsBeingScraped = 0;
+                        if (FanartHandlerSetup.MyScraperWorker != null)
+                        {
+                            FanartHandlerSetup.MyScraperWorker.ReportProgress(0, "Ongoing");
+                        }
+                        
 
                         for (int x = 0; x < iPages; x++)
                         {
@@ -166,6 +171,10 @@ namespace FanartHandler
                                 }
                             }
                             dbm.CurrArtistsBeingScraped++;
+                            if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperWorker != null)
+                            {
+                                FanartHandlerSetup.MyScraperWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
+                            }
                         }
                     }
                     else
@@ -355,7 +364,7 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int GetImages(string artist, int iMax, DatabaseManager dbm, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp, bool reportProgress)
+        public int GetImages(string artist, int iMax, DatabaseManager dbm, bool reportProgress)
         {
             try
             {
@@ -417,6 +426,10 @@ namespace FanartHandler
                         dbm.TotArtistsBeingScraped = iMatchesCount;
                     }
                     dbm.CurrArtistsBeingScraped = 0;
+                    if (FanartHandlerSetup.MyScraperNowWorker != null)
+                    {
+                        FanartHandlerSetup.MyScraperNowWorker.ReportProgress(0, "Ongoing");
+                    }
                 }
                 for (m = reg.Match(strResult); m.Success && iCount < iMax; m = m.NextMatch())
                 {
@@ -440,10 +453,10 @@ namespace FanartHandler
                             {
                                 iCount = iCount + 1;
                                 dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicFanart");
-                                if (swnp != null)
+                                if (FanartHandlerSetup.MyScraperNowWorker != null)
                                 {
-                                    swnp.SetRefreshFlag(true);
-                                }
+                                    FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
+                                }                                
                             }
                         }
                         else
@@ -454,6 +467,10 @@ namespace FanartHandler
                     if (!reportProgress)
                     {
                         dbm.CurrArtistsBeingScraped++;
+                        if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                        {
+                            FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
+                        }
                     }
                 }
                 objRequest = null;

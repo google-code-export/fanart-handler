@@ -8,7 +8,7 @@
     using System.Text;
     using System.ComponentModel;
     using System.Threading;
-
+    
     class DirectoryWorker : BackgroundWorker
     {
         #region declarations
@@ -23,9 +23,17 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
+            if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            }
+            else
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            }
             Thread.CurrentThread.Name = "DirectoryWorker";
             Utils.SetDelayStop(true);
+            logger.Info("Refreshing local fanart is starting.");
             if (Utils.GetIsStopping() == false)
             {
                 try
@@ -123,13 +131,16 @@
                     Utils.GetDbm().HtAnyTVSeries = null; //20200429
                     Utils.GetDbm().HtAnyTVFanart = null; //20200429
                     Utils.GetDbm().HtAnyPluginFanart = null; //20200429
+                    
                 }
                 catch (Exception ex)
                 {
                     FanartHandlerSetup.syncPointRefresh = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
-                }
+                }                
             }
+            Utils.SetDelayStop(true);
+            logger.Info("Refreshing local fanart is done.");
         }
     }
 }
