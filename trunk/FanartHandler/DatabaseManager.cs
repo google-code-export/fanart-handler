@@ -786,7 +786,11 @@ namespace FanartHandler
                 }
 
                 string artist;
-                FanartHandlerSetup.MyScraperWorker.ReportProgress(0, "Start");
+                if (FanartHandlerSetup.MyScraperWorker != null)
+                {
+                    FanartHandlerSetup.MyScraperWorker.ReportProgress(0, "Start");
+                }
+                
                 TotArtistsBeingScraped = musicDatabaseArtists.Count;
                 if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
                 {
