@@ -43,8 +43,8 @@ namespace FanartHandler
         private MusicDatabase m_db = null;
         private bool isScraping = false;        
         private Scraper scraper;
-        private int totArtistsBeingScraped = 0;
-        private int currArtistsBeingScraped = 0;
+        private double totArtistsBeingScraped = 0;
+        private double currArtistsBeingScraped = 0;
         private bool isInitialized = false;        
         #endregion
 
@@ -60,13 +60,13 @@ namespace FanartHandler
             set { isInitialized = value; }
         }
 
-        public int CurrArtistsBeingScraped
+        public double CurrArtistsBeingScraped
         {
             get { return currArtistsBeingScraped; }
             set { currArtistsBeingScraped = value; }
         }
 
-        public int TotArtistsBeingScraped
+        public double TotArtistsBeingScraped
         {
             get { return totArtistsBeingScraped; }
             set { totArtistsBeingScraped = value; }
@@ -217,32 +217,30 @@ namespace FanartHandler
         /// <param name="artist">Name of the artist</param>
         /// <param name="swnp">ScraperWorkerNowPlaying object</param>
         /// <returns>True if scraping has occured successfully</returns>
-        public bool NowPlayingScrape(string artist, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
+        public bool NowPlayingScrape(string artist, FanartHandler.ScraperNowWorker swnp)
         {
             try
             {
-                IsScraping = true;
+//                IsScraping = true;
                 logger.Info("NowPlayingScrape is starting for artist " + artist + ".");
                 TotArtistsBeingScraped = 2;
                 CurrArtistsBeingScraped = 0;
-                //CurrArtistsBeingScraped++;
-                if (DoScrape(artist, false, false, swnp) > 0)
+                if (DoScrape(artist, false, false) > 0)
                 {
-                  //  CurrArtistsBeingScraped++;
                     logger.Info("NowPlayingScrape is done.");
-                    IsScraping = false;
+//                    IsScraping = false;
                     return true;
                 }
                 else
                 {
                     logger.Info("NowPlayingScrape is done.");
-                    IsScraping = false;
+//                    IsScraping = false;
                     return false;
                 }    
             }
             catch (Exception ex)
             {
-                IsScraping = false;
+//                IsScraping = false;
                 logger.Error("NowPlayingScrape: " + ex.ToString());
                 return false;
             }
@@ -623,15 +621,15 @@ namespace FanartHandler
             {
                 try
                 {
-                    IsScraping = true;
+//                    IsScraping = true;
                     scraper = new Scraper();                    
                     scraper.GetNewImages(Convert.ToInt32(Utils.GetScraperMaxImages()), this);
                     scraper = null;
-                    IsScraping = false;
+//                    IsScraping = false;
                 }
                 catch (Exception ex)
                 {
-                    IsScraping = false;
+//                    IsScraping = false;
                     logger.Error("doNewScrape: " + ex.ToString());
                 }
             }
@@ -679,7 +677,7 @@ namespace FanartHandler
         /// <param name="useStopScraper">Use the stop scraper parameter or not</param>
         /// <param name="swnp">ScraperWorkerNowPlaying object</param>
         /// <returns>Number of scraped images</returns>
-        public int DoScrape (string artist, bool useSuccessfulScrape, bool useStopScraper, FanartHandler.FanartHandlerSetup.ScraperWorkerNowPlaying swnp)
+        public int DoScrape(string artist, bool useSuccessfulScrape, bool useStopScraper)
         {
             if (StopScraper == false)
             {
@@ -734,7 +732,7 @@ namespace FanartHandler
 
                         if (maxScrapes > 0)
                         {
-                            totalImages = scraper.GetImages(artist, maxScrapes, this, swnp, useSuccessfulScrape);
+                            totalImages = scraper.GetImages(artist, maxScrapes, this, useSuccessfulScrape);
                             if (totalImages == 0)
                             {
                                 logger.Debug("No fanart found for artist " + artist + ".");
@@ -771,13 +769,14 @@ namespace FanartHandler
         /// database until max images per artist is meet or no more images exist for the artist.
         /// </summary>
         /// <param name="sw">ScraperWorker object</param>
-        public void InitialScrape(FanartHandler.FanartHandlerSetup.ScraperWorker sw)
+//        public void InitialScrape(FanartHandler.FanartHandlerSetup.ScraperWorker sw)
+        public void InitialScrape()
         {
             try
             {
                 logger.Info("InitialScrape is starting...");
                 bool firstRun = true;
-                IsScraping = true;                
+//                IsScraping = true;                
                 musicDatabaseArtists = new ArrayList();
                 m_db.GetAllArtists(ref musicDatabaseArtists);  
                 ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
@@ -787,6 +786,7 @@ namespace FanartHandler
                 }
 
                 string artist;
+                FanartHandlerSetup.MyScraperWorker.ReportProgress(0, "Start");
                 TotArtistsBeingScraped = musicDatabaseArtists.Count;
                 if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
                 {
@@ -798,28 +798,32 @@ namespace FanartHandler
                             break;
                         }
 
-                        if (this.DoScrape(artist, true, true, null) > 0 && firstRun)
+                        if (this.DoScrape(artist, true, true) > 0 && firstRun)
                         {
                             AddScapedFanartToAnyHash();
-                            if (sw != null)
+                            if (FanartHandlerSetup.MyScraperNowWorker != null)
                             {
-                                sw.SetRefreshFlag(true);
+                                FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
+                                //sw.SetRefreshFlag(true);
                                 firstRun = false;
                             }                            
                         }
-
                         CurrArtistsBeingScraped++;
+                        if (TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperWorker != null)
+                        {
+                            FanartHandlerSetup.MyScraperWorker.ReportProgress(Convert.ToInt32((CurrArtistsBeingScraped / TotArtistsBeingScraped) * 100), "Ongoing");
+                        }
                     }
                 }
 
                 logger.Info("InitialScrape is done.");
-                IsScraping = false;
+//                IsScraping = false;
                 musicDatabaseArtists = null;
                 AddScapedFanartToAnyHash();                
             }
             catch (Exception ex)
             {
-                IsScraping = false;
+//                IsScraping = false;
                 logger.Error("InitialScrape: " + ex.ToString());
             }
         }
@@ -1284,11 +1288,11 @@ namespace FanartHandler
                 string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSQL(artist)) + ") AND Enabled = 'True' AND Type = 'MusicFanart';";
                 SQLiteResultSet result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
-                {
+                {                    
                     FanartImage fi = new FanartImage(result.GetField(i, 0), result.GetField(i, 1), result.GetField(i, 2), result.GetField(i, 3), result.GetField(i, 4), result.GetField(i, 5));
                     ht.Add(i, fi);
                 }
-
+                
                 result = null;
                 sqlQuery = null;
             }

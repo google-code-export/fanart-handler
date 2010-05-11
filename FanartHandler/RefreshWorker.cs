@@ -35,7 +35,15 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
+            //Thread.CurrentThread.Priority = FanartHandlerSetup.FHThreadPriority;
+            if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+            }
+            else
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            }
             Thread.CurrentThread.Name = "RefreshWorker";
             Utils.SetDelayStop(true);
             if (Utils.GetIsStopping() == false)
@@ -48,23 +56,23 @@
                     FanartHandlerSetup.fp.HasUpdatedCurrCountPlay = false;
                     int windowId = GUIWindowManager.ActiveWindow;
                     FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
-                    if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True") && FanartHandlerSetup.ScraperWorkerObject != null && FanartHandlerSetup.ScraperWorkerObject.GetRefreshFlag())
+                    if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True") && ((FanartHandlerSetup.MyScraperWorker != null && FanartHandlerSetup.MyScraperWorker.TriggerRefresh) || (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh)))
                     {
                         FanartHandlerSetup.fs.CurrCount = FanartHandlerSetup.MaxCountImage;
                         FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
-                        FanartHandlerSetup.ScraperWorkerObject.SetRefreshFlag(false);
+                        FanartHandlerSetup.MyScraperWorker.TriggerRefresh = false;
                     }
                     if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
                     {
-                        if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && FanartHandlerSetup.ScraperWorkerObjectNowPlaying != null && FanartHandlerSetup.ScraperWorkerObjectNowPlaying.GetRefreshFlag())
+                        if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh))
                         {
                             FanartHandlerSetup.fp.CurrCountPlay = FanartHandlerSetup.MaxCountImage;
                             FanartHandlerSetup.fp.SetCurrentArtistsImageNames(null);
-                            FanartHandlerSetup.ScraperWorkerObjectNowPlaying.SetRefreshFlag(false);
+                            FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = false;
                         }
                         if (FanartHandlerSetup.fp.CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag) == false)
                         {
-                            if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && Utils.GetDbm().GetIsScraping() == false && ((FanartHandlerSetup.ScrapeWorkerThreadNowPlaying != null && FanartHandlerSetup.ScrapeWorkerThreadNowPlaying.IsAlive == false) || FanartHandlerSetup.ScrapeWorkerThreadNowPlaying == null))
+                            if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && Utils.GetDbm().GetIsScraping() == false && ((FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.IsBusy == false) || FanartHandlerSetup.MyScraperNowWorker == null))
                             {
                                 FanartHandlerSetup.StartScraperNowPlaying(FanartHandlerSetup.CurrentTrackTag);
                             }
@@ -100,11 +108,11 @@
                             FanartHandlerSetup.CurrentTitleTag = GUIPropertyManager.GetProperty("#Play.Current.Title");
                             if (((FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0) || (FanartHandlerSetup.CurrentTitleTag != null && FanartHandlerSetup.CurrentTitleTag.Trim().Length > 0)) && Utils.IsIdle(FanartHandlerSetup.BasichomeFadeTime))
                             {
-                                GUIButtonControl.ShowControl(35, 98761234);
+                                GUIButtonControl.ShowControl(GUIWindowManager.ActiveWindow, 98761234);
                             }
                             else
                             {
-                                GUIButtonControl.HideControl(35, 98761234);
+                                GUIButtonControl.HideControl(GUIWindowManager.ActiveWindow, 98761234);
                             }
                         }
                         catch

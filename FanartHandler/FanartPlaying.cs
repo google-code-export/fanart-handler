@@ -214,7 +214,7 @@ namespace FanartHandler
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
                     string sFilenamePrev = currPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);                    
                     if (sFilename.Length == 0)
                     {
                         sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
@@ -251,6 +251,7 @@ namespace FanartHandler
                 }
                 CurrPlayMusicArtist = FanartHandlerSetup.CurrentTrackTag;
                 IncreaseCurrCountPlay();
+                
             }
             catch (Exception ex)
             {

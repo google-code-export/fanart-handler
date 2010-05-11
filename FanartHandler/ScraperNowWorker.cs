@@ -1,4 +1,5 @@
-﻿namespace FanartHandler
+﻿
+namespace FanartHandler
 {
     using NLog;
     using System;
@@ -8,49 +9,64 @@
     using System.ComponentModel;
     using System.Threading;
 
-    class ProgressWorker : BackgroundWorker
+    public class ScraperNowWorker : BackgroundWorker
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private string artist;        
+        private bool triggerRefresh = false;        
         #endregion
 
-        public ProgressWorker()
+        public string Artist
+        {
+            get { return artist; }
+            set { artist = value; }
+        }
+
+        public bool TriggerRefresh
+        {
+            get { return triggerRefresh; }
+            set { triggerRefresh = value; }
+        }
+
+        public ScraperNowWorker()
         {
             WorkerReportsProgress = true;
-            WorkerSupportsCancellation = true;            
+            WorkerSupportsCancellation = true;
         }
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
             try
             {
-                if (Utils.GetIsStopping() == false)
+                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.syncPointScraper, 1, 0);
+                if (Utils.GetIsStopping() == false && sync == 0)
                 {
-                    Thread.CurrentThread.Priority = FanartHandlerSetup.ThreadPriority;
-                    Thread.CurrentThread.Name = "ProgressWorker";
-                    double iTot = Utils.GetDbm().TotArtistsBeingScraped;
-                    double iCurr = Utils.GetDbm().CurrArtistsBeingScraped;
-                    ReportProgress(0, "Starting");
-                    while (Utils.GetDbm().GetIsScraping())
+                    if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
                     {
-                        iTot = Utils.GetDbm().TotArtistsBeingScraped;
-                        iCurr = Utils.GetDbm().CurrArtistsBeingScraped;
-                        if (iTot > 0)
-                        {
-                            ReportProgress(Convert.ToInt32((iCurr / iTot) * 100), "Ongoing");
-                        }
-                        if (CancellationPending)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
+                        Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                     }
+                    else
+                    {
+                        Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                    }
+                    Thread.CurrentThread.Name = "ScraperNowWorker";
+                    this.artist = (string) e.Argument;
+                    this.triggerRefresh = false;
+
+                    Utils.GetDbm().IsScraping = true;
+//                    FanartHandlerSetup.ManageScraperProperties();
+                    FanartHandlerSetup.ShowScraperProgressIndicator();
+                    Utils.GetDbm().NowPlayingScrape(artist, this);
+                    Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
+                    FanartHandlerSetup.syncPointScraper = 0;
                     e.Result = 0;
                 }
             }
             catch (Exception ex)
             {
+                FanartHandlerSetup.syncPointScraper = 0;
                 logger.Error("OnDoWork: " + ex.ToString());
             }
         }
@@ -58,7 +74,7 @@
         public void OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             try
-            {
+            {                
                 if (Utils.GetIsStopping() == false)
                 {
                     FanartHandlerSetup.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty + e.ProgressPercentage);
@@ -88,9 +104,7 @@
                 logger.Error("OnRunWorkerCompleted: " + ex.ToString());
             }
         }
-        
+
     }
-
-
-
 }
+
