@@ -37,8 +37,8 @@
         <ForumPage>http://forum.team-mediaportal.com/mediaportal-plugins-47/fanart-handler-plugin-v1-3-music-fanart-scraper-76535/</ForumPage>
         <UpdateUrl>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
-          <Major>1</Major>
-          <Minor>10</Minor>
+          <Major>2</Major>
+          <Minor>0</Minor>
           <Build>0</Build>
           <Revision>0</Revision>
         </Version>
