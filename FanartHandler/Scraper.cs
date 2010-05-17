@@ -40,7 +40,6 @@ namespace FanartHandler
                 try
                 {
                     logger.Info("Scrape for new images is starting...");
-                    //System.Net.ServicePointManager.Expect100Continue = false; 20100504
                     Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
                     string strResult = null;
                     string dbArtist = null;
@@ -51,7 +50,6 @@ namespace FanartHandler
                     {
                         proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                         proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                        //WebRequest.DefaultWebProxy = proxy;
                         objRequest.Proxy = proxy;
                     }
                     objRequest.ServicePoint.Expect100Continue = false;
@@ -369,7 +367,6 @@ namespace FanartHandler
             try
             {
                 Encoding enc = Encoding.GetEncoding("iso-8859-1");
-                //System.Net.ServicePointManager.Expect100Continue = false; 20100504
                 string dbArtist = null;
                 string strResult = null;
                 string path = null;
@@ -379,7 +376,6 @@ namespace FanartHandler
                 {
                     proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                     proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                    //WebRequest.DefaultWebProxy = proxy;
                     objRequest.Proxy = proxy;
                 }
                 objRequest.ServicePoint.Expect100Continue = false;                 
@@ -433,7 +429,10 @@ namespace FanartHandler
                 }
                 for (m = reg.Match(strResult); m.Success && iCount < iMax; m = m.NextMatch())
                 {
-                    
+                    if (dbm.StopScraper == true)
+                    {
+                        break;
+                    }
                     picUri = m.Groups[0].ToString();
                     sArtist = picUri.Substring(picUri.IndexOf("alt=\"") + 5);
                     sArtist = sArtist.Substring(0, sArtist.LastIndexOf("\" />"));

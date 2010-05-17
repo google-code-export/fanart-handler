@@ -34,8 +34,6 @@ namespace FanartHandler
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string logFileName = "fanarthandler_config.log";
         private const string oldLogFileName = "fanarthandler_config.old.log";
-        //private FanartHandlerSetup.ScraperWorker scraperWorkerObject;        
-        //private Thread scrapeWorkerThread;
         private ScraperWorker myScraperWorker = null;        
         private System.Timers.Timer scraperTimer = null;
         private string useArtist = null;
@@ -1889,15 +1887,6 @@ namespace FanartHandler
                 {
                     button6.Enabled = false;
                 }
-                // Request that the worker thread stop itself:            
-                /*if (scraperWorkerObject != null && scrapeWorkerThread != null && scrapeWorkerThread.IsAlive)
-                {
-                    scraperWorkerObject.RequestStop();
-
-                    // Use the Join method to block the current thread 
-                    // until the object's thread terminates.
-                    scrapeWorkerThread.Join();
-                }*/
                 if (myScraperWorker != null)
                 {
                     myScraperWorker.CancelAsync();
@@ -1918,9 +1907,7 @@ namespace FanartHandler
                 if (progressBar1 != null)
                 {
                     progressBar1.Value = 0;
-                }
-                //scraperWorkerObject = null;
-                //scrapeWorkerThread = null;                
+                }                
                 if (button6 != null)
                 {
                     button6.Enabled = true;
@@ -1954,19 +1941,6 @@ namespace FanartHandler
                 myScraperWorker.RunWorkerCompleted += myScraperWorker.OnRunWorkerCompleted;
                 myScraperWorker.RunWorkerAsync();  
 
-/*                scraperWorkerObject = new FanartHandlerSetup.ScraperWorker();
-                scrapeWorkerThread = new Thread(scraperWorkerObject.DoWork);
-                scrapeWorkerThread.Priority = ThreadPriority.Lowest;
-                // Start the worker thread.
-                scrapeWorkerThread.Start();
-                // Loop until worker thread activates.
-                int ix = 0;
-                while (!scrapeWorkerThread.IsAlive && ix < 30)
-                {
-                    System.Threading.Thread.Sleep(500);
-                    ix++;
-                }
- */
                 button6.Enabled = true;
             }
             catch (Exception ex)

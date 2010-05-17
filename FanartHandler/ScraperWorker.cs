@@ -46,12 +46,9 @@ namespace FanartHandler
                     Thread.CurrentThread.Name = "ScraperWorker";
                     this.TriggerRefresh = false;
                     Utils.GetDbm().IsScraping = true;
-                    //FanartHandlerSetup.ManageScraperProperties();
                     FanartHandlerSetup.ShowScraperProgressIndicator();
                     Utils.GetDbm().InitialScrape();
                     Thread.Sleep(2000);
-                    //Utils.GetDbm().IsScraping = true;
-                    //FanartHandlerSetup.ManageScraperProperties();
                     Utils.GetDbm().DoNewScrape();
                     Utils.GetDbm().StopScraper = true;
                     Utils.GetDbm().StopScraper = false;

@@ -781,7 +781,7 @@ namespace FanartHandler
                 try
                 {
                     if (filename != null && filename.Length > 0)
-                    {                        
+                    {                    
                         GUITextureManager.Load(filename, 0, 0, 0, true);
                     }
                 }
@@ -789,7 +789,7 @@ namespace FanartHandler
                 {
                     if (isStopping == false)
                     {
-                        logger.Error("LoadImage: " + ex.ToString());
+                        logger.Error("LoadImage (" + filename + "): " + ex.ToString());
 /*                        if (!IsFileValid(filename))
                         {
                             if (File.Exists(filename)) File.Delete(filename);

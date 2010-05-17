@@ -131,11 +131,11 @@
                     Utils.GetDbm().HtAnyTVSeries = null; //20200429
                     Utils.GetDbm().HtAnyTVFanart = null; //20200429
                     Utils.GetDbm().HtAnyPluginFanart = null; //20200429
-                    
+                    FanartHandlerSetup.syncPointDirectory = 0;
                 }
                 catch (Exception ex)
                 {
-                    FanartHandlerSetup.syncPointRefresh = 0;
+                    FanartHandlerSetup.syncPointDirectory = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }                
             }
