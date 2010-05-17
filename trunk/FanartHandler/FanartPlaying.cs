@@ -162,7 +162,7 @@ namespace FanartHandler
         public void RefreshMusicPlayingProperties()
         {
             try
-            {
+            {                
                 if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag) == false)
                 {
                     currPlayMusic = String.Empty;
@@ -172,7 +172,7 @@ namespace FanartHandler
                     string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", true, true);
                     if (sFilename.Length == 0)
                     {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currPlayMusic, ref prevPlayMusic);
                         if (sFilename.Length == 0)
                         {
                             FanartAvailablePlay = false;
@@ -214,10 +214,10 @@ namespace FanartHandler
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
                     string sFilenamePrev = currPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);                    
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);
                     if (sFilename.Length == 0)
                     {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currPlayMusic, ref prevPlayMusic);
                         if (sFilename.Length == 0)
                         {
                             FanartAvailablePlay = false;

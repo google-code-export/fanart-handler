@@ -143,6 +143,18 @@ namespace FanartHandler
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#mvids.artist");
                 }
+                else if (GUIWindowManager.ActiveWindow == 759)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#TV.RecordedTV.Title");
+                }
+                else if (GUIWindowManager.ActiveWindow == 1)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#TV.View.title");
+                }
+                else if (GUIWindowManager.ActiveWindow == 600)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#TV.Guide.Title");
+                }
                 else if (GUIWindowManager.ActiveWindow == 880)
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#MusicVids.ArtistName");
@@ -182,7 +194,7 @@ namespace FanartHandler
                             {
                                 if (property.Equals("music"))
                                 {
-                                    sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                                    sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currSelectedGeneric, ref prevSelectedGeneric);
                                     if (sFilename.Length == 0)
                                     {
                                         FanartAvailable = false;
@@ -221,7 +233,7 @@ namespace FanartHandler
                             {
                                 if (property.Equals("music"))
                                 {
-                                    sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                                    sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currSelectedGeneric, ref prevSelectedGeneric);
                                     if (sFilename.Length == 0)
                                     {
                                         FanartAvailable = false;
@@ -515,7 +527,7 @@ namespace FanartHandler
                         string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", "FanartSelected", true, true);
                         if (sFilename.Length == 0)
                         {
-                            sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                            sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currSelectedMusic, ref prevSelectedMusic);
                             if (sFilename.Length == 0)
                             {
                                 FanartAvailable = false;
@@ -547,7 +559,7 @@ namespace FanartHandler
                         string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedMusic, ref prevSelectedMusic, "MusicFanart", "FanartSelected", false, true);
                         if (sFilename.Length == 0)
                         {
-                            sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop();
+                            sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currSelectedMusic, ref prevSelectedMusic);
                             if (sFilename.Length == 0)
                             {
                                 FanartAvailable = false;

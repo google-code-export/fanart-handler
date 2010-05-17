@@ -221,26 +221,22 @@ namespace FanartHandler
         {
             try
             {
-//                IsScraping = true;
                 logger.Info("NowPlayingScrape is starting for artist " + artist + ".");
                 TotArtistsBeingScraped = 2;
                 CurrArtistsBeingScraped = 0;
                 if (DoScrape(artist, false, false) > 0)
                 {
                     logger.Info("NowPlayingScrape is done.");
-//                    IsScraping = false;
                     return true;
                 }
                 else
                 {
                     logger.Info("NowPlayingScrape is done.");
-//                    IsScraping = false;
                     return false;
                 }    
             }
             catch (Exception ex)
             {
-//                IsScraping = false;
                 logger.Error("NowPlayingScrape: " + ex.ToString());
                 return false;
             }
@@ -621,15 +617,12 @@ namespace FanartHandler
             {
                 try
                 {
-//                    IsScraping = true;
                     scraper = new Scraper();                    
                     scraper.GetNewImages(Convert.ToInt32(Utils.GetScraperMaxImages()), this);
                     scraper = null;
-//                    IsScraping = false;
                 }
                 catch (Exception ex)
                 {
-//                    IsScraping = false;
                     logger.Error("doNewScrape: " + ex.ToString());
                 }
             }
@@ -776,7 +769,6 @@ namespace FanartHandler
             {
                 logger.Info("InitialScrape is starting...");
                 bool firstRun = true;
-//                IsScraping = true;                
                 musicDatabaseArtists = new ArrayList();
                 m_db.GetAllArtists(ref musicDatabaseArtists);  
                 ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
@@ -797,7 +789,7 @@ namespace FanartHandler
                     for (int i = 0; i < musicDatabaseArtists.Count; i++)
                     {
                         artist = musicDatabaseArtists[i].ToString();
-                        if (StopScraper == true)
+                        if (StopScraper == true || Utils.GetIsStopping())
                         {                            
                             break;
                         }
@@ -808,7 +800,6 @@ namespace FanartHandler
                             if (FanartHandlerSetup.MyScraperNowWorker != null)
                             {
                                 FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
-                                //sw.SetRefreshFlag(true);
                                 firstRun = false;
                             }                            
                         }
@@ -1328,6 +1319,10 @@ namespace FanartHandler
                 return "Movie_Fanart";
             }
             else if (type.Equals("Online Videos"))
+            {
+                return "Movie_Fanart";
+            }
+            else if (type.Equals("TV Section"))
             {
                 return "Movie_Fanart";
             }

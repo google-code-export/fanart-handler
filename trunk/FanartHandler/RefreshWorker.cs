@@ -25,7 +25,6 @@
 
         public void Report(DoWorkEventArgs e)
         {
-            //ReportProgress(100, "Updated Properties");
             if (CancellationPending)
             {
                 e.Cancel = true;
@@ -35,7 +34,6 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            //Thread.CurrentThread.Priority = FanartHandlerSetup.FHThreadPriority;
             if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
@@ -204,6 +202,14 @@
                             FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "Online Videos", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
                             Report(e);
                         }
+                        else if (windowId == 601 || windowId == 605 || windowId == 606 || windowId == 603 || windowId == 759 || windowId == 1 || windowId == 600 || windowId == 747 || windowId == 49849 || windowId == 49848 || windowId == 49850)
+                        {
+                            //tv section
+                            FanartHandlerSetup.IsSelectedVideo = true;
+                            resetFanartAvailableFlags = false;
+                            FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "TV Section", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
+                            Report(e);
+                        }
                         else if (windowId == 35)
                         {
                             //User are in basichome
@@ -317,14 +323,6 @@
                     e.Result = 0;
                     // Release control of syncPoint.
                     FanartHandlerSetup.syncPointRefresh = 0;
-/*                    try
-                    {
-                        FanartHandlerSetup.MyRefreshWorker.CancelAsync();
-                    }
-                    catch
-                    {
-                    }
-                    FanartHandlerSetup.MyRefreshWorker.Dispose();*/
                 }
                 catch (Exception ex)
                 {
