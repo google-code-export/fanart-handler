@@ -47,6 +47,8 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 1.10 to 2.0==
+No changes needed in skin files to support version 1.10 if your skin previously supported version 1.1 - 1.10 of this plugin. This version has added support for fanart in MP's TV sections like tv guide, recorded tv, tv home, tv program info. Use the #fanarthandler.movie.backdrop1.selected and #fanarthandler.movie.backdrop2.selected properties for this.
 ==Change Log - Version 1.9 to 1.10==
 No changes needed in skin files to support version 1.10 if your skin previously supported version 1.1 - 1.9 of this plugin. All handling of asynchronous image loading has been rewritten to ensure faster loading of images and more stable handling.
 ==Change Log - Version 1.8 to 1.9==
