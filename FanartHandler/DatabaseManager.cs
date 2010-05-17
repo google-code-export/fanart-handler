@@ -1126,7 +1126,7 @@ namespace FanartHandler
             SQLiteResultSet result = null;
             try
             {
-                string sqlQuery = "select t1.artist, count(t2.artist) from music_artist t1 LEFT OUTER JOIN music_fanart t2  ON t1.artist = t2.artist group by t1.artist;";
+                string sqlQuery = "select music_artist.artist, count(music_fanart.type) from music_artist LEFT OUTER JOIN music_fanart ON music_artist.artist = music_fanart.artist and music_fanart.type = 'MusicFanart' group by music_artist.artist;";
                 result = dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
