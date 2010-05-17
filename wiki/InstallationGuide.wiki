@@ -5,6 +5,14 @@
 
 ----
 =Change Logs=
+==Change Log (version 1.10 to 2.0)==
+  * new feature: Support for fanart (by using the #fanarthandler.movie.backdrop1.selected and #fanarthandler.movie.backdrop2.selected properties) in TV sections (like tv guide, tv recordings) implemented.
+  * new feature: Timestamp handling implemented to make import of local fanart faster
+  * bug fixed: Scraping causing huge CPU loads and stutter in MP solved.
+  * bug fixed: Resuming from standby or hibernation bug fixed.
+  * bug fixed: Bug in how default backdrops where used is fixed
+  * bug fixed: The total number of images reported in music fanart overview was wrong, now fixed (in MP configuration).
+  * bug fixed: MPE1 bug causing version 1.10 not correctly identified in the new installer solved by versioning this to 2.0
 ==Change Log (version 1.9 to 1.10)==
 I have made some big changes in how the fanart handler plugin works (optimizations and overall improvements). A big part of the plugin has been re-coded in this release.
   * new feature: Added a delay between fanart selected item changes
