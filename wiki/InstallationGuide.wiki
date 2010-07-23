@@ -5,6 +5,9 @@
 
 ----
 =Change Logs=
+==Change Log (version 2.0 to 2.1)==
+  * new feature: Support for fanart in MPGrooveshark plugin
+  * bug fixed: small fine tuning and code cleanup  
 ==Change Log (version 1.10 to 2.0)==
   * new feature: Support for fanart (by using the #fanarthandler.movie.backdrop1.selected and #fanarthandler.movie.backdrop2.selected properties) in TV sections (like tv guide, tv recordings) implemented.
   * new feature: Timestamp handling implemented to make import of local fanart faster
