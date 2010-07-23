@@ -38,7 +38,7 @@
         <UpdateUrl>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>2</Major>
-          <Minor>0</Minor>
+          <Minor>1</Minor>
           <Build>0</Build>
           <Revision>0</Revision>
         </Version>
