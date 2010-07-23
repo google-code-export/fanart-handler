@@ -1346,6 +1346,14 @@ namespace FanartHandler
             {
                 return "Music_Fanart";
             }
+            else if (type.Equals("Music Trivia"))
+            {
+                return "Music_Fanart";
+            }
+/*            else if (type.Equals("MPGrooveshark"))
+            {
+                return "Music_Fanart";
+            }                */
             else if (type.Equals("Youtube.FM"))
             {
                 return "Music_Fanart";

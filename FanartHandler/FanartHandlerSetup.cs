@@ -1572,7 +1572,7 @@ namespace FanartHandler
                     }
                     if ((fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
                     {
-                        if (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0))))
+                        if (windowId.Equals("730718") || (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0)))) )
                         {
                             if (fp.DoShowImageOnePlay)
                             {
@@ -1955,7 +1955,7 @@ namespace FanartHandler
                 GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 int ix = 0;
-                while (Utils.GetDelayStop() && ix < 20)
+                while (Utils.GetDelayStop() && ix < 12)
                 {
                     System.Threading.Thread.Sleep(500);
                     ix++;
