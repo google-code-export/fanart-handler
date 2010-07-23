@@ -167,6 +167,14 @@ namespace FanartHandler
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#Play.Current.Title");
                 }
+                else if (GUIWindowManager.ActiveWindow == 6622)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem2");
+                }
+/*                else if (GUIWindowManager.ActiveWindow == 730716)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem2");
+                }                    */
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
@@ -179,7 +187,7 @@ namespace FanartHandler
                     }
                     else
                     {
-                        if (type.Equals("Global Search") || type.Equals("mVids") || type.Equals("Youtube.FM") || type.Equals("Music Playlist"))
+                        if (type.Equals("Global Search") || type.Equals("mVids") || type.Equals("Youtube.FM") || type.Equals("Music Playlist") || type.Equals("Music Trivia"))
                         {
                             FanartHandlerSetup.SelectedItem = Utils.GetArtistLeftOfMinusSign(FanartHandlerSetup.SelectedItem);
                         }

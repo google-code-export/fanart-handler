@@ -135,11 +135,12 @@
                 }
                 catch (Exception ex)
                 {
+                    Utils.SetDelayStop(false);
                     FanartHandlerSetup.syncPointDirectory = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }                
             }
-            Utils.SetDelayStop(true);
+            Utils.SetDelayStop(false);
             logger.Info("Refreshing local fanart is done.");
         }
     }

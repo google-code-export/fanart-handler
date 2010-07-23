@@ -53,14 +53,21 @@
                     FanartHandlerSetup.fs.HasUpdatedCurrCount = false;
                     FanartHandlerSetup.fp.HasUpdatedCurrCountPlay = false;
                     int windowId = GUIWindowManager.ActiveWindow;
-                    FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
+                    if (windowId == 730718)
+                    {
+                        FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#mpgrooveshark.current.artist");
+                    }
+                    else
+                    {
+                        FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
+                    }
                     if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True") && ((FanartHandlerSetup.MyScraperWorker != null && FanartHandlerSetup.MyScraperWorker.TriggerRefresh) || (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh)))
                     {
                         FanartHandlerSetup.fs.CurrCount = FanartHandlerSetup.MaxCountImage;
                         FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
                         FanartHandlerSetup.MyScraperWorker.TriggerRefresh = false;
                     }
-                    if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
+                    if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused || windowId == 730718))   // music is playing
                     {
                         if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh))
                         {
@@ -135,6 +142,22 @@
                             FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Playlist", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
                             Report(e);
                         }
+                        else if (windowId == 6622)
+                        {
+                            //User are in music playlist
+                            FanartHandlerSetup.IsSelectedMusic = true;
+                            resetFanartAvailableFlags = false;
+                            FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Trivia", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                            Report(e);
+                        }
+                        /*else if (windowId == 730716)
+                        {
+                            //User are in music playlist
+                            FanartHandlerSetup.IsSelectedMusic = true;
+                            resetFanartAvailableFlags = false;
+                            FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "MPGrooveshark", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                            Report(e);
+                        }     */                       
                         else if (windowId == 29050 || windowId == 29051 || windowId == 29052)
                         {
                             //User are in youtubefm search window
@@ -150,7 +173,7 @@
                             resetFanartAvailableFlags = false;
                             FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Videos", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
                             Report(e);
-                        }
+                        }                            
                         else if (windowId == 6623)
                         {
                             //User are in mvids window
@@ -326,6 +349,7 @@
                 }
                 catch (Exception ex)
                 {
+                    Utils.SetDelayStop(false);
                     FanartHandlerSetup.syncPointRefresh = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }
