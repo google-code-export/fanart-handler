@@ -67,7 +67,8 @@
                         FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
                         FanartHandlerSetup.MyScraperWorker.TriggerRefresh = false;
                     }
-                    if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused || windowId == 730718))   // music is playing
+                    //if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused || windowId == 730718))   // music is playing
+                    if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
                     {
                         if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh))
                         {
@@ -83,6 +84,7 @@
                             }
                         }
                         FanartHandlerSetup.fp.RefreshMusicPlayingProperties();
+                        FanartHandlerSetup.IsPlaying = true;
                         Report(e);
                     }
                     else
