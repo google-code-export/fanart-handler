@@ -414,41 +414,44 @@ namespace FanartHandler
             string typeOrg = type;
             try
             {
-                string useFilter = Utils.GetDbm().GetTimeStamp("Directory - " + s);
-                if (useFilter == null || useFilter.Length < 2)
+                if (Directory.Exists(s))
                 {
-                    useFilter = new DateTime(1970,1,1,1,1,1).ToString();
-                }
-                DirectoryInfo Dir = new DirectoryInfo(s);
-                DateTime dt = Convert.ToDateTime(useFilter);
-                FileInfo[] FileList = Dir.GetFiles(filter, SearchOption.AllDirectories);
-                var query = from FI in FileList
-                            where FI.CreationTime >= dt
-                            select FI.FullName;
-                foreach (string dir in query)
-                {
-                    if (Utils.GetIsStopping())
+                    string useFilter = Utils.GetDbm().GetTimeStamp("Directory - " + s);
+                    if (useFilter == null || useFilter.Length < 2)
                     {
-                        break;
+                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString();
                     }
-                    artist = Utils.GetArtist(dir, type);
-                    if (type.Equals("MusicAlbum") || type.Equals("MusicArtist") || type.Equals("MusicFanart"))
+                    DirectoryInfo Dir = new DirectoryInfo(s);
+                    DateTime dt = Convert.ToDateTime(useFilter);
+                    FileInfo[] FileList = Dir.GetFiles(filter, SearchOption.AllDirectories);
+                    var query = from FI in FileList
+                                where FI.CreationTime >= dt
+                                select FI.FullName;
+                    foreach (string dir in query)
                     {
-                        if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default"))
+                        if (Utils.GetIsStopping())
                         {
-                            type = "Default";
+                            break;
                         }
-                        Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type);
-                        type = typeOrg;
+                        artist = Utils.GetArtist(dir, type);
+                        if (type.Equals("MusicAlbum") || type.Equals("MusicArtist") || type.Equals("MusicFanart"))
+                        {
+                            if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default"))
+                            {
+                                type = "Default";
+                            }
+                            Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type);
+                            type = typeOrg;
+                        }
+                        else
+                        {
+                            Utils.GetDbm().LoadFanart(artist, dir, dir, type);
+                        }
                     }
-                    else
+                    if (Utils.GetIsStopping() == false)
                     {
-                        Utils.GetDbm().LoadFanart(artist, dir, dir, type);
+                        Utils.GetDbm().SetTimeStamp("Directory - " + s, DateTime.Now.ToString());
                     }
-                }
-                if (Utils.GetIsStopping() == false)
-                {
-                    Utils.GetDbm().SetTimeStamp("Directory - " + s, DateTime.Now.ToString());
                 }
             }
             catch (Exception ex)
@@ -1256,10 +1259,11 @@ namespace FanartHandler
                 }
                 if (useProxy != null && useProxy.Length > 0)
                 {
-                    //donothing
+                    logger.Info("Proxy is used.");    
                 }
                 else
                 {
+                    logger.Info("Proxy is not used.");    
                     useProxy = "False";
                 }
                 if (proxyHostname != null && proxyHostname.Length > 0)
@@ -1572,7 +1576,8 @@ namespace FanartHandler
                     }
                     if ((fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
                     {
-                        if (windowId.Equals("730718") || (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0)))) )
+                        //if (windowId.Equals("730718") || (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0)))) )
+                        if (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0))))
                         {
                             if (fp.DoShowImageOnePlay)
                             {
@@ -1776,7 +1781,7 @@ namespace FanartHandler
                 IsPlaying = true;
                 if ((fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
                 {
-                    if (refreshTimer != null && !refreshTimer.Enabled && (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio || MediaPortal.Util.Utils.IsLastFMStream(filename)))
+                    if (refreshTimer != null && !refreshTimer.Enabled && (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio || MediaPortal.Util.Utils.IsLastFMStream(filename) || windowId.Equals("730718")))
                     {
                         refreshTimer.Start();
                     }

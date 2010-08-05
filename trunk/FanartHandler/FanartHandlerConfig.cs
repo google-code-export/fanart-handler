@@ -1336,7 +1336,7 @@ namespace FanartHandler
         /// <summary>
         /// Add files in directory to hashtable
         /// </summary>
-        public void SetupFilenames(string s, string filter, ref int i, string type)
+       /* public void SetupFilenames(string s, string filter, ref int i, string type)
         {
             string artist = String.Empty;
             string typeOrg = type;
@@ -1388,7 +1388,7 @@ namespace FanartHandler
             {
                 logger.Error("SetupFilenames: " + ex.ToString());
             }
-        }
+        }*/
 
 
         private void button6_Click(object sender, EventArgs e)
@@ -1408,7 +1408,7 @@ namespace FanartHandler
                         if (useFanart.Equals("True"))
                         {
                             int i = 0;
-                            SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart");
+                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart");
                         }
                         dataGridView1.Enabled = false;
                         button6.Text = "Stop Scraper";
@@ -2295,12 +2295,12 @@ namespace FanartHandler
                 //Add games images
                 string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
                 int i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "Game");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Game");
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
                 i = 0;
                 if (useVideoFanart.Equals("True"))
                 {
-                    SetupFilenames(path, "*.jpg", ref i, "Movie");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Movie");
                 }
                 //Add music images
                 path = String.Empty;
@@ -2308,45 +2308,45 @@ namespace FanartHandler
                 if (useAlbum.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
-                    SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum");
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum");
                 }
                 if (useArtist.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-                    SetupFilenames(path, "*L.jpg", ref i, "MusicArtist");
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicArtist");
                 }
                 if (useFanart.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                    SetupFilenames(path, "*.jpg", ref i, "MusicFanart");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MusicFanart");
                 }
                 //Add pictures images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
                 i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "Picture");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Picture");
                 //Add games images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
                 i = 0;
                 if (useScoreCenterFanart.Equals("True"))
                 {
-                    SetupFilenames(path, "*.jpg", ref i, "ScoreCenter");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "ScoreCenter");
                 }
                 //Add moving pictures images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\MovingPictures\Backdrops\FullSize";
                 i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "MovingPicture");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MovingPicture");
                 //Add tvseries images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
                 i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "TVSeries");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TVSeries");
                 //Add tv images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
                 i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "TV");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TV");
                 //Add plugins images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
                 i = 0;
-                SetupFilenames(path, "*.jpg", ref i, "Plugin");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Plugin");
             }
             catch (Exception ex)
             {

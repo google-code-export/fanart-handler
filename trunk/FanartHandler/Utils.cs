@@ -28,7 +28,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "2.0";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.1.1";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
