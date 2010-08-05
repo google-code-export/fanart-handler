@@ -5,6 +5,11 @@
 
 ----
 =Change Logs=
+==Change Log (version 2.1 to 2.1.1)==
+  * bug fixed: DirectoryNotFoundException is now handled correctly by the plugin
+  * bug fixed: Configuration allways checked all local fanart. Now uses timestamps just like the plugin in MP.
+  * bug fixed: fanarthandler.org database included in installer was old version, now current
+  * bug fixed: Fanart available flag (id: 91919294) was not set properly on end of playback.
 ==Change Log (version 2.0 to 2.1)==
   * new feature: Support for fanart in MPGrooveshark plugin
   * bug fixed: small fine tuning and code cleanup  
