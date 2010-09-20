@@ -248,26 +248,26 @@ By default no random images are loaded. The reason for this is to save memory in
 ----
 
 = Latest Added Media Tags =
-||*Moving Pictures*||
-||#fanarthandler.movingpicture.latest1.thumb||
-||#fanarthandler.movingpicture.latest1.fanart||
-||#fanarthandler.movingpicture.latest1.title||
-||#fanarthandler.movingpicture.latest1.dateAdded||
-||*Music*||
-||#fanarthandler.music.latest1.thumb||
-||#fanarthandler.music.latest1.artist||
-||#fanarthandler.music.latest1.album||
-||#fanarthandler.music.latest1.dateAdded||
-||*Picture*||
-||#fanarthandler.picture.latest1.thumb||
-||#fanarthandler.picture.latest1.filename||
-||#fanarthandler.picture.latest1.dateAdded||
-||*TVSeries*||
-||#fanarthandler.tvseries.latest1.thumb||
-||#fanarthandler.tvseries.latest1.fanart||
-||#fanarthandler.tvseries.latest1.serieName||
-||#fanarthandler.tvseries.latest1.episodeName||
-||#fanarthandler.tvseries.latest1.dateAdded||
+==Moving Pictures==
+||#fanarthandler.movingpicture.latest1.thumb||Full path to thumb (poster)||
+||#fanarthandler.movingpicture.latest1.fanart||Full patch to fanart||
+||#fanarthandler.movingpicture.latest1.title||Movie title||
+||#fanarthandler.movingpicture.latest1.dateAdded||Date when movie was added to MP||
+==Music==
+||#fanarthandler.music.latest1.thumb||Full patch to thumb (Album or if not available, artist)||
+||#fanarthandler.music.latest1.artist||Artist name||
+||#fanarthandler.music.latest1.album||Album name||
+||#fanarthandler.music.latest1.dateAdded||Date when album was added to MP||
+==Picture==
+||#fanarthandler.picture.latest1.thumb||Full patch to picture||
+||#fanarthandler.picture.latest1.filename||Picture name||
+||#fanarthandler.picture.latest1.dateAdded||Date when picture was added to MP||
+==TVSeries==
+||#fanarthandler.tvseries.latest1.thumb||Full patch to thumb (poster)||
+||#fanarthandler.tvseries.latest1.fanart||Full patch to fanart||
+||#fanarthandler.tvseries.latest1.serieName||Series name||
+||#fanarthandler.tvseries.latest1.episodeName||Episode name||
+||#fanarthandler.tvseries.latest1.dateAdded||Date when episode was added to MP||
 
 ----
 
