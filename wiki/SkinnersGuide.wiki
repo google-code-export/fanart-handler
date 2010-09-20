@@ -47,6 +47,8 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 2.1.1 to 2.2==
+The plugin now supports latest added properties for Music, Pictures, Moving Pictures and TVSeries. Read more about this in sections below.
 ==Change Log - Version 2.1 to 2.1.1==
 No changes needed in skin files to support version 2.1.1 if your skin previously supported version 1.1 - 2.1.1 of this plugin.
 ==Change Log - Version 2.0 to 2.1==
@@ -242,6 +244,30 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
 ||#fanarthandler.tvseries.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
 
+
+----
+
+= Latest Added Media Tags =
+||*Moving Pictures*||
+||#fanarthandler.movingpicture.latest1.thumb||
+||#fanarthandler.movingpicture.latest1.fanart||
+||#fanarthandler.movingpicture.latest1.title||
+||#fanarthandler.movingpicture.latest1.dateAdded||
+||*Music*||
+||#fanarthandler.music.latest1.thumb||
+||#fanarthandler.music.latest1.artist||
+||#fanarthandler.music.latest1.album||
+||#fanarthandler.music.latest1.dateAdded||
+||*Picture*||
+||#fanarthandler.picture.latest1.thumb||
+||#fanarthandler.picture.latest1.filename||
+||#fanarthandler.picture.latest1.dateAdded||
+||*TVSeries*||
+||#fanarthandler.tvseries.latest1.thumb||
+||#fanarthandler.tvseries.latest1.fanart||
+||#fanarthandler.tvseries.latest1.serieName||
+||#fanarthandler.tvseries.latest1.episodeName||
+||#fanarthandler.tvseries.latest1.dateAdded||
 
 ----
 
