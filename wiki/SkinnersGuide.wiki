@@ -48,7 +48,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.1.1 to 2.2==
-The plugin now supports latest added properties for Music, Pictures, Moving Pictures and TVSeries. Read more about this in sections below.
+The plugin now supports latest added properties for Music, Pictures, Moving Pictures, TV Recordings and TVSeries. Read more about this in sections below.
 ==Change Log - Version 2.1 to 2.1.1==
 No changes needed in skin files to support version 2.1.1 if your skin previously supported version 1.1 - 2.1.1 of this plugin.
 ==Change Log - Version 2.0 to 2.1==
@@ -250,7 +250,7 @@ By default no random images are loaded. The reason for this is to save memory in
 = Latest Added Media Tags =
 ==Moving Pictures==
 ||#fanarthandler.movingpicture.latest1.thumb||Full path to thumb (poster)||
-||#fanarthandler.movingpicture.latest1.fanart||Full patch to fanart||
+||#fanarthandler.movingpicture.latest1.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest1.title||Movie title||
 ||#fanarthandler.movingpicture.latest1.dateAdded||Date when movie was added to MP||
 ||#fanarthandler.movingpicture.latest1.genre||Movie Genre||
@@ -260,7 +260,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.movingpicture.latest1.year||Year of movie||
 ||#fanarthandler.movingpicture.latest2.thumb||Full path to thumb (poster)||
-||#fanarthandler.movingpicture.latest2.fanart||Full patch to fanart||
+||#fanarthandler.movingpicture.latest2.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest2.title||Movie title||
 ||#fanarthandler.movingpicture.latest2.dateAdded||Date when movie was added to MP||
 ||#fanarthandler.movingpicture.latest2.genre||Movie Genre||
@@ -270,7 +270,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.movingpicture.latest2.year||Year of movie||
 ||#fanarthandler.movingpicture.latest3.thumb||Full path to thumb (poster)||
-||#fanarthandler.movingpicture.latest3.fanart||Full patch to fanart||
+||#fanarthandler.movingpicture.latest3.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest3.title||Movie title||
 ||#fanarthandler.movingpicture.latest3.dateAdded||Date when movie was added to MP||
 ||#fanarthandler.movingpicture.latest3.genre||Movie Genre||
@@ -281,33 +281,33 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest3.year||Year of movie||
 
 ==Music==
-||#fanarthandler.music.latest1.thumb||Full patch to thumb (Album or if not available, artist)||
+||#fanarthandler.music.latest1.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest1.artist||Artist name||
 ||#fanarthandler.music.latest1.album||Album name||
 ||#fanarthandler.music.latest1.dateAdded||Date when album was added to MP||
-||#fanarthandler.music.latest2.thumb||Full patch to thumb (Album or if not available, artist)||
+||#fanarthandler.music.latest2.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest2.artist||Artist name||
 ||#fanarthandler.music.latest2.album||Album name||
 ||#fanarthandler.music.latest2.dateAdded||Date when album was added to MP||
-||#fanarthandler.music.latest3.thumb||Full patch to thumb (Album or if not available, artist)||
+||#fanarthandler.music.latest3.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest3.artist||Artist name||
 ||#fanarthandler.music.latest3.album||Album name||
 ||#fanarthandler.music.latest3.dateAdded||Date when album was added to MP||
 
 ==Picture==
-||#fanarthandler.picture.latest1.thumb||Full patch to picture||
+||#fanarthandler.picture.latest1.thumb||Full path to picture||
 ||#fanarthandler.picture.latest1.filename||Picture name||
 ||#fanarthandler.picture.latest1.dateAdded||Date when picture was added to MP||
-||#fanarthandler.picture.latest2.thumb||Full patch to picture||
+||#fanarthandler.picture.latest2.thumb||Full path to picture||
 ||#fanarthandler.picture.latest2.filename||Picture name||
 ||#fanarthandler.picture.latest2.dateAdded||Date when picture was added to MP||
-||#fanarthandler.picture.latest3.thumb||Full patch to picture||
+||#fanarthandler.picture.latest3.thumb||Full path to picture||
 ||#fanarthandler.picture.latest3.filename||Picture name||
 ||#fanarthandler.picture.latest3.dateAdded||Date when picture was added to MP||
 
 ==TVSeries==
-||#fanarthandler.tvseries.latest1.thumb||Full patch to thumb (poster)||
-||#fanarthandler.tvseries.latest1.fanart||Full patch to fanart||
+||#fanarthandler.tvseries.latest1.thumb||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest1.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest1.serieName||Series name||
 ||#fanarthandler.tvseries.latest1.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest1.dateAdded||Date when episode was added to MP||
@@ -317,8 +317,8 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.classification||PG classification||
 ||#fanarthandler.tvseries.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest1.firstAired||First aired||
-||#fanarthandler.tvseries.latest2.thumb||Full patch to thumb (poster)||
-||#fanarthandler.tvseries.latest2.fanart||Full patch to fanart||
+||#fanarthandler.tvseries.latest2.thumb||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest2.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest2.serieName||Series name||
 ||#fanarthandler.tvseries.latest2.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest2.dateAdded||Date when episode was added to MP||
@@ -328,8 +328,8 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest2.classification||PG classification||
 ||#fanarthandler.tvseries.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest2.firstAired||First aired||
-||#fanarthandler.tvseries.latest3.thumb||Full patch to thumb (poster)||
-||#fanarthandler.tvseries.latest3.fanart||Full patch to fanart||
+||#fanarthandler.tvseries.latest3.thumb||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest3.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest3.serieName||Series name||
 ||#fanarthandler.tvseries.latest3.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest3.dateAdded||Date when episode was added to MP||
@@ -339,6 +339,20 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest3.classification||PG classification||
 ||#fanarthandler.tvseries.latest3.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest3.firstAired||First aired||
+
+==TV Recordings==
+||#fanarthandler.tvrecordings.latest1.thumb||Full path to thumbnail||
+||#fanarthandler.tvrecordings.latest1.title||Recorded tv title||
+||#fanarthandler.tvrecordings.latest1.dateAdded||Date when recordingwas added to MP||
+||#fanarthandler.tvrecordings.latest1.genre||Genre||
+||#fanarthandler.tvrecordings.latest2.thumb||Full path to thumbnail||
+||#fanarthandler.tvrecordings.latest2.title||Recorded tv title||
+||#fanarthandler.tvrecordings.latest2.dateAdded||Date when recordingwas added to MP||
+||#fanarthandler.tvrecordings.latest2.genre||Genre||
+||#fanarthandler.tvrecordings.latest3.thumb||Full path to thumbnail||
+||#fanarthandler.tvrecordings.latest3.title||Recorded tv title||
+||#fanarthandler.tvrecordings.latest3.dateAdded||Date when recordingwas added to MP||
+||#fanarthandler.tvrecordings.latest3.genre||Genre||
 
 ----
 
