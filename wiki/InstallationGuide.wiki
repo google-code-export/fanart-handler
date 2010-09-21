@@ -7,7 +7,7 @@
 =Change Logs=
 ==Change Log (version 2.1.1 to 2.2)==
   * new feature: Scraper  now scrapes artist thumbnails from htbackdrops
-  * new feature: Latest added picture, movie, tvseries and music properties available
+  * new feature: Latest added picture, movie, tvseries, tv recordings and music properties available
   * new feature: Moving Picture fanart (random) now respects parental control
 ==Change Log (version 2.1 to 2.1.1)==
   * bug fixed: DirectoryNotFoundException is now handled correctly by the plugin
