@@ -253,14 +253,32 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest1.fanart||Full patch to fanart||
 ||#fanarthandler.movingpicture.latest1.title||Movie title||
 ||#fanarthandler.movingpicture.latest1.dateAdded||Date when movie was added to MP||
+||#fanarthandler.movingpicture.latest1.genre||Movie Genre||
+||#fanarthandler.movingpicture.latest1.rating||Movie score/rating||
+||#fanarthandler.movingpicture.latest1.ratingRounded||Rounded movie score/rating||
+||#fanarthandler.movingpicture.latest1.classification||PG classification||
+||#fanarthandler.movingpicture.latest1.runtime||Runtime in minutes||
+||#fanarthandler.movingpicture.latest1.year||Year of movie||
 ||#fanarthandler.movingpicture.latest2.thumb||Full path to thumb (poster)||
 ||#fanarthandler.movingpicture.latest2.fanart||Full patch to fanart||
 ||#fanarthandler.movingpicture.latest2.title||Movie title||
 ||#fanarthandler.movingpicture.latest2.dateAdded||Date when movie was added to MP||
+||#fanarthandler.movingpicture.latest2.genre||Movie Genre||
+||#fanarthandler.movingpicture.latest2.rating||Movie score/rating||
+||#fanarthandler.movingpicture.latest2.ratingRounded||Rounded movie score/rating||
+||#fanarthandler.movingpicture.latest2.classification||PG classification||
+||#fanarthandler.movingpicture.latest2.runtime||Runtime in minutes||
+||#fanarthandler.movingpicture.latest2.year||Year of movie||
 ||#fanarthandler.movingpicture.latest3.thumb||Full path to thumb (poster)||
 ||#fanarthandler.movingpicture.latest3.fanart||Full patch to fanart||
 ||#fanarthandler.movingpicture.latest3.title||Movie title||
 ||#fanarthandler.movingpicture.latest3.dateAdded||Date when movie was added to MP||
+||#fanarthandler.movingpicture.latest3.genre||Movie Genre||
+||#fanarthandler.movingpicture.latest3.rating||Movie score/rating||
+||#fanarthandler.movingpicture.latest3.ratingRounded||Rounded movie score/rating||
+||#fanarthandler.movingpicture.latest3.classification||PG classification||
+||#fanarthandler.movingpicture.latest3.runtime||Runtime in minutes||
+||#fanarthandler.movingpicture.latest3.year||Year of movie||
 
 ==Music==
 ||#fanarthandler.music.latest1.thumb||Full patch to thumb (Album or if not available, artist)||
@@ -293,16 +311,34 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.serieName||Series name||
 ||#fanarthandler.tvseries.latest1.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest1.dateAdded||Date when episode was added to MP||
+||#fanarthandler.tvseries.latest1.genre||Episode Genre||
+||#fanarthandler.tvseries.latest1.rating||Episode score/rating||
+||#fanarthandler.tvseries.latest1.ratingRounded||Rounded episode score/rating||
+||#fanarthandler.tvseries.latest1.classification||PG classification||
+||#fanarthandler.tvseries.latest1.runtime||Runtime in minutes||
+||#fanarthandler.tvseries.latest1.firstAired||First aired||
 ||#fanarthandler.tvseries.latest2.thumb||Full patch to thumb (poster)||
 ||#fanarthandler.tvseries.latest2.fanart||Full patch to fanart||
 ||#fanarthandler.tvseries.latest2.serieName||Series name||
 ||#fanarthandler.tvseries.latest2.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest2.dateAdded||Date when episode was added to MP||
+||#fanarthandler.tvseries.latest2.genre||Episode Genre||
+||#fanarthandler.tvseries.latest2.rating||Episode score/rating||
+||#fanarthandler.tvseries.latest2.ratingRounded||Rounded episode score/rating||
+||#fanarthandler.tvseries.latest2.classification||PG classification||
+||#fanarthandler.tvseries.latest2.runtime||Runtime in minutes||
+||#fanarthandler.tvseries.latest2.firstAired||First aired||
 ||#fanarthandler.tvseries.latest3.thumb||Full patch to thumb (poster)||
 ||#fanarthandler.tvseries.latest3.fanart||Full patch to fanart||
 ||#fanarthandler.tvseries.latest3.serieName||Series name||
 ||#fanarthandler.tvseries.latest3.episodeName||Episode name||
 ||#fanarthandler.tvseries.latest3.dateAdded||Date when episode was added to MP||
+||#fanarthandler.tvseries.latest3.genre||Episode Genre||
+||#fanarthandler.tvseries.latest3.rating||Episode score/rating||
+||#fanarthandler.tvseries.latest3.ratingRounded||Rounded episode score/rating||
+||#fanarthandler.tvseries.latest3.classification||PG classification||
+||#fanarthandler.tvseries.latest3.runtime||Runtime in minutes||
+||#fanarthandler.tvseries.latest3.firstAired||First aired||
 
 ----
 
