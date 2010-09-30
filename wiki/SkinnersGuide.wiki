@@ -309,7 +309,9 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.thumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest1.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest1.serieName||Series name||
+||#fanarthandler.tvseries.latest1.seasonIndex||Season index||
 ||#fanarthandler.tvseries.latest1.episodeName||Episode name||
+||#fanarthandler.tvseries.latest1.episodeIndex||Episode index||
 ||#fanarthandler.tvseries.latest1.dateAdded||Date when episode was added to MP||
 ||#fanarthandler.tvseries.latest1.genre||Episode Genre||
 ||#fanarthandler.tvseries.latest1.rating||Episode score/rating||
@@ -320,7 +322,9 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest2.thumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest2.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest2.serieName||Series name||
+||#fanarthandler.tvseries.latest2.seasonIndex||Season index||
 ||#fanarthandler.tvseries.latest2.episodeName||Episode name||
+||#fanarthandler.tvseries.latest2.episodeIndex||Episode index||
 ||#fanarthandler.tvseries.latest2.dateAdded||Date when episode was added to MP||
 ||#fanarthandler.tvseries.latest2.genre||Episode Genre||
 ||#fanarthandler.tvseries.latest2.rating||Episode score/rating||
@@ -331,7 +335,9 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest3.thumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest3.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest3.serieName||Series name||
+||#fanarthandler.tvseries.latest3.seasonIndex||Season index||
 ||#fanarthandler.tvseries.latest3.episodeName||Episode name||
+||#fanarthandler.tvseries.latest3.episodeIndex||Episode index||
 ||#fanarthandler.tvseries.latest3.dateAdded||Date when episode was added to MP||
 ||#fanarthandler.tvseries.latest3.genre||Episode Genre||
 ||#fanarthandler.tvseries.latest3.rating||Episode score/rating||
