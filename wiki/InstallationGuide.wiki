@@ -6,9 +6,12 @@
 ----
 =Change Logs=
 ==Change Log (version 2.1.1 to 2.2)==
+  * new feature: htbackdrops have released a new API (new database) and this is the first version of Fanart Handler that supports it.
   * new feature: Scraper  now scrapes artist thumbnails from htbackdrops
   * new feature: Latest added picture, movie, tvseries, tv recordings and music properties available
   * new feature: Moving Picture fanart (random) now respects parental control
+  * bug fixed: many small bugs has been fixed (like sraping for new images failed from time to time). 
+*WARNING*Because of the new htbackdrop database and API image duplication check will no longer work. The only unique id before was the URL to the image but since this now is changed I have no way of detecting duplicates. New API supports Image IDs and this is now implemented and should assure that future changes to htbackdrops wont affect the fanart handler. If you want to be sure not to get duplicated images the only way is to (from fanart handler configuration) delete all music fanart images (Delete All Fanart button in configuration), reset the scraper (Reset Scraper button in configuration) and finally do a new scrape (Start Scraper button in configuration). If you don't mid duplicates or handles this in the configuration you do not have to to this "reset" step. And, please remember that doing so would cause  alot of load on the htbackdrop site.
 ==Change Log (version 2.1 to 2.1.1)==
   * bug fixed: DirectoryNotFoundException is now handled correctly by the plugin
   * bug fixed: Configuration allways checked all local fanart. Now uses timestamps just like the plugin in MP.
