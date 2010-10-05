@@ -49,6 +49,14 @@ The scope of this plugin is to;
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.1.1 to 2.2==
 The plugin now supports latest added properties for Music, Pictures, Moving Pictures, TV Recordings and TVSeries. Read more about this in sections below.
+===New Property: Displays what type of scrape is occurring===
+This property informs what type of scrape is occurring, like;
+  * Initial Scrape
+  * New Fanart Scrape
+  * Now Playing Scrape
+{{{
+#fanarthandler.scraper.task
+}}} 
 ==Change Log - Version 2.1 to 2.1.1==
 No changes needed in skin files to support version 2.1.1 if your skin previously supported version 1.1 - 2.1.1 of this plugin.
 ==Change Log - Version 2.0 to 2.1==
