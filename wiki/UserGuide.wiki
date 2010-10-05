@@ -65,6 +65,12 @@ You can find this folder by clicking Start button in Windows and the "`Programs\
 ==Naming Convention for your custom fanart==
 If you add music or video fanart that you want the skin to use when you select a video or music (or play music) you should use the following naming convention. If the current played artist in MP is Madonna that will be matched in the fanart folder with any image that starts with "madonna", followed by numbers and a file extenstion. This means a file named "madonna1.jpg" will be a match. And Madonna010.jpg will be a match. However, a file named "This Is A Madonna Image.jpg" will not be a match, and a file named madoXnna.jpg will not be a match. 
 
+===Supported naming convention for id3 artist tag for multiple artist support===
+To get fanart for music that has two or more artists the artist names in the id3 tag need to be separated by semicolon(s).
+
+Example;
+Madonna;Blur
+
 ----
 
 = Configuration =
