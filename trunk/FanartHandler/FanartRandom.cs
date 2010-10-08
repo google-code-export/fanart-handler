@@ -33,6 +33,7 @@ namespace FanartHandler
         private bool doShowImageOneRandom = true; // Decides if property .1 or .2 should be set on next run        
         private Hashtable windowsUsingFanartRandom; //used to know what skin files that supports random fanart        
         private Hashtable propertiesRandom; //used to hold properties to be updated (Random)        
+        private Hashtable htAny;
 
         private string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";
 
@@ -208,17 +209,16 @@ namespace FanartHandler
         {
             try
             {
-                
                 if ((currCountRandom >= FanartHandlerSetup.MaxCountImage) || FirstRandom || currCountRandom == 0)
                 {
                     string sFilename = String.Empty;                    
                     if (SupportsRandomImages("useRandomMoviesFanart").Equals("True"))
-                    {
-                        sFilename = GetRandomFilename(ref currAnyMovies, ref randAnyMovies, "Movie", ref prevSelectedMovies);
+                    {                        
+                        sFilename = GetRandomFilename(ref currAnyMovies, ref randAnyMovies, "Movie", ref prevSelectedMovies);                        
                         if (sFilename != null && sFilename.Length > 0)
                         {
                             if (DoShowImageOneRandom)
-                            {
+                            {                     
                                 AddPropertyRandom("#fanarthandler.movie.backdrop1.any", sFilename, ref listAnyMovies, "Movie");
                                 string sTag = GUIPropertyManager.GetProperty("#fanarthandler.movie.backdrop2.any");
                                 if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png"))
@@ -719,9 +719,9 @@ namespace FanartHandler
             try
             {
                 if (value == null)
-                    value = " ";
-                if (String.IsNullOrEmpty(value))
-                    value = " ";
+                    value = "";//20101008
+                //if (String.IsNullOrEmpty(value))//20101008
+                //    value = " ";
 
                 if (PropertiesRandom.Contains(property))
                 {
@@ -763,6 +763,15 @@ namespace FanartHandler
         public string GetRandomFilename(ref string prevImage, ref Random randNum, string type, ref int iFilePrev)
         {
             string sout = String.Empty;
+            int restricted = 0;
+            if (type.Equals("Movie") || type.Equals("MovingPicture") || type.Equals("myVideos") || type.Equals("Online Videos") || type.Equals("TV Section"))
+            {
+                try
+                {
+                    restricted = UtilsExternal.MovingPictureIsRestricted();
+                }
+                catch { }
+            }
             try
             {
                 if (Utils.GetIsStopping() == false)
@@ -797,12 +806,11 @@ namespace FanartHandler
                     {
                         types = null;
                     }
-                    
-                    Hashtable ht = Utils.GetDbm().GetAnyFanart(type, types);
-                    
-                    if (ht != null && ht.Count > 0)
+
+                    htAny = Utils.GetDbm().GetAnyFanart(type, types, restricted);
+                    if (htAny != null && htAny.Count > 0)
                     {
-                        ICollection valueColl = ht.Values;
+                        ICollection valueColl = htAny.Values;
                         int iFile = 0;
                         int iStop = 0;
                         foreach (DatabaseManager.FanartImage s in valueColl)
@@ -827,7 +835,7 @@ namespace FanartHandler
                         valueColl = null;
                         if (iStop == 0)
                         {
-                            valueColl = ht.Values;
+                            valueColl = htAny.Values;
                             iFilePrev = -1;
                             iFile = 0;
                             iStop = 0;
@@ -853,33 +861,6 @@ namespace FanartHandler
                         }
                         valueColl = null;
                     }
-
-
-/*                    Hashtable ht = Utils.GetDbm().GetAnyFanart(type, types);                    
-                    
-                    if (ht != null && ht.Count > 0)
-                    {
-                        bool doRun = true;
-                        int attempts = 0;
-                        while (doRun && attempts < (ht.Count * 2))
-                        {
-                            int iHt = randNum.Next(0, ht.Count);
-                            DatabaseManager.FanartImage imgFile = (DatabaseManager.FanartImage)ht[iHt];
-                            sout = imgFile.disk_image;
-                            if (FanartHandlerSetup.CheckImageResolution(sout, type, FanartHandlerSetup.UseAspectRatio) && Utils.IsFileValid(sout))
-                            {
-                                prevImage = sout;
-
-                                if (CountSetVisibility == 0)
-                                {
-                                    CountSetVisibility = 1;
-                                }
-                                doRun = false;
-                            }
-                            attempts++;
-                        }
-                    }
- */ 
                 }
             }
             catch (Exception ex)
@@ -946,9 +927,9 @@ namespace FanartHandler
                 for (int i = 0; i < ht.Count; i++)
                 {
                     PropertiesRandom.Remove(ht[i].ToString());
-                }                
+                }
+                ht.Clear();
                 ht = null;
-                //propertiesRandom.Clear();
             }
             catch (Exception ex)
             {

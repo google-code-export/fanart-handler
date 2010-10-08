@@ -171,10 +171,6 @@ namespace FanartHandler
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem2");
                 }
-/*                else if (GUIWindowManager.ActiveWindow == 730716)
-                {
-                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem2");
-                }                    */
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
@@ -438,6 +434,7 @@ namespace FanartHandler
                                 break;
                             }
                         }
+                        al.Clear();
                         al = null;
                         currSelectedInList = Utils.GetArtistLeftOfMinusSign(GUIPropertyManager.GetProperty("#selecteditem"));
                         if (sArtistName == null)
@@ -479,6 +476,7 @@ namespace FanartHandler
                                 }
                             }
                         }
+                        al.Clear();
                         al = null;
                         return Utils.MovePrefixToBack(Utils.RemoveMPArtistPipes(sArtistName));
                     }
@@ -650,9 +648,9 @@ namespace FanartHandler
             try
             {
                 if (value == null)
-                    value = " ";
-                if (String.IsNullOrEmpty(value))
-                    value = " ";
+                    value = "";//20101008
+                //if (String.IsNullOrEmpty(value))//20101008
+                //    value = " ";
                 if (Properties.Contains(property))
                 {
                     Properties[property] = value;

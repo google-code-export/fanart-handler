@@ -7,10 +7,11 @@
 namespace FanartHandler
 {
     using MediaPortal.Configuration;
-    using NLog;
+    using NLog;    
     using SQLite.NET;
     using System;
     using System.Collections.Generic;
+    using System.Collections;
     using System.IO;
     using System.Linq;   
     using System.Text;
@@ -78,23 +79,15 @@ namespace FanartHandler
         /// </summary>
         /// <param name="type">Type of data to fetch</param>
         /// <returns>Resultset of matching data</returns>
-        public SQLiteResultSet GetData(string type)
+       public SQLiteResultSet GetData(string type)
         {
             SQLiteResultSet result = null;
             string sqlQuery = null;
             try
             {
-                if (type.Equals("MovingPicture"))
+                if (type.Equals("TVSeries"))
                 {
-                    sqlQuery = "select title, backdropfullpath from movie_info where date_added >= '"+Utils.GetDbm().GetTimeStamp(type)+"';";
-                    Utils.GetDbm().SetTimeStamp(type, DateTime.Now.ToString());
-                }
-                else if (type.Equals("TVSeries"))
-                {
-                    sqlQuery = "select SortName, fanart from online_series;";
-  //                  sqlQuery = "select SortName, fanart from online_series where lastupdated >= '" + Utils.GetDbm().GetTimeStamp(type) + "';";
-//                    double l = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-//                    Utils.GetDbm().SetTimeStamp(type, l.ToString());                    
+                    sqlQuery = "select SortName, id from online_series;";
                 }
                 else
                 {
@@ -102,12 +95,58 @@ namespace FanartHandler
                 }
                 result = dbClient.Execute(sqlQuery);
             }
+            catch 
+            {
+            }
+            return result;
+        }
+
+        
+        /// <summary>
+        /// Returns latest added movie thumbs from MovingPictures db.
+        /// </summary>
+        /// <param name="type">Type of data to fetch</param>
+        /// <returns>Resultset of matching data</returns>
+       public UtilsExternal.Latests GetLatestPictures()
+        {
+            UtilsExternal.Latests result = new UtilsExternal.Latests();
+            string sqlQuery = null;
+            int x = 0;
+            try
+            {
+                sqlQuery = "select strFile, strDateTaken from picture where strFile not like '%kindgirls%' order by strDateTaken desc limit 10;";
+                SQLiteResultSet resultSet = dbClient.Execute(sqlQuery);
+                if (resultSet != null)
+                {
+                    if (resultSet.Rows.Count > 0)
+                    {                        
+                        for (int i = 0; i < resultSet.Rows.Count; i++)
+                        {                            
+                            string thumb = resultSet.GetField(i, 0);
+                            string dateAdded = resultSet.GetField(i, 1);
+                            if (thumb != null && thumb.Trim().Length > 0)
+                            {
+                                if (File.Exists(thumb))
+                                {
+                                    result.Add(new UtilsExternal.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null));
+                                    x++;
+                                }
+                            }
+                            if (x == 3)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                resultSet = null;
+            }
             catch //(Exception ex)
             {
                 //logger.Error("getData: " + ex.ToString());
             }
             return result;
-        }
+        }        
 
     }
 }
