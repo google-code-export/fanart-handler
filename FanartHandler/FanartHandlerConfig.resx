@@ -258,6 +258,17 @@ you will have to press this button to initiate a new intitial scrape
 the next time you start MediaPortal. After the initial scrape this
 plugin will only scrape the htbackdrop site for new images.</value>
   </data>
+  <data name="button39.ToolTip" xml:space="preserve">
+    <value>The first time you open MediaPortal after enabling the scraper
+will cause a big search for fanart matching every artist you
+have in your MediaPortal music database. This is only done once.
+After this MediaPortal will perorm this "initial scrape" only for
+new added artists. If you at a later stage decided that you for 
+example want to increase the number of imges per artis
+you will have to press this button to initiate a new intitial scrape
+the next time you start MediaPortal. After the initial scrape this
+plugin will only scrape the htbackdrop site for new images.</value>
+  </data>
   <data name="button8.ToolTip" xml:space="preserve">
     <value>Press this button to enable or disable the use of the
 selected fanart/backdrop. Enabled means that the

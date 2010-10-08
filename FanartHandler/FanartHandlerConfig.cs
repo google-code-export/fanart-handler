@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,6 +32,7 @@ namespace FanartHandler
         private DataTable myDataTable6 = null;
         private DataTable myDataTable7 = null;
         private DataTable myDataTable8 = null;
+        private DataTable myDataTable9 = null;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string logFileName = "fanarthandler_config.log";
         private const string oldLogFileName = "fanarthandler_config.old.log";
@@ -55,10 +57,17 @@ namespace FanartHandler
         private string scraperInterval = null;
         private string useAspectRatio = null;
         private string useDefaultBackdrop = null;
+        private string scrapeThumbnails = null;
+        private string latestPictures = null;
+        private string latestMusic = null;
+        private string latestMovingPictures = null;
+        private string latestTVSeries = null;
+        private string latestTVRecordings = null;
         private bool isScraping = false;
         public delegate void ScrollDelegate();
         private bool isStopping = false;
         private int lastID = 0;
+        private int lastIDThumb = 0;
         private int lastIDMovie = 0;
         private int lastIDScoreCenter = 0;
         private int lastIDGame = 0;
@@ -171,6 +180,12 @@ namespace FanartHandler
                     xmlwriter.SetValue("FanartHandler", "proxyPassword", textBoxProxyPassword.Text);
                     xmlwriter.SetValue("FanartHandler", "proxyDomain", textBoxProxyDomain.Text);
                     xmlwriter.SetValue("FanartHandler", "useProxy", checkBoxProxy.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "scrapeThumbnails", checkBox1.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "latestPictures", checkBox5.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "latestMusic", checkBox6.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "latestMovingPictures", checkBox7.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "latestTVSeries", checkBox2.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "latestTVRecordings", checkBox3.Checked ? true : false);
                     
                 }
                 MessageBox.Show("Settings is stored in memory. Make sure to press Ok when exiting MP Configuration. Pressing Cancel when exiting MP Configuration will result in these setting NOT being saved!");
@@ -276,8 +291,93 @@ namespace FanartHandler
                 proxyUsername = xmlreader.GetValueAsString("FanartHandler", "proxyUsername", String.Empty);
                 proxyPassword = xmlreader.GetValueAsString("FanartHandler", "proxyPassword", String.Empty);
                 proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", String.Empty);
-                useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);        
+                useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);   
+                scrapeThumbnails = xmlreader.GetValueAsString("FanartHandler", "scrapeThumbnails", String.Empty);
+                latestPictures = xmlreader.GetValueAsString("FanartHandler", "latestPictures", String.Empty);
+                latestMusic = xmlreader.GetValueAsString("FanartHandler", "latestMusic", String.Empty);
+                latestMovingPictures = xmlreader.GetValueAsString("FanartHandler", "latestMovingPictures", String.Empty);
+                latestTVSeries = xmlreader.GetValueAsString("FanartHandler", "latestTVSeries", String.Empty);
+                latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);   
             }
+
+            if (latestPictures != null && latestPictures.Length > 0)
+            {
+                if (latestPictures.Equals("True"))
+                    checkBox5.Checked = true;
+                else
+                    checkBox5.Checked = false;
+            }
+            else
+            {
+                latestPictures = "True";
+                checkBox5.Checked = true;
+            }
+
+            if (latestMusic != null && latestMusic.Length > 0)
+            {
+                if (latestMusic.Equals("True"))
+                    checkBox6.Checked = true;
+                else
+                    checkBox6.Checked = false;
+            }
+            else
+            {
+                latestMusic = "True";
+                checkBox6.Checked = true;
+            }
+
+            if (latestMovingPictures != null && latestMovingPictures.Length > 0)
+            {
+                if (latestMovingPictures.Equals("True"))
+                    checkBox7.Checked = true;
+                else
+                    checkBox7.Checked = false;
+            }
+            else
+            {
+                latestMovingPictures = "True";
+                checkBox7.Checked = true;
+            }
+
+            if (latestTVSeries != null && latestTVSeries.Length > 0)
+            {
+                if (latestTVSeries.Equals("True"))
+                    checkBox2.Checked = true;
+                else
+                    checkBox2.Checked = false;
+            }
+            else
+            {
+                latestTVSeries = "True";
+                checkBox2.Checked = true;
+            }
+
+            if (latestTVRecordings != null && latestTVRecordings.Length > 0)
+            {
+                if (latestTVRecordings.Equals("True"))
+                    checkBox3.Checked = true;
+                else
+                    checkBox3.Checked = false;
+            }
+            else
+            {
+                latestTVRecordings = "True";
+                checkBox3.Checked = true;
+            }
+
+                if (scrapeThumbnails != null && scrapeThumbnails.Length > 0)
+                {
+                    if (scrapeThumbnails.Equals("True"))
+                        checkBox1.Checked = true;
+                    else
+                        checkBox1.Checked = false;
+                }
+                else
+                {
+                    scrapeThumbnails = "True";
+                    checkBox1.Checked = true;
+                }
+
                 if (useFanart != null && useFanart.Length > 0)
                 {
                     if (useFanart.Equals("True"))
@@ -583,10 +683,9 @@ namespace FanartHandler
                     Utils.SetProxyPassword(proxyPassword);
                     Utils.SetProxyDomain(proxyDomain);
                     Utils.SetScraperMaxImages(scraperMaxImages);
+                    Utils.ScrapeThumbnails = scrapeThumbnails;
                     Utils.InitiateDbm();
                     ImportLocalFanartAtStartup();
-                    Utils.ImportExternalDbFanart("movingpictures.db3", "MovingPicture");
-                    Utils.ImportExternalDbFanart("TVSeriesDatabase4.db3", "TVSeries");
                     myDataTable = new DataTable();
                     myDataTable.Columns.Add("Artist");
                     myDataTable.Columns.Add("Enabled");
@@ -614,6 +713,29 @@ namespace FanartHandler
                     myDataTable.Columns.Add("Image Path");
                     dataGridView1.DataSource = myDataTable;
                     dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+                try
+                {
+                    myDataTable9 = new DataTable();
+                    myDataTable9.Columns.Add("Artist");
+                    myDataTable9.Columns.Add("Image");
+                    myDataTable9.Columns.Add("Image Path");
+                    dataGridView9.DataSource = myDataTable9;
+                    UpdateThumbnailTableOnStartup();
+                    dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridView9.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    dataGridView9.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    dataGridView9.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error("FanartHandlerConfig_Load: " + ex.ToString());
+                    myDataTable9 = new DataTable();
+                    myDataTable9.Columns.Add("Artist");
+                    myDataTable9.Columns.Add("Image");
+                    myDataTable9.Columns.Add("Image Path");
+                    dataGridView9.DataSource = myDataTable9;
+                    dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
                 try
                 {
@@ -791,6 +913,8 @@ namespace FanartHandler
                     dataGridView8.DataSource = myDataTable8;
                     dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
+
+
         }
 
         
@@ -963,6 +1087,38 @@ namespace FanartHandler
             catch //(Exception ex)
             {
                     //MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void DataGridView9_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView9 != null && dataGridView9.RowCount > 0)
+                {
+                    DataGridView dgv = (DataGridView)sender;
+                    Bitmap img = (Bitmap)Image.FromFile(dataGridView9[2, dgv.CurrentRow.Index].Value.ToString());
+                    label33.Text = "Resolution: " + img.Width + "x" + img.Height;
+                    Size imgSize = new Size(110, 110);
+                    Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
+                    Graphics gfx = Graphics.FromImage(finalImg);
+                    gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gfx.Dispose();
+                    pictureBox9.Image = null;
+                    pictureBox9.SizeMode = PictureBoxSizeMode.CenterImage;
+                    pictureBox9.Image = finalImg;
+                    img.Dispose();
+                    img = null;
+                    gfx = null;
+                }
+                else
+                {
+                    pictureBox9.Image = null;
+                }
+            }
+            catch //(Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());
             }
         }
 
@@ -1197,7 +1353,7 @@ namespace FanartHandler
                 {
                     lastID = 0;
                     Utils.GetDbm().DeleteAllFanart("MusicFanart");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\music";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -1253,6 +1409,20 @@ namespace FanartHandler
                 ImportMusicFanart();
             }
         }
+
+        /*private void DataGridView9_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.R)
+            {
+                ResetScrape();
+            }
+            else if (e.KeyData == Keys.S)
+            {
+                StartScrape();
+            }
+             
+        }*/
+
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -1333,63 +1503,7 @@ namespace FanartHandler
 
         }
 
-        /// <summary>
-        /// Add files in directory to hashtable
-        /// </summary>
-       /* public void SetupFilenames(string s, string filter, ref int i, string type)
-        {
-            string artist = String.Empty;
-            string typeOrg = type;
-            try
-            {
-                // Process the list of files found in the directory
-                string[] dirs = Directory.GetFiles(s, filter);
-                foreach (string dir in dirs)
-                {
-                    try
-                    {
-                        try
-                        {
-                            artist = Utils.GetArtist(dir, type);
-                            if (type.Equals("MusicAlbum") || type.Equals("MusicArtist") || type.Equals("MusicFanart"))
-                            {
-                                if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default"))
-                                {
-                                    type = "Default";
-                                }
-                                Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type);
-                                type = typeOrg;
-                            }
-                            else
-                            {
-                                Utils.GetDbm().LoadFanart(artist, dir, dir, type);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error("SetupFilenames: " + ex.ToString());
-                        }
-                        i++;
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error("SetupFilenames: " + ex.ToString());
-                    }
-                }
-                // Recurse into subdirectories of this directory.
-                string[] subdirs = Directory.GetDirectories(s);
-                foreach (string subdir in subdirs)
-                {
-                    SetupFilenames(subdir, filter, ref i, type);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                logger.Error("SetupFilenames: " + ex.ToString());
-            }
-        }*/
-
+        
 
         private void button6_Click(object sender, EventArgs e)
         {
@@ -1408,7 +1522,7 @@ namespace FanartHandler
                         if (useFanart.Equals("True"))
                         {
                             int i = 0;
-                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart");
+                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart",0);
                         }
                         dataGridView1.Enabled = false;
                         button6.Text = "Stop Scraper";
@@ -1818,6 +1932,48 @@ namespace FanartHandler
             }
         }
 
+        private void UpdateThumbnailTableOnStartup()
+        {
+            try
+            {
+                //get artists, scrape_successfult_thumb
+                SQLiteResultSet result = Utils.GetDbm().GetDataForThumbTable(lastIDThumb);                
+                int tmpID = 0;
+                if (result != null)
+                {
+                    if (result.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < result.Rows.Count; i++)
+                        {
+                            DataRow myDataRow = myDataTable9.NewRow();
+                            myDataRow["Artist"] = result.GetField(i, 0);
+                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image Path"] = result.GetField(i, 2);
+                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            if (tmpID > lastIDThumb)
+                            {
+                                lastIDThumb = tmpID;
+                            }
+                            myDataTable9.Rows.Add(myDataRow);
+                        }
+                    }
+                }
+                result = null;
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error("UpdateThumbnailTableOnStartup: " + ex.ToString());
+                dataGridView9.DataSource = null;
+                DataTable d = new DataTable();
+                d.Columns.Add("Artist");
+                d.Columns.Add("Image");
+                d.Columns.Add("Image Path");
+                dataGridView9.DataSource = d;
+                dataGridView9.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+            }
+        }
+
         private void UpdateFanartTableOnStartup()
         {
             try
@@ -1912,6 +2068,7 @@ namespace FanartHandler
                 {
                     button6.Enabled = true;
                 }
+                UpdateThumbnailTableOnStartup();
                 button1.Enabled = true;
                 button2.Enabled = true;
                 button3.Enabled = true;
@@ -2161,7 +2318,7 @@ namespace FanartHandler
                 {
                     lastIDMovie = 0;
                     Utils.GetDbm().DeleteAllFanart("Movie");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\movies";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2254,7 +2411,7 @@ namespace FanartHandler
                 {
                     lastIDScoreCenter = 0;
                     Utils.GetDbm().DeleteAllFanart("ScoreCenter");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\scorecenter";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2295,12 +2452,12 @@ namespace FanartHandler
                 //Add games images
                 string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
                 int i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Game");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Game", 0);
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
                 i = 0;
                 if (useVideoFanart.Equals("True"))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Movie");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Movie", 0);
                 }
                 //Add music images
                 path = String.Empty;
@@ -2308,45 +2465,42 @@ namespace FanartHandler
                 if (useAlbum.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
-                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum");
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum", 0);
                 }
                 if (useArtist.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicArtist");
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicArtist", 0);
                 }
                 if (useFanart.Equals("True"))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MusicFanart");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MusicFanart", 0);
                 }
                 //Add pictures images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
                 i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Picture");
-                //Add games images
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Picture", 0);
+                //Add scorecenter images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
                 i = 0;
                 if (useScoreCenterFanart.Equals("True"))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "ScoreCenter");
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "ScoreCenter", 0);
                 }
-                //Add moving pictures images
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\MovingPictures\Backdrops\FullSize";
-                i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MovingPicture");
                 //Add tvseries images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
                 i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TVSeries");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TVSeries", 0);
+                 
                 //Add tv images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
                 i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TV");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TV", 0);
                 //Add plugins images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
                 i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Plugin");
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Plugin",0);
             }
             catch (Exception ex)
             {
@@ -2540,7 +2694,7 @@ namespace FanartHandler
                 {
                     lastIDGame = 0;
                     Utils.GetDbm().DeleteAllFanart("Game");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\games";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2647,7 +2801,7 @@ namespace FanartHandler
                 {
                     lastIDPicture = 0;
                     Utils.GetDbm().DeleteAllFanart("Picture");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\pictures";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2754,7 +2908,7 @@ namespace FanartHandler
                 {
                     lastIDPlugin = 0;
                     Utils.GetDbm().DeleteAllFanart("Plugin");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\plugins";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2861,7 +3015,7 @@ namespace FanartHandler
                 {
                     lastIDTV = 0;
                     Utils.GetDbm().DeleteAllFanart("TV");
-                    string path = Config.GetFolder(Config.Dir.Config) + @"\thumbs\Skin FanArt\tv";
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2929,5 +3083,26 @@ namespace FanartHandler
                 dataGridView8.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelTotalMPArtistCount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button39_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button40_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

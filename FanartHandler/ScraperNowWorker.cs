@@ -55,11 +55,13 @@ namespace FanartHandler
                     this.triggerRefresh = false;
 
                     Utils.GetDbm().IsScraping = true;
-//                    FanartHandlerSetup.ManageScraperProperties();
                     FanartHandlerSetup.ShowScraperProgressIndicator();
+                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", "Now Playing Scrape");
                     Utils.GetDbm().NowPlayingScrape(artist, this);
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
+                    Utils.SetDelayStop(false);
+                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
                     FanartHandlerSetup.syncPointScraper = 0;
                     e.Result = 0;
                 }
@@ -94,6 +96,7 @@ namespace FanartHandler
                 {
                     Thread.Sleep(1000);
                     FanartHandlerSetup.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty);
+                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
                     FanartHandlerSetup.HideScraperProgressIndicator();
                     Utils.GetDbm().TotArtistsBeingScraped = 0;
                     Utils.GetDbm().CurrArtistsBeingScraped = 0;

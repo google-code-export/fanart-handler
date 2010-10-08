@@ -118,9 +118,9 @@ namespace FanartHandler
             try
             {
                 if (value == null)
-                    value = " ";
-                if (String.IsNullOrEmpty(value))
-                    value = " ";
+                    value = "";//20101008
+                //if (String.IsNullOrEmpty(value))//20101008
+                  //  value = " ";
                 if (PropertiesPlay.Contains(property))
                 {
                     PropertiesPlay[property] = value;

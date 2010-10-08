@@ -8,6 +8,7 @@ namespace FanartHandler
 {
     using MediaPortal.Configuration;
     using MediaPortal.GUI.Library;
+    using MediaPortal.Util;
     using NLog;
     using SQLite.NET;
     using System;
@@ -17,18 +18,20 @@ namespace FanartHandler
     using System.Globalization;
     using System.IO;
     using System.Linq;
+
     using System.Text;
     using System.Text.RegularExpressions;
+
 
     /// <summary>
     /// Utility class used by the Fanart Handler plugin.
     /// </summary>
-    static class Utils
+    public static class Utils
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "2.1.1";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.2.0";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -38,7 +41,8 @@ namespace FanartHandler
         private static bool isStopping = false;  //is the plugin about to stop, then this will be true
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
-        private static bool delayStop = false;
+        private static string scrapeThumbnails = null;  //scrape for thums or not        
+        private static bool delayStop = false; 
         #endregion
 
         /// <summary>
@@ -104,6 +108,15 @@ namespace FanartHandler
         public static void SetScraperMaxImages(string s)
         {
             scraperMaxImages = s;
+        }
+
+        /// <summary>
+        /// Scrape for thumbnail or not
+        /// </summary>
+        public static string ScrapeThumbnails
+        {
+            get { return Utils.scrapeThumbnails; }
+            set { Utils.scrapeThumbnails = value; }
         }
 
         /// <summary>
@@ -468,52 +481,6 @@ namespace FanartHandler
             return null;
         }
 
-        /// <summary>
-        /// Import moving picture and tvseries fanart into the database.
-        /// </summary> 
-        public static void ImportExternalDbFanart(string dbName, string type)
-        {
-            ExternalDatabaseManager edbm = null;
-            try
-            {
-                edbm = new ExternalDatabaseManager();
-                string artist = String.Empty;
-                string fanart = String.Empty;
-                if (edbm.InitDB(dbName))
-                {
-                    SQLiteResultSet result = edbm.GetData(type);
-                    if (result != null)
-                    {
-                        if (result.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < result.Rows.Count; i++)
-                            {
-                                artist = Utils.GetArtist(result.GetField(i, 0), type);
-                                fanart = result.GetField(i, 1);
-                                if (type.Equals("TVSeries"))
-                                {
-                                    fanart = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\" + fanart;
-                                }                                
-                                Utils.GetDbm().LoadFanartExternal(artist, fanart, fanart, type); //20100503
-                            }
-                        }
-                    }
-                    result = null;
-                }
-                try
-                {
-                    edbm.close();
-                }
-                catch { }
-                edbm = null;
-            }
-            catch (Exception ex)
-            {
-                edbm.close();
-                edbm = null;
-                logger.Error("ImportExternalDbFanart: " + ex.ToString());
-            }
-        }
 
         /// <summary>
         /// Get Artist.
@@ -621,6 +588,31 @@ namespace FanartHandler
             s = s.Replace("720", String.Empty);
             s = s.Replace("1920x1080", String.Empty);
             s = s.Replace("_1920", String.Empty);
+            s = s.Replace("Thumbnail", String.Empty);
+            s = s.Replace("thumbnail", String.Empty);
+            s = s.Replace("Thumb", String.Empty);
+            s = s.Replace("thumb", String.Empty);
+            s = s.Replace("400x400", String.Empty);
+            s = s.Replace("400X400", String.Empty);
+            s = s.Replace("500x500", String.Empty);
+            s = s.Replace("500X500", String.Empty);
+            s = s.Replace("600x600", String.Empty);
+            s = s.Replace("600X600", String.Empty);
+            s = s.Replace("700x700", String.Empty);
+            s = s.Replace("700X700", String.Empty);
+            s = s.Replace("800x800", String.Empty);
+            s = s.Replace("800X800", String.Empty);
+            s = s.Replace("900x900", String.Empty);
+            s = s.Replace("900X900", String.Empty);
+            s = s.Replace("1000x1000", String.Empty);
+            s = s.Replace("1000X1000", String.Empty);
+            s = s.Replace("-400", String.Empty);
+            s = s.Replace("-500", String.Empty);
+            s = s.Replace("-600", String.Empty);
+            s = s.Replace("-700", String.Empty);
+            s = s.Replace("-800", String.Empty);
+            s = s.Replace("-900", String.Empty);
+            s = s.Replace("-1000", String.Empty);            
             return s;
         }
 
@@ -749,6 +741,35 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// method for converting a System.DateTime value to a UNIX Timestamp
+        /// </summary>
+        /// <param name="value">date to convert</param>
+        /// <returns></returns>
+        public static double ConvertToTimestamp(DateTime value)
+        {
+            //create Timespan by subtracting the value provided from
+            //the Unix Epoch
+            TimeSpan span = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
+
+            //return the total seconds (which is a UNIX timestamp)
+            return (double)span.TotalSeconds;
+        }
+
+
+        /// <summary>
+        /// method for converting a UNIX Timestamp to a System.DateTime value
+        /// </summary>
+        /// <param name="value">date to convert</param>
+        /// <returns></returns>
+        public static string ConvertFromTimestamp(double timestamp)
+        {
+            System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(timestamp);
+            return dateTime.ToString("yyyy-MM-ss HH:mm:ss");
+        }
+
+
+        /// <summary>
         /// User has been "idle" for a short time. Method used to see if
         /// to fade basichome when music or movie is playing
         /// </summary>
@@ -827,8 +848,6 @@ namespace FanartHandler
             }
             return false;
         }
-
-      
 
     }    
 }

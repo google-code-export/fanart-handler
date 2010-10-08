@@ -77,6 +77,14 @@ namespace FanartHandler
             this.comboBoxMinResolution = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabPage20 = new System.Windows.Forms.TabPage();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -126,6 +134,19 @@ namespace FanartHandler
             this.tabPage18 = new System.Windows.Forms.TabPage();
             this.button38 = new System.Windows.Forms.Button();
             this.dataGridView8 = new System.Windows.Forms.DataGridView();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.tabControl6 = new System.Windows.Forms.TabControl();
+            this.tabPage21 = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.label33 = new System.Windows.Forms.Label();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.button39 = new System.Windows.Forms.Button();
+            this.button40 = new System.Windows.Forms.Button();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.dataGridView9 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage9 = new System.Windows.Forms.TabPage();
@@ -210,6 +231,8 @@ namespace FanartHandler
             this.groupBox7.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            this.tabPage20.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -221,6 +244,13 @@ namespace FanartHandler
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage18.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView8)).BeginInit();
+            this.tabPage19.SuspendLayout();
+            this.tabControl6.SuspendLayout();
+            this.tabPage21.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.tabPage22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView9)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage9.SuspendLayout();
@@ -648,7 +678,9 @@ namespace FanartHandler
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage8);
+            this.tabControl1.Controls.Add(this.tabPage20);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage19);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage13);
@@ -672,6 +704,108 @@ namespace FanartHandler
             this.tabPage8.Text = "General Options";
             this.tabPage8.UseVisualStyleBackColor = true;
             this.tabPage8.Click += new System.EventHandler(this.tabPage8_Click);
+            // 
+            // tabPage20
+            // 
+            this.tabPage20.Controls.Add(this.groupBox11);
+            this.tabPage20.Location = new System.Drawing.Point(4, 22);
+            this.tabPage20.Name = "tabPage20";
+            this.tabPage20.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage20.Size = new System.Drawing.Size(760, 516);
+            this.tabPage20.TabIndex = 7;
+            this.tabPage20.Text = "Latest Media";
+            this.tabPage20.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.checkBox2);
+            this.groupBox11.Controls.Add(this.checkBox3);
+            this.groupBox11.Controls.Add(this.label31);
+            this.groupBox11.Controls.Add(this.checkBox5);
+            this.groupBox11.Controls.Add(this.checkBox6);
+            this.groupBox11.Controls.Add(this.checkBox7);
+            this.groupBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox11.Location = new System.Drawing.Point(6, 6);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(378, 235);
+            this.groupBox11.TabIndex = 8;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Latest Media Options";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox2.Location = new System.Drawing.Point(9, 113);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(84, 20);
+            this.checkBox2.TabIndex = 10;
+            this.checkBox2.Text = "TVSeries";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox3.Location = new System.Drawing.Point(9, 138);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(109, 20);
+            this.checkBox3.TabIndex = 8;
+            this.checkBox3.Text = "Recorded TV";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label31.Location = new System.Drawing.Point(6, 26);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(239, 16);
+            this.label31.TabIndex = 2;
+            this.label31.Text = "Enable Latest Media Support For:";
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox5.Location = new System.Drawing.Point(9, 44);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(75, 20);
+            this.checkBox5.TabIndex = 1;
+            this.checkBox5.Text = "Pictures";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.Checked = true;
+            this.checkBox6.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox6.Location = new System.Drawing.Point(9, 67);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(62, 20);
+            this.checkBox6.TabIndex = 3;
+            this.checkBox6.Text = "Music";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.Checked = true;
+            this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox7.Location = new System.Drawing.Point(9, 90);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(122, 20);
+            this.checkBox7.TabIndex = 4;
+            this.checkBox7.Text = "Moving Pictures";
+            this.checkBox7.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
@@ -1028,7 +1162,7 @@ namespace FanartHandler
             // 
             this.labelTotalFanartArtistUnInitCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelTotalFanartArtistUnInitCount.AutoSize = true;
-            this.labelTotalFanartArtistUnInitCount.Location = new System.Drawing.Point(272, 414);
+            this.labelTotalFanartArtistUnInitCount.Location = new System.Drawing.Point(283, 414);
             this.labelTotalFanartArtistUnInitCount.Name = "labelTotalFanartArtistUnInitCount";
             this.labelTotalFanartArtistUnInitCount.Size = new System.Drawing.Size(13, 13);
             this.labelTotalFanartArtistUnInitCount.TabIndex = 13;
@@ -1040,15 +1174,15 @@ namespace FanartHandler
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(3, 414);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(258, 13);
+            this.label20.Size = new System.Drawing.Size(272, 13);
             this.label20.TabIndex = 12;
-            this.label20.Text = "Total Artists Uninitialised In Fanart Handler Database:";
+            this.label20.Text = "Total Artists Without Fanart In Fanart Handler Database:";
             // 
             // labelTotalFanartArtistInitCount
             // 
             this.labelTotalFanartArtistInitCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelTotalFanartArtistInitCount.AutoSize = true;
-            this.labelTotalFanartArtistInitCount.Location = new System.Drawing.Point(272, 397);
+            this.labelTotalFanartArtistInitCount.Location = new System.Drawing.Point(283, 397);
             this.labelTotalFanartArtistInitCount.Name = "labelTotalFanartArtistInitCount";
             this.labelTotalFanartArtistInitCount.Size = new System.Drawing.Size(13, 13);
             this.labelTotalFanartArtistInitCount.TabIndex = 11;
@@ -1060,15 +1194,15 @@ namespace FanartHandler
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(3, 397);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(245, 13);
+            this.label18.Size = new System.Drawing.Size(257, 13);
             this.label18.TabIndex = 10;
-            this.label18.Text = "Total Artists Initialised In Fanart Handler Database:";
+            this.label18.Text = "Total Artists With Fanart In Fanart Handler Database:";
             // 
             // labelTotalFanartArtistCount
             // 
             this.labelTotalFanartArtistCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelTotalFanartArtistCount.AutoSize = true;
-            this.labelTotalFanartArtistCount.Location = new System.Drawing.Point(272, 380);
+            this.labelTotalFanartArtistCount.Location = new System.Drawing.Point(283, 380);
             this.labelTotalFanartArtistCount.Name = "labelTotalFanartArtistCount";
             this.labelTotalFanartArtistCount.Size = new System.Drawing.Size(13, 13);
             this.labelTotalFanartArtistCount.TabIndex = 9;
@@ -1088,11 +1222,13 @@ namespace FanartHandler
             // 
             this.labelTotalMPArtistCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelTotalMPArtistCount.AutoSize = true;
-            this.labelTotalMPArtistCount.Location = new System.Drawing.Point(272, 364);
+            this.labelTotalMPArtistCount.Location = new System.Drawing.Point(283, 364);
             this.labelTotalMPArtistCount.Name = "labelTotalMPArtistCount";
             this.labelTotalMPArtistCount.Size = new System.Drawing.Size(13, 13);
             this.labelTotalMPArtistCount.TabIndex = 7;
             this.labelTotalMPArtistCount.Text = "0";
+            this.labelTotalMPArtistCount.Visible = false;
+            this.labelTotalMPArtistCount.Click += new System.EventHandler(this.labelTotalMPArtistCount_Click);
             // 
             // label14
             // 
@@ -1103,6 +1239,7 @@ namespace FanartHandler
             this.label14.Size = new System.Drawing.Size(216, 13);
             this.label14.TabIndex = 6;
             this.label14.Text = "Total Artists In MediaPortal Music Database:";
+            this.label14.Visible = false;
             // 
             // button5
             // 
@@ -1271,6 +1408,178 @@ namespace FanartHandler
             this.dataGridView8.Size = new System.Drawing.Size(737, 443);
             this.dataGridView8.TabIndex = 0;
             this.dataGridView8.VirtualMode = true;
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.Controls.Add(this.tabControl6);
+            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage19.Size = new System.Drawing.Size(760, 516);
+            this.tabPage19.TabIndex = 6;
+            this.tabPage19.Text = "Music Thumbnails";
+            this.tabPage19.UseVisualStyleBackColor = true;
+            // 
+            // tabControl6
+            // 
+            this.tabControl6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl6.Controls.Add(this.tabPage21);
+            this.tabControl6.Controls.Add(this.tabPage22);
+            this.tabControl6.Location = new System.Drawing.Point(6, 3);
+            this.tabControl6.Name = "tabControl6";
+            this.tabControl6.SelectedIndex = 0;
+            this.tabControl6.Size = new System.Drawing.Size(748, 507);
+            this.tabControl6.TabIndex = 16;
+            // 
+            // tabPage21
+            // 
+            this.tabPage21.Controls.Add(this.groupBox10);
+            this.tabPage21.Location = new System.Drawing.Point(4, 22);
+            this.tabPage21.Name = "tabPage21";
+            this.tabPage21.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage21.Size = new System.Drawing.Size(740, 481);
+            this.tabPage21.TabIndex = 0;
+            this.tabPage21.Text = "Thumbnails Settings";
+            this.tabPage21.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.checkBox1);
+            this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox10.Location = new System.Drawing.Point(6, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(342, 98);
+            this.groupBox10.TabIndex = 15;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Music Thumbnail Options";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(12, 37);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(263, 20);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "Enable Music Artist Thumbnail Scraping";
+            this.toolTip1.SetToolTip(this.checkBox1, "Check this opton if you want to enable scraping ");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // tabPage22
+            // 
+            this.tabPage22.Controls.Add(this.label33);
+            this.tabPage22.Controls.Add(this.pictureBox9);
+            this.tabPage22.Controls.Add(this.label32);
+            this.tabPage22.Controls.Add(this.button39);
+            this.tabPage22.Controls.Add(this.button40);
+            this.tabPage22.Controls.Add(this.progressBar2);
+            this.tabPage22.Controls.Add(this.dataGridView9);
+            this.tabPage22.Location = new System.Drawing.Point(4, 22);
+            this.tabPage22.Name = "tabPage22";
+            this.tabPage22.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage22.Size = new System.Drawing.Size(740, 481);
+            this.tabPage22.TabIndex = 1;
+            this.tabPage22.Text = "Manage Thumbnails";
+            this.tabPage22.UseVisualStyleBackColor = true;
+            // 
+            // label33
+            // 
+            this.label33.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label33.AutoSize = true;
+            this.label33.BackColor = System.Drawing.Color.Transparent;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label33.ForeColor = System.Drawing.Color.Teal;
+            this.label33.Location = new System.Drawing.Point(629, 454);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(0, 13);
+            this.label33.TabIndex = 21;
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox9.Location = new System.Drawing.Point(624, 362);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(110, 110);
+            this.pictureBox9.TabIndex = 20;
+            this.pictureBox9.TabStop = false;
+            // 
+            // label32
+            // 
+            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(198, 437);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(88, 13);
+            this.label32.TabIndex = 19;
+            this.label32.Text = "Scraper Progress";
+            this.label32.Visible = false;
+            // 
+            // button39
+            // 
+            this.button39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button39.Location = new System.Drawing.Point(6, 429);
+            this.button39.Name = "button39";
+            this.button39.Size = new System.Drawing.Size(103, 22);
+            this.button39.TabIndex = 16;
+            this.button39.Text = "Reset Scraper [R]";
+            this.toolTip1.SetToolTip(this.button39, resources.GetString("button39.ToolTip"));
+            this.button39.UseVisualStyleBackColor = true;
+            this.button39.Visible = false;
+            this.button39.Click += new System.EventHandler(this.button39_Click);
+            // 
+            // button40
+            // 
+            this.button40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button40.Location = new System.Drawing.Point(6, 452);
+            this.button40.Name = "button40";
+            this.button40.Size = new System.Drawing.Size(103, 22);
+            this.button40.TabIndex = 17;
+            this.button40.Text = "Start Scraper [S]";
+            this.toolTip1.SetToolTip(this.button40, "Initiates a new scrape.");
+            this.button40.UseVisualStyleBackColor = true;
+            this.button40.Visible = false;
+            this.button40.Click += new System.EventHandler(this.button40_Click);
+            // 
+            // progressBar2
+            // 
+            this.progressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBar2.Location = new System.Drawing.Point(120, 454);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(239, 18);
+            this.progressBar2.TabIndex = 18;
+            this.progressBar2.Visible = false;
+            // 
+            // dataGridView9
+            // 
+            this.dataGridView9.AllowUserToAddRows = false;
+            this.dataGridView9.AllowUserToResizeColumns = false;
+            this.dataGridView9.AllowUserToResizeRows = false;
+            this.dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView9.CausesValidation = false;
+            this.dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView9.Location = new System.Drawing.Point(3, 6);
+            this.dataGridView9.MultiSelect = false;
+            this.dataGridView9.Name = "dataGridView9";
+            this.dataGridView9.ReadOnly = true;
+            this.dataGridView9.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView9.ShowCellErrors = false;
+            this.dataGridView9.ShowCellToolTips = false;
+            this.dataGridView9.ShowEditingIcon = false;
+            this.dataGridView9.ShowRowErrors = false;
+            this.dataGridView9.Size = new System.Drawing.Size(731, 350);
+            this.dataGridView9.TabIndex = 1;
+            this.dataGridView9.VirtualMode = true;
+            //this.dataGridView9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView9_KeyDown);
+            this.dataGridView9.SelectionChanged += new System.EventHandler(this.DataGridView9_SelectionChanged);
             // 
             // tabPage2
             // 
@@ -2227,10 +2536,10 @@ namespace FanartHandler
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Arial Black", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(201, 3);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(279, 45);
+            this.label9.Size = new System.Drawing.Size(246, 37);
             this.label9.TabIndex = 1;
             this.label9.Text = "Fanart Handler";
             // 
@@ -2285,6 +2594,9 @@ namespace FanartHandler
             this.groupBox7.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
+            this.tabPage20.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
@@ -2299,6 +2611,15 @@ namespace FanartHandler
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage18.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView8)).EndInit();
+            this.tabPage19.ResumeLayout(false);
+            this.tabControl6.ResumeLayout(false);
+            this.tabPage21.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.tabPage22.ResumeLayout(false);
+            this.tabPage22.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView9)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
@@ -2496,5 +2817,26 @@ namespace FanartHandler
         private System.Windows.Forms.DataGridView dataGridView8;
         private System.Windows.Forms.Button button38;
         private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TabPage tabPage19;
+        private System.Windows.Forms.TabPage tabPage20;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.TabControl tabControl6;
+        private System.Windows.Forms.TabPage tabPage21;
+        private System.Windows.Forms.TabPage tabPage22;
+        private System.Windows.Forms.PictureBox pictureBox9;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Button button39;
+        private System.Windows.Forms.Button button40;
+        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.DataGridView dataGridView9;
+        private System.Windows.Forms.Label label33;
     }
 }

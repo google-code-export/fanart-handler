@@ -32,21 +32,63 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Core, Version=1.0.4.17407, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\Core.dll</HintPath>
     </Reference>
-    <Reference Include="Databases, Version=1.0.4.17409, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Cornerstone">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\Cornerstone.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Databases">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\Databases.dll</HintPath>
     </Reference>
-    <Reference Include="Dialogs, Version=1.0.4.17412, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="Dialogs">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\plugins\Windows\Dialogs.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+    <Reference Include="ForTheRecord.Entities">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Skin\nlog\NLog.dll</HintPath>
+      <HintPath>..\External\ForTheRecord.Entities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ForTheRecord.ServiceAgents">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\ForTheRecord.ServiceAgents.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ForTheRecord.ServiceContracts">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\ForTheRecord.ServiceContracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ForTheRecord.UI.Process">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\ForTheRecord.UI.Process.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gentle.Common">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\Gentle.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Gentle.Framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\Gentle.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MovingPictures">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MovingPictures.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MP-TVSeries, Version=2.6.2.1231, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\plugins\Windows\MP-TVSeries.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -64,11 +106,15 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Utils, Version=2.2.7.17403, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="TVDatabase">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\TVDatabase.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\Utils.dll</HintPath>
     </Reference>
-    <Reference Include="WindowPlugins, Version=1.0.4.17421, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="WindowPlugins">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Team MediaPortal\MediaPortal\plugins\Windows\WindowPlugins.dll</HintPath>
     </Reference>
@@ -77,7 +123,9 @@
     <Compile Include="DirectoryWorker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ExternalDatabaseManager.cs" />
+    <Compile Include="ExternalDatabaseManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FanartHandlerSetup.cs">
     </Compile>
     <Compile Include="DatabaseManager.cs" />
@@ -112,6 +160,7 @@
     <Compile Include="FanartHandlerConfig.Designer.cs">
       <DependentUpon>FanartHandlerConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="UtilsExternal.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FanartHandlerConfig.resx">
