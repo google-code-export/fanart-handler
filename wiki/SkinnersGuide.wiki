@@ -57,6 +57,8 @@ This property informs what type of scrape is occurring, like;
 {{{
 #fanarthandler.scraper.task
 }}} 
+==Change Log - Version 2.2 to 2.2.1==
+No changes needed in skin files to support version 2.2.1 if your skin previously supported version 1.1 - 2.2 of this plugin.
 ==Change Log - Version 2.1 to 2.1.1==
 No changes needed in skin files to support version 2.1.1 if your skin previously supported version 1.1 - 2.1.1 of this plugin.
 ==Change Log - Version 2.0 to 2.1==
