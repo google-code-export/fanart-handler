@@ -59,11 +59,11 @@ namespace FanartHandler
                 //bool foundThumb = false;
                 bool foundNewImages = false;
                 string filename = null;
-                bool bFound = false;
+                //bool bFound = false;
                 string sTimestamp = dbm.GetTimeStamp("Fanart Handler Last Scrape");
                 if (sTimestamp == null || sTimestamp.Length <= 0)
                 {
-                    sTimestamp = "2010-09-13 01:00:00";
+                    sTimestamp = "1284008400";
                 }
 
                 HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/searchXML?");
@@ -77,7 +77,8 @@ namespace FanartHandler
                 string values = "keywords=";
                 values += "&aid=1,5";
                 values += "&limit=500";
-                values += "&modified_since=" + Utils.ConvertToTimestamp(DateTime.ParseExact(sTimestamp, "yyyy-MM-dd HH:mm:ss", null));
+                //values += "&modified_since=" + Utils.ConvertToTimestamp(DateTime.ParseExact(sTimestamp, "yyyy-MM-dd HH:mm:ss", null));
+                values += "&modified_since=" + sTimestamp;
                 objRequest.Method = "POST";
                 objRequest.ContentType = "application/x-www-form-urlencoded"; 
                 objRequest.ContentLength = values.Length;
@@ -109,11 +110,11 @@ namespace FanartHandler
                         string s = xmlSearchResultGetElementsByTagName[i].InnerText;
                         if (s != null && s.Length > 0)
                         {
-                            bFound = true;
-                            sTimestamp = Utils.ConvertFromTimestamp(Double.Parse(s, CultureInfo.CurrentCulture));
+                            //bFound = true;
+                            //sTimestamp = Utils.ConvertFromTimestamp(Double.Parse(s, CultureInfo.CurrentCulture));
+                            sTimestamp = s;
                         }
                     }
-
                     XPathNavigator nav = xmlSearchResult.CreateNavigator();                                         
                     nav.MoveToRoot();
                     alSearchResults = new ArrayList();                    
@@ -227,10 +228,11 @@ namespace FanartHandler
                 }
                 alSearchResults = null;
                 objRequest = null;
-                if (bFound)
-                {
-                    Utils.GetDbm().SetTimeStamp("Fanart Handler Last Scrape", sTimestamp);//DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                }
+                //if (bFound)
+                //{
+                    //Utils.GetDbm().SetTimeStamp("Fanart Handler Last Scrape", sTimestamp);//DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                Utils.GetDbm().SetTimeStamp("Fanart Handler Last Scrape", sTimestamp);//DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                //}
                 logger.Info("Scrape for new images is done."); 
             }
             catch (Exception ex)

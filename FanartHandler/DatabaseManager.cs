@@ -1157,10 +1157,23 @@ namespace FanartHandler
                     logger.Info("Upgrading Step 1 - finished");
                     sqlQuery = "UPDATE Version SET Version = '2.0'";
                     lock (lockObject) dbClient.Execute(sqlQuery);
-                    logger.Info("Upgrading Step 5 - finished");
+                    logger.Info("Upgrading Step 2 - finished");
                     justUpgraded = true;
                     logger.Info("Upgraded Database to version 2.0");
                     currVersion = "2.0";
+                }
+                if ((tmpS != null && tmpS.Equals("2.0", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.1");
+                    sqlQuery = "DELETE FROM Timestamps WHERE Key = 'Fanart Handler Last Scrape';";
+                    result = dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    sqlQuery = "UPDATE Version SET Version = '2.1'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 2 - finished");
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.1");
+                    currVersion = "2.1";
                 }
                 result = null;
                 sqlQuery = null;
