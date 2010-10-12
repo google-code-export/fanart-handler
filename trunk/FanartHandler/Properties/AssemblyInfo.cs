@@ -1,6 +1,14 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System;
+
+[assembly: CLSCompliant(false)]
+
+
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, UnmanagedCode = false)]
+
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -10,7 +18,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FanartHandler")]
-[assembly: AssemblyCopyright("Copyright © Cul8er 2009")]
+[assembly: AssemblyCopyright("Open Source software licensed under the GNU/GPL agreement.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

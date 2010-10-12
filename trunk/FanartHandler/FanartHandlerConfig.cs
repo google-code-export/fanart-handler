@@ -1,4 +1,15 @@
-﻿using System;
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +30,7 @@ using NLog.Config;
 using NLog.Targets;
 using MediaPortal.Services;
 using MediaPortal.Music.Database;
+using System.Globalization;
 
 namespace FanartHandler
 {    
@@ -34,8 +46,8 @@ namespace FanartHandler
         private DataTable myDataTable8 = null;
         private DataTable myDataTable9 = null;
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private const string logFileName = "fanarthandler_config.log";
-        private const string oldLogFileName = "fanarthandler_config.old.log";
+        private const string LogFileName = "fanarthandler_config.log";
+        private const string OldLogFileName = "fanarthandler_config.old.log";
         private ScraperWorker myScraperWorker = null;        
         private System.Timers.Timer scraperTimer = null;
         private string useArtist = null;
@@ -63,17 +75,17 @@ namespace FanartHandler
         private string latestMovingPictures = null;
         private string latestTVSeries = null;
         private string latestTVRecordings = null;
-        private bool isScraping = false;
+        private bool isScraping/* = false*/;
         public delegate void ScrollDelegate();
-        private bool isStopping = false;
-        private int lastID = 0;
-        private int lastIDThumb = 0;
-        private int lastIDMovie = 0;
-        private int lastIDScoreCenter = 0;
-        private int lastIDGame = 0;
-        private int lastIDPicture = 0;
-        private int lastIDPlugin = 0;
-        private int lastIDTV = 0; 
+        private bool isStopping/* = false*/;
+        private int lastID/* = 0*/;
+        private int lastIDThumb/* = 0*/;
+        private int lastIDMovie/* = 0*/;
+        private int lastIDScoreCenter/* = 0*/;
+        private int lastIDGame/* = 0*/;
+        private int lastIDPicture/* = 0*/;
+        private int lastIDPlugin/* = 0*/;
+        private int lastIDTV/* = 0*/; 
         private string proxyHostname = null;
         private string proxyPort = null;
         private string proxyUsername = null;
@@ -88,22 +100,22 @@ namespace FanartHandler
             InitializeComponent();
         }
 
-        public bool getCheckBoxXFactorFanart()
+        public bool GetCheckBoxXFactorFanart()
         {
             return checkBoxXFactorFanart.Checked;
         }
 
-        public bool getCheckBoxThumbsAlbum()
+        public bool GetCheckBoxThumbsAlbum()
         {
             return checkBoxThumbsAlbum.Checked;
         }
 
-        public bool getCheckBoxThumbsArtist()
+        public bool GetCheckBoxThumbsArtist()
         {
             return checkBoxThumbsArtist.Checked;
         }
 
-        private bool checkValidity()
+        private bool CheckValidity()
         {
             bool sout = false;
             if ((checkBoxXFactorFanart.Checked == false) && (checkBoxThumbsAlbum.Checked == false) && (checkBoxThumbsArtist.Checked == false))
@@ -121,7 +133,7 @@ namespace FanartHandler
 
         }
 
-        private void setupConfigFile()
+        private void SetupConfigFile()
         {
             try
             {
@@ -144,7 +156,7 @@ namespace FanartHandler
 
         private void DoSave()
         {
-            if (checkValidity())
+            if (CheckValidity())
             {
                 using (MediaPortal.Profile.Settings xmlwriter = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "FanartHandler.xml")))
                 {
@@ -206,7 +218,7 @@ namespace FanartHandler
             if (!DesignMode)
             {
                 DialogResult result = MessageBox.Show("Do you want to save your changes?", "Save Changes?", MessageBoxButtons.YesNo);
-                stopScraper();
+                StopScraper();
                 if (result == DialogResult.No)
                 {
                     //do nothing
@@ -262,7 +274,7 @@ namespace FanartHandler
             comboBoxMinResolution.Items.Add("1280x720");
             comboBoxMinResolution.Items.Add("1920x1080");
 
-            setupConfigFile();
+            SetupConfigFile();
 
             using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "FanartHandler.xml")))
             {
@@ -302,7 +314,7 @@ namespace FanartHandler
 
             if (latestPictures != null && latestPictures.Length > 0)
             {
-                if (latestPictures.Equals("True"))
+                if (latestPictures.Equals("True", StringComparison.CurrentCulture))
                     checkBox5.Checked = true;
                 else
                     checkBox5.Checked = false;
@@ -315,7 +327,7 @@ namespace FanartHandler
 
             if (latestMusic != null && latestMusic.Length > 0)
             {
-                if (latestMusic.Equals("True"))
+                if (latestMusic.Equals("True", StringComparison.CurrentCulture))
                     checkBox6.Checked = true;
                 else
                     checkBox6.Checked = false;
@@ -328,7 +340,7 @@ namespace FanartHandler
 
             if (latestMovingPictures != null && latestMovingPictures.Length > 0)
             {
-                if (latestMovingPictures.Equals("True"))
+                if (latestMovingPictures.Equals("True", StringComparison.CurrentCulture))
                     checkBox7.Checked = true;
                 else
                     checkBox7.Checked = false;
@@ -341,7 +353,7 @@ namespace FanartHandler
 
             if (latestTVSeries != null && latestTVSeries.Length > 0)
             {
-                if (latestTVSeries.Equals("True"))
+                if (latestTVSeries.Equals("True", StringComparison.CurrentCulture))
                     checkBox2.Checked = true;
                 else
                     checkBox2.Checked = false;
@@ -354,7 +366,7 @@ namespace FanartHandler
 
             if (latestTVRecordings != null && latestTVRecordings.Length > 0)
             {
-                if (latestTVRecordings.Equals("True"))
+                if (latestTVRecordings.Equals("True", StringComparison.CurrentCulture))
                     checkBox3.Checked = true;
                 else
                     checkBox3.Checked = false;
@@ -367,7 +379,7 @@ namespace FanartHandler
 
                 if (scrapeThumbnails != null && scrapeThumbnails.Length > 0)
                 {
-                    if (scrapeThumbnails.Equals("True"))
+                    if (scrapeThumbnails.Equals("True", StringComparison.CurrentCulture))
                         checkBox1.Checked = true;
                     else
                         checkBox1.Checked = false;
@@ -380,7 +392,7 @@ namespace FanartHandler
 
                 if (useFanart != null && useFanart.Length > 0)
                 {
-                    if (useFanart.Equals("True"))
+                    if (useFanart.Equals("True", StringComparison.CurrentCulture))
                         checkBoxXFactorFanart.Checked = true;
                     else
                         checkBoxXFactorFanart.Checked = false;
@@ -392,7 +404,7 @@ namespace FanartHandler
                 }
                 if (useProxy != null && useProxy.Length > 0)
                 {
-                    if (useProxy.Equals("True"))
+                    if (useProxy.Equals("True", StringComparison.CurrentCulture))
                     {
                         checkBoxProxy.Checked = true;
                         textBoxProxyHostname.Enabled = true;
@@ -423,7 +435,7 @@ namespace FanartHandler
                 }            
                 if (useAlbum != null && useAlbum.Length > 0)
                 {
-                    if (useAlbum.Equals("True"))
+                    if (useAlbum.Equals("True", StringComparison.CurrentCulture))
                         checkBoxThumbsAlbum.Checked = true;
                     else
                         checkBoxThumbsAlbum.Checked = false;
@@ -435,7 +447,7 @@ namespace FanartHandler
                 }
                 if (useArtist != null && useArtist.Length > 0)
                 {
-                    if (useArtist.Equals("True"))
+                    if (useArtist.Equals("True", StringComparison.CurrentCulture))
                         checkBoxThumbsArtist.Checked = true;
                     else
                         checkBoxThumbsArtist.Checked = false;
@@ -447,7 +459,7 @@ namespace FanartHandler
                 }
                 if (skipWhenHighResAvailable != null && skipWhenHighResAvailable.Length > 0)
                 {
-                    if (skipWhenHighResAvailable.Equals("True"))
+                    if (skipWhenHighResAvailable.Equals("True", StringComparison.CurrentCulture))
                         checkBoxSkipMPThumbsIfFanartAvailble.Checked = true;
                     else
                         checkBoxSkipMPThumbsIfFanartAvailble.Checked = false;
@@ -459,7 +471,7 @@ namespace FanartHandler
                 }
                 if (disableMPTumbsForRandom != null && disableMPTumbsForRandom.Length > 0)
                 {
-                    if (disableMPTumbsForRandom.Equals("True"))
+                    if (disableMPTumbsForRandom.Equals("True", StringComparison.CurrentCulture))
                         checkBoxThumbsDisabled.Checked = true;
                     else
                         checkBoxThumbsDisabled.Checked = false;
@@ -471,7 +483,7 @@ namespace FanartHandler
                 }
                 if (defaultBackdropIsImage != null && defaultBackdropIsImage.Length > 0)
                 {
-                    if (defaultBackdropIsImage.Equals("True"))
+                    if (defaultBackdropIsImage.Equals("True", StringComparison.CurrentCulture))
                     {
                         radioButtonBackgroundIsFile.Checked = true;
                         radioButtonBackgroundIsFolder.Checked = false;
@@ -490,7 +502,7 @@ namespace FanartHandler
                 }            
                 if (useOverlayFanart != null && useOverlayFanart.Length > 0)
                 {
-                    if (useOverlayFanart.Equals("True"))
+                    if (useOverlayFanart.Equals("True", StringComparison.CurrentCulture))
                         checkBoxOverlayFanart.Checked = true;
                     else
                         checkBoxOverlayFanart.Checked = false;
@@ -502,7 +514,7 @@ namespace FanartHandler
                 }
                 if (useDefaultBackdrop != null && useDefaultBackdrop.Length > 0)
                 {
-                    if (useDefaultBackdrop.Equals("True"))
+                    if (useDefaultBackdrop.Equals("True", StringComparison.CurrentCulture))
                         checkBoxEnableDefaultBackdrop.Checked = true;
                     else
                         checkBoxEnableDefaultBackdrop.Checked = false;
@@ -514,7 +526,7 @@ namespace FanartHandler
                 }            
                 if (useMusicFanart != null && useMusicFanart.Length > 0)
                 {
-                    if (useMusicFanart.Equals("True"))
+                    if (useMusicFanart.Equals("True", StringComparison.CurrentCulture))
                         checkBoxEnableMusicFanart.Checked = true;
                     else
                         checkBoxEnableMusicFanart.Checked = false;
@@ -526,7 +538,7 @@ namespace FanartHandler
                 }
                 if (useVideoFanart != null && useVideoFanart.Length > 0)
                 {
-                    if (useVideoFanart.Equals("True"))
+                    if (useVideoFanart.Equals("True", StringComparison.CurrentCulture))
                         checkBoxEnableVideoFanart.Checked = true;
                     else
                         checkBoxEnableVideoFanart.Checked = false;
@@ -538,7 +550,7 @@ namespace FanartHandler
                 }
                 if (useScoreCenterFanart != null && useScoreCenterFanart.Length > 0)
                 {
-                    if (useScoreCenterFanart.Equals("True"))
+                    if (useScoreCenterFanart.Equals("True", StringComparison.CurrentCulture))
                         checkBoxEnableScoreCenterFanart.Checked = true;
                     else
                         checkBoxEnableScoreCenterFanart.Checked = false;
@@ -627,7 +639,7 @@ namespace FanartHandler
                 }
                 if (scraperMusicPlaying != null && scraperMusicPlaying.Length > 0)
                 {
-                    if (scraperMusicPlaying.Equals("True"))
+                    if (scraperMusicPlaying.Equals("True", StringComparison.CurrentCulture))
                         checkBoxScraperMusicPlaying.Checked = true;
                     else
                         checkBoxScraperMusicPlaying.Checked = false;
@@ -639,7 +651,7 @@ namespace FanartHandler
                 }
                 if (scraperMPDatabase != null && scraperMPDatabase.Length > 0)
                 {
-                    if (scraperMPDatabase.Equals("True"))
+                    if (scraperMPDatabase.Equals("True", StringComparison.CurrentCulture))
                         checkBoxEnableScraperMPDatabase.Checked = true;
                     else
                         checkBoxEnableScraperMPDatabase.Checked = false;
@@ -660,7 +672,7 @@ namespace FanartHandler
                 }
                 if (useAspectRatio != null && useAspectRatio.Length > 0)
                 {
-                    if (useAspectRatio.Equals("True"))
+                    if (useAspectRatio.Equals("True", StringComparison.CurrentCulture))
                         checkBoxAspectRatio.Checked = true;
                     else
                         checkBoxAspectRatio.Checked = false;
@@ -672,7 +684,7 @@ namespace FanartHandler
                 }
                 try
                 {
-                    initLogger();
+                    InitLogger();
                     //System.Net.ServicePointManager.Expect100Continue = false;
                     logger.Info("Fanart Handler configuration is starting.");
                     logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());                                        
@@ -923,19 +935,19 @@ namespace FanartHandler
         /// Setup logger. This funtion made by the team behind Moving Pictures 
         /// (http://code.google.com/p/moving-pictures/)
         /// </summary>
-        private void initLogger()
+        private void InitLogger()
         {
             LoggingConfiguration config = new LoggingConfiguration();
 
             try
             {
-                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
+                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, LogFileName));
                 if (logFile.Exists)
                 {
-                    if (File.Exists(Config.GetFile(Config.Dir.Log, oldLogFileName)))
-                        File.Delete(Config.GetFile(Config.Dir.Log, oldLogFileName));
+                    if (File.Exists(Config.GetFile(Config.Dir.Log, OldLogFileName)))
+                        File.Delete(Config.GetFile(Config.Dir.Log, OldLogFileName));
 
-                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, oldLogFileName));
+                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, OldLogFileName));
                     logFile.Delete();
                 }
             }
@@ -943,7 +955,7 @@ namespace FanartHandler
 
 
             FileTarget fileTarget = new FileTarget();
-            fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
+            fileTarget.FileName = Config.GetFile(Config.Dir.Log, LogFileName);
             fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
                                 "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
@@ -982,12 +994,12 @@ namespace FanartHandler
             LogManager.Configuration = config;
         }
 
-        private string getFilenameOnly(string filename)
+        private string GetFilenameOnly(string filename)
         {
             filename = filename.Replace("/", "\\");
-            if (filename.IndexOf("\\") >= 0)
+            if (filename.IndexOf("\\", StringComparison.CurrentCulture) >= 0)
             {
-                return filename.Substring(filename.LastIndexOf("\\") + 1);
+                return filename.Substring(filename.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
             }
             return filename;
         }
@@ -1357,7 +1369,7 @@ namespace FanartHandler
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
-                        if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default") == false)
+                        if (Utils.GetFilenameNoPath(dir).ToLower(CultureInfo.CurrentCulture).StartsWith("default", StringComparison.CurrentCulture) == false)
                         {
                             File.Delete(dir);
                         }
@@ -1368,7 +1380,7 @@ namespace FanartHandler
                     labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
                     labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
                     labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                    labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                    labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUNInitialisedInFanartDatabase();
                     MessageBox.Show("Done!");
                 }
             }
@@ -1437,7 +1449,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView1.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartMusic(sFileName, false);
                         dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[1].Value = "False";
@@ -1514,15 +1526,14 @@ namespace FanartHandler
         {
             try
             {
-                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True"))
+                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True", StringComparison.CurrentCulture))
                 {
                     if (isScraping == false)
                     {
                         isScraping = true;
-                        if (useFanart.Equals("True"))
+                        if (useFanart.Equals("True", StringComparison.CurrentCulture))
                         {
-                            int i = 0;
-                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", ref i, "MusicFanart",0);
+                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", "MusicFanart",0);
                         }
                         dataGridView1.Enabled = false;
                         button6.Text = "Stop Scraper";
@@ -1544,7 +1555,7 @@ namespace FanartHandler
                     {
                         button6.Text = "Start Scraper";
                         dataGridView1.Enabled = false;
-                        stopScraper();
+                        StopScraper();
                         isScraping = false;
                         button1.Enabled = true;
                         button2.Enabled = true;
@@ -1579,7 +1590,7 @@ namespace FanartHandler
             progressBar1.Maximum = 1;
             progressBar1.Value = 1;
             Thread.Sleep(1000);
-            stopScraper();
+            StopScraper();
         }
 
 
@@ -1598,9 +1609,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable3.NewRow();
                             myDataRow["Genre"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDScoreCenter)
                             {
                                 lastIDScoreCenter = tmpID;
@@ -1641,9 +1652,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable4.NewRow();
                             myDataRow["Genre"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDGame)
                             {
                                 lastIDGame = tmpID;
@@ -1684,9 +1695,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable5.NewRow();
                             myDataRow["Genre"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDPicture)
                             {
                                 lastIDPicture = tmpID;
@@ -1727,9 +1738,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable6.NewRow();
                             myDataRow["Genre"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDPlugin)
                             {
                                 lastIDPlugin = tmpID;
@@ -1770,9 +1781,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable7.NewRow();
                             myDataRow["Genre"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDTV)
                             {
                                 lastIDTV = tmpID;
@@ -1846,9 +1857,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable2.NewRow();
                             myDataRow["Title"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDMovie)
                             {
                                 lastIDMovie = tmpID;
@@ -1898,9 +1909,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable.NewRow();
                             myDataRow["Artist"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastID)
                             {
                                 lastID = tmpID;
@@ -1910,7 +1921,7 @@ namespace FanartHandler
                         labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
                         labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
                         labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUNInitialisedInFanartDatabase();
                     }
                 }
                 result = null;
@@ -1947,9 +1958,9 @@ namespace FanartHandler
                         {
                             DataRow myDataRow = myDataTable9.NewRow();
                             myDataRow["Artist"] = result.GetField(i, 0);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastIDThumb)
                             {
                                 lastIDThumb = tmpID;
@@ -1989,9 +2000,9 @@ namespace FanartHandler
                             DataRow myDataRow = myDataTable.NewRow();
                             myDataRow["Artist"] = result.GetField(i, 0);
                             myDataRow["Enabled"] = result.GetField(i, 1);
-                            myDataRow["Image"] = getFilenameOnly(result.GetField(i, 2));
+                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3));
+                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
                             if (tmpID > lastID)
                             {
                                 lastID = tmpID;
@@ -2001,7 +2012,7 @@ namespace FanartHandler
                         labelTotalMPArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInMPMusicDatabase();
                         labelTotalFanartArtistCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInFanartDatabase();
                         labelTotalFanartArtistInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsInitialisedInFanartDatabase();
-                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUnInitialisedInFanartDatabase();
+                        labelTotalFanartArtistUnInitCount.Text = String.Empty + Utils.GetDbm().GetTotalArtistsUNInitialisedInFanartDatabase();
                     }
                 }
                 result = null;
@@ -2024,9 +2035,9 @@ namespace FanartHandler
         {
             try
             {
-                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True") && Utils.GetDbm().GetIsScraping() == false)
+                if (scraperMPDatabase != null && scraperMPDatabase.Equals("True", StringComparison.CurrentCulture) && Utils.GetDbm().GetIsScraping() == false)
                 {
-                    startScraper();
+                    StartScraper();
                 }
             }
             catch (Exception ex)
@@ -2035,7 +2046,7 @@ namespace FanartHandler
             }
         }
 
-        private void stopScraper()
+        private void StopScraper()
         {
             try
             {
@@ -2085,7 +2096,7 @@ namespace FanartHandler
         
         
 
-        private void startScraper()
+        private void StartScraper()
         {
             try
             {
@@ -2264,7 +2275,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView2.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView2.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartMovie(sFileName, false);
                         dataGridView2.Rows[dataGridView2.CurrentRow.Index].Cells[1].Value = "False";
@@ -2357,7 +2368,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView3.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView3.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartScoreCenter(sFileName, false);
                         dataGridView3.Rows[dataGridView3.CurrentRow.Index].Cells[1].Value = "False";
@@ -2451,56 +2462,48 @@ namespace FanartHandler
             {
                 //Add games images
                 string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
-                int i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Game", 0);
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game", 0);
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
-                i = 0;
-                if (useVideoFanart.Equals("True"))
+                if (useVideoFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Movie", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie", 0);
                 }
                 //Add music images
                 path = String.Empty;
-                i = 0;
-                if (useAlbum.Equals("True"))
+                if (useAlbum.Equals("True", StringComparison.CurrentCulture))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
-                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicAlbum", 0);
                 }
-                if (useArtist.Equals("True"))
+                if (useArtist.Equals("True", StringComparison.CurrentCulture))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicArtist", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicArtist", 0);
                 }
-                if (useFanart.Equals("True"))
+                if (useFanart.Equals("True", StringComparison.CurrentCulture))
                 {
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MusicFanart", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart", 0);
                 }
                 //Add pictures images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
-                i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Picture", 0);
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture", 0);
                 //Add scorecenter images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
-                i = 0;
-                if (useScoreCenterFanart.Equals("True"))
+                if (useScoreCenterFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "ScoreCenter", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter", 0);
                 }
                 //Add tvseries images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
-                i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TVSeries", 0);
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TVSeries", 0);
                  
                 //Add tv images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
-                i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TV", 0);
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV", 0);
                 //Add plugins images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
-                i = 0;
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Plugin",0);
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin",0);
             }
             catch (Exception ex)
             {
@@ -2513,7 +2516,7 @@ namespace FanartHandler
             //import local fanart movie
             try
             {
-                if (useVideoFanart.Equals("True"))
+                if (useVideoFanart.Equals("True", StringComparison.CurrentCulture))
                 {
                     ImportLocalFanart("Movie");
                     ImportLocalFanartAtStartup();
@@ -2540,7 +2543,7 @@ namespace FanartHandler
                 if (isScraping == false)
                 {
                     isScraping = true;
-                    if (useMusicFanart.Equals("True"))
+                    if (useMusicFanart.Equals("True", StringComparison.CurrentCulture))
                     {
                         ImportLocalFanart("MusicFanart");
                         ImportLocalFanartAtStartup();
@@ -2560,7 +2563,7 @@ namespace FanartHandler
             //import local fanart scorecenter
             try
             {
-                if (useScoreCenterFanart.Equals("True"))
+                if (useScoreCenterFanart.Equals("True", StringComparison.CurrentCulture))
                 {
                     ImportLocalFanart("ScoreCenter");
                     ImportLocalFanartAtStartup();
@@ -2594,27 +2597,27 @@ namespace FanartHandler
                     foreach (String file in openFD.FileNames)
                     {
                         artist = Utils.GetArtist(file, type);
-                        if (type.Equals("MusicFanart"))
+                        if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\music\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Movie"))
+                        else if (type.Equals("Movie", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\movies\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Game"))
+                        else if (type.Equals("Game", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\games\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Picture"))
+                        else if (type.Equals("Picture", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\pictures\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Plugin"))
+                        else if (type.Equals("Plugin", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\plugins\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("TV"))
+                        else if (type.Equals("TV", StringComparison.CurrentCulture))
                         {
                             newFilename = path + @"\Skin FanArt\tv\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
@@ -2640,7 +2643,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView4.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView4.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartRandom(sFileName, false, "Game");
                         dataGridView4.Rows[dataGridView4.CurrentRow.Index].Cells[1].Value = "False";
@@ -2747,7 +2750,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView5.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView5.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartRandom(sFileName, false, "Picture");
                         dataGridView5.Rows[dataGridView5.CurrentRow.Index].Cells[1].Value = "False";
@@ -2854,7 +2857,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView6.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView6.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartRandom(sFileName, false, "Plugin");
                         dataGridView6.Rows[dataGridView6.CurrentRow.Index].Cells[1].Value = "False";
@@ -2961,7 +2964,7 @@ namespace FanartHandler
                 {
                     string sFileName = dataGridView7.CurrentRow.Cells[3].Value.ToString();
                     string enabled = dataGridView7.CurrentRow.Cells[1].Value.ToString();
-                    if (enabled != null && enabled.Equals("True"))
+                    if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
                         Utils.GetDbm().EnableFanartRandom(sFileName, false, "TV");
                         dataGridView7.Rows[dataGridView7.CurrentRow.Index].Cells[1].Value = "False";

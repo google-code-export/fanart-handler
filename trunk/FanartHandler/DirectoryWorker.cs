@@ -1,4 +1,16 @@
-﻿namespace FanartHandler
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
+using System.Globalization;
+namespace FanartHandler
 {
     using MediaPortal.Configuration;
     using NLog;
@@ -28,7 +40,7 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
+            if (FanartHandlerSetup.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             }
@@ -48,65 +60,58 @@
 
                     //Add games images
                     string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
-                    int i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyGames)
+                    if (FanartHandlerSetup.FR.UseAnyGames)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Game", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game", 0);
                     }
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
-                    i = 0;
-                    if (FanartHandlerSetup.UseVideoFanart.Equals("True") || FanartHandlerSetup.fr.UseAnyMovies)
+                    if (FanartHandlerSetup.UseVideoFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMovies)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Movie", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie", 0);
                     }
 
                     //Add music images
                     path = String.Empty;
-                    i = 0;
-                    if (FanartHandlerSetup.UseAlbum.Equals("True"))
+                    if (FanartHandlerSetup.UseAlbum.Equals("True", StringComparison.CurrentCulture))
                     {
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
-                        FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicAlbum", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicAlbum", 0);
                     }
-                    if (FanartHandlerSetup.UseArtist.Equals("True"))
+                    if (FanartHandlerSetup.UseArtist.Equals("True", StringComparison.CurrentCulture))
                     {
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-                        FanartHandlerSetup.SetupFilenames(path, "*L.jpg", ref i, "MusicArtist", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicArtist", 0);
                     }
-                    if (FanartHandlerSetup.UseFanart.Equals("True") || FanartHandlerSetup.fr.UseAnyMusic)
+                    if (FanartHandlerSetup.UseFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMusic)
                     {
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "MusicFanart", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart", 0);
                     }
 
                     //Add pictures images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
-                    i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyPictures)
+                    if (FanartHandlerSetup.FR.UseAnyPictures)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Picture", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture", 0);
                     }
 
                     //Add games images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
-                    i = 0;
-                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True") || FanartHandlerSetup.fr.UseAnyScoreCenter)
+                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyScoreCenter)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "ScoreCenter", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter", 0);
                     }
 
                     //Add tvseries images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
-                    i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyTVSeries)
+                    if (FanartHandlerSetup.FR.UseAnyTVSeries)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TVSeries", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TVSeries", 0);
                     }
 
                     //Add tvseries images external
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
-                    i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyTVSeries)
+                    if (FanartHandlerSetup.FR.UseAnyTVSeries)
                     {
                         Hashtable seriesHt = null;
                         try
@@ -118,7 +123,7 @@
                         }
                         if (seriesHt != null)
                         {
-                            FanartHandlerSetup.SetupFilenamesExternal(path, "*.jpg", ref i, "TVSeries", 0, seriesHt);
+                            FanartHandlerSetup.SetupFilenamesExternal(path, "*.jpg", "TVSeries", 0, seriesHt);
                             seriesHt.Clear();
                             seriesHt = null;
                         }
@@ -126,18 +131,16 @@
                     
                     //Add tv images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
-                    i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyTV)
+                    if (FanartHandlerSetup.FR.UseAnyTV)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "TV", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV", 0);
                     }
 
                     //Add plugins images
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
-                    i = 0;
-                    if (FanartHandlerSetup.fr.UseAnyPlugins)
+                    if (FanartHandlerSetup.FR.UseAnyPlugins)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", ref i, "Plugin", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin", 0);
                     }
 
                     try
@@ -148,21 +151,21 @@
                     {
                     }
                     
-                    Utils.GetDbm().HtAnyGameFanart = null; //20200429
-                    Utils.GetDbm().HtAnyMovieFanart = null; //20200429
-                    Utils.GetDbm().HtAnyMovingPicturesFanart = null; //20200429
-                    Utils.GetDbm().HtAnyMusicFanart = null; //20200429
-                    Utils.GetDbm().HtAnyPictureFanart = null; //20200429
-                    Utils.GetDbm().HtAnyScorecenter = null; //20200429
-                    Utils.GetDbm().HtAnyTVSeries = null; //20200429
-                    Utils.GetDbm().HtAnyTVFanart = null; //20200429
-                    Utils.GetDbm().HtAnyPluginFanart = null; //20200429
-                    FanartHandlerSetup.syncPointDirectory = 0;
+                    Utils.GetDbm().HTAnyGameFanart = null; //20200429
+                    Utils.GetDbm().HTAnyMovieFanart = null; //20200429
+                    Utils.GetDbm().HTAnyMovingPicturesFanart = null; //20200429
+                    Utils.GetDbm().HTAnyMusicFanart = null; //20200429
+                    Utils.GetDbm().HTAnyPictureFanart = null; //20200429
+                    Utils.GetDbm().HTAnyScorecenter = null; //20200429
+                    Utils.GetDbm().HTAnyTVSeries = null; //20200429
+                    Utils.GetDbm().HTAnyTVFanart = null; //20200429
+                    Utils.GetDbm().HTAnyPluginFanart = null; //20200429
+                    FanartHandlerSetup.SyncPointDirectory = 0;
                 }
                 catch (Exception ex)
                 {
                     Utils.SetDelayStop(false);
-                    FanartHandlerSetup.syncPointDirectory = 0;
+                    FanartHandlerSetup.SyncPointDirectory = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }                
             }
@@ -175,17 +178,17 @@
         private void GetLatestMediaInfo()
         {
             int z = 1;
-            string windowId = GUIWindowManager.ActiveWindow.ToString();           
+            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);           
 
-            if (FanartHandlerSetup.LatestTVRecordings.Equals("True"))
+            if (FanartHandlerSetup.LatestTVRecordings.Equals("True", StringComparison.CurrentCulture))
             {
                 //TV Recordings
-                UtilsExternal.Latests latestTVRecordings = null;
+                FanartHandler.LatestsCollection latestTVRecordings = null;
                 try
                 {
                     MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
                     string use4TR = xmlreader.GetValue("plugins", "For The Record TV");
-                    if (use4TR != null && use4TR.Equals("yes"))
+                    if (use4TR != null && use4TR.Equals("yes", StringComparison.CurrentCulture))
                     {
                         ResolveEventHandler assemblyResolve = UtilsExternal.OnAssemblyResolve;
                         try
@@ -230,13 +233,13 @@
             }                       
 
             ExternalDatabaseManager edbm;
-            if (FanartHandlerSetup.LatestPictures.Equals("True") && !(windowId.Equals("2")))
+            if (FanartHandlerSetup.LatestPictures.Equals("True", StringComparison.CurrentCulture) && !(windowId.Equals("2", StringComparison.CurrentCulture)))
             {
                 //Pictures            
                 edbm = new ExternalDatabaseManager();
                 if (edbm.InitDB("PictureDatabase.db3"))
                 {
-                    UtilsExternal.Latests ht = edbm.GetLatestPictures();
+                    FanartHandler.LatestsCollection ht = edbm.GetLatestPictures();
                     if (ht != null)
                     {
                         //logger.Debug("Updating Latest Media Info: New pictures added");
@@ -254,17 +257,17 @@
                 }
                 try
                 {
-                    edbm.close();
+                    edbm.Close();
                 }
                 catch { }
                 edbm = null;
                 z = 1;
             }
 
-            if (FanartHandlerSetup.LatestMusic.Equals("True") && !(windowId.Equals("987656") || windowId.Equals("504") || windowId.Equals("501") || windowId.Equals("500")))
+            if (FanartHandlerSetup.LatestMusic.Equals("True", StringComparison.CurrentCulture) && !(windowId.Equals("987656", StringComparison.CurrentCulture) || windowId.Equals("504", StringComparison.CurrentCulture) || windowId.Equals("501", StringComparison.CurrentCulture) || windowId.Equals("500", StringComparison.CurrentCulture)))
             {
                 //Music
-                UtilsExternal.Latests hTable = Utils.GetDbm().GetLatestMusic();
+                FanartHandler.LatestsCollection hTable = Utils.GetDbm().GetLatestMusic();
                 if (hTable != null)
                 {
                     //logger.Debug("Updating Latest Media Info: New music added");

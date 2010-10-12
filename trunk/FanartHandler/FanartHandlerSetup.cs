@@ -1,9 +1,16 @@
-﻿//-----------------------------------------------------------------------
-// Open Source software licensed under the GNU/GPL agreement.
-// 
-// Author: Cul8er
-//-----------------------------------------------------------------------
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
 
+using System.Globalization;
 namespace FanartHandler
 {
     using MediaPortal.Configuration;
@@ -40,8 +47,8 @@ namespace FanartHandler
          * Log declarations
          */ 
         private static Logger logger = LogManager.GetCurrentClassLogger();  //log
-        private const string logFileName = "fanarthandler.log";  //log's filename
-        private const string oldLogFileName = "fanarthandler.old.log";  //log's old filename
+        private const string LogFileName = "fanarthandler.log";  //log's filename
+        private const string OldLogFileName = "fanarthandler.old.log";  //log's old filename
 
         /*
          * All Threads and Timers
@@ -58,13 +65,13 @@ namespace FanartHandler
         private System.Threading.Timer scraperTimer = null;
 
         private static string m_CurrentTrackTag = null;  //is music playing and if so this holds current artist name                        
-        private static bool isPlaying = false; //hold true if MP plays music        
-        private static bool isSelectedMusic = false;
-        private static bool isSelectedVideo = false;
-        private static bool isSelectedScoreCenter = false;
-        private static bool isRandom = false;        
+        private static bool isPlaying/* = false*/; //hold true if MP plays music        
+        private static bool isSelectedMusic/* = false*/;
+        private static bool isSelectedVideo/* = false*/;
+        private static bool isSelectedScoreCenter/* = false*/;
+        private static bool isRandom/* = false*/;        
         private static string tmpImage = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\transparent.png";        
-        private static bool preventRefresh = false;        
+        private static bool preventRefresh/* = false*/;        
         private static Hashtable defaultBackdropImages;  //used to hold all the default backdrop images                
         private static Random randDefaultBackdropImages = null;  //For getting random default backdrops
         private FanartHandlerConfig xconfig = null;
@@ -96,12 +103,12 @@ namespace FanartHandler
         private static MusicDatabase m_db = null;  //handle to MP Music database                        
         private static int maxCountImage = 30;        
         private static string m_SelectedItem = null; //artist, album, title                
-        public static FanartPlaying fp = null;
-        public static FanartSelected fs = null;
-        public static FanartRandom fr = null;
-        public static int syncPointRefresh = 0;
-        public static int syncPointDirectory = 0;
-        public static int syncPointScraper = 0;
+        public static FanartPlaying FP = null;
+        public static FanartSelected FS = null;
+        public static FanartRandom FR = null;
+        public static int SyncPointRefresh/* = 0*/;
+        public static int SyncPointDirectory/* = 0*/;
+        public static int SyncPointScraper/* = 0*/;
         private static int basichomeFadeTime = 5;        
         private static bool useBasichomeFade = true;
         private static string m_CurrentTitleTag = null;
@@ -162,7 +169,7 @@ namespace FanartHandler
             set { FanartHandlerSetup.myScraperWorker = value; }
         }        
 
-        public static string FhThreadPriority
+        public static string FHThreadPriority
         {
             get { return FanartHandlerSetup.fhThreadPriority; }
             set { FanartHandlerSetup.fhThreadPriority = value; }
@@ -306,7 +313,7 @@ namespace FanartHandler
             set { FanartHandlerSetup.useAspectRatio = value; }
         }
 
-        public static MusicDatabase M_Db
+        public static MusicDatabase MDB
         {
             get { return FanartHandlerSetup.m_db; }
             set { FanartHandlerSetup.m_db = value; }
@@ -341,7 +348,7 @@ namespace FanartHandler
                     while (i < (al.Count - 1))
                     {
                         //unload old image to free MP resource
-                        UnLoadImage(al[i].ToString());
+                        UNLoadImage(al[i].ToString());
 
                         //remove old no longer used image
                         al.RemoveAt(i);
@@ -363,7 +370,7 @@ namespace FanartHandler
                     foreach (Object obj in al)
                     {
                         //unload old image to free MP resource
-                        UnLoadImage(obj.ToString());
+                        UNLoadImage(obj.ToString());
                     }
 
                     //remove old no longer used image
@@ -411,15 +418,15 @@ namespace FanartHandler
                     return false;
                 }
                 Image checkImage = Image.FromFile(filename);
-                double mWidth = Convert.ToInt32(minResolution.Substring(0, minResolution.IndexOf("x")));
-                double mHeight = Convert.ToInt32(minResolution.Substring(minResolution.IndexOf("x") + 1));
+                double mWidth = Convert.ToInt32(minResolution.Substring(0, minResolution.IndexOf("x", StringComparison.CurrentCulture)), CultureInfo.CurrentCulture);
+                double mHeight = Convert.ToInt32(minResolution.Substring(minResolution.IndexOf("x", StringComparison.CurrentCulture) + 1), CultureInfo.CurrentCulture);
                 double imageWidth = checkImage.Width;
                 double imageHeight = checkImage.Height;
                 checkImage.Dispose();
                 checkImage = null;
                 if (imageWidth >= mWidth && imageHeight >= mHeight)
                 {
-                    if (useAspectRatio.Equals("True"))
+                    if (useAspectRatio.Equals("True", StringComparison.CurrentCulture))
                     {
                         if (imageHeight > 0 && ((imageWidth / imageHeight) >= 1.3))
                         {
@@ -451,7 +458,7 @@ namespace FanartHandler
         /// <summary>
         /// Add files in directory to hashtable
         /// </summary>
-        public static void SetupFilenames(string s, string filter, ref int i, string type, int restricted)
+        public static void SetupFilenames(string s, string filter, string type, int restricted)
         {
             string artist = String.Empty;
             string typeOrg = type;
@@ -462,14 +469,14 @@ namespace FanartHandler
                     string useFilter = Utils.GetDbm().GetTimeStamp("Directory - " + s);
                     if (useFilter == null || useFilter.Length < 2)
                     {
-                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString();
+                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString(CultureInfo.CurrentCulture);
                     }
-                    DirectoryInfo Dir = new DirectoryInfo(s);
-                    DateTime dt = Convert.ToDateTime(useFilter);
-                    FileInfo[] FileList = Dir.GetFiles(filter, SearchOption.AllDirectories);
-                    var query = from FI in FileList
-                                where FI.CreationTime >= dt
-                                select FI.FullName;
+                    DirectoryInfo dir1 = new DirectoryInfo(s);
+                    DateTime dt = Convert.ToDateTime(useFilter, CultureInfo.CurrentCulture);
+                    FileInfo[] fileList = dir1.GetFiles(filter, SearchOption.AllDirectories);
+                    var query = from fi in fileList
+                                where fi.CreationTime >= dt
+                                select fi.FullName;
                     foreach (string dir in query)
                     {
                         if (Utils.GetIsStopping())
@@ -477,9 +484,9 @@ namespace FanartHandler
                             break;
                         }
                         artist = Utils.GetArtist(dir, type);
-                        if (type.Equals("MusicAlbum") || type.Equals("MusicArtist") || type.Equals("MusicFanart"))
+                        if (type.Equals("MusicAlbum", StringComparison.CurrentCulture) || type.Equals("MusicArtist", StringComparison.CurrentCulture) || type.Equals("MusicFanart", StringComparison.CurrentCulture))
                         {
-                            if (Utils.GetFilenameNoPath(dir).ToLower().StartsWith("default"))
+                            if (Utils.GetFilenameNoPath(dir).ToLower(CultureInfo.CurrentCulture).StartsWith("default", StringComparison.CurrentCulture))
                             {
                                 type = "Default";
                             }
@@ -491,11 +498,11 @@ namespace FanartHandler
                             Utils.GetDbm().LoadFanart(artist, dir, dir, type, restricted);
                         }
                     }
-                    FileList = null;
-                    Dir = null;
+                    fileList = null;
+                    dir1 = null;
                     if (Utils.GetIsStopping() == false)
                     {
-                        Utils.GetDbm().SetTimeStamp("Directory - " + s, DateTime.Now.ToString());
+                        Utils.GetDbm().SetTimeStamp("Directory - " + s, DateTime.Now.ToString(CultureInfo.CurrentCulture));
                     }
                 }
             }
@@ -508,10 +515,10 @@ namespace FanartHandler
         /// <summary>
         /// Add files in directory to hashtable
         /// </summary>
-        public static void SetupFilenamesExternal(string s, string filter, ref int i, string type, int restricted, Hashtable ht)
+        public static void SetupFilenamesExternal(string s, string filter, string type, int restricted, Hashtable ht)
         {
             string artist = String.Empty;
-            string typeOrg = type;
+//            string typeOrg = type // COMMENTED BY CODEIT.RIGHT;
             try
             {
                 if (Directory.Exists(s))
@@ -519,14 +526,14 @@ namespace FanartHandler
                     string useFilter = Utils.GetDbm().GetTimeStamp("Directory Ext - " + s);
                     if (useFilter == null || useFilter.Length < 2)
                     {
-                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString();
+                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString(CultureInfo.CurrentCulture);
                     }
-                    DirectoryInfo Dir = new DirectoryInfo(s);
-                    DateTime dt = Convert.ToDateTime(useFilter);
-                    FileInfo[] FileList = Dir.GetFiles(filter, SearchOption.AllDirectories);
-                    var query = from FI in FileList
-                                where FI.CreationTime >= dt
-                                select FI.FullName;
+                    DirectoryInfo dir1 = new DirectoryInfo(s);
+                    DateTime dt = Convert.ToDateTime(useFilter, CultureInfo.CurrentCulture);
+                    FileInfo[] fileList = dir1.GetFiles(filter, SearchOption.AllDirectories);
+                    var query = from fi in fileList
+                                where fi.CreationTime >= dt
+                                select fi.FullName;
                     foreach (string dir in query)
                     {
                         if (Utils.GetIsStopping())
@@ -539,11 +546,11 @@ namespace FanartHandler
                             Utils.GetDbm().LoadFanartExternal(ht[artist].ToString(), dir, dir, type, restricted);
                         }                        
                     }
-                    FileList = null;
-                    Dir = null;
+                    fileList = null;
+                    dir1 = null;
                     if (Utils.GetIsStopping() == false)
                     {
-                        Utils.GetDbm().SetTimeStamp("Directory Ext - " + s, DateTime.Now.ToString());
+                        Utils.GetDbm().SetTimeStamp("Directory Ext - " + s, DateTime.Now.ToString(CultureInfo.CurrentCulture));
                     }
                 }
             }
@@ -560,12 +567,12 @@ namespace FanartHandler
         /// </summary>
         public void SetupDefaultBackdrops(string startDir, ref int i)
         {
-            if (useDefaultBackdrop.Equals("True"))
+            if (useDefaultBackdrop.Equals("True", StringComparison.CurrentCulture))
             {
                 try
                 {
                     // Process the list of files found in the directory
-                    var files = Directory.GetFiles(startDir, "*.*").Where(s => s.EndsWith(".jpg") || s.EndsWith(".jpeg") || s.EndsWith(".png"));
+                    var files = Directory.GetFiles(startDir, "*.*").Where(s => s.EndsWith(".jpg", StringComparison.CurrentCulture) || s.EndsWith(".jpeg", StringComparison.CurrentCulture) || s.EndsWith(".png", StringComparison.CurrentCulture));
                     foreach (string file in files)
                     {
                         try
@@ -610,7 +617,7 @@ namespace FanartHandler
             {
                 try
                 {
-                    int sync = Interlocked.CompareExchange(ref syncPointDirectory, 1, 0);
+                    int sync = Interlocked.CompareExchange(ref SyncPointDirectory, 1, 0);
                     if (sync == 0)
                     {
                         // No other event was executing.                        
@@ -620,7 +627,7 @@ namespace FanartHandler
                 }
                 catch (Exception ex)
                 {
-                    syncPointDirectory = 0;
+                    SyncPointDirectory = 0;
                     logger.Error("UpdateDirectoryTimer: " + ex.ToString());
                 }
             }
@@ -632,7 +639,7 @@ namespace FanartHandler
             {
                 try
                 {
-                    if (ScraperMPDatabase != null && ScraperMPDatabase.Equals("True") && Utils.GetDbm().GetIsScraping() == false)
+                    if (ScraperMPDatabase != null && ScraperMPDatabase.Equals("True", StringComparison.CurrentCulture) && Utils.GetDbm().GetIsScraping() == false)
                     {
                         StartScraper();
                     }
@@ -651,7 +658,7 @@ namespace FanartHandler
         {
             string sout = String.Empty;//currFile; 20100515
             int restricted = 0;
-            if (type.Equals("Movie") || type.Equals("MovingPicture") || type.Equals("myVideos") || type.Equals("Online Videos") || type.Equals("TV Section"))
+            if (type.Equals("Movie", StringComparison.CurrentCulture) || type.Equals("MovingPicture", StringComparison.CurrentCulture) || type.Equals("myVideos", StringComparison.CurrentCulture) || type.Equals("Online Videos", StringComparison.CurrentCulture) || type.Equals("TV Section", StringComparison.CurrentCulture))
             {
                 try
                 {
@@ -665,19 +672,19 @@ namespace FanartHandler
                 {
                     key = Utils.GetArtist(key, type);
                     Hashtable tmp = null;
-                    if (obj.Equals("FanartPlaying"))
+                    if (obj.Equals("FanartPlaying", StringComparison.CurrentCulture))
                     {
-                        tmp = fp.GetCurrentArtistsImageNames();
+                        tmp = FP.GetCurrentArtistsImageNames();
                     }
                     else
                     {
-                        tmp = fs.GetCurrentArtistsImageNames();
+                        tmp = FS.GetCurrentArtistsImageNames();
                     }
                     if (newArtist || tmp == null || tmp.Count == 0)
                     {
-                        if (isMusic && skipWhenHighResAvailable != null && skipWhenHighResAvailable.Equals("True"))
+                        if (isMusic && skipWhenHighResAvailable != null && skipWhenHighResAvailable.Equals("True", StringComparison.CurrentCulture))
                         {
-                            tmp = Utils.GetDbm().GetHigResFanart(key, type, restricted);
+                            tmp = Utils.GetDbm().GetHigResFanart(key, restricted);
                         }
                         if (tmp != null && tmp.Count > 0)
                         {
@@ -688,13 +695,13 @@ namespace FanartHandler
                             tmp = Utils.GetDbm().GetFanart(key, type, restricted);
                         }
                         Utils.Shuffle(ref tmp);
-                        if (obj.Equals("FanartPlaying"))
+                        if (obj.Equals("FanartPlaying", StringComparison.CurrentCulture))
                         {
-                            fp.SetCurrentArtistsImageNames(tmp);
+                            FP.SetCurrentArtistsImageNames(tmp);
                         }
                         else
                         {
-                            fs.SetCurrentArtistsImageNames(tmp);
+                            FS.SetCurrentArtistsImageNames(tmp);
                         }
                     }
                     if (tmp != null && tmp.Count > 0)
@@ -702,15 +709,15 @@ namespace FanartHandler
                         ICollection valueColl = tmp.Values;
                         int iFile = 0;
                         int iStop = 0;
-                        foreach (DatabaseManager.FanartImage s in valueColl)
+                        foreach (FanartHandler.FanartImage s in valueColl)
                         {
                             if (((iFile > iFilePrev) || (iFilePrev == -1)) && (iStop == 0))
                             {
-                                if (CheckImageResolution(s.disk_image, type, UseAspectRatio) && Utils.IsFileValid(s.disk_image))
+                                if (CheckImageResolution(s.DiskImage, type, UseAspectRatio) && Utils.IsFileValid(s.DiskImage))
                                 {                                    
-                                    sout = s.disk_image;
+                                    sout = s.DiskImage;
                                     iFilePrev = iFile;
-                                    currFile = s.disk_image;
+                                    currFile = s.DiskImage;
                                     iStop = 1;
                                     break;
                                 }
@@ -724,15 +731,15 @@ namespace FanartHandler
                             iFilePrev = -1;
                             iFile = 0;
                             iStop = 0;
-                            foreach (DatabaseManager.FanartImage s in valueColl)
+                            foreach (FanartHandler.FanartImage s in valueColl)
                             {
                                 if (((iFile > iFilePrev) || (iFilePrev == -1)) && (iStop == 0))
                                 {
-                                    if (CheckImageResolution(s.disk_image, type, UseAspectRatio) && Utils.IsFileValid(s.disk_image))
+                                    if (CheckImageResolution(s.DiskImage, type, UseAspectRatio) && Utils.IsFileValid(s.DiskImage))
                                     {
-                                        sout = s.disk_image;
+                                        sout = s.DiskImage;
                                         iFilePrev = iFile;
-                                        currFile = s.disk_image;
+                                        currFile = s.DiskImage;
                                         iStop = 1;
                                         break;
                                     }
@@ -745,13 +752,13 @@ namespace FanartHandler
                 }
                 else
                 {
-                    if (obj.Equals("FanartPlaying"))
+                    if (obj.Equals("FanartPlaying", StringComparison.CurrentCulture))
                     {
-                        fp.SetCurrentArtistsImageNames(null);
+                        FP.SetCurrentArtistsImageNames(null);
                     }
                     else
                     {
-                        fs.SetCurrentArtistsImageNames(null);
+                        FS.SetCurrentArtistsImageNames(null);
                     }
                 }
             }
@@ -772,7 +779,7 @@ namespace FanartHandler
             string sout = String.Empty;
             try
             {
-                if (Utils.GetIsStopping() == false && useDefaultBackdrop.Equals("True"))
+                if (Utils.GetIsStopping() == false && useDefaultBackdrop.Equals("True", StringComparison.CurrentCulture))
                 {
                     if (DefaultBackdropImages != null && DefaultBackdropImages.Count > 0)
                     {
@@ -831,49 +838,50 @@ namespace FanartHandler
         /// <summary>
         /// Parse Music Artist Name
         /// </summary>
-        private string ParseArtist(string s)
-        {
-            try
-            {
-                if (s != null && s.Length > 0 && s.IndexOf(".") >= 0)
-                {
-                    s = s.Trim();
-                    s = s.Substring(s.IndexOf(".") + 1);
-                    s = s.Trim();
-                }
-                if (s != null && s.Length > 0 && s.IndexOf("-") >= 0)
-                {
-                    s = s.Trim();
-                    s = s.Substring(0, s.IndexOf("-"));
-                    s = s.Trim();
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("ParseArtist: " + ex.ToString());  
-            }
-            return s;
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        private string ParseArtist(string s)
+//        {
+//            try
+//            {
+//                if (s != null && s.Length > 0 && s.IndexOf(".") >= 0)
+//                {
+//                    s = s.Trim();
+//                    s = s.Substring(s.IndexOf(".") + 1);
+//                    s = s.Trim();
+//                }
+//                if (s != null && s.Length > 0 && s.IndexOf("-") >= 0)
+//                {
+//                    s = s.Trim();
+//                    s = s.Substring(0, s.IndexOf("-"));
+//                    s = s.Trim();
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                logger.Error("ParseArtist: " + ex.ToString());  
+//            }
+//            return s;
+//        }
 
         private static void ResetCounters()
         {
-            if (fs.CurrCount > MaxCountImage)
+            if (FS.CurrCount > MaxCountImage)
             {
-                fs.CurrCount = 0;
-                fs.HasUpdatedCurrCount = false;
+                FS.CurrCount = 0;
+                FS.HasUpdatedCurrCount = false;
             }
-            if (fs.UpdateVisibilityCount > 5)
+            if (FS.UpdateVisibilityCount > 5)
             {
-                fs.UpdateVisibilityCount = 1;
+                FS.UpdateVisibilityCount = 1;
             }
-            if (fp.CurrCountPlay > MaxCountImage)
+            if (FP.CurrCountPlay > MaxCountImage)
             {
-                fp.CurrCountPlay = 0;
-                fp.HasUpdatedCurrCountPlay = false;
+                FP.CurrCountPlay = 0;
+                FP.HasUpdatedCurrCountPlay = false;
             }
-            if (fp.UpdateVisibilityCountPlay > 5)
+            if (FP.UpdateVisibilityCountPlay > 5)
             {
-                fp.UpdateVisibilityCountPlay = 1;
+                FP.UpdateVisibilityCountPlay = 1;
             }
         }
 
@@ -887,63 +895,63 @@ namespace FanartHandler
                 //something has gone wrong
                 ResetCounters();
                 int windowId = GUIWindowManager.ActiveWindow;
-                if (fs.UpdateVisibilityCount == 2)  //after 2 sek
+                if (FS.UpdateVisibilityCount == 2)  //after 2 sek
                 {
-                    fs.UpdateProperties();
-                    if (fs.DoShowImageOne)
+                    FS.UpdateProperties();
+                    if (FS.DoShowImageOne)
                     {
-                        fs.ShowImageOne(windowId);
-                        fs.DoShowImageOne = false;
+                        FS.ShowImageOne(windowId);
+                        FS.DoShowImageOne = false;
                     }
                     else
                     {
-                        fs.ShowImageTwo(windowId);
-                        fs.DoShowImageOne = true;
+                        FS.ShowImageTwo(windowId);
+                        FS.DoShowImageOne = true;
                     }
-                    if (fs.FanartAvailable)
+                    if (FS.FanartAvailable)
                     {
-                        fs.FanartIsAvailable(windowId);
+                        FS.FanartIsAvailable(windowId);
                     }
                     else
                     {
-                        fs.FanartIsNotAvailable(windowId);
+                        FS.FanartIsNotAvailable(windowId);
                     }                    
                 }
-                else if (fs.UpdateVisibilityCount == 5) //after 4 sek
+                else if (FS.UpdateVisibilityCount == 5) //after 4 sek
                 {
-                    fs.UpdateVisibilityCount = 0;
+                    FS.UpdateVisibilityCount = 0;
                     //release unused image resources
-                    HandleOldImages(ref fs.listSelectedMovies);
-                    HandleOldImages(ref fs.listSelectedMusic);
-                    HandleOldImages(ref fs.listSelectedScorecenter);
+                    HandleOldImages(ref FS.ListSelectedMovies);
+                    HandleOldImages(ref FS.ListSelectedMusic);
+                    HandleOldImages(ref FS.ListSelectedScorecenter);
                 }
-                if (fp.UpdateVisibilityCountPlay == 2)  //after 2 sek
+                if (FP.UpdateVisibilityCountPlay == 2)  //after 2 sek
                 {
-                    fp.UpdatePropertiesPlay();
-                    if (fp.DoShowImageOnePlay)
+                    FP.UpdatePropertiesPlay();
+                    if (FP.DoShowImageOnePlay)
                     {
-                        fp.ShowImageOnePlay(windowId);
-                        fp.DoShowImageOnePlay = false;
+                        FP.ShowImageOnePlay(windowId);
+                        FP.DoShowImageOnePlay = false;
                     }
                     else
                     {
-                        fp.ShowImageTwoPlay(windowId);
-                        fp.DoShowImageOnePlay = true;
+                        FP.ShowImageTwoPlay(windowId);
+                        FP.DoShowImageOnePlay = true;
                     }
-                    if (fp.FanartAvailablePlay)
+                    if (FP.FanartAvailablePlay)
                     {
-                        fp.FanartIsAvailablePlay(windowId);
+                        FP.FanartIsAvailablePlay(windowId);
                     }
                     else
                     {
-                        fp.FanartIsNotAvailablePlay(windowId);
+                        FP.FanartIsNotAvailablePlay(windowId);
                     }
                 }
-                else if (fp.UpdateVisibilityCountPlay == 5) //after 4 sek
+                else if (FP.UpdateVisibilityCountPlay == 5) //after 4 sek
                 {
-                    fp.UpdateVisibilityCountPlay = 0;
+                    FP.UpdateVisibilityCountPlay = 0;
                     //release unused image resources
-                    HandleOldImages(ref fp.listPlayMusic);
+                    HandleOldImages(ref FP.ListPlayMusic);
                 }                       
                
              /*   logger.Debug("listAnyGames: " + fr.listAnyGames.Count);
@@ -985,8 +993,8 @@ namespace FanartHandler
         private void SetupWindowsUsingFanartHandlerVisibility()
         {
             XPathDocument myXPathDocument;
-            fs.WindowsUsingFanartSelected = new Hashtable();
-            fp.WindowsUsingFanartPlay = new Hashtable();
+            FS.WindowsUsingFanartSelected = new Hashtable();
+            FP.WindowsUsingFanartPlay = new Hashtable();
             string path = GUIGraphicsContext.Skin + @"\";
             string windowId = String.Empty;
             string sNodeValue = String.Empty;
@@ -1010,19 +1018,19 @@ namespace FanartHandler
                             while (myXPathNodeIterator.MoveNext())
                             {
                                 sNodeValue = myXPathNodeIterator.Current.Value;
-                                if (sNodeValue.StartsWith("#useSelectedFanart:Yes"))
+                                if (sNodeValue.StartsWith("#useSelectedFanart:Yes", StringComparison.CurrentCulture))
                                 {
                                     try
                                     {
-                                        fs.WindowsUsingFanartSelected.Add(windowId, windowId);
+                                        FS.WindowsUsingFanartSelected.Add(windowId, windowId);
                                     }
                                     catch { }
                                 }
-                                if (sNodeValue.StartsWith("#usePlayFanart:Yes"))
+                                if (sNodeValue.StartsWith("#usePlayFanart:Yes", StringComparison.CurrentCulture))
                                 {
                                     try
                                     {
-                                        fp.WindowsUsingFanartPlay.Add(windowId, windowId);
+                                        FP.WindowsUsingFanartPlay.Add(windowId, windowId);
                                     }
                                     catch { }
                                 }                                
@@ -1045,13 +1053,13 @@ namespace FanartHandler
             {
                 try
                 {
-                    if (fr.WindowsUsingFanartRandom.ContainsKey("35"))
+                    if (FR.WindowsUsingFanartRandom.ContainsKey("35"))
                     {
                         IsRandom = true;
-                        fr.RefreshRandomImageProperties(null);
-                        if (fr.UpdateVisibilityCountRandom > 0)
+                        FR.RefreshRandomImageProperties(null);
+                        if (FR.UpdateVisibilityCountRandom > 0)
                         {
-                            fr.UpdateVisibilityCountRandom = fr.UpdateVisibilityCountRandom + 1;
+                            FR.UpdateVisibilityCountRandom = FR.UpdateVisibilityCountRandom + 1;
                         }
                         UpdateDummyControls();
                     }
@@ -1066,13 +1074,13 @@ namespace FanartHandler
         /// <summary>
         /// Run new check and return updated images to user
         /// </summary>
-        public void UpdateImageTimer(Object stateInfo, ElapsedEventArgs e)
+        private void UpdateImageTimer(Object stateInfo, ElapsedEventArgs e)
         {
             if (Utils.GetIsStopping() == false && !PreventRefresh)
             {
                 try
                 {
-                    int sync = Interlocked.CompareExchange(ref syncPointRefresh, 1, 0);
+                    int sync = Interlocked.CompareExchange(ref SyncPointRefresh, 1, 0);
                     if (sync == 0)
                     {
                         // No other event was executing.                        
@@ -1084,7 +1092,7 @@ namespace FanartHandler
                 }
                 catch (Exception ex)
                 {
-                    syncPointRefresh = 0;
+                    SyncPointRefresh = 0;
                     logger.Error("UpdateImageTimer: " + ex.ToString());
                 }
             }
@@ -1102,36 +1110,36 @@ namespace FanartHandler
             IsSelectedVideo = false;
             IsSelectedScoreCenter = false;
             IsRandom = false;
-            fs.DoShowImageOne = true;
-            fp.DoShowImageOnePlay = true;
-            fr.DoShowImageOneRandom = true;
-            fr.FirstRandom = true;
-            fs.FanartAvailable = false;
-            fp.FanartAvailablePlay = false;
-            fs.UpdateVisibilityCount = 0;
-            fp.UpdateVisibilityCountPlay = 0;
-            fr.UpdateVisibilityCountRandom = 0;
-            fs.CurrCount = 0;
-            fp.CurrCountPlay = 0;
-            fr.currCountRandom = 0;
-            MaxCountImage = Convert.ToInt32(imageInterval);
-            fs.HasUpdatedCurrCount = false;
-            fp.HasUpdatedCurrCountPlay = false;
-            fs.prevSelectedGeneric = -1;
-            fp.prevPlayMusic = -1;
-            fs.prevSelectedMusic = -1;
-            fs.prevSelectedScorecenter = -1;
-            fs.currSelectedMovieTitle = String.Empty;
-            fp.CurrPlayMusicArtist = String.Empty;
-            fs.currSelectedMusicArtist = String.Empty;
-            fs.CurrSelectedScorecenterGenre = String.Empty;
-            fs.currSelectedMovie = String.Empty;
-            fp.currPlayMusic = String.Empty;
-            fs.currSelectedMusic = String.Empty;
-            fs.currSelectedScorecenter = String.Empty;
-            syncPointRefresh = 0;
-            syncPointDirectory = 0;
-            syncPointScraper = 0;
+            FS.DoShowImageOne = true;
+            FP.DoShowImageOnePlay = true;
+            FR.DoShowImageOneRandom = true;
+            FR.FirstRandom = true;
+            FS.FanartAvailable = false;
+            FP.FanartAvailablePlay = false;
+            FS.UpdateVisibilityCount = 0;
+            FP.UpdateVisibilityCountPlay = 0;
+            FR.UpdateVisibilityCountRandom = 0;
+            FS.CurrCount = 0;
+            FP.CurrCountPlay = 0;
+            FR.CurrCountRandom = 0;
+            MaxCountImage = Convert.ToInt32(imageInterval, CultureInfo.CurrentCulture);
+            FS.HasUpdatedCurrCount = false;
+            FP.HasUpdatedCurrCountPlay = false;
+            FS.PrevSelectedGeneric = -1;
+            FP.PrevPlayMusic = -1;
+            FS.PrevSelectedMusic = -1;
+            FS.PrevSelectedScorecenter = -1;
+            FS.CurrSelectedMovieTitle = String.Empty;
+            FP.CurrPlayMusicArtist = String.Empty;
+            FS.CurrSelectedMusicArtist = String.Empty;
+            FS.CurrSelectedScorecenterGenre = String.Empty;
+            FS.CurrSelectedMovie = String.Empty;
+            FP.CurrPlayMusic = String.Empty;
+            FS.CurrSelectedMusic = String.Empty;
+            FS.CurrSelectedScorecenter = String.Empty;
+            SyncPointRefresh = 0;
+            SyncPointDirectory = 0;
+            SyncPointScraper = 0;
             m_CurrentTrackTag = null;
             m_CurrentTitleTag = null;
             m_SelectedItem = null;
@@ -1266,32 +1274,32 @@ namespace FanartHandler
             SetProperty("#fanarthandler.tvrecordings.latest3.title", "");
             SetProperty("#fanarthandler.tvrecordings.latest3.dateAdded", "");
             SetProperty("#fanarthandler.tvrecordings.latest3.genre", "");
-            fs.Properties = new Hashtable();
-            fp.PropertiesPlay = new Hashtable();
-            fr.PropertiesRandom = new Hashtable();
+            FS.Properties = new Hashtable();
+            FP.PropertiesPlay = new Hashtable();
+            FR.PropertiesRandom = new Hashtable();
             DefaultBackdropImages = new Hashtable();
-            fr.listAnyGames = new ArrayList();
-            fr.listAnyMovies = new ArrayList();
-            fs.listSelectedMovies = new ArrayList();
-            fr.listAnyMovingPictures = new ArrayList();
-            fr.listAnyMusic = new ArrayList();
-            fp.listPlayMusic = new ArrayList();
-            fr.listAnyPictures = new ArrayList();
-            fr.listAnyScorecenter = new ArrayList();
-            fs.listSelectedMusic = new ArrayList();
-            fs.listSelectedScorecenter = new ArrayList();
-            fr.listAnyTVSeries = new ArrayList();
-            fr.listAnyTV = new ArrayList();
-            fr.listAnyPlugins = new ArrayList();
-            fr.randAnyGames = new Random();
-            fr.randAnyMovies = new Random();
-            fr.randAnyMovingPictures = new Random();
-            fr.randAnyMusic = new Random();
-            fr.randAnyPictures = new Random();
-            fr.randAnyScorecenter = new Random();
-            fr.randAnyTVSeries = new Random();
-            fr.randAnyTV = new Random();
-            fr.randAnyPlugins = new Random();
+            FR.ListAnyGames = new ArrayList();
+            FR.ListAnyMovies = new ArrayList();
+            FS.ListSelectedMovies = new ArrayList();
+            FR.ListAnyMovingPictures = new ArrayList();
+            FR.ListAnyMusic = new ArrayList();
+            FP.ListPlayMusic = new ArrayList();
+            FR.ListAnyPictures = new ArrayList();
+            FR.ListAnyScorecenter = new ArrayList();
+            FS.ListSelectedMusic = new ArrayList();
+            FS.ListSelectedScorecenter = new ArrayList();
+            FR.ListAnyTVSeries = new ArrayList();
+            FR.ListAnyTV = new ArrayList();
+            FR.ListAnyPlugins = new ArrayList();
+            FR.RandAnyGames = new Random();
+            FR.RandAnyMovies = new Random();
+            FR.RandAnyMovingPictures = new Random();
+            FR.RandAnyMusic = new Random();
+            FR.RandAnyPictures = new Random();
+            FR.RandAnyScorecenter = new Random();
+            FR.RandAnyTVSeries = new Random();
+            FR.RandAnyTV = new Random();
+            FR.RandAnyPlugins = new Random();
             randDefaultBackdropImages = new Random();
         }
 
@@ -1305,13 +1313,13 @@ namespace FanartHandler
 
             try
             {
-                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
+                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, LogFileName));
                 if (logFile.Exists)
                 {
-                    if (File.Exists(Config.GetFile(Config.Dir.Log, oldLogFileName)))
-                        File.Delete(Config.GetFile(Config.Dir.Log, oldLogFileName));
+                    if (File.Exists(Config.GetFile(Config.Dir.Log, OldLogFileName)))
+                        File.Delete(Config.GetFile(Config.Dir.Log, OldLogFileName));
 
-                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, oldLogFileName));
+                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, OldLogFileName));
                     logFile.Delete();
                 }
             }
@@ -1319,7 +1327,7 @@ namespace FanartHandler
 
 
             FileTarget fileTarget = new FileTarget();
-            fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
+            fileTarget.FileName = Config.GetFile(Config.Dir.Log, LogFileName);
             fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
                                 "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
@@ -1333,17 +1341,17 @@ namespace FanartHandler
 
             string myThreadPriority = xmlreader.GetValue("general", "ThreadPriority");
 
-            if (myThreadPriority != null && myThreadPriority.Equals("Normal"))
+            if (myThreadPriority != null && myThreadPriority.Equals("Normal", StringComparison.CurrentCulture))
             {
-                FhThreadPriority = "Lowest";
+                FHThreadPriority = "Lowest";
             }
-            else if (myThreadPriority != null && myThreadPriority.Equals("BelowNormal"))
+            else if (myThreadPriority != null && myThreadPriority.Equals("BelowNormal", StringComparison.CurrentCulture))
             {
-                FhThreadPriority = "Lowest";
+                FHThreadPriority = "Lowest";
             }
             else
             {
-                FhThreadPriority = "BelowNormal";
+                FHThreadPriority = "BelowNormal";
             }
 
             switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0))
@@ -1488,7 +1496,7 @@ namespace FanartHandler
                         }
                         else
                         {
-                            if (tmpUse.Equals("Enabled"))
+                            if (tmpUse.Equals("Enabled", StringComparison.CurrentCulture))
                             {
                                 UseBasichomeFade = true;
                             }
@@ -1505,7 +1513,7 @@ namespace FanartHandler
                         }
                         else
                         {
-                            BasichomeFadeTime = Int32.Parse(tmpFadeTime);
+                            BasichomeFadeTime = Int32.Parse(tmpFadeTime, CultureInfo.CurrentCulture);
                         }
                     }
                 }
@@ -1525,7 +1533,7 @@ namespace FanartHandler
                 }
                 if (useProxy != null && useProxy.Length > 0)
                 {
-                    if (useProxy.Equals("True"))
+                    if (useProxy.Equals("True", StringComparison.CurrentCulture))
                     {
                         logger.Info("Proxy is used.");
                     }
@@ -1724,14 +1732,14 @@ namespace FanartHandler
                 {
                     UseAspectRatio = "False";
                 }
-                fp = new FanartPlaying();
-                fs = new FanartSelected();
-                fr = new FanartRandom();
-                fr.SetupWindowsUsingRandomImages();
+                FP = new FanartPlaying();
+                FS = new FanartSelected();
+                FR = new FanartRandom();
+                FR.SetupWindowsUsingRandomImages();
                 SetupWindowsUsingFanartHandlerVisibility();
                 SetupVariables();
                 SetupDirectories();
-                if (defaultBackdropIsImage != null && defaultBackdropIsImage.Equals("True"))
+                if (defaultBackdropIsImage != null && defaultBackdropIsImage.Equals("True", StringComparison.CurrentCulture))
                 {
                     DefaultBackdropImages.Add(0, defaultBackdrop);
                 }
@@ -1751,33 +1759,62 @@ namespace FanartHandler
                 Utils.SetScraperMaxImages(ScraperMaxImages);
                 Utils.ScrapeThumbnails = scrapeThumbnails;
                 Utils.InitiateDbm();
-                M_Db = MusicDatabase.Instance;
+                MDB = MusicDatabase.Instance;
                 myDirectoryTimer = new TimerCallback(UpdateDirectoryTimer);
                 directoryTimer = new System.Threading.Timer(myDirectoryTimer, null, 500, 900000);                       
                 InitRandomProperties();
-                if (ScraperMPDatabase != null && ScraperMPDatabase.Equals("True"))
+                if (ScraperMPDatabase != null && ScraperMPDatabase.Equals("True", StringComparison.CurrentCulture))
                 {
                     //startScraper();
                     myScraperTimer = new TimerCallback(UpdateScraperTimer);
-                    int iScraperInterval = Convert.ToInt32(scraperInterval);
+                    int iScraperInterval = Convert.ToInt32(scraperInterval, CultureInfo.CurrentCulture);
                     iScraperInterval = iScraperInterval * 3600000;
                     scraperTimer = new System.Threading.Timer(myScraperTimer, null, 1000, iScraperInterval);
                 }
                 Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(OnSystemPowerModeChanged);
-                GUIWindowManager.OnActivateWindow += new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
+                GUIWindowManager.OnActivateWindow += new GUIWindowManager.WindowActivationHandler(GuiWindowManagerOnActivateWindow);
                 g_Player.PlayBackStarted += new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 refreshTimer = new System.Timers.Timer(1000);
                 refreshTimer.Elapsed += new ElapsedEventHandler(UpdateImageTimer);
                 refreshTimer.Interval = 1000;
                 string windowId = "35";
-                if (fr.WindowsUsingFanartRandom.ContainsKey(windowId) || fs.WindowsUsingFanartSelected.ContainsKey(windowId) || (fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))))
+                if (FR.WindowsUsingFanartRandom.ContainsKey(windowId) || FS.WindowsUsingFanartSelected.ContainsKey(windowId) || (FP.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))))
                 {
                     refreshTimer.Start();                    
                 }
-                UtilsExternal.MovingPictureUpdateLatest(true);
-                UtilsExternal.TVSeriesUpdateLatest(true);
-                UtilsExternal.SetupMovingPicturesLatest();
-                UtilsExternal.SetupTVSeriesLatest();
+
+                try
+                {
+                    UtilsExternal.MovingPictureUpdateLatest(true);
+                }
+                catch 
+                {
+                }
+
+                try
+                {
+                    UtilsExternal.TVSeriesUpdateLatest(true);
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    UtilsExternal.SetupMovingPicturesLatest();
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    UtilsExternal.SetupTVSeriesLatest();
+                }
+                catch
+                {
+                }
+                                                
                 logger.Info("Fanart Handler is started.");
             }
             catch (Exception ex)
@@ -1804,19 +1841,19 @@ namespace FanartHandler
             }
         }
 
-        public void GUIWindowManager_OnActivateWindow(int activeWindowId)
+        public void GuiWindowManagerOnActivateWindow(int activeWindowId)
         {
             try
             {
                 int ix = 0;
-                while (syncPointRefresh != 0 && ix < 20)
+                while (SyncPointRefresh != 0 && ix < 20)
                 {
                     System.Threading.Thread.Sleep(400);                    
                     ix++;
                 }
                 string windowId = String.Empty+activeWindowId;
                 PreventRefresh = true;
-                if ((fr.WindowsUsingFanartRandom.ContainsKey(windowId) || fs.WindowsUsingFanartSelected.ContainsKey(windowId) || fp.WindowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
+                if ((FR.WindowsUsingFanartRandom.ContainsKey(windowId) || FS.WindowsUsingFanartSelected.ContainsKey(windowId) || FP.WindowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
                 {
                     if (Utils.GetDbm().GetIsScraping())
                     {
@@ -1830,49 +1867,49 @@ namespace FanartHandler
                         Utils.GetDbm().TotArtistsBeingScraped = 0;
                         Utils.GetDbm().CurrArtistsBeingScraped = 0;
                     }
-                    if (fs.WindowsUsingFanartSelected.ContainsKey(windowId))
+                    if (FS.WindowsUsingFanartSelected.ContainsKey(windowId))
                     {                        
-                        if (fs.DoShowImageOne)
+                        if (FS.DoShowImageOne)
                         {
-                            fs.ShowImageTwo(activeWindowId);
+                            FS.ShowImageTwo(activeWindowId);
                         }
                         else
                         {
-                            fs.ShowImageOne(activeWindowId);
+                            FS.ShowImageOne(activeWindowId);
                         }
-                        if (fs.FanartAvailable)
+                        if (FS.FanartAvailable)
                         {
-                            fs.FanartIsAvailable(activeWindowId);
+                            FS.FanartIsAvailable(activeWindowId);
                         }
                         else
                         {
-                            fs.FanartIsNotAvailable(activeWindowId);
+                            FS.FanartIsNotAvailable(activeWindowId);
                         }
                         if (refreshTimer != null && !refreshTimer.Enabled)
                         {
                             refreshTimer.Start();
                         }
                     }
-                    if ((fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
+                    if ((FP.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))) && AllowFanartInThisWindow(windowId))
                     {
                         //if (windowId.Equals("730718") || (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0)))) )
                         if (((g_Player.Playing || g_Player.Paused) && (g_Player.IsCDA || g_Player.IsMusic || g_Player.IsRadio || (CurrentTrackTag != null && CurrentTrackTag.Length > 0))))
                         {
-                            if (fp.DoShowImageOnePlay)
+                            if (FP.DoShowImageOnePlay)
                             {
-                                fp.ShowImageTwoPlay(activeWindowId);
+                                FP.ShowImageTwoPlay(activeWindowId);
                             }
                             else
                             {
-                                fp.ShowImageOnePlay(activeWindowId);
+                                FP.ShowImageOnePlay(activeWindowId);
                             }
-                            if (fp.FanartAvailablePlay)
+                            if (FP.FanartAvailablePlay)
                             {
-                                fp.FanartIsAvailablePlay(activeWindowId);
+                                FP.FanartIsAvailablePlay(activeWindowId);
                             }
                             else
                             {
-                                fp.FanartIsNotAvailablePlay(activeWindowId);
+                                FP.FanartIsNotAvailablePlay(activeWindowId);
                             }
                             if (refreshTimer != null && !refreshTimer.Enabled)
                             {
@@ -1885,36 +1922,36 @@ namespace FanartHandler
                             if (IsPlaying)
                             {
                                 StopScraperNowPlaying();
-                                EmptyAllImages(ref fp.listPlayMusic);
-                                fp.SetCurrentArtistsImageNames(null);
-                                fp.currPlayMusic = String.Empty;
-                                fp.CurrPlayMusicArtist = String.Empty;
-                                fp.FanartAvailablePlay = false;
-                                fp.FanartIsNotAvailablePlay(activeWindowId);
-                                fp.prevPlayMusic = -1;
+                                EmptyAllImages(ref FP.ListPlayMusic);
+                                FP.SetCurrentArtistsImageNames(null);
+                                FP.CurrPlayMusic = String.Empty;
+                                FP.CurrPlayMusicArtist = String.Empty;
+                                FP.FanartAvailablePlay = false;
+                                FP.FanartIsNotAvailablePlay(activeWindowId);
+                                FP.PrevPlayMusic = -1;
                                 SetProperty("#fanarthandler.music.overlay.play", TmpImage);
                                 SetProperty("#fanarthandler.music.backdrop1.play", TmpImage);
                                 SetProperty("#fanarthandler.music.backdrop2.play", TmpImage);
-                                fp.CurrCountPlay = 0;
-                                fp.UpdateVisibilityCountPlay = 0;
+                                FP.CurrCountPlay = 0;
+                                FP.UpdateVisibilityCountPlay = 0;
                                 IsPlaying = false;
                             }
                             else
                             {
-                                fp.FanartIsNotAvailablePlay(activeWindowId);
+                                FP.FanartIsNotAvailablePlay(activeWindowId);
                             }
                         }
                     }
-                    if (fr.WindowsUsingFanartRandom.ContainsKey(windowId))
+                    if (FR.WindowsUsingFanartRandom.ContainsKey(windowId))
                     {
-                        fr.WindowOpen = true;
-                        if (fr.DoShowImageOneRandom)
+                        FR.WindowOpen = true;
+                        if (FR.DoShowImageOneRandom)
                         {
-                            fr.ShowImageTwoRandom(activeWindowId);
+                            FR.ShowImageTwoRandom(activeWindowId);
                         }
                         else
                         {
-                            fr.ShowImageOneRandom(activeWindowId);
+                            FR.ShowImageOneRandom(activeWindowId);
                         }
                         if (refreshTimer != null && !refreshTimer.Enabled)
                         {
@@ -1946,52 +1983,52 @@ namespace FanartHandler
                 if (IsPlaying)
                 {
                     StopScraperNowPlaying();
-                    EmptyAllImages(ref fp.listPlayMusic);
-                    fp.SetCurrentArtistsImageNames(null);
-                    fp.currPlayMusic = String.Empty;
-                    fp.CurrPlayMusicArtist = String.Empty;
-                    fp.FanartAvailablePlay = false;
-                    fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
-                    fp.prevPlayMusic = -1;
+                    EmptyAllImages(ref FP.ListPlayMusic);
+                    FP.SetCurrentArtistsImageNames(null);
+                    FP.CurrPlayMusic = String.Empty;
+                    FP.CurrPlayMusicArtist = String.Empty;
+                    FP.FanartAvailablePlay = false;
+                    FP.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
+                    FP.PrevPlayMusic = -1;
                     SetProperty("#fanarthandler.music.overlay.play", TmpImage);
                     SetProperty("#fanarthandler.music.backdrop1.play", TmpImage);
                     SetProperty("#fanarthandler.music.backdrop2.play", TmpImage);
-                    fp.CurrCountPlay = 0;
-                    fp.UpdateVisibilityCountPlay = 0;
+                    FP.CurrCountPlay = 0;
+                    FP.UpdateVisibilityCountPlay = 0;
                     IsPlaying = false;
                 }
                 if (IsSelectedMusic)
                 {
-                    EmptyAllImages(ref fs.listSelectedMusic);
-                    fs.currSelectedMusic = String.Empty;
-                    fs.currSelectedMusicArtist = String.Empty;
-                    fs.SetCurrentArtistsImageNames(null);
-                    fs.CurrCount = 0;
-                    fs.UpdateVisibilityCount = 0;
+                    EmptyAllImages(ref FS.ListSelectedMusic);
+                    FS.CurrSelectedMusic = String.Empty;
+                    FS.CurrSelectedMusicArtist = String.Empty;
+                    FS.SetCurrentArtistsImageNames(null);
+                    FS.CurrCount = 0;
+                    FS.UpdateVisibilityCount = 0;
                     SetProperty("#fanarthandler.music.backdrop1.selected", TmpImage);
                     SetProperty("#fanarthandler.music.backdrop2.selected", TmpImage);
                     IsSelectedMusic = false;
                 }
                 if (IsSelectedVideo)
                 {
-                    EmptyAllImages(ref fs.listSelectedMovies);
-                    fs.currSelectedMovie = String.Empty;
-                    fs.currSelectedMovieTitle = String.Empty;
-                    fs.SetCurrentArtistsImageNames(null);
-                    fs.CurrCount = 0;
-                    fs.UpdateVisibilityCount = 0;
+                    EmptyAllImages(ref FS.ListSelectedMovies);
+                    FS.CurrSelectedMovie = String.Empty;
+                    FS.CurrSelectedMovieTitle = String.Empty;
+                    FS.SetCurrentArtistsImageNames(null);
+                    FS.CurrCount = 0;
+                    FS.UpdateVisibilityCount = 0;
                     SetProperty("#fanarthandler.movie.backdrop1.selected", TmpImage);
                     SetProperty("#fanarthandler.movie.backdrop2.selected", TmpImage);
                     IsSelectedVideo = false;
                 }
                 if (IsSelectedScoreCenter)
                 {
-                    EmptyAllImages(ref fs.listSelectedScorecenter);
-                    fs.currSelectedScorecenter = String.Empty;
-                    fs.CurrSelectedScorecenterGenre = String.Empty;
-                    fs.SetCurrentArtistsImageNames(null);
-                    fs.CurrCount = 0;
-                    fs.UpdateVisibilityCount = 0;
+                    EmptyAllImages(ref FS.ListSelectedScorecenter);
+                    FS.CurrSelectedScorecenter = String.Empty;
+                    FS.CurrSelectedScorecenterGenre = String.Empty;
+                    FS.SetCurrentArtistsImageNames(null);
+                    FS.CurrCount = 0;
+                    FS.UpdateVisibilityCount = 0;
                     SetProperty("#fanarthandler.scorecenter.backdrop1.selected", TmpImage);
                     SetProperty("#fanarthandler.scorecenter.backdrop2.selected", TmpImage);
                     IsSelectedScoreCenter = false;
@@ -2016,19 +2053,19 @@ namespace FanartHandler
                     SetProperty("#fanarthandler.tvseries.backdrop2.any", TmpImage);
                     SetProperty("#fanarthandler.tv.backdrop2.any", TmpImage);
                     SetProperty("#fanarthandler.plugins.backdrop2.any", TmpImage);
-                    fr.currCountRandom = 0;
-                    fr.CountSetVisibility = 0;
-                    fr.ClearPropertiesRandom();
-                    fr.UpdateVisibilityCountRandom = 0;
-                    EmptyAllImages(ref fr.listAnyGames);
-                    EmptyAllImages(ref fr.listAnyMovies);
-                    EmptyAllImages(ref fr.listAnyMovingPictures);
-                    EmptyAllImages(ref fr.listAnyMusic);
-                    EmptyAllImages(ref fr.listAnyPictures);
-                    EmptyAllImages(ref fr.listAnyScorecenter);
-                    EmptyAllImages(ref fr.listAnyTVSeries);
-                    EmptyAllImages(ref fr.listAnyTV);
-                    EmptyAllImages(ref fr.listAnyPlugins);
+                    FR.CurrCountRandom = 0;
+                    FR.CountSetVisibility = 0;
+                    FR.ClearPropertiesRandom();
+                    FR.UpdateVisibilityCountRandom = 0;
+                    EmptyAllImages(ref FR.ListAnyGames);
+                    EmptyAllImages(ref FR.ListAnyMovies);
+                    EmptyAllImages(ref FR.ListAnyMovingPictures);
+                    EmptyAllImages(ref FR.ListAnyMusic);
+                    EmptyAllImages(ref FR.ListAnyPictures);
+                    EmptyAllImages(ref FR.ListAnyScorecenter);
+                    EmptyAllImages(ref FR.ListAnyTVSeries);
+                    EmptyAllImages(ref FR.ListAnyTV);
+                    EmptyAllImages(ref FR.ListAnyPlugins);
                     IsRandom = false;
                 }
             }
@@ -2042,11 +2079,11 @@ namespace FanartHandler
 
         private bool AllowFanartInThisWindow(string windowId)
         {            
-            if (windowId != null && windowId.Equals("511"))
+            if (windowId != null && windowId.Equals("511", StringComparison.CurrentCulture))
                 return false;
-            else if (windowId != null && windowId.Equals("2005"))
+            else if (windowId != null && windowId.Equals("2005", StringComparison.CurrentCulture))
                 return false;
-            else if (windowId != null && windowId.Equals("602"))
+            else if (windowId != null && windowId.Equals("602", StringComparison.CurrentCulture))
                 return false;
             else
                 return true;
@@ -2056,11 +2093,11 @@ namespace FanartHandler
         {
             try
             {
-                string windowId = GUIWindowManager.ActiveWindow.ToString();                                
+                string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);                                
                 IsPlaying = true;
-                if ((fp.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True"))) && AllowFanartInThisWindow(windowId))
+                if ((FP.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))) && AllowFanartInThisWindow(windowId))
                 {
-                    if (refreshTimer != null && !refreshTimer.Enabled && (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio || MediaPortal.Util.Utils.IsLastFMStream(filename) || windowId.Equals("730718")))
+                    if (refreshTimer != null && !refreshTimer.Enabled && (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio || MediaPortal.Util.Utils.IsLastFMStream(filename) || windowId.Equals("730718", StringComparison.CurrentCulture)))
                     {
                         refreshTimer.Start();
                     }
@@ -2173,7 +2210,7 @@ namespace FanartHandler
         /// <summary>
         /// UnLoad image (free memory)
         /// </summary>
-        private static void UnLoadImage(string filename)
+        private static void UNLoadImage(string filename)
         {
             try
             {
@@ -2241,7 +2278,7 @@ namespace FanartHandler
                 {
                     Utils.GetDbm().StopScraper = true;
                 }
-                GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
+                GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GuiWindowManagerOnActivateWindow);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 int ix = 0;
                 while (Utils.GetDelayStop() && ix < 12)
@@ -2301,65 +2338,65 @@ namespace FanartHandler
                 catch
                 {
                 }
-                if (fr != null && fr.listAnyGames != null)
+                if (FR != null && FR.ListAnyGames != null)
                 {
-                    EmptyAllImages(ref fr.listAnyGames);
+                    EmptyAllImages(ref FR.ListAnyGames);
                 }
-                if (fr != null && fr.listAnyMovies != null)
+                if (FR != null && FR.ListAnyMovies != null)
                 {
-                    EmptyAllImages(ref fr.listAnyMovies);
+                    EmptyAllImages(ref FR.ListAnyMovies);
                 }
-                if (fs != null && fs.listSelectedMovies != null)
+                if (FS != null && FS.ListSelectedMovies != null)
                 {
-                    EmptyAllImages(ref fs.listSelectedMovies);
+                    EmptyAllImages(ref FS.ListSelectedMovies);
                 }
-                if (fr != null && fr.listAnyMovingPictures != null)
+                if (FR != null && FR.ListAnyMovingPictures != null)
                 {
-                    EmptyAllImages(ref fr.listAnyMovingPictures);
+                    EmptyAllImages(ref FR.ListAnyMovingPictures);
                 }
-                if (fr != null && fr.listAnyMusic != null)
+                if (FR != null && FR.ListAnyMusic != null)
                 {
-                    EmptyAllImages(ref fr.listAnyMusic);
+                    EmptyAllImages(ref FR.ListAnyMusic);
                 }
-                if (fp != null && fp.listPlayMusic != null)
+                if (FP != null && FP.ListPlayMusic != null)
                 {
-                    EmptyAllImages(ref fp.listPlayMusic);
+                    EmptyAllImages(ref FP.ListPlayMusic);
                 }
-                if (fr != null && fr.listAnyPictures != null)
+                if (FR != null && FR.ListAnyPictures != null)
                 {
-                    EmptyAllImages(ref fr.listAnyPictures);
+                    EmptyAllImages(ref FR.ListAnyPictures);
                 }
-                if (fr != null && fr.listAnyScorecenter != null)
+                if (FR != null && FR.ListAnyScorecenter != null)
                 {
-                    EmptyAllImages(ref fr.listAnyScorecenter);
+                    EmptyAllImages(ref FR.ListAnyScorecenter);
                 }
-                if (fs != null && fs.listSelectedMusic != null)
+                if (FS != null && FS.ListSelectedMusic != null)
                 {
-                    EmptyAllImages(ref fs.listSelectedMusic);
+                    EmptyAllImages(ref FS.ListSelectedMusic);
                 }
-                if (fs != null && fs.listSelectedScorecenter != null)
+                if (FS != null && FS.ListSelectedScorecenter != null)
                 {
-                    EmptyAllImages(ref fs.listSelectedScorecenter);
+                    EmptyAllImages(ref FS.ListSelectedScorecenter);
                 }
-                if (fr != null && fr.listAnyTVSeries != null)
+                if (FR != null && FR.ListAnyTVSeries != null)
                 {
-                    EmptyAllImages(ref fr.listAnyTVSeries);
+                    EmptyAllImages(ref FR.ListAnyTVSeries);
                 }
-                if (fr != null && fr.listAnyTV != null)
+                if (FR != null && FR.ListAnyTV != null)
                 {
-                    EmptyAllImages(ref fr.listAnyTV);
+                    EmptyAllImages(ref FR.ListAnyTV);
                 }
-                if (fr != null && fr.listAnyPlugins != null)
+                if (FR != null && FR.ListAnyPlugins != null)
                 {
-                    EmptyAllImages(ref fr.listAnyPlugins);
+                    EmptyAllImages(ref FR.ListAnyPlugins);
                 }
                 if (!suspending)
                 {
                     Microsoft.Win32.SystemEvents.PowerModeChanged -= new Microsoft.Win32.PowerModeChangedEventHandler(OnSystemPowerModeChanged);
                 }
-                fp = null;
-                fs = null;
-                fr = null;
+                FP = null;
+                FS = null;
+                FR = null;
             }
             catch (Exception ex)
             {

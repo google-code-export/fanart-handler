@@ -39,7 +39,7 @@
         <Version>
           <Major>2</Major>
           <Minor>2</Minor>
-          <Build>0</Build>
+          <Build>1</Build>
           <Revision>0</Revision>
         </Version>
         <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal.</ExtensionDescription>

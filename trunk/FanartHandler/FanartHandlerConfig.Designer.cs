@@ -19,7 +19,7 @@ namespace FanartHandler
             try
             {
                 isStopping = true;
-                stopScraper();
+                StopScraper();
                 Utils.GetDbm().Close();
                 if (scraperTimer != null)
                 {
