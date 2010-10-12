@@ -37,7 +37,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "2.2.1";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.2.2";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -831,7 +831,7 @@ namespace FanartHandler
         /// </summary>
         /// <param name="value">date to convert</param>
         /// <returns></returns>
-        public static double ConvertToTimestamp(DateTime value)
+       /* public static double ConvertToTimestamp(DateTime value)
         {
             //create Timespan by subtracting the value provided from
             //the Unix Epoch
@@ -839,7 +839,7 @@ namespace FanartHandler
 
             //return the total seconds (which is a UNIX timestamp)
             return (double)span.TotalSeconds;
-        }
+        }*/
 
 
         /// <summary>
@@ -847,12 +847,12 @@ namespace FanartHandler
         /// </summary>
         /// <param name="value">date to convert</param>
         /// <returns></returns>
-        public static string ConvertFromTimestamp(double timestamp)
+        /*public static string ConvertFromTimestamp(double timestamp)
         {
             System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
             dateTime = dateTime.AddSeconds(timestamp);
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
-        }
+        }*/
 
 
         /// <summary>
