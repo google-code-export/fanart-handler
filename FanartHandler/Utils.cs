@@ -1,8 +1,14 @@
-﻿//-----------------------------------------------------------------------
-// Open Source software licensed under the GNU/GPL agreement.
-// 
-// Author: Cul8er
-//-----------------------------------------------------------------------
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
 
 namespace FanartHandler
 {
@@ -30,19 +36,19 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private const string rxMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "2.2.0";  //Holds current pluginversion.
+        private const string RXMatchNonWordCharacters = @"[^\w|;]";
+        public const string GetMajorMinorVersionNumber = "2.2.1";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyUsername = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPassword = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyDomain = null;  // Holds info read from fanarthandler.xml settings file
-        private static bool isStopping = false;  //is the plugin about to stop, then this will be true
+        private static bool isStopping/* = false*/;  //is the plugin about to stop, then this will be true
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
         private static string scrapeThumbnails = null;  //scrape for thums or not        
-        private static bool delayStop = false; 
+        private static bool delayStop/* = false*/; 
         #endregion
 
         /// <summary>
@@ -224,13 +230,17 @@ namespace FanartHandler
         /// <returns></returns>
         public static string Equalize(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
 
             // Convert title to lowercase culture invariant
             string newTitle = self.ToLowerInvariant();
 
             // Replace non-descriptive characters with spaces
-            newTitle = Regex.Replace(newTitle, rxMatchNonWordCharacters, " ");
+            newTitle = Regex.Replace(newTitle, RXMatchNonWordCharacters, " ");
 
             // Equalize: Convert to base character string
             newTitle = newTitle.RemoveDiacritics();
@@ -261,7 +271,11 @@ namespace FanartHandler
         /// <returns></returns>
         public static string RemoveDiacritics(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
             string stFormD = self.Normalize(NormalizationForm.FormD);
             StringBuilder sb = new StringBuilder();
             for (int ich = 0; ich < stFormD.Length; ich++)
@@ -281,7 +295,11 @@ namespace FanartHandler
         /// </summary>    
         public static string ReplaceDiacritics(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
             string s1 = self;
             string s2 = Utils.RemoveDiacritics(self);
             StringBuilder sb = new StringBuilder();
@@ -304,7 +322,11 @@ namespace FanartHandler
         /// </summary>        
         public static bool IsMatch(string s1, string s2)
         {
-            if (s1 == null) return false;
+            if (s1 == null)
+            {
+                return false;
+            }
+
             int i = 0;
             if (s1.Length > s2.Length)
             {
@@ -329,7 +351,7 @@ namespace FanartHandler
             {
                 s2 = Utils.RemoveTrailingDigits(s2);
                 s1 = Utils.RemoveTrailingDigits(s1);
-                if (s2.Equals(s1))
+                if (s2.Equals(s1, StringComparison.CurrentCulture))
                 {
                     return true;
                 }
@@ -345,7 +367,11 @@ namespace FanartHandler
         /// </summary>        
         public static bool IsInteger(string theValue)
         {
-            if (theValue == null) return false;
+            if (theValue == null)
+            {
+                return false;
+            }
+
             Regex _isNumber = new Regex(@"^\d+$");
             Match m = _isNumber.Match(theValue);
             return m.Success;
@@ -358,7 +384,11 @@ namespace FanartHandler
         /// <returns></returns>
         public static string TrimWhiteSpace(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
             return Regex.Replace(self, @"\s{2,}", " ").Trim();
         }
 
@@ -367,7 +397,11 @@ namespace FanartHandler
         /// </summary>
         public static string RemoveUnderline(string key)
         {
-            if (key == null) return string.Empty;
+            if (key == null)
+            {
+                return string.Empty;
+            }
+
             return Regex.Replace(key, @"_", String.Empty);
         }
 
@@ -376,20 +410,24 @@ namespace FanartHandler
         /// </summary>
         public static string GetArtist(string key, string type)
         {
-            if (key == null) return string.Empty;
+            if (key == null)
+            {
+                return string.Empty;
+            }
+
             key = GetFilenameNoPath(key);
             key = Utils.RemoveExtension(key);
             key = Regex.Replace(key, @"\(\d{5}\)", String.Empty).Trim();
-            if (type.Equals("MusicArtist"))
+            if (type.Equals("MusicArtist", StringComparison.CurrentCulture))
             {
                 key = Regex.Replace(key, "[L]$", String.Empty).Trim();
             }
             key = Utils.RemoveUnderline(key);
-            if (type.Equals("MusicAlbum"))
+            if (type.Equals("MusicAlbum", StringComparison.CurrentCulture))
             {
-                if (key.IndexOf("-") >= 0)
+                if (key.IndexOf("-", StringComparison.CurrentCulture) >= 0)
                 {
-                    key = key.Substring(0, key.IndexOf("-"));
+                    key = key.Substring(0, key.IndexOf("-", StringComparison.CurrentCulture));
                 }
             }
             key = RemoveTrailingDigits(key);
@@ -405,7 +443,11 @@ namespace FanartHandler
         /// </summary>    
         public static string HandleMultipleArtistNamesForDBQuery(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
             s = s.Replace(";","|");
             string[] words = s.Split('|');
             string sout = String.Empty;
@@ -430,7 +472,11 @@ namespace FanartHandler
         /// </summary>    
         public static string RemoveMPArtistPipes(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
 //            s = s.Replace("|",String.Empty);
 //            s = s.Trim();
             return s;
@@ -466,7 +512,7 @@ namespace FanartHandler
                 }
                 try
                 {
-                    edbm.close();
+                    edbm.Close();
                 }
                 catch { }
                 edbm = null;
@@ -474,7 +520,7 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                edbm.close();
+                edbm.Close();
                 edbm = null;
                 logger.Error("GetMusicVideoArtists: " + ex.ToString());
             }
@@ -487,10 +533,14 @@ namespace FanartHandler
         /// </summary>
         public static string GetArtistLeftOfMinusSign(string key)
         {
-            if (key == null) return string.Empty;
-            if (key.IndexOf("-") >= 0)
+            if (key == null)
             {
-                key = key.Substring(0, key.IndexOf("-"));
+                return string.Empty;
+            }
+
+            if (key.IndexOf("-", StringComparison.CurrentCulture) >= 0)
+            {
+                key = key.Substring(0, key.IndexOf("-", StringComparison.CurrentCulture));
             }
             return key;
         }
@@ -500,11 +550,15 @@ namespace FanartHandler
         /// </summary>
         public static string GetFilenameNoPath(string key)
         {
-            if (key == null) return string.Empty;
-            key = key.Replace("/", "\\");
-            if (key.LastIndexOf("\\") >= 0)
+            if (key == null)
             {
-                return key.Substring(key.LastIndexOf("\\") + 1);
+                return string.Empty;
+            }
+
+            key = key.Replace("/", "\\");
+            if (key.LastIndexOf("\\", StringComparison.CurrentCulture) >= 0)
+            {
+                return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
             }
             return key;
         }
@@ -514,7 +568,11 @@ namespace FanartHandler
         /// </summary>
         public static string RemoveExtension(string key)
         {
-            if (key == null) return string.Empty;
+            if (key == null)
+            {
+                return string.Empty;
+            }
+
             //key = key.ToLowerInvariant();
             key = Regex.Replace(key, @".jpg", String.Empty);
             key = Regex.Replace(key, @".JPG", String.Empty);
@@ -534,16 +592,24 @@ namespace FanartHandler
         /// </summary>
         public static string RemoveDigits(string key)
         {
-            if (key == null) return string.Empty;
+            if (key == null)
+            {
+                return string.Empty;
+            }
+
             return Regex.Replace(key, @"\d", String.Empty);            
         }
 
         /// <summary>
         /// Patch SQL statements by replaceing single quotes with two
         /// </summary>    
-        public static string PatchSQL(string s)
+        public static string PatchSql(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
             return s.Replace("'", "''");
         }
 
@@ -553,7 +619,11 @@ namespace FanartHandler
         /// </summary>    
         public static string RemoveResolutionFromArtistName(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
             s = s.Replace("-(1080P)", String.Empty);
             s = s.Replace("-(720P)", String.Empty);
             s = s.Replace("-[1080P]", String.Empty);
@@ -621,7 +691,11 @@ namespace FanartHandler
         /// </summary>
         public static string PatchFilename(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
             s = s.Replace("?", String.Empty);
             s = s.Replace("[", String.Empty);
             s = s.Replace("]", String.Empty);
@@ -645,7 +719,11 @@ namespace FanartHandler
         /// </summary>
         public static string RemoveTrailingDigits(string s)
         {
-            if (s == null) return string.Empty;
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
             if (Utils.IsInteger(s))
             {
                 return s;
@@ -664,7 +742,11 @@ namespace FanartHandler
         /// <returns></returns>
         public static string MovePrefixToFront(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
             Regex expr = new Regex(@"(.+?)(?: (" + "the|a|an|ein|das|die|der|les|la|le|el|une|de|het" + @"))?\s*$", RegexOptions.IgnoreCase);
             return expr.Replace(self, "$2 $1").Trim();
         }
@@ -677,7 +759,11 @@ namespace FanartHandler
         /// <returns></returns>
         public static string MovePrefixToBack(this String self)
         {
-            if (self == null) return string.Empty;
+            if (self == null)
+            {
+                return string.Empty;
+            }
+
             Regex expr = new Regex(@"^(" + "the|a|an|ein|das|die|der|les|la|le|el|une|de|het" + @")\s(.+)", RegexOptions.IgnoreCase);
             return expr.Replace(self, "$2, $1").Trim();
         }        
@@ -765,7 +851,7 @@ namespace FanartHandler
         {
             System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
             dateTime = dateTime.AddSeconds(timestamp);
-            return dateTime.ToString("yyyy-MM-ss HH:mm:ss");
+            return dateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
         }
 
 
@@ -795,7 +881,7 @@ namespace FanartHandler
         /// <summary>
         /// Load image
         /// </summary>
-        public static void LoadImage(string filename, string type)
+        public static void LoadImage(string filename)
         {
             if (isStopping == false)
             {
@@ -829,7 +915,11 @@ namespace FanartHandler
         /// </summary>
         public static bool IsFileValid(string filename)
         {
-            if (filename == null) return false;
+            if (filename == null)
+            {
+                return false;
+            }
+
             Image checkImage = null;
             try
             {

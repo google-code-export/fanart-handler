@@ -1,4 +1,16 @@
-﻿namespace FanartHandler
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
+using System.Globalization;
+namespace FanartHandler
 {
     using MediaPortal.GUI.Library;
     using MediaPortal.Player;
@@ -14,7 +26,7 @@
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static int syncPointProgressChange = 0;
+        private static int syncPointProgressChange/* = 0*/;
         #endregion
 
         public RefreshWorker()
@@ -34,7 +46,7 @@
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
-            if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
+            if (FanartHandlerSetup.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             }
@@ -50,8 +62,8 @@
                 try
                 {
                     bool resetFanartAvailableFlags = true;
-                    FanartHandlerSetup.fs.HasUpdatedCurrCount = false;
-                    FanartHandlerSetup.fp.HasUpdatedCurrCountPlay = false;
+                    FanartHandlerSetup.FS.HasUpdatedCurrCount = false;
+                    FanartHandlerSetup.FP.HasUpdatedCurrCountPlay = false;
                     int windowId = GUIWindowManager.ActiveWindow;
                     if (windowId == 730718)
                     {
@@ -61,28 +73,28 @@
                     {
                         FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
                     }
-                    if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True") && ((FanartHandlerSetup.MyScraperWorker != null && FanartHandlerSetup.MyScraperWorker.TriggerRefresh) || (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh)))
+                    if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True", StringComparison.CurrentCulture) && ((FanartHandlerSetup.MyScraperWorker != null && FanartHandlerSetup.MyScraperWorker.TriggerRefresh) || (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh)))
                     {
-                        FanartHandlerSetup.fs.CurrCount = FanartHandlerSetup.MaxCountImage;
-                        FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
+                        FanartHandlerSetup.FS.CurrCount = FanartHandlerSetup.MaxCountImage;
+                        FanartHandlerSetup.FS.SetCurrentArtistsImageNames(null);
                         FanartHandlerSetup.MyScraperWorker.TriggerRefresh = false;
                     }
                     if (FanartHandlerSetup.CurrentTrackTag != null && FanartHandlerSetup.CurrentTrackTag.Trim().Length > 0 && (g_Player.Playing || g_Player.Paused))   // music is playing
                     {
-                        if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh))
+                        if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True", StringComparison.CurrentCulture) && (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh))
                         {
-                            FanartHandlerSetup.fp.CurrCountPlay = FanartHandlerSetup.MaxCountImage;
-                            FanartHandlerSetup.fp.SetCurrentArtistsImageNames(null);
+                            FanartHandlerSetup.FP.CurrCountPlay = FanartHandlerSetup.MaxCountImage;
+                            FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null);
                             FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = false;
                         }
-                        if (FanartHandlerSetup.fp.CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag) == false)
+                        if (FanartHandlerSetup.FP.CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag, StringComparison.CurrentCulture) == false)
                         {
-                            if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True") && Utils.GetDbm().GetIsScraping() == false && ((FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.IsBusy == false) || FanartHandlerSetup.MyScraperNowWorker == null))
+                            if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True", StringComparison.CurrentCulture) && Utils.GetDbm().GetIsScraping() == false && ((FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.IsBusy == false) || FanartHandlerSetup.MyScraperNowWorker == null))
                             {
                                 FanartHandlerSetup.StartScraperNowPlaying(FanartHandlerSetup.CurrentTrackTag);
                             }
                         }
-                        FanartHandlerSetup.fp.RefreshMusicPlayingProperties();
+                        FanartHandlerSetup.FP.RefreshMusicPlayingProperties();
                         FanartHandlerSetup.IsPlaying = true;
                         Report(e);
                     }
@@ -91,18 +103,18 @@
                         if (FanartHandlerSetup.IsPlaying)
                         {
                             FanartHandlerSetup.StopScraperNowPlaying();
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fp.listPlayMusic);
-                            FanartHandlerSetup.fp.SetCurrentArtistsImageNames(null);
-                            FanartHandlerSetup.fp.currPlayMusic = String.Empty;
-                            FanartHandlerSetup.fp.CurrPlayMusicArtist = String.Empty;
-                            FanartHandlerSetup.fp.FanartAvailablePlay = false;
-                            FanartHandlerSetup.fp.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
-                            FanartHandlerSetup.fp.prevPlayMusic = -1;
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FP.ListPlayMusic);
+                            FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null);
+                            FanartHandlerSetup.FP.CurrPlayMusic = String.Empty;
+                            FanartHandlerSetup.FP.CurrPlayMusicArtist = String.Empty;
+                            FanartHandlerSetup.FP.FanartAvailablePlay = false;
+                            FanartHandlerSetup.FP.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
+                            FanartHandlerSetup.FP.PrevPlayMusic = -1;
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.overlay.play", FanartHandlerSetup.TmpImage);
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.play", FanartHandlerSetup.TmpImage);
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.play", FanartHandlerSetup.TmpImage);
-                            FanartHandlerSetup.fp.CurrCountPlay = 0;
-                            FanartHandlerSetup.fp.UpdateVisibilityCountPlay = 0;
+                            FanartHandlerSetup.FP.CurrCountPlay = 0;
+                            FanartHandlerSetup.FP.UpdateVisibilityCountPlay = 0;
                             FanartHandlerSetup.IsPlaying = false;
                             Report(e);
                         }
@@ -125,16 +137,16 @@
                         {
                         }
                     }
-                    if (FanartHandlerSetup.UseMusicFanart.Equals("True") && isIdle)
+                    if (FanartHandlerSetup.UseMusicFanart.Equals("True", StringComparison.CurrentCulture) && isIdle)
                     {
-                        if (FanartHandlerSetup.fs.WindowsUsingFanartSelected.ContainsKey(windowId.ToString()))
+                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
                             if (windowId == 504 || windowId == 501)
                             {
                                 //User are in myMusicGenres window
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshMusicSelectedProperties();
+                                FanartHandlerSetup.FS.RefreshMusicSelectedProperties();
                                 Report(e);
                             }
                             else if (windowId == 500)
@@ -142,7 +154,7 @@
                                 //User are in music playlist
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Playlist", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Music Playlist", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
                             else if (windowId == 6622)
@@ -150,7 +162,7 @@
                                 //User are in music playlist
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Trivia", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Music Trivia", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
                             else if (windowId == 29050 || windowId == 29051 || windowId == 29052)
@@ -158,7 +170,7 @@
                                 //User are in youtubefm search window
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Youtube.FM", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Youtube.FM", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
                             else if (windowId == 880)
@@ -166,7 +178,7 @@
                                 //User are in music videos window
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Music Videos", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Music Videos", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
                             else if (windowId == 6623)
@@ -174,7 +186,7 @@
                                 //User are in mvids window
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "mVids", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "mVids", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }                            
                             else
@@ -182,7 +194,7 @@
                                 //User are in global search window or UNKNOW/NOT SPECIFIED plugin that supports fanart handler
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.fs.listSelectedMusic, "Global Search", ref FanartHandlerSetup.fs.currSelectedMusic, ref FanartHandlerSetup.fs.currSelectedMusicArtist);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Global Search", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
                                 Report(e);                                
                             }
                         }
@@ -190,12 +202,12 @@
                         {
                             if (FanartHandlerSetup.IsSelectedMusic)
                             {
-                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fs.listSelectedMusic);
-                                FanartHandlerSetup.fs.currSelectedMusic = String.Empty;
-                                FanartHandlerSetup.fs.currSelectedMusicArtist = String.Empty;
-                                FanartHandlerSetup.fs.prevSelectedMusic = -1;
-                                FanartHandlerSetup.fs.prevSelectedGeneric = -1;
-                                FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
+                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FS.ListSelectedMusic);
+                                FanartHandlerSetup.FS.CurrSelectedMusic = String.Empty;
+                                FanartHandlerSetup.FS.CurrSelectedMusicArtist = String.Empty;
+                                FanartHandlerSetup.FS.PrevSelectedMusic = -1;
+                                FanartHandlerSetup.FS.PrevSelectedGeneric = -1;
+                                FanartHandlerSetup.FS.SetCurrentArtistsImageNames(null);
                                 FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.IsSelectedMusic = false;
@@ -204,16 +216,16 @@
                         }
                     }
 
-                    if (FanartHandlerSetup.UseVideoFanart.Equals("True") && isIdle)
+                    if (FanartHandlerSetup.UseVideoFanart.Equals("True", StringComparison.CurrentCulture) && isIdle)
                     {
-                        if (FanartHandlerSetup.fs.WindowsUsingFanartSelected.ContainsKey(windowId.ToString()))
+                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
                             if (windowId == 6 || windowId == 25 || windowId == 28)
                             {
                                 //User are in myVideo, myVideoTitle window or myvideoplaylist
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "myVideos", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "myVideos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }                          
                             else if (windowId == 601 || windowId == 605 || windowId == 606 || windowId == 603 || windowId == 759 || windowId == 1 || windowId == 600 || windowId == 747 || windowId == 49849 || windowId == 49848 || windowId == 49850)
@@ -221,7 +233,7 @@
                                 //tv section
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "TV Section", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "TV Section", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }
                             else if (windowId == 35)
@@ -229,7 +241,7 @@
                                 //User are in basichome
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "myVideos", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "myVideos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }
                             else if (!FanartHandlerSetup.IsSelectedMusic)
@@ -237,7 +249,7 @@
                                 //User are in myonlinevideos, mytrailers or UNKNOW/NOT SPECIFIED plugin that supports fanart handler
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.fs.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.fs.listSelectedMovies, "Online Videos", ref FanartHandlerSetup.fs.currSelectedMovie, ref FanartHandlerSetup.fs.currSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "Online Videos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }
                         }
@@ -245,11 +257,11 @@
                         {
                             if (FanartHandlerSetup.IsSelectedVideo)
                             {
-                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fs.listSelectedMovies);
-                                FanartHandlerSetup.fs.currSelectedMovie = String.Empty;
-                                FanartHandlerSetup.fs.currSelectedMovieTitle = String.Empty;
-                                FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
-                                FanartHandlerSetup.fs.prevSelectedGeneric = -1;
+                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FS.ListSelectedMovies);
+                                FanartHandlerSetup.FS.CurrSelectedMovie = String.Empty;
+                                FanartHandlerSetup.FS.CurrSelectedMovieTitle = String.Empty;
+                                FanartHandlerSetup.FS.SetCurrentArtistsImageNames(null);
+                                FanartHandlerSetup.FS.PrevSelectedGeneric = -1;
                                 FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop1.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.SetProperty("#fanarthandler.movie.backdrop2.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.IsSelectedVideo = false;
@@ -257,24 +269,24 @@
                             }
                         }
                     }
-                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True") && isIdle)
+                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True", StringComparison.CurrentCulture) && isIdle)
                     {
                         if (windowId == 42000)  //User are in myScorecenter window
                         {
                             FanartHandlerSetup.IsSelectedScoreCenter = true;
                             resetFanartAvailableFlags = false;
-                            FanartHandlerSetup.fs.RefreshScorecenterSelectedProperties();
+                            FanartHandlerSetup.FS.RefreshScorecenterSelectedProperties();
                             Report(e);
                         }
                         else
                         {
                             if (FanartHandlerSetup.IsSelectedScoreCenter)
                             {
-                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fs.listSelectedScorecenter);
-                                FanartHandlerSetup.fs.currSelectedScorecenter = String.Empty;
-                                FanartHandlerSetup.fs.CurrSelectedScorecenterGenre = String.Empty;
-                                FanartHandlerSetup.fs.SetCurrentArtistsImageNames(null);
-                                FanartHandlerSetup.fs.prevSelectedScorecenter = -1;
+                                FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FS.ListSelectedScorecenter);
+                                FanartHandlerSetup.FS.CurrSelectedScorecenter = String.Empty;
+                                FanartHandlerSetup.FS.CurrSelectedScorecenterGenre = String.Empty;
+                                FanartHandlerSetup.FS.SetCurrentArtistsImageNames(null);
+                                FanartHandlerSetup.FS.PrevSelectedScorecenter = -1;
                                 FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop1.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.SetProperty("#fanarthandler.scorecenter.backdrop2.selected", FanartHandlerSetup.TmpImage);
                                 FanartHandlerSetup.IsSelectedScoreCenter = false;
@@ -284,13 +296,13 @@
                     }
                     if (resetFanartAvailableFlags && isIdle)
                     {
-                        FanartHandlerSetup.fs.FanartAvailable = false;
-                        FanartHandlerSetup.fs.FanartIsNotAvailable(windowId);
+                        FanartHandlerSetup.FS.FanartAvailable = false;
+                        FanartHandlerSetup.FS.FanartIsNotAvailable(windowId);
                     }
-                    if (FanartHandlerSetup.fr.WindowsUsingFanartRandom.ContainsKey(windowId.ToString()))
+                    if (FanartHandlerSetup.FR.WindowsUsingFanartRandom.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                     {
                         FanartHandlerSetup.IsRandom = true;
-                        FanartHandlerSetup.fr.RefreshRandomImageProperties(this);
+                        FanartHandlerSetup.FR.RefreshRandomImageProperties(this);
                     }
                     else
                     {
@@ -314,43 +326,43 @@
                             FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.backdrop2.any", FanartHandlerSetup.TmpImage);
                             FanartHandlerSetup.SetProperty("#fanarthandler.tv.backdrop2.any", FanartHandlerSetup.TmpImage);
                             FanartHandlerSetup.SetProperty("#fanarthandler.plugins.backdrop2.any", FanartHandlerSetup.TmpImage);
-                            FanartHandlerSetup.fr.currCountRandom = 0;
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyGames);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyMovies);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyMovingPictures);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyMusic);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyPictures);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyScorecenter);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyTVSeries);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyTV);
-                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.fr.listAnyPlugins);
+                            FanartHandlerSetup.FR.CurrCountRandom = 0;
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyGames);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyMovies);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyMovingPictures);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyMusic);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyPictures);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyScorecenter);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyTVSeries);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyTV);
+                            FanartHandlerSetup.EmptyAllImages(ref FanartHandlerSetup.FR.ListAnyPlugins);
                             FanartHandlerSetup.IsRandom = false;
                             Report(e);
                         }
                     }
-                    if (FanartHandlerSetup.fs.UpdateVisibilityCount > 0)
+                    if (FanartHandlerSetup.FS.UpdateVisibilityCount > 0)
                     {
-                        FanartHandlerSetup.fs.UpdateVisibilityCount = FanartHandlerSetup.fs.UpdateVisibilityCount + 1;
+                        FanartHandlerSetup.FS.UpdateVisibilityCount = FanartHandlerSetup.FS.UpdateVisibilityCount + 1;
                     }
-                    if (FanartHandlerSetup.fp.UpdateVisibilityCountPlay > 0)
+                    if (FanartHandlerSetup.FP.UpdateVisibilityCountPlay > 0)
                     {
-                        FanartHandlerSetup.fp.UpdateVisibilityCountPlay = FanartHandlerSetup.fp.UpdateVisibilityCountPlay + 1;
+                        FanartHandlerSetup.FP.UpdateVisibilityCountPlay = FanartHandlerSetup.FP.UpdateVisibilityCountPlay + 1;
                     }
-                    if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom > 0)
+                    if (FanartHandlerSetup.FR.UpdateVisibilityCountRandom > 0)
                     {
-                        FanartHandlerSetup.fr.UpdateVisibilityCountRandom = FanartHandlerSetup.fr.UpdateVisibilityCountRandom + 1;
+                        FanartHandlerSetup.FR.UpdateVisibilityCountRandom = FanartHandlerSetup.FR.UpdateVisibilityCountRandom + 1;
                     }
                     FanartHandlerSetup.UpdateDummyControls();
                     Utils.SetDelayStop(false);
                     Report(e);
                     e.Result = 0;
                     // Release control of syncPoint.
-                    FanartHandlerSetup.syncPointRefresh = 0;
+                    FanartHandlerSetup.SyncPointRefresh = 0;
                 }
                 catch (Exception ex)
                 {
                     Utils.SetDelayStop(false);
-                    FanartHandlerSetup.syncPointRefresh = 0;
+                    FanartHandlerSetup.SyncPointRefresh = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }
             }
@@ -358,7 +370,7 @@
 
 
 
-        public void OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        internal void OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             try
             {
@@ -370,48 +382,48 @@
                     {
                         FanartHandlerSetup.PreventRefresh = true;
                         int windowId = GUIWindowManager.ActiveWindow;
-                        if (FanartHandlerSetup.fr.CountSetVisibility == 1 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0)  //after 2 sek
+                        if (FanartHandlerSetup.FR.CountSetVisibility == 1 && FanartHandlerSetup.FR.GetPropertiesRandom() > 0)  //after 2 sek
                         {
-                            FanartHandlerSetup.fr.CountSetVisibility = 2;
-                            FanartHandlerSetup.fr.UpdatePropertiesRandom();
+                            FanartHandlerSetup.FR.CountSetVisibility = 2;
+                            FanartHandlerSetup.FR.UpdatePropertiesRandom();
 
-                            if (FanartHandlerSetup.fr.DoShowImageOneRandom)
+                            if (FanartHandlerSetup.FR.DoShowImageOneRandom)
                             {
-                                FanartHandlerSetup.fr.ShowImageOneRandom(windowId);
+                                FanartHandlerSetup.FR.ShowImageOneRandom(windowId);
                             }
                             else
                             {
-                                FanartHandlerSetup.fr.ShowImageTwoRandom(windowId);
+                                FanartHandlerSetup.FR.ShowImageTwoRandom(windowId);
                             }
 
                         }
-                        else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom > 2 && FanartHandlerSetup.fr.GetPropertiesRandom() > 0) //after 2 sek
+                        else if (FanartHandlerSetup.FR.UpdateVisibilityCountRandom > 2 && FanartHandlerSetup.FR.GetPropertiesRandom() > 0) //after 2 sek
                         {
-                            FanartHandlerSetup.fr.UpdatePropertiesRandom();
+                            FanartHandlerSetup.FR.UpdatePropertiesRandom();
                         }
-                        else if (FanartHandlerSetup.fr.UpdateVisibilityCountRandom >= 5 && FanartHandlerSetup.fr.GetPropertiesRandom() == 0) //after 4 sek
+                        else if (FanartHandlerSetup.FR.UpdateVisibilityCountRandom >= 5 && FanartHandlerSetup.FR.GetPropertiesRandom() == 0) //after 4 sek
                         {
-                            if (FanartHandlerSetup.fr.DoShowImageOneRandom)
+                            if (FanartHandlerSetup.FR.DoShowImageOneRandom)
                             {
-                                FanartHandlerSetup.fr.DoShowImageOneRandom = false;
+                                FanartHandlerSetup.FR.DoShowImageOneRandom = false;
                             }
                             else
                             {
-                                FanartHandlerSetup.fr.DoShowImageOneRandom = true;
+                                FanartHandlerSetup.FR.DoShowImageOneRandom = true;
                             }
-                            FanartHandlerSetup.fr.CountSetVisibility = 0;
-                            FanartHandlerSetup.fr.UpdateVisibilityCountRandom = 0;
+                            FanartHandlerSetup.FR.CountSetVisibility = 0;
+                            FanartHandlerSetup.FR.UpdateVisibilityCountRandom = 0;
                             //release unused image resources
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyGames);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovies);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMovingPictures);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyMusic);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPictures);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyScorecenter);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyPlugins);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTV);
-                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.fr.listAnyTVSeries);
-                            FanartHandlerSetup.fr.WindowOpen = false;
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyGames);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyMovies);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyMovingPictures);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyMusic);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyPictures);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyScorecenter);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyPlugins);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyTV);
+                            FanartHandlerSetup.HandleOldImages(ref FanartHandlerSetup.FR.ListAnyTVSeries);
+                            FanartHandlerSetup.FR.WindowOpen = false;
                         }
                         FanartHandlerSetup.PreventRefresh = false;
                         syncPointProgressChange = 0;

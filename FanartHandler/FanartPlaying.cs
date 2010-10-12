@@ -1,8 +1,14 @@
-﻿//-----------------------------------------------------------------------
-// Open Source software licensed under the GNU/GPL agreement.
-// 
-// Author: Cul8er
-//-----------------------------------------------------------------------
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
 
 namespace FanartHandler
 {
@@ -22,15 +28,15 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private Hashtable propertiesPlay; //used to hold properties to be updated (Play)        
-        private int currCountPlay = 0;
-        private int updateVisibilityCountPlay = 0;
+        private int currCountPlay/* = 0*/;
+        private int updateVisibilityCountPlay/* = 0*/;
         private string currPlayMusicArtist = null;        
-        public int prevPlayMusic = 0;
-        public string currPlayMusic = null;
-        public ArrayList listPlayMusic = null;
-        private bool fanartAvailablePlay = false;  //Holds if fanart is available (found) or not, controls visibility tag        
+        public int PrevPlayMusic/* = 0*/;
+        public string CurrPlayMusic = null;
+        public ArrayList ListPlayMusic = null;
+        private bool fanartAvailablePlay/* = false*/;  //Holds if fanart is available (found) or not, controls visibility tag        
         private bool doShowImageOnePlay = true; // Decides if property .1 or .2 should be set on next run        
-        private bool hasUpdatedCurrCountPlay = false; // CurrCountPlay have allready been updated this run        
+        private bool hasUpdatedCurrCountPlay/* = false*/; // CurrCountPlay have allready been updated this run        
         private Hashtable windowsUsingFanartPlay;  //used to know what skin files that supports play fanart        
         private Hashtable currentArtistsImageNames = null;        
         #endregion
@@ -113,7 +119,7 @@ namespace FanartHandler
         /// <summary>
         /// Add properties for now playing music
         /// </summary>
-        private void AddPropertyPlay(string property, string value, ref ArrayList al, string type)
+        private void AddPropertyPlay(string property, string value, ref ArrayList al)
         {
             try
             {
@@ -144,7 +150,7 @@ namespace FanartHandler
                             {
                                 logger.Error("AddPropertyPlay: " + ex.ToString());
                             }
-                            Utils.LoadImage(value, type);
+                            Utils.LoadImage(value);
                         }
                     }
                 }
@@ -163,16 +169,16 @@ namespace FanartHandler
         {
             try
             {                
-                if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag) == false)
+                if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag, StringComparison.CurrentCulture) == false)
                 {
-                    currPlayMusic = String.Empty;
-                    prevPlayMusic = -1;
+                    CurrPlayMusic = String.Empty;
+                    PrevPlayMusic = -1;
                     UpdateVisibilityCountPlay = 0;
                     SetCurrentArtistsImageNames(null);
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", true, true);
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart", "FanartPlaying", true, true);
                     if (sFilename.Length == 0)
                     {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currPlayMusic, ref prevPlayMusic);
+                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
                         if (sFilename.Length == 0)
                         {
                             FanartAvailablePlay = false;
@@ -180,7 +186,7 @@ namespace FanartHandler
                         else
                         {
                             FanartAvailablePlay = true;
-                            currPlayMusic = sFilename;
+                            CurrPlayMusic = sFilename;
                         }
                     }
                     else
@@ -189,35 +195,35 @@ namespace FanartHandler
                     }                    
                     if (DoShowImageOnePlay)
                     {                        
-                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
                         string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop2.play");
-                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png"))
+                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png", StringComparison.CurrentCulture))
                         {
-                            AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref listPlayMusic, "MusicFanart");
+                            AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
                         }
                     }
                     else
                     {
-                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
                         string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop1.play");
-                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png"))
+                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png", StringComparison.CurrentCulture))
                         {
-                            AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref listPlayMusic, "MusicFanart");
+                            AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
                         }
                     }
-                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True"))
+                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
                     {
-                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
                     }
                     ResetCurrCountPlay();
                 }
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
-                    string sFilenamePrev = currPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref currPlayMusic, ref prevPlayMusic, "MusicFanart", "FanartPlaying", false, true);
+                    string sFilenamePrev = CurrPlayMusic;
+                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart", "FanartPlaying", false, true);
                     if (sFilename.Length == 0)
                     {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref currPlayMusic, ref prevPlayMusic);
+                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
                         if (sFilename.Length == 0)
                         {
                             FanartAvailablePlay = false;
@@ -225,7 +231,7 @@ namespace FanartHandler
                         else
                         {
                             FanartAvailablePlay = true;
-                            currPlayMusic = sFilename;
+                            CurrPlayMusic = sFilename;
                         }
                     }
                     else
@@ -234,17 +240,17 @@ namespace FanartHandler
                     }
                     if (DoShowImageOnePlay)
                     {
-                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
                     }
                     else
                     {
-                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
                     }
-                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True"))
+                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
                     {
-                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref listPlayMusic, "MusicFanart");
+                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
                     }
-                    if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev) == false))
+                    if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev, StringComparison.CurrentCulture) == false))
                     {
                         ResetCurrCountPlay();
                     }

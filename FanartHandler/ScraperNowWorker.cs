@@ -1,4 +1,15 @@
-﻿
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
+
 namespace FanartHandler
 {
     using NLog;
@@ -14,7 +25,7 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string artist;        
-        private bool triggerRefresh = false;        
+        private bool triggerRefresh/* = false*/;        
         #endregion
 
         public string Artist
@@ -39,10 +50,10 @@ namespace FanartHandler
         {
             try
             {
-                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.syncPointScraper, 1, 0);
+                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.SyncPointScraper, 1, 0);
                 if (Utils.GetIsStopping() == false && sync == 0)
                 {
-                    if (FanartHandlerSetup.FhThreadPriority.Equals("Lowest"))
+                    if (FanartHandlerSetup.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
                     {
                         Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                     }
@@ -57,23 +68,23 @@ namespace FanartHandler
                     Utils.GetDbm().IsScraping = true;
                     FanartHandlerSetup.ShowScraperProgressIndicator();
                     FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", "Now Playing Scrape");
-                    Utils.GetDbm().NowPlayingScrape(artist, this);
+                    Utils.GetDbm().NowPlayingScrape(artist);
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
                     Utils.SetDelayStop(false);
                     FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
-                    FanartHandlerSetup.syncPointScraper = 0;
+                    FanartHandlerSetup.SyncPointScraper = 0;
                     e.Result = 0;
                 }
             }
             catch (Exception ex)
             {
-                FanartHandlerSetup.syncPointScraper = 0;
+                FanartHandlerSetup.SyncPointScraper = 0;
                 logger.Error("OnDoWork: " + ex.ToString());
             }
         }
 
-        public void OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        internal void OnProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             try
             {                
@@ -88,7 +99,7 @@ namespace FanartHandler
             }
         }
 
-        public void OnRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        internal void OnRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
             {

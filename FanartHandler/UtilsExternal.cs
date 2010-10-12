@@ -1,8 +1,14 @@
-﻿//-----------------------------------------------------------------------
-// Open Source software licensed under the GNU/GPL agreement.
-// 
-// Author: Cul8er
-//-----------------------------------------------------------------------
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
 
 using System;
 using System.Collections;
@@ -16,7 +22,7 @@ using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using MediaPortal.Util;
 using MediaPortal.Plugins.MovingPictures;
-using MediaPortal.Plugins.MovingPictures.Database;  
+using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using TvDatabase;
@@ -25,6 +31,7 @@ using ForTheRecord.ServiceAgents;
 using ForTheRecord.ServiceContracts;
 using ForTheRecord.UI.Process.Recordings;
 using WindowPlugins.GUITVSeries;
+using System.Globalization;
 
 namespace FanartHandler
 {
@@ -32,7 +39,7 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static bool _isGetTypeRunningOnThisThread = false;
+        private static bool _isGetTypeRunningOnThisThread/* = false*/;
         #endregion
 
         public static bool IsGetTypeRunningOnThisThread
@@ -61,7 +68,7 @@ namespace FanartHandler
             return 0;
         }
 
-        public static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+        internal static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             Assembly assembly = null;
             // Only process events from the thread that started it, not any other thread
@@ -76,10 +83,10 @@ namespace FanartHandler
             return assembly;
         }
 
-        public static Latests Get4TRRecordings()
+        public static LatestsCollection Get4TRRecordings()
         {
-            Latests latests = new Latests();
-            Latests result = new Latests();
+            LatestsCollection latests = new LatestsCollection();
+            LatestsCollection result = new LatestsCollection();
 
             try
             {
@@ -104,7 +111,7 @@ namespace FanartHandler
                             //{
                             //    thumbNail = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music\default.jpg";
                             // }
-                            latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss"), thumbNail, null, rec.Title, null, null, null, rec.Category, null, null, null, null, null, null, null));
+                            latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), thumbNail, null, rec.Title, null, null, null, rec.Category, null, null, null, null, null, null, null));
                         }
 
                     }
@@ -124,7 +131,10 @@ namespace FanartHandler
                 _model = null;
                 _controller = null;
                 _tvControlAgent = null;
-                latests.Clear();
+                if (latests != null)
+                {
+                    latests.Clear();
+                }
                 latests = null;
             }
             catch
@@ -138,24 +148,24 @@ namespace FanartHandler
             return result;
         }
 
-        public static Latests GetTVRecordings()
+        public static LatestsCollection GetTVRecordings()
         {
-            Latests result = new Latests();
-            Latests latests = new Latests();
+            LatestsCollection result = new LatestsCollection();
+            LatestsCollection latests = new LatestsCollection();
             try
             {
                 IList<TvDatabase.Recording> recordings = TvDatabase.Recording.ListAll();
                 int x = 0;
                 foreach (TvDatabase.Recording rec in recordings)
                 {
-                    string thumbNail = string.Format("{0}\\{1}{2}", Thumbs.TVRecorded,
+                    string thumbNail = string.Format(CultureInfo.CurrentCulture, "{0}\\{1}{2}", Thumbs.TVRecorded,
                                                  Path.ChangeExtension(MediaPortal.Util.Utils.SplitFilename(rec.FileName), null),
                                                  MediaPortal.Util.Utils.GetThumbExtension());
                     //if (!File.Exists(thumbNail))
                     //{
                     //    thumbNail = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music\default.jpg";                    
                     //}
-                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss"), thumbNail, null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null));
+                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), thumbNail, null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null));
                 }
                 latests.Sort(new LatestAddedComparer());
                 for (int x0 = 0; x0 < latests.Count; x0++)
@@ -168,7 +178,10 @@ namespace FanartHandler
                         break;
                     }
                 }
-                latests.Clear();
+                if (latests != null)
+                {
+                    latests.Clear();
+                }
                 latests = null;
             }
             catch //(Exception ex)
@@ -188,10 +201,10 @@ namespace FanartHandler
         /// </summary>
         /// <param name="type">Type of data to fetch</param>
         /// <returns>Resultset of matching data</returns>
-        public static Latests GetLatestMovingPictures()
+        public static LatestsCollection GetLatestMovingPictures()
         {
-            Latests result = new Latests();
-            Latests latests = new Latests();
+            LatestsCollection result = new LatestsCollection();
+            LatestsCollection latests = new LatestsCollection();
             int x = 0;
             string sTimestamp = string.Empty;
             try
@@ -201,14 +214,17 @@ namespace FanartHandler
                     var vMovies = MovingPicturesCore.Settings.ParentalControlsFilter.Filter(DBMovieInfo.GetAll());
                     foreach (var item in vMovies)
                     {
-                        sTimestamp = item.DateAdded.ToString("yyyy-MM-dd HH:mm:ss");
+                        sTimestamp = item.DateAdded.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                         string fanart = item.CoverThumbFullPath;
                         //                        if (fanart != null && fanart.Trim().Length > 0)
                         //                      {
-                        latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(), null, null));
+                        latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null));
                         //                    }
                     }
-                    vMovies.Clear();
+                    if (vMovies != null)
+                    {
+                        vMovies.Clear();
+                    }
                     vMovies = null;
                     latests.Sort(new LatestAddedComparer());
                     for (int x0 = 0; x0 < latests.Count; x0++)
@@ -228,14 +244,17 @@ namespace FanartHandler
                     var vMovies = DBMovieInfo.GetAll();
                     foreach (var item in vMovies)
                     {
-                        sTimestamp = item.DateAdded.ToString("yyyy-MM-dd HH:mm:ss");
+                        sTimestamp = item.DateAdded.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                         string fanart = item.CoverThumbFullPath;
                         if (fanart != null && fanart.Trim().Length > 0)
                         {
-                            latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(), null, null));
+                            latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null));
                         }
                     }
-                    vMovies.Clear();
+                    if (vMovies != null)
+                    {
+                        vMovies.Clear();
+                    }
                     vMovies = null;
                     latests.Sort(new LatestAddedComparer());
                     for (int x0 = 0; x0 < latests.Count; x0++)
@@ -273,9 +292,9 @@ namespace FanartHandler
         /// </summary>
         /// <param name="type">Type of data to fetch</param>
         /// <returns>Resultset of matching data</returns>
-        public static Latests GetLatestTVSeries()
+        public static LatestsCollection GetLatestTVSeries()
         {
-            UtilsExternal.Latests result = new UtilsExternal.Latests();
+            FanartHandler.LatestsCollection result = new FanartHandler.LatestsCollection();
             try
             {
                 // Calculate date for querying database
@@ -322,17 +341,20 @@ namespace FanartHandler
                                 try
                                 {
                                     episodeRating = episodeRating.Replace(",", ".");
-                                    mathRoundToString = Math.Round(double.Parse(episodeRating, ni), MidpointRounding.AwayFromZero).ToString();
+                                    mathRoundToString = Math.Round(double.Parse(episodeRating, ni), MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture);
                                 }
-                                catch 
+                                catch
                                 {
                                 }
                             }
-                            result.Add(new UtilsExternal.Latest(dateAdded, thumb, fanart, seriesTitle, episodeTitle, null, null, seriesGenre, episodeRating, mathRoundToString, contentRating, episodeRuntime, episodeFirstAired, seasonIdx, episodeIdx));
+                            result.Add(new FanartHandler.Latest(dateAdded, thumb, fanart, seriesTitle, episodeTitle, null, null, seriesGenre, episodeRating, mathRoundToString, contentRating, episodeRuntime, episodeFirstAired, seasonIdx, episodeIdx));
                         }
                         series = null;
                     }
-                    episodes.Clear();
+                    if (episodes != null)
+                    {
+                        episodes.Clear();
+                    }
                     episodes = null;
                 }
             }
@@ -364,14 +386,14 @@ namespace FanartHandler
         public static void TVSeriesUpdateLatest(bool initialSetup)
         {
             int z = 1;
-            string windowId = GUIWindowManager.ActiveWindow.ToString();
-            if (FanartHandlerSetup.LatestTVSeries.Equals("True"))// && !(windowId.Equals("9811") || windowId.Equals("9812") || windowId.Equals("9813") || windowId.Equals("9814") || windowId.Equals("9815")))
+            //            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture) // COMMENTED BY CODEIT.RIGHT;
+            if (FanartHandlerSetup.LatestTVSeries.Equals("True", StringComparison.CurrentCulture))// && !(windowId.Equals("9811") || windowId.Equals("9812") || windowId.Equals("9813") || windowId.Equals("9814") || windowId.Equals("9815")))
             {
                 //if (!initialSetup)
                 //{
                 //    logger.Debug("Updating Latest Media Info: New episode added in TVSeries");
                 //}
-                UtilsExternal.Latests ht = null;
+                FanartHandler.LatestsCollection ht = null;
                 try
                 {
                     ht = UtilsExternal.GetLatestTVSeries();
@@ -424,7 +446,7 @@ namespace FanartHandler
             }
         }
 
-        public static void MovingPictureUpdateLatest(bool initialSetup) 
+        public static void MovingPictureUpdateLatest(bool initialSetup)
         {
             try
             {
@@ -433,11 +455,11 @@ namespace FanartHandler
                 //    logger.Debug("Updating Latest Media Info: New movie added in MovingPicture");
                 //}
                 int z = 1;
-                string windowId = GUIWindowManager.ActiveWindow.ToString();
-                if (FanartHandlerSetup.LatestMovingPictures.Equals("True"))// && !(windowId.Equals("96742")))
+                //                string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture) // COMMENTED BY CODEIT.RIGHT;
+                if (FanartHandlerSetup.LatestMovingPictures.Equals("True", StringComparison.CurrentCulture))// && !(windowId.Equals("96742")))
                 {
                     //Moving Pictures
-                    UtilsExternal.Latests latestMovingPictures = null;
+                    FanartHandler.LatestsCollection latestMovingPictures = null;
                     try
                     {
                         latestMovingPictures = UtilsExternal.GetLatestMovingPictures();//edbm.GetLatestMovingPictures();
@@ -465,7 +487,7 @@ namespace FanartHandler
                     }
                     latestMovingPictures = null;
                     z = 1;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -481,16 +503,20 @@ namespace FanartHandler
         private static string GetMovieRuntime(DBMovieInfo movie)
         {
             string minutes = string.Empty;
-            if (movie == null) return minutes;
+            if (movie == null)
+            {
+                return minutes;
+            }
+
 
             if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0)
             {
                 // Actual Runtime or (MediaInfo result) is in milliseconds
                 // convert to minutes
-                minutes = ((movie.ActualRuntime / 1000) / 60).ToString();
+                minutes = ((movie.ActualRuntime / 1000) / 60).ToString(CultureInfo.CurrentCulture);
             }
             else
-                minutes = movie.Runtime.ToString();
+                minutes = movie.Runtime.ToString(CultureInfo.CurrentCulture);
 
             return minutes;
         }
@@ -509,7 +535,10 @@ namespace FanartHandler
                         Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie"), fanart, fanart, "MovingPicture", 1);
                     }
                 }
-                vMovies2.Clear();
+                if (vMovies2 != null)
+                {
+                    vMovies2.Clear();
+                }
                 vMovies2 = null;
                 if (MovingPicturesCore.Settings.ParentalControlsEnabled)
                 {
@@ -523,7 +552,10 @@ namespace FanartHandler
                             Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie"), fanart, fanart, "MovingPicture", 0);
                         }
                     }
-                    vMovies1.Clear();
+                    if (vMovies1 != null)
+                    {
+                        vMovies1.Clear();
+                    }
                     vMovies1 = null;
                 }
             }
@@ -548,12 +580,12 @@ namespace FanartHandler
                 string seriesId = String.Empty;
                 // Calculate date for querying database
                 DateTime dt = new DateTime(1980, 01, 01);
-                string date = dt.ToString("yyyy'-'MM'-'dd HH':'mm':'ss");
+                string date = dt.ToString("yyyy'-'MM'-'dd HH':'mm':'ss", CultureInfo.CurrentCulture);
                 SQLCondition conditions = new SQLCondition();
                 conditions.Add(new DBEpisode(), DBEpisode.cFileDateCreated, date, SQLConditionType.GreaterEqualThan);
                 conditions.AddOrderItem(DBEpisode.Q(DBEpisode.cFileDateCreated), SQLCondition.orderType.Descending);
                 List<DBEpisode> episodes = DBEpisode.Get(conditions, false);
-                
+
                 if (episodes != null)
                 {
                     //if (episodes.Count > 3) episodes.RemoveRange(3, episodes.Count - 3);
@@ -573,7 +605,10 @@ namespace FanartHandler
                         }
                         series = null;
                     }
-                    episodes.Clear();
+                    if (episodes != null)
+                    {
+                        episodes.Clear();
+                    }
                     episodes = null;
                 }
 
@@ -585,134 +620,7 @@ namespace FanartHandler
             return ht;
         }
 
-        public class Latest
-        {
-            string dateAdded;
-            string thumb;
-            string fanart;
-            string title;
-            string subtitle;
-            string artist;
-            string album;
-            string genre;
-            string rating;
-            string roundedRating;
-            string classification;
-            string runtime;
-            string year;
-            string seasonIndex;
-            string episodeIndex;
 
-            public string DateAdded
-            {
-                get { return dateAdded; }
-                set { dateAdded = value; }
-            }
-
-            public string Thumb
-            {
-                get { return thumb; }
-                set { thumb = value; }
-            }
-
-            public string Fanart
-            {
-                get { return fanart; }
-                set { fanart = value; }
-            }
-
-            public string Title
-            {
-                get { return title; }
-                set { title = value; }
-            }
-
-            public string Subtitle
-            {
-                get { return subtitle; }
-                set { subtitle = value; }
-            }
-
-            public string Artist
-            {
-                get { return artist; }
-                set { artist = value; }
-            }
-
-            public string Album
-            {
-                get { return album; }
-                set { album = value; }
-            }
-
-            public string Genre
-            {
-                get { return genre; }
-                set { genre = value; }
-            }
-
-            public string Rating
-            {
-                get { return rating; }
-                set { rating = value; }
-            }
-
-            public string RoundedRating
-            {
-                get { return roundedRating; }
-                set { roundedRating = value; }
-            }
-
-            public string Classification
-            {
-                get { return classification; }
-                set { classification = value; }
-            }
-
-            public string Runtime
-            {
-                get { return runtime; }
-                set { runtime = value; }
-            }
-
-            public string Year
-            {
-                get { return year; }
-                set { year = value; }
-            }
-
-            public string SeasonIndex
-            {
-                get { return seasonIndex; }
-                set { seasonIndex = value; }
-            }
-
-            public string EpisodeIndex
-            {
-                get { return episodeIndex; }
-                set { episodeIndex = value; }
-            }
-
-            public Latest(string dateAdded, string thumb, string fanart, string title, string subtitle, string artist, string album, string genre, string rating, string roundedRating, string classification, string runtime, string year, string seasonIndex, string episodeIndex)
-            {
-                this.dateAdded = dateAdded;
-                this.thumb = thumb;
-                this.fanart = fanart;
-                this.title = title;
-                this.subtitle = subtitle;
-                this.artist = artist;
-                this.album = album;
-                this.genre = genre;
-                this.rating = rating;
-                this.roundedRating = roundedRating;
-                this.classification = classification;
-                this.runtime = runtime;
-                this.year = year;
-                this.seasonIndex = seasonIndex;
-                this.episodeIndex = episodeIndex;
-            }
-
-        }
 
         class LatestAddedComparer : IComparer<Latest>
         {
@@ -733,9 +641,11 @@ namespace FanartHandler
             #endregion
         }
 
-        public class Latests : List<Latest>
-        {
-        }    
+
 
     }
+
+
+
+
 }

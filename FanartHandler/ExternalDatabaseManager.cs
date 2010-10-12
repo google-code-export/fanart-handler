@@ -1,8 +1,14 @@
-﻿//-----------------------------------------------------------------------
-// Open Source software licensed under the GNU/GPL agreement.
-// 
-// Author: Cul8er
-//-----------------------------------------------------------------------
+﻿//***********************************************************************
+// Assembly         : FanartHandler
+// Author           : cul8er
+// Created          : 05-09-2010
+//
+// Last Modified By : cul8er
+// Last Modified On : 10-05-2010
+// Description      : 
+//
+// Copyright        : Open Source software licensed under the GNU/GPL agreement.
+//***********************************************************************
 
 namespace FanartHandler
 {
@@ -57,7 +63,7 @@ namespace FanartHandler
         /// <summary>
         /// Close the database client.
         /// </summary>
-        public void close()
+        public void Close()
         {
             try
             {
@@ -85,7 +91,7 @@ namespace FanartHandler
             string sqlQuery = null;
             try
             {
-                if (type.Equals("TVSeries"))
+                if (type.Equals("TVSeries", StringComparison.CurrentCulture))
                 {
                     sqlQuery = "select SortName, id from online_series;";
                 }
@@ -107,9 +113,9 @@ namespace FanartHandler
         /// </summary>
         /// <param name="type">Type of data to fetch</param>
         /// <returns>Resultset of matching data</returns>
-       public UtilsExternal.Latests GetLatestPictures()
+       public FanartHandler.LatestsCollection GetLatestPictures()
         {
-            UtilsExternal.Latests result = new UtilsExternal.Latests();
+            FanartHandler.LatestsCollection result = new FanartHandler.LatestsCollection();
             string sqlQuery = null;
             int x = 0;
             try
@@ -128,7 +134,7 @@ namespace FanartHandler
                             {
                                 if (File.Exists(thumb))
                                 {
-                                    result.Add(new UtilsExternal.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null));
+                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null));
                                     x++;
                                 }
                             }
