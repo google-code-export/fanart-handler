@@ -68,7 +68,7 @@ namespace FanartHandler
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
                     Utils.SetDelayStop(false);
-                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", string.Empty);
+                    //FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", string.Empty);
                     FanartHandlerSetup.SyncPointScraper = 0;
                     e.Result = 0;
                 }
