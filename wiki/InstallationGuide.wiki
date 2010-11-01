@@ -5,6 +5,13 @@
 
 ----
 =Change Logs=
+==Change Log (version 2.2.1 to 2.2.2)==
+  * Now playing scrape improved for multiple artists
+  * Scraping for new images improved
+  * Latest added TVrecordings used low quality thumb, now uses high quality thumb
+  * Sometimes low quality artist or album thumb was incorrectly used instead of high quality fanart
+  * The folder structure of this plugin has changed. Skin Fanart has got two subfolders called Scraper and UserDef.
+  * New property for (#fanarthandler.tvseries.latest1.serieThumb, #fanarthandler.tvseries.latest2.serieThumb and #fanarthandler.tvseries.latest3.serieThumb)
 ==Change Log (version 2.2 to 2.2.1)==
   * Various optimizations and code cleanup.
   * Max 4 Images in now plaing scrape restriction now removed
