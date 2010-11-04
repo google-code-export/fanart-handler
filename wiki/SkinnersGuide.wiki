@@ -325,7 +325,7 @@ By default no random images are loaded. The reason for this is to save memory in
 
 ==TVSeries==
 ||#fanarthandler.tvseries.latest1.thumb||Full path to thumb (episode image)||
-||#fanarthandler.tvseries.latest1.serieThumb||Full path to thumb (poster)||
+||*~~NEW~~ #fanarthandler.tvseries.latest1.serieThumb*||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest1.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest1.serieName||Series name||
 ||#fanarthandler.tvseries.latest1.seasonIndex||Season index||
@@ -339,7 +339,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest1.firstAired||First aired||
 ||#fanarthandler.tvseries.latest2.thumb||Full path to thumb (episode image)||
-||#fanarthandler.tvseries.latest2.serieThumb||Full path to thumb (poster)||
+||*~~NEW~~ #fanarthandler.tvseries.latest2.serieThumb*||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest2.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest2.serieName||Series name||
 ||#fanarthandler.tvseries.latest2.seasonIndex||Season index||
@@ -353,7 +353,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest2.firstAired||First aired||
 ||#fanarthandler.tvseries.latest3.thumb||Full path to thumb (episode image)||
-||#fanarthandler.tvseries.latest3.serieThumb||Full path to thumb (poster)||
+||*~~NEW~~ #fanarthandler.tvseries.latest3.serieThumb*||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest3.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest3.serieName||Series name||
 ||#fanarthandler.tvseries.latest3.seasonIndex||Season index||
