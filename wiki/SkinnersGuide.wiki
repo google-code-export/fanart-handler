@@ -20,13 +20,9 @@ The scope of this plugin is to;
   # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
   # scrape htbackdrops site for music fanart for currently played artist.
   # push music fanart for now played music track (artist images)
-  # push music fanart for browsed music artist in myMusic plugin
-  # push music fanart for browsed/played music artist in myMusicPlaylist plugin
-  # push music fanart for browsed music artist in GlobalSearch plugin
-  # push music fanart for browsed music artist in Music Videos plugin
-  # push music fanart for browsed music artist in mVidsplugin
-  # push music fanart for browsed music artist in YouTube.FM plugin
-  # push movie fanart for browsed video title in myVideo plugin
+  # push music fanart for browsed music artists
+  # push music fanart for browsed/played music artists
+  # push movie fanart for browsed video titles
   # push scorecenter fanart for browsed category in myScoreCenter plugin
   # push cycling fanart from the following folders for use anywhere in a skin for
     * thumbs\MovingPictures\Backdrops\FullSize
@@ -41,7 +37,7 @@ The scope of this plugin is to;
     * thumbs\Skin Fanart\Scraper\music
 
 == Requirements ==
-  * MediaPortal 1.0.2 or later
+  * MediaPortal 1.1 or later
   * Fanart Handler Plugin
   * A skin that supports the Fanart Handler.
 *NOTE* This plugin only supports JPG images.
@@ -50,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.1 to 2.2.2==
-New Latest Media properties for TVSeries Serie Poster added.
+Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added.
 ==Change Log - Version 2.2 to 2.2.1==
 No changes needed in skin files to support version 2.2.1 if your skin previously supported version 1.1 - 2.2 of this plugin.
 ==Change Log - Version 2.1.1 to 2.2==
