@@ -27,14 +27,14 @@ The scope of this plugin is to;
   # push cycling fanart from the following folders for use anywhere in a skin for
     * thumbs\MovingPictures\Backdrops\FullSize
     * thumbs\Fan Art\fanart\original
-    * thumbs\Skin Fanart\UserDef\games
-    * thumbs\Skin Fanart\UserDef\movies
-    * thumbs\Skin Fanart\UserDef\music
-    * thumbs\Skin Fanart\UserDef\pictures
-    * thumbs\Skin Fanart\UserDef\plugins
-    * thumbs\Skin Fanart\UserDef\tv
-    * thumbs\Skin Fanart\Scraper\movies
-    * thumbs\Skin Fanart\Scraper\music
+    * *~~thumbs\Skin Fanart\games~~ thumbs\Skin Fanart\UserDef\games* 
+    * *~~thumbs\Skin Fanart\movies~~ thumbs\Skin Fanart\UserDef\movies* 
+    * *~~thumbs\Skin Fanart\music~~ thumbs\Skin Fanart\UserDef\music* 
+    * *~~thumbs\Skin Fanart\pictures~~ thumbs\Skin Fanart\UserDef\pictures* 
+    * *~~thumbs\Skin Fanart\plugins~~ thumbs\Skin Fanart\UserDef\plugins* 
+    * *~~thumbs\Skin Fanart\tv~~ thumbs\Skin Fanart\UserDef\tv* 
+    * *~~thumbs\Skin Fanart\movies~~ thumbs\Skin Fanart\Scraper\movies* 
+    * *~~thumbs\Skin Fanart\music~~ thumbs\Skin Fanart\Scraper\music* 
 
 == Requirements ==
   * MediaPortal 1.1 or later
@@ -46,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.1 to 2.2.2==
-Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added.
+Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added. Changes are marked with strikeouts in the text below.
 ==Change Log - Version 2.2 to 2.2.1==
 No changes needed in skin files to support version 2.2.1 if your skin previously supported version 1.1 - 2.2 of this plugin.
 ==Change Log - Version 2.1.1 to 2.2==
@@ -215,8 +215,8 @@ By default no random images are loaded. The reason for this is to save memory in
 == Available Define Tags ==
 ||useSelectedFanart||Enables fanart for the "selected" properties like "#fanarthandler.music.backdrop1.selected" and "#fanarthandler.movie.backdrop1.selected"||
 ||usePlayFanart||Enables fanart for the tags "#fanarthandler.music.backdrop1.play" and "#fanarthandler.music.backdrop1.play"||
-||useRandomGamesUserFanart||Enables cycling fanart from the tags "#fanarthandler.games.userdef.backdrop1.any" and "#fanarthandler.games.userdef.backdrop2.any"||
-||useRandomMoviesUserFanart||Enables cycling fanart from the tags "#fanarthandler.movie.userdef.backdrop1.any" and "#fanarthandler.movie.userdef.backdrop2.any"||
+||*~~useRandomGamesFanart~~ useRandomGamesUserFanart*||Enables cycling fanart from the tags "#fanarthandler.games.userdef.backdrop1.any" and "#fanarthandler.games.userdef.backdrop2.any"||
+||*~~useRandomMoviesFanart~~ useRandomMoviesUserFanart*||Enables cycling fanart from the tags "#fanarthandler.movie.userdef.backdrop1.any" and "#fanarthandler.movie.userdef.backdrop2.any"||
 ||useRandomMoviesScraperFanart||Enables cycling fanart from the tags "#fanarthandler.movie.scraper.backdrop1.any" and "#fanarthandler.movie.scraper.backdrop2.any"||
 ||useRandomMovingPicturesFanart||Enables cycling fanart from the tags "#fanarthandler.movingpicture.userdef.backdrop1.any" and "#fanarthandler.movingpicture.userdef.backdrop2.any"||
 ||useRandomMusicUserFanart||Enables cycling fanart from the tags "#fanarthandler.music.userdef.backdrop1.any" and "#fanarthandler.music.userdef.backdrop2.any"||
