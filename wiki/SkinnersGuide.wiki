@@ -31,12 +31,14 @@ The scope of this plugin is to;
   # push cycling fanart from the following folders for use anywhere in a skin for
     * thumbs\MovingPictures\Backdrops\FullSize
     * thumbs\Fan Art\fanart\original
-    * thumbs\Skin Fanart\games
-    * thumbs\Skin Fanart\movies
-    * thumbs\Skin Fanart\music
-    * thumbs\Skin Fanart\pictures
-    * thumbs\Skin Fanart\plugins
-    * thumbs\Skin Fanart\tv
+    * thumbs\Skin Fanart\UserDef\games
+    * thumbs\Skin Fanart\UserDef\movies
+    * thumbs\Skin Fanart\UserDef\music
+    * thumbs\Skin Fanart\UserDef\pictures
+    * thumbs\Skin Fanart\UserDef\plugins
+    * thumbs\Skin Fanart\UserDef\tv
+    * thumbs\Skin Fanart\Scraper\movies
+    * thumbs\Skin Fanart\Scraper\music
 
 == Requirements ==
   * MediaPortal 1.0.2 or later
