@@ -20,26 +20,24 @@ The scope of this plugin is to;
   # scrape htbackdrops site for music fanart for all artists stored in your MP music database.
   # scrape htbackdrops site for music fanart for currently played artist.
   # push music fanart for now played music track (artist images)
-  # push music fanart for browsed music artist in myMusic plugin
-  # push music fanart for browsed/played music artist in myMusicPlaylist plugin
-  # push music fanart for browsed music artist in !GlobalSearch plugin
-  # push music fanart for browsed music artist in Music Videos plugin
-  # push music fanart for browsed music artist in mVidsplugin
-  # push music fanart for browsed music artist in !YouTube.FM plugin
-  # push movie fanart for browsed video title in myVideo plugin
+  # push music fanart for browsed music artists
+  # push movie fanart for browsed video titles
   # push scorecenter fanart for browsed category in myScoreCenter plugin
   # push cycling fanart from the following folders for use anywhere in a skin for
     * `thumbs\MovingPictures\Backdrops\FullSize`
     * `thumbs\Fan Art\fanart\original`
-    * `thumbs\Skin Fanart\games`
-    * `thumbs\Skin Fanart\movies`
-    * `thumbs\Skin Fanart\music`
-    * `thumbs\Skin Fanart\pictures`
-    * `thumbs\Skin Fanart\plugins`
-    * `thumbs\Skin Fanart\tv`
+    * `thumbs\Skin Fanart\UserDef\games`
+    * `thumbs\Skin Fanart\UserDef\movies`
+    * `thumbs\Skin Fanart\UserDef\music`
+    * `thumbs\Skin Fanart\UserDef\pictures`
+    * `thumbs\Skin Fanart\UserDef\plugins`
+    * `thumbs\Skin Fanart\UserDef\scorecenter`
+    * `thumbs\Skin Fanart\UserDef\tv`
+    * `thumbs\Skin Fanart\Scraper\movies`
+    * `thumbs\Skin Fanart\Scraper\music`
 
 == Requirements ==
-  * !MediaPortal 1.0.2 or later
+  * MediaPortal 1.1 or later
   * Fanart Handler Plugin
   * A skin that supports the Fanart Handler.
 *NOTE* This plugin only supports JPG images.
@@ -48,13 +46,15 @@ The scope of this plugin is to;
 
 =Add Your Own Custom Fanart (Backdrops) To Be Used In The Skin=
 To add you fanart (backdrops) that you yourself has downloaded or made to be used by the fanart handler plugin you should use these folders
-  # thumbs\Skin Fanart\games (used for pushing random game images to a skin)
-  # thumbs\Skin Fanart\movies (used for pushing random movie images to a skin, also used for providing fanart for now played title or selected title in your movie library)
-  # thumbs\Skin Fanart\music (used for pushing random music images to a skin, also used for providing fanart for now played artist or selected artist in your music library)
-  # thumbs\Skin Fanart\pictures (used for pushing random picture images to a skin)
-  # thumbs\Skin Fanart\plugins (used for pushing random plugins images to a skin)
-  # thumbs\Skin Fanart\scorecenter (used for pushing images of selected genre in the scorecenter plugin to a skin).
-  # thumbs\Skin Fanart\tv (used for pushing random tv images to a skin)
+  # thumbs\Skin Fanart\UserDef\games (used for pushing random game images to a skin)
+  # thumbs\Skin Fanart\UserDef\movies (used for pushing random movie images to a skin)
+  # thumbs\Skin Fanart\UserDef\music (used for pushing random music images to a skin)
+  # thumbs\Skin Fanart\UserDef\pictures (used for pushing random picture images to a skin)
+  # thumbs\Skin Fanart\UserDef\plugins (used for pushing random plugins images to a skin)
+  # thumbs\Skin Fanart\UserDef\scorecenter (used for pushing images of selected genre in the scorecenter plugin to a skin).
+  # thumbs\Skin Fanart\UserDef\tv (used for pushing random tv images to a skin)
+  # thumbs\Skin Fanart\UserDef\movies (used for providing fanart for now played title or selected title in your movie library)
+  # thumbs\Skin Fanart\UserDef\music (used for providing fanart for now played artist or selected artist in your music library)
 
 The *thumbs* folder, or directory, is located in;
   # Windows Vista: `C:\ProgramData\Team MediaPortal\MediaPortal\`
