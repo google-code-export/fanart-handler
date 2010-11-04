@@ -46,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.1 to 2.2.2==
-Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added. Changes are marked with strikeouts in the text below.
+Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added. New buttons for making latest media (music, moving pictures and tvseries) playable for basichome page. Changes are marked with strikeouts in the text below.
 ==Change Log - Version 2.2 to 2.2.1==
 No changes needed in skin files to support version 2.2.1 if your skin previously supported version 1.1 - 2.2 of this plugin.
 ==Change Log - Version 2.1.1 to 2.2==
@@ -380,6 +380,49 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvrecordings.latest3.title||Recorded tv title||
 ||#fanarthandler.tvrecordings.latest3.dateAdded||Date when recordingwas added to MP||
 ||#fanarthandler.tvrecordings.latest3.genre||Genre||
+
+==Latest Media Playable==
+Buttons controls are now available for skinners that want to make the latest media clickable (playable).
+
+Playing support exists for;
+  * music
+  * moving pictures
+  * tvseries
+
+===Button Ids===
+||91919991||Moving Picture, first movie||
+||91919992||Moving Picture, second movie||
+||91919993||Moving Picture, third movie||
+||91919994||TVSeries, first episode||
+||91919995||TVSeries, second episode||
+||91919996||TVSeries, third episode||
+||91919997||Music, first album||
+||91919998||Music, second album||
+||91919999||Music, third album||
+
+===Example Button (Play First Moving Picture Movie)===
+{{{
+<control>
+        <description>Play Button</description>
+        <type>button</type>
+        <id>91919991</id>
+        <posX>790</posX>
+        <posY>484</posY>
+        <width>148</width>
+        <height>207</height>
+        <textureFocus>poster_frame_rounder_corners_play.png</textureFocus>
+        <textureNoFocus>poster_frame_rounder_corners.png</textureNoFocus>
+        <label>-</label>
+        <onleft>91919993</onleft>
+        <onright>91919992</onright>
+        <onup>61703</onup>
+        <font>font12</font>
+        <animation effect="fade" time="800" reversible="true">VisibleChange</animation>
+        <animation effect="fade" start="100" end="0" time="350">WindowClose</animation>	
+        <animation effect="slide" start="0,0" end="800,0" tween="quadratic" easing="in" time="350">Hidden</animation>
+        <visible allowhiddenfocus="true">[Control.HasFocus(91919991)|Control.HasFocus(91919992)|Control.HasFocus(91919993)]|[Control.isvisible(98345611)+[Control.HasFocus(61703)|Control.HasFocus(61803)|Control.HasFocus(61704)|Control.HasFocus(61804)]]</visible>
+    </control>
+}}}
 
 ----
 
