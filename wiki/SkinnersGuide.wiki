@@ -217,48 +217,48 @@ By default no random images are loaded. The reason for this is to save memory in
 ||usePlayFanart||Enables fanart for the tags "#fanarthandler.music.backdrop1.play" and "#fanarthandler.music.backdrop1.play"||
 ||*~~useRandomGamesFanart~~ useRandomGamesUserFanart*||Enables cycling fanart from the tags "#fanarthandler.games.userdef.backdrop1.any" and "#fanarthandler.games.userdef.backdrop2.any"||
 ||*~~useRandomMoviesFanart~~ useRandomMoviesUserFanart*||Enables cycling fanart from the tags "#fanarthandler.movie.userdef.backdrop1.any" and "#fanarthandler.movie.userdef.backdrop2.any"||
-||useRandomMoviesScraperFanart||Enables cycling fanart from the tags "#fanarthandler.movie.scraper.backdrop1.any" and "#fanarthandler.movie.scraper.backdrop2.any"||
+||*~~NEW TAG~~ useRandomMoviesScraperFanart*||Enables cycling fanart from the tags "#fanarthandler.movie.scraper.backdrop1.any" and "#fanarthandler.movie.scraper.backdrop2.any"||
 ||useRandomMovingPicturesFanart||Enables cycling fanart from the tags "#fanarthandler.movingpicture.userdef.backdrop1.any" and "#fanarthandler.movingpicture.userdef.backdrop2.any"||
-||useRandomMusicUserFanart||Enables cycling fanart from the tags "#fanarthandler.music.userdef.backdrop1.any" and "#fanarthandler.music.userdef.backdrop2.any"||
-||useRandomMusicScraperFanart||Enables cycling fanart from the tags "#fanarthandler.music.scraper.backdrop1.any" and "#fanarthandler.music.acraper.backdrop2.any"||
-||useRandomPicturesUserFanart||Enables cycling fanart from the tags "#fanarthandler.picture.userdef.backdrop1.any" and "#fanarthandler.picture.userdef.backdrop2.any"||
-||useRandomPluginsUserFanart||Enables cycling fanart from the tags "#fanarthandler.plugins.userdef.backdrop1.any" and "#fanarthandler.plugins.userdef.backdrop2.any"||
-||useRandomScoreCenterUserFanart||Enables cycling fanart from the tags "#fanarthandler.scorecenter.userdef.backdrop1.any" and "#fanarthandler.scorecenter.backdrop2.any"||
-||useRandomTVUserFanart||Enables cycling fanart from the tags "#fanarthandler.tv.backdrop1.selected" and "#fanarthandler.tv.backdrop2.selected"||
+||*~~useRandomMusicFanart~~ useRandomMusicUserFanart*||Enables cycling fanart from the tags "#fanarthandler.music.userdef.backdrop1.any" and "#fanarthandler.music.userdef.backdrop2.any"||
+||*~~NEW TAG~~ useRandomMusicScraperFanart*||Enables cycling fanart from the tags "#fanarthandler.music.scraper.backdrop1.any" and "#fanarthandler.music.acraper.backdrop2.any"||
+||*~~useRandomPicturesFanart~~ useRandomPicturesUserFanart*||Enables cycling fanart from the tags "#fanarthandler.picture.userdef.backdrop1.any" and "#fanarthandler.picture.userdef.backdrop2.any"||
+||*~~useRandomPluginsFanart~~ useRandomPluginsUserFanart*||Enables cycling fanart from the tags "#fanarthandler.plugins.userdef.backdrop1.any" and "#fanarthandler.plugins.userdef.backdrop2.any"||
+||*~~useRandomScoreCenterFanart~~ useRandomScoreCenterUserFanart*||Enables cycling fanart from the tags "#fanarthandler.scorecenter.userdef.backdrop1.any" and "#fanarthandler.scorecenter.backdrop2.any"||
+||*~~useRandomTVFanart~~ useRandomTVUserFanart*||Enables cycling fanart from the tags "#fanarthandler.tv.backdrop1.selected" and "#fanarthandler.tv.backdrop2.selected"||
 ||useRandomTVSeriesFanart||Enables cycling fanart from the tags "#fanarthandler.tvseries.backdrop1.selected" and "#fanarthandler.tvseries.backdrop2.selected"||
 
 ----
 
 = Available Skin Tags =
-||#fanarthandler.games.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\games" folder.||
-||#fanarthandler.games.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\games" folder.||
-||#fanarthandler.movie.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\movies" folder.||
-||#fanarthandler.movie.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\movies" folder.||
-||#fanarthandler.movie.scraper.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
-||#fanarthandler.movie.scraper.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
+||*~~#fanarthandler.games.backdrop1.any~~ #fanarthandler.games.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\games" folder.||
+||*~~#fanarthandler.games.backdrop2.any~~ #fanarthandler.games.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\games" folder.||
+||*~~#fanarthandler.movie.backdrop1.any~~ #fanarthandler.movie.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\movies" folder.||
+||*~~#fanarthandler.movie.backdrop2.any~~ #fanarthandler.movie.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\movies" folder.||
+||*~~NEW TAG~~ #fanarthandler.movie.scraper.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
+||*~~NEW TAG~~ #fanarthandler.movie.scraper.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
 ||#fanarthandler.movie.backdrop1.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
 ||#fanarthandler.movie.backdrop2.selected||Use this tag in the myVideo plugin (myVideo.xml & myVideoTitle.xml) to show fanart for selected video. It picks images from the "thumbs\Skin Fanart\Scraper\movies" folder.||
 ||#fanarthandler.movingpicture.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
 ||#fanarthandler.movingpicture.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\MovingPictures\Backdrops\FullSize" folder.||
-||#fanarthandler.music.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\music" folder.||
-||#fanarthandler.music.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\music" folder.||
-||#fanarthandler.music.scraper.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\music" folder.||
-||#fanarthandler.music.scraper.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\music" folder.||
+||*~~#fanarthandler.music.backdrop1.any~~ #fanarthandler.music.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\music" folder.||
+||*~~#fanarthandler.music.backdrop2.any~~ #fanarthandler.music.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\music" folder.||
+||*~~NEW TAG~~ #fanarthandler.music.scraper.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\music" folder.||
+||*~~NEW TAG~~ #fanarthandler.music.scraper.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\Scraper\music" folder.||
 ||#fanarthandler.music.overlay.play||Can be used if you want a "small" fanart available in the background of the now playing overlay in MP. Using this instead of ".play" property allows end users to enable/disable this fanart in the MP configuration||
 ||#fanarthandler.music.backdrop1.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\Scraper\music" folder for now playing music (artist).||
 ||#fanarthandler.music.backdrop2.play||Use this tag anywhere in a skin for displaying images from the "thumbs\Skin Fanart\Scraper\music" folder for now playing music (artist).||
 ||#fanarthandler.music.backdrop1.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\Scraper\music" folder.||
 ||#fanarthandler.music.backdrop2.selected||Use this tag in the myMusic plugin (myMusicGenres.xml) to show fanart for selected artist. It picks images from the "thumbs\Skin Fanart\Scraper\music" folder.||
-||#fanarthandler.picture.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\pictures" folder.||
-||#fanarthandler.picture.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\pictures" folder.||
-||#fanarthandler.plugins.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\plugins" folder.||
-||#fanarthandler.plugins.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\plugins" folder.||
-||#fanarthandler.scorecenter.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
-||#fanarthandler.scorecenter.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
+||*~~#fanarthandler.picture.backdrop1.any~~ #fanarthandler.picture.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\pictures" folder.||
+||*~~#fanarthandler.picture.backdrop2.any~~ #fanarthandler.picture.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\pictures" folder.||
+||*~~#fanarthandler.plugins.backdrop1.any~~ #fanarthandler.plugins.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\plugins" folder.||
+||*~~#fanarthandler.plugins.backdrop2.any~~ #fanarthandler.plugins.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\plugins" folder.||
+||*~~#fanarthandler.scorecenter.backdrop1.any~~ #fanarthandler.scorecenter.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
+||*~~#fanarthandler.scorecenter.backdrop1.any~~ #fanarthandler.scorecenter.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
 ||#fanarthandler.scorecenter.backdrop1.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
 ||#fanarthandler.scorecenter.backdrop2.selected||Use this tag in the myScorecenter plugin (myScoreCenter.xml) to show fanart for selected genre in the plugin. It picks images from the "thumbs\Skin Fanart\UserDef\scorecenter" folder.||
-||#fanarthandler.tv.userdef.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\tv" folder.||
-||#fanarthandler.tv.userdef.backdrop2.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\tv" folder.||
+||*~~#fanarthandler.tv.backdrop1.any~~ #fanarthandler.tv.userdef.backdrop1.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\tv" folder.||
+||*~~#fanarthandler.tv.backdrop2.any~~ #fanarthandler.tv.userdef.backdrop2.any*||Use this tag anywhere in a skin for displaying random images from the "thumbs\Skin Fanart\UserDef\tv" folder.||
 ||#fanarthandler.tvseries.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
 ||#fanarthandler.tvseries.backdrop1.any||Use this tag anywhere in a skin for displaying random images from the "thumbs\Fan Art\fanart\original" folder.||
 
