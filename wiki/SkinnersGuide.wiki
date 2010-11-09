@@ -303,14 +303,20 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.music.latest1.artist||Artist name||
 ||#fanarthandler.music.latest1.album||Album name||
 ||#fanarthandler.music.latest1.dateAdded||Date when album was added to MP||
+||*~~NEW TAG~~ #fanarthandler.music.latest1.fanart1*||Full path to fanart image||
+||*~~NEW TAG~~ #fanarthandler.music.latest1.fanart2*||Full path to fanart image||
 ||#fanarthandler.music.latest2.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest2.artist||Artist name||
 ||#fanarthandler.music.latest2.album||Album name||
 ||#fanarthandler.music.latest2.dateAdded||Date when album was added to MP||
+||*~~NEW TAG~~ #fanarthandler.music.latest2.fanart1*||Full path to fanart image||
+||*~~NEW TAG~~ #fanarthandler.music.latest2.fanart2*||Full path to fanart image||
 ||#fanarthandler.music.latest3.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest3.artist||Artist name||
 ||#fanarthandler.music.latest3.album||Album name||
 ||#fanarthandler.music.latest3.dateAdded||Date when album was added to MP||
+||*~~NEW TAG~~ #fanarthandler.music.latest3.fanart1*||Full path to fanart image||
+||*~~NEW TAG~~ #fanarthandler.music.latest3.fanart2*||Full path to fanart image||
 
 ==Picture==
 ||#fanarthandler.picture.latest1.thumb||Full path to picture||
