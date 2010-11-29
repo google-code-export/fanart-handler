@@ -43,16 +43,8 @@
           <Revision>0</Revision>
         </Version>
         <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal.</ExtensionDescription>
-        <VersionDescription>Now playing scrape improved for multiple artists
-Scraping for new images improved
-Latest added TVrecordings used low quality thumb, now uses high quality thumb
-Sometimes low quality artist or album thumb was incorrectly used instead of high quality fanart
-Improved music fanart matching in myMusic plugin - shared view
-You can now click on Latest music, moving picture and tvseries and start playback from basichome
-The folder structure of this plugin has changed. Skin Fanart has got two subfolders called Scraper and UserDef. 
-New property for (#fanarthandler.tvseries.latest1.serieThumb, #fanarthandler.tvseries.latest2.serieThumb and 
-
-#fanarthandler.tvseries.latest3.serieThumb)</VersionDescription>
+        <VersionDescription>WARNING!
+The plugin has undergone alot of changes to make it MP 1.2 compatible. MP 1.2 contains for example a new great feature for the myVideo plugin. The new feature allows MP to scrape movie fanart for movies handled by the myVideos plugin. This and a few other things has forced me to change the folder structure for the FanartHandler fanarts. More on this in the Fanart Handlers Wikis. This version require all skins to make changes to use the new structure. All community skinner has been notified but if you are unsure if your skin supports this new version then do not use this upgrade but wait instead for a new version of your used skin to be released.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2010-02-23T15:04:24.1976731+01:00</ReleaseDate>
