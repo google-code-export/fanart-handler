@@ -79,6 +79,7 @@ namespace FanartHandler
                 values += "&limit=500";
                 //values += "&modified_since=" + Utils.ConvertToTimestamp(DateTime.ParseExact(sTimestamp, "yyyy-MM-dd HH:mm:ss", null));
                 values += "&modified_since=" + sTimestamp;
+                values += "&inc=keywords,mb_aliases";
                 objRequest.Method = "POST";
                 objRequest.ContentType = "application/x-www-form-urlencoded"; 
                 objRequest.ContentLength = values.Length;
@@ -143,10 +144,26 @@ namespace FanartHandler
                     foundNewImages = true;
                     sArtist = Utils.RemoveResolutionFromArtistName(((SearchResults)alSearchResults[x]).Title);
                     sArtist = sArtist.Trim();                    
-                    dbArtist = Utils.GetArtist(sArtist, "MusicFanart");
+                    dbArtist = Utils.GetArtist(sArtist, "MusicFanart Scraper");
                     sArtist = Utils.RemoveResolutionFromArtistName(sArtist);
                     dbArtist = Utils.RemoveResolutionFromArtistName(dbArtist);
                     iCount = dbm.GetArtistCount(sArtist, dbArtist);
+                    if (iCount == 999)
+                    {
+                        if (((SearchResults)alSearchResults[x]).Alias != null)
+                        {
+                            for (int ix = 0; ix < ((SearchResults)alSearchResults[x]).Alias.Count; ix++ )
+                            {
+                                sArtist = Utils.RemoveResolutionFromArtistName(((SearchResults)alSearchResults[x]).Alias[ix].ToString());
+                                sArtist = sArtist.Trim();                    
+                                iCount = dbm.GetArtistCount(sArtist, dbArtist);
+                                if (iCount != 999)
+                                {
+                                    ix = 99999;
+                                }
+                            }
+                        }                        
+                    }
                     if (iCount != 999 && iCount < iMax)
                     {
                         if (((SearchResults)alSearchResults[x]).Album.Equals("1", StringComparison.CurrentCulture))
@@ -156,10 +173,10 @@ namespace FanartHandler
                             sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                             if (dbm.SourceImageExist(dbArtist, ((SearchResults)alSearchResults[x]).Id) == false)
                             {
-                                if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart"))
+                                if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
                                 {
                                     iCount = iCount + 1;
-                                    dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart", 0);
+                                    dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
                                 }
                             }
                             else
@@ -259,13 +276,13 @@ namespace FanartHandler
             if (type.Equals("MusicThumbs", StringComparison.CurrentCulture))
             {
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-                filename = path + @"\" + sArtist + "L.jpg";
+                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + "L.jpg";
                 logger.Debug("Downloading tumbnail for " + sArtist + " (" + filename + ").");
             }
             else
             {
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                filename = path + @"\" + Utils.PatchFilename(sArtist) + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
+                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + " (" + randNumber.Next(10000, 99999) + ").jpg";
                 logger.Debug("Downloading fanart for " + sArtist + " (" + filename + ").");
             }
             
@@ -587,8 +604,14 @@ namespace FanartHandler
                                 case "title":
                                     sr.Title = reader.ReadString();
                                     break;
+                                case "alias":
+                                    sr.AddAlias(reader.ReadString());
+                                    break;
                                 case "votes":
                                     alSearchResults.Add(sr);
+                                    break;
+                                default:
+//                                    logger.Debug(reader.Name + ":"+reader.ReadString());
                                     break;
                             }
                         }
@@ -639,6 +662,7 @@ namespace FanartHandler
                 string values = "keywords=" + artist;
                 values += "&aid=1,5";
                 values += "&default_operator=and";
+                values += "&inc=keywords,mb_aliases";
                 objRequest.Method = "POST";
                 objRequest.ContentType = "application/x-www-form-urlencoded";
                 objRequest.ContentLength = values.Length;
@@ -699,7 +723,7 @@ namespace FanartHandler
                             FanartHandlerSetup.MyScraperNowWorker.ReportProgress(0, "Ongoing");
                         }
                     }
-                    dbArtist = Utils.GetArtist(artist, "MusicFanart");
+                    dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                     for (int x = 0; x < alSearchResults.Count; x++)
                     {
                         if (dbm.StopScraper == true)
@@ -708,8 +732,8 @@ namespace FanartHandler
                         }
                         sArtist = Utils.RemoveResolutionFromArtistName(((SearchResults)alSearchResults[x]).Title);
                         sArtist = sArtist.Trim();
-                        sArtist = Utils.GetArtist(sArtist, "MusicFanart");
-                        if (Utils.IsMatch(dbArtist, sArtist))
+                        sArtist = Utils.GetArtist(sArtist, "MusicFanart Scraper");
+                        if (Utils.IsMatch(dbArtist, sArtist, ((SearchResults)alSearchResults[x]).Alias))
                         {
                             if (iCount < iMax)
                             {
@@ -720,10 +744,10 @@ namespace FanartHandler
                                     sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                                     if (dbm.SourceImageExist(dbArtist, ((SearchResults)alSearchResults[x]).Id) == false)
                                     {
-                                        if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart"))
+                                        if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
                                         {
                                             iCount = iCount + 1;
-                                            dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart", 0);
+                                            dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
                                             if (FanartHandlerSetup.MyScraperNowWorker != null)
                                             {
                                                 FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
@@ -791,16 +815,23 @@ namespace FanartHandler
         public string Id = string.Empty;
         public string Album = string.Empty;
         public string Title = string.Empty;
+        public ArrayList Alias = new ArrayList();
 
         public SearchResults()
         {
         }
 
-        public SearchResults(string id, string album, string title)
+        public SearchResults(string id, string album, string title, ArrayList alias)
         {
             this.Id = id;
             this.Album = album;
             this.Title = title;
+            this.Alias = alias;
+        }
+
+        public void AddAlias(string alias)
+        {
+            Alias.Add(alias);
         }
     }
 }

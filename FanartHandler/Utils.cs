@@ -48,12 +48,20 @@ namespace FanartHandler
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
         private static string scrapeThumbnails = null;  //scrape for thums or not        
-        private static bool delayStop/* = false*/; 
+        private static bool delayStop/* = false*/;
+        private static int idleTimeInMillis = 150;//250;
         #endregion
 
         /// <summary>
         /// Return value.
         /// </summary>
+        
+
+        public static int IdleTimeInMillis
+        {
+          get { return Utils.idleTimeInMillis; }
+          set { Utils.idleTimeInMillis = value; }
+        }
         public static DatabaseManager GetDbm()
         {
             return dbm;
@@ -320,13 +328,45 @@ namespace FanartHandler
         /// <summary>
         /// Matches two strings (artists or titles)
         /// </summary>        
-        public static bool IsMatch(string s1, string s2)
+        public static bool IsMatch(string s1, string s2, ArrayList al)
         {
-            if (s1 == null)
+            if (s1 == null || s2 == null)
             {
                 return false;
             }
 
+            if (IsMatch(s1, s2) == false)
+            {
+                if (al != null)
+                {
+                    for (int x = 0; x < al.Count; x++)
+                    {
+                        s2 = al[x].ToString().Trim();
+                        s2 = Utils.GetArtist(s2, "MusicFanart Scraper");
+                        if (IsMatch(s1,s2))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Matches two strings (artists or titles)
+        /// </summary>        
+        public static bool IsMatch(string s1, string s2)
+        {
+            if (s1 == null || s2 == null)
+            {
+                return false;
+            }
+            
             int i = 0;
             if (s1.Length > s2.Length)
             {
@@ -449,6 +489,9 @@ namespace FanartHandler
             }
 
             s = s.Replace(";","|");
+            s = s.ToLower().Replace(" ft ", "|");
+            s = s.ToLower().Replace(" and ", "|");
+            s = s.ToLower().Replace(" & ", "|");
             string[] words = s.Split('|');
             string sout = String.Empty;
             string tmpWord = String.Empty;
@@ -686,33 +729,7 @@ namespace FanartHandler
             return s;
         }
 
-        /// <summary>
-        /// Remove illegal characters from filename.
-        /// </summary>
-        public static string PatchFilename(string s)
-        {
-            if (s == null)
-            {
-                return string.Empty;
-            }
-
-            s = s.Replace("?", String.Empty);
-            s = s.Replace("[", String.Empty);
-            s = s.Replace("]", String.Empty);
-            s = s.Replace("/", String.Empty);
-            s = s.Replace("\\", String.Empty);
-            s = s.Replace("=", String.Empty);
-            s = s.Replace("+", String.Empty);
-            s = s.Replace("<", String.Empty);
-            s = s.Replace(">", String.Empty);
-            s = s.Replace(":", String.Empty);
-            s = s.Replace(";", String.Empty);
-            s = s.Replace("\"", String.Empty);
-            s = s.Replace(",", String.Empty);
-            s = s.Replace("*", String.Empty);
-            s = s.Replace("|", String.Empty);
-            return s.Replace("^", String.Empty);                          
-        }
+   
 
         /// <summary>
         /// Remove trailing digits.
@@ -814,7 +831,7 @@ namespace FanartHandler
             try
             {
                 TimeSpan ts = DateTime.Now - GUIGraphicsContext.LastActivity;
-                if (ts.TotalMilliseconds >= 250)
+                if (ts.TotalMilliseconds >= IdleTimeInMillis)
                 {
                     return true;
                 }
@@ -826,33 +843,7 @@ namespace FanartHandler
             return false;
         }
 
-        /// <summary>
-        /// method for converting a System.DateTime value to a UNIX Timestamp
-        /// </summary>
-        /// <param name="value">date to convert</param>
-        /// <returns></returns>
-       /* public static double ConvertToTimestamp(DateTime value)
-        {
-            //create Timespan by subtracting the value provided from
-            //the Unix Epoch
-            TimeSpan span = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
-
-            //return the total seconds (which is a UNIX timestamp)
-            return (double)span.TotalSeconds;
-        }*/
-
-
-        /// <summary>
-        /// method for converting a UNIX Timestamp to a System.DateTime value
-        /// </summary>
-        /// <param name="value">date to convert</param>
-        /// <returns></returns>
-        /*public static string ConvertFromTimestamp(double timestamp)
-        {
-            System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-            dateTime = dateTime.AddSeconds(timestamp);
-            return dateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
-        }*/
+      
 
 
         /// <summary>
@@ -897,13 +888,6 @@ namespace FanartHandler
                     if (isStopping == false)
                     {
                         logger.Error("LoadImage (" + filename + "): " + ex.ToString());
-/*                        if (!IsFileValid(filename))
-                        {
-                            if (File.Exists(filename)) File.Delete(filename);
-                            dbm.DeleteFanart(filename, type);
-                            logger.Error("LoadImage: Deleting downloaded file because it is corrupt.");
-                        }
- */ 
                     }
 
                 }

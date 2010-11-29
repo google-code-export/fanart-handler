@@ -59,15 +59,17 @@ namespace FanartHandler
                     GetLatestMediaInfo();
 
                     //Add games images
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
-                    if (FanartHandlerSetup.FR.UseAnyGames)
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\games";
+                    if (FanartHandlerSetup.FR.UseAnyGamesUser)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game User", 0);
                     }
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
-                    if (FanartHandlerSetup.UseVideoFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMovies)
+                    if (FanartHandlerSetup.UseVideoFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMoviesUser || FanartHandlerSetup.FR.UseAnyMoviesScraper)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie", 0);
+                        path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\movies";
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie User", 0);                    
+                        path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\movies";
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie Scraper", 0);
                     }
 
                     //Add music images
@@ -82,24 +84,26 @@ namespace FanartHandler
                         path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
                         FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicArtist", 0);
                     }
-                    if (FanartHandlerSetup.UseFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMusic)
+                    if (FanartHandlerSetup.UseFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyMusicUser || FanartHandlerSetup.FR.UseAnyMusicScraper)
                     {
-                        path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart", 0);
+                        path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\music";
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart User", 0);                    
+                        path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart Scraper", 0);
                     }
 
                     //Add pictures images
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
-                    if (FanartHandlerSetup.FR.UseAnyPictures)
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\pictures";
+                    if (FanartHandlerSetup.FR.UseAnyPicturesUser)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture User", 0);
                     }
 
                     //Add games images
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
-                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyScoreCenter)
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\scorecenter";
+                    if (FanartHandlerSetup.UseScoreCenterFanart.Equals("True", StringComparison.CurrentCulture) || FanartHandlerSetup.FR.UseAnyScoreCenterUser)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter User", 0);
                     }
 
                     //Add tvseries images
@@ -130,17 +134,17 @@ namespace FanartHandler
                     }
                     
                     //Add tv images
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
-                    if (FanartHandlerSetup.FR.UseAnyTV)
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\tv";
+                    if (FanartHandlerSetup.FR.UseAnyTVUser)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV User", 0);
                     }
 
                     //Add plugins images
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
-                    if (FanartHandlerSetup.FR.UseAnyPlugins)
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\plugins";
+                    if (FanartHandlerSetup.FR.UseAnyPluginsUser)
                     {
-                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin", 0);
+                        FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin User", 0);
                     }
 
                     try
@@ -277,7 +281,12 @@ namespace FanartHandler
                         thumb = MediaPortal.Util.Utils.GetLargeCoverArtName(Thumbs.MusicAlbum, hTable[i].Artist + "-" + hTable[i].Album);
                         if (thumb == null || thumb.Length < 1 || !File.Exists(thumb))
                         {
-                            thumb = MediaPortal.Util.Utils.GetLargeCoverArtName(Thumbs.MusicArtists, hTable[i].Artist);
+                            string sArtist = hTable[i].Artist;
+                            if (sArtist != null && sArtist.Length > 0 && sArtist.IndexOf("|")>0)
+                            {
+                                sArtist = sArtist.Substring(0, sArtist.IndexOf("|")).Trim();
+                            }
+                            thumb = MediaPortal.Util.Utils.GetLargeCoverArtName(Thumbs.MusicArtists, sArtist);
                         }
                         if (thumb == null || thumb.Length < 1 || !File.Exists(thumb))
                         {
@@ -288,6 +297,8 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".artist", hTable[i].Artist);
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".album", hTable[i].Album);
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".dateAdded", hTable[i].DateAdded);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".fanart1", hTable[i].Fanart1);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".fanart2", hTable[i].Fanart2);
                         z++;
                     }
                     hTable.Clear();

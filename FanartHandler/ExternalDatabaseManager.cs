@@ -134,7 +134,7 @@ namespace FanartHandler
                             {
                                 if (File.Exists(thumb))
                                 {
-                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null));
+                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null));
                                     x++;
                                 }
                             }
