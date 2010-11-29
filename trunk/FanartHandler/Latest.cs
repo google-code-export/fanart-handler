@@ -10,27 +10,9 @@
 // Copyright        : Open Source software licensed under the GNU/GPL agreement.
 //***********************************************************************
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using System.Reflection;
 using System.Text;
-using NLog;
-using MediaPortal.Configuration;
-using MediaPortal.GUI.Library;
-using MediaPortal.Util;
-using MediaPortal.Plugins.MovingPictures;
-using MediaPortal.Plugins.MovingPictures.Database;
-using Cornerstone.Database;
-using Cornerstone.Database.Tables;
-using TvDatabase;
-using ForTheRecord.Entities;
-using ForTheRecord.ServiceAgents;
-using ForTheRecord.ServiceContracts;
-using ForTheRecord.UI.Process.Recordings;
-using WindowPlugins.GUITVSeries;
-using System.Globalization;
 
 namespace FanartHandler
 {
@@ -51,6 +33,34 @@ namespace FanartHandler
         string year;
         string seasonIndex;
         string episodeIndex;
+        string thumbSeries;
+        object playable;
+        string fanart1;        
+        string fanart2;
+
+        public string Fanart1
+        {
+            get { return fanart1; }
+            set { fanart1 = value; }
+        }
+
+        public string Fanart2
+        {
+            get { return fanart2; }
+            set { fanart2 = value; }
+        }
+
+        public object Playable
+        {
+            get { return playable; }
+            set { playable = value; }
+        }
+
+        public string ThumbSeries
+        {
+            get { return thumbSeries; }
+            set { thumbSeries = value; }
+        }
 
         public string DateAdded
         {
@@ -142,7 +152,7 @@ namespace FanartHandler
             set { episodeIndex = value; }
         }
 
-        public Latest(string dateAdded, string thumb, string fanart, string title, string subtitle, string artist, string album, string genre, string rating, string roundedRating, string classification, string runtime, string year, string seasonIndex, string episodeIndex)
+        public Latest(string dateAdded, string thumb, string fanart, string title, string subtitle, string artist, string album, string genre, string rating, string roundedRating, string classification, string runtime, string year, string seasonIndex, string episodeIndex, string thumbSeries, object playable, string fanart1, string fanart2)
         {
             this.dateAdded = dateAdded;
             this.thumb = thumb;
@@ -159,6 +169,10 @@ namespace FanartHandler
             this.year = year;
             this.seasonIndex = seasonIndex;
             this.episodeIndex = episodeIndex;
+            this.thumbSeries = thumbSeries;
+            this.playable = playable;
+            this.fanart1 = fanart1;
+            this.fanart2 = fanart2;
         }
 
     }

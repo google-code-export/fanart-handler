@@ -580,11 +580,11 @@ namespace FanartHandler
                 }
                 if (defaultBackdrop != null && defaultBackdrop.Length > 0)
                 {
-                    textBoxDefaultBackdrop.Text = defaultBackdrop;
+                    textBoxDefaultBackdrop.Text = defaultBackdrop.Replace(@"\Skin FanArt\music\default.jpg", @"\Skin FanArt\UserDef\music\default.jpg");
                 }
                 else
                 {
-                    string tmpPath = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music\default.jpg";
+                    string tmpPath = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\music\default.jpg";
                     defaultBackdrop = tmpPath;
                     textBoxDefaultBackdrop.Text = tmpPath;
                 }
@@ -687,7 +687,8 @@ namespace FanartHandler
                     InitLogger();
                     //System.Net.ServicePointManager.Expect100Continue = false;
                     logger.Info("Fanart Handler configuration is starting.");
-                    logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());                                        
+                    logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());
+                    FanartHandlerSetup.SetupDirectories();                 
                     Utils.SetUseProxy(useProxy);
                     Utils.SetProxyHostname(proxyHostname);
                     Utils.SetProxyPort(proxyPort);
@@ -1329,7 +1330,7 @@ namespace FanartHandler
                     pictureBox1.Image = null;
                     string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
                     
-                    Utils.GetDbm().DeleteFanart(sFileName, "MusicFanart");
+                    Utils.GetDbm().DeleteFanart(sFileName, "MusicFanart Scraper");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -1364,8 +1365,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastID = 0;
-                    Utils.GetDbm().DeleteAllFanart("MusicFanart");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
+                    Utils.GetDbm().DeleteAllFanart("MusicFanart Scraper");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -1422,20 +1423,6 @@ namespace FanartHandler
             }
         }
 
-        /*private void DataGridView9_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.R)
-            {
-                ResetScrape();
-            }
-            else if (e.KeyData == Keys.S)
-            {
-                StartScrape();
-            }
-             
-        }*/
-
-
         private void button4_Click(object sender, EventArgs e)
         {
             EnableDisableFanart();
@@ -1476,7 +1463,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("MusicFanart");
+                int i = Utils.GetDbm().SyncDatabase("MusicFanart Scraper");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -1533,7 +1520,7 @@ namespace FanartHandler
                         isScraping = true;
                         if (useFanart.Equals("True", StringComparison.CurrentCulture))
                         {
-                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music", "*.jpg", "MusicFanart",0);
+                            FanartHandlerSetup.SetupFilenames(Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music", "*.jpg", "MusicFanart Scraper", 0);
                         }
                         dataGridView1.Enabled = false;
                         button6.Text = "Stop Scraper";
@@ -1641,7 +1628,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDGame, "Game");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDGame, "Game User");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1661,7 +1648,7 @@ namespace FanartHandler
                             }
                             myDataTable4.Rows.Add(myDataRow);
                         }
-                        label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
+                        label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game User");
                     }
                 }
                 result = null;
@@ -1684,7 +1671,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPicture, "Picture");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPicture, "Picture User");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1704,7 +1691,7 @@ namespace FanartHandler
                             }
                             myDataTable5.Rows.Add(myDataRow);
                         }
-                        label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
+                        label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture User");
                     }
                 }
                 result = null;
@@ -1727,7 +1714,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPlugin, "Plugin");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDPlugin, "Plugin User");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1747,7 +1734,7 @@ namespace FanartHandler
                             }
                             myDataTable6.Rows.Add(myDataRow);
                         }
-                        label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
+                        label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin User");
                     }
                 }
                 result = null;
@@ -1770,7 +1757,7 @@ namespace FanartHandler
         {
             try
             {
-                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDTV, "TV");
+                SQLiteResultSet result = Utils.GetDbm().GetDataForTableRandom(lastIDTV, "TV User");
                 int tmpID = 0;
                 if (result != null)
                 {
@@ -1790,7 +1777,7 @@ namespace FanartHandler
                             }
                             myDataTable7.Rows.Add(myDataRow);
                         }
-                        label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
+                        label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV User");
                     }
                 }
                 result = null;
@@ -2301,7 +2288,7 @@ namespace FanartHandler
                 {
                     pictureBox3.Image = null;
                     string sFileName = dataGridView2.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "Movie");
+                    Utils.GetDbm().DeleteFanart(sFileName, "Movie User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -2328,8 +2315,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDMovie = 0;
-                    Utils.GetDbm().DeleteAllFanart("Movie");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
+                    Utils.GetDbm().DeleteAllFanart("Movie User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\movies";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2351,7 +2338,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("Movie");
+                int i = Utils.GetDbm().SyncDatabase("Movie User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2394,7 +2381,7 @@ namespace FanartHandler
                 {
                     pictureBox4.Image = null;
                     string sFileName = dataGridView3.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "ScoreCenter");
+                    Utils.GetDbm().DeleteFanart(sFileName, "ScoreCenter User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -2421,8 +2408,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDScoreCenter = 0;
-                    Utils.GetDbm().DeleteAllFanart("ScoreCenter");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
+                    Utils.GetDbm().DeleteAllFanart("ScoreCenter User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\scorecenter";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2444,7 +2431,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("ScoreCenter");
+                int i = Utils.GetDbm().SyncDatabase("ScoreCenter User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2461,13 +2448,16 @@ namespace FanartHandler
             try
             {
                 //Add games images
-                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game", 0);
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
+                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\games";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Game User", 0);
+                //Add movie images 
                 if (useVideoFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie", 0);
-                }
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\movies";
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie User", 0);
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\movies";
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Movie Scraper", 0);
+                }                
                 //Add music images
                 path = String.Empty;
                 if (useAlbum.Equals("True", StringComparison.CurrentCulture))
@@ -2480,30 +2470,30 @@ namespace FanartHandler
                     path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
                     FanartHandlerSetup.SetupFilenames(path, "*L.jpg", "MusicArtist", 0);
                 }
-                if (useFanart.Equals("True", StringComparison.CurrentCulture))
-                {
-                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart", 0);
-                }
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\music";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart User", 0);
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "MusicFanart Scraper", 0);
+                
                 //Add pictures images
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture", 0);
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\pictures";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Picture User", 0);
                 //Add scorecenter images
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\scorecenter";
                 if (useScoreCenterFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter", 0);
+                    FanartHandlerSetup.SetupFilenames(path, "*.jpg", "ScoreCenter User", 0);
                 }
                 //Add tvseries images
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Fan Art\fanart\original";
                 FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TVSeries", 0);
                  
                 //Add tv images
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV", 0);
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\tv";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "TV User", 0);
                 //Add plugins images
-                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
-                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin",0);
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\plugins";
+                FanartHandlerSetup.SetupFilenames(path, "*.jpg", "Plugin User", 0);
             }
             catch (Exception ex)
             {
@@ -2518,7 +2508,7 @@ namespace FanartHandler
             {
                 if (useVideoFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    ImportLocalFanart("Movie");
+                    ImportLocalFanart("Movie User");
                     ImportLocalFanartAtStartup();
                     UpdateFanartTableMovie();
                     
@@ -2545,7 +2535,7 @@ namespace FanartHandler
                     isScraping = true;
                     if (useMusicFanart.Equals("True", StringComparison.CurrentCulture))
                     {
-                        ImportLocalFanart("MusicFanart");
+                        ImportLocalFanart("MusicFanart Scraper");
                         ImportLocalFanartAtStartup();
                         UpdateFanartTableOnStartup();
                     }
@@ -2565,7 +2555,7 @@ namespace FanartHandler
             {
                 if (useScoreCenterFanart.Equals("True", StringComparison.CurrentCulture))
                 {
-                    ImportLocalFanart("ScoreCenter");
+                    ImportLocalFanart("ScoreCenter User");
                     ImportLocalFanartAtStartup();
                     UpdateFanartTableScoreCenter(); 
                 }                
@@ -2597,33 +2587,41 @@ namespace FanartHandler
                     foreach (String file in openFD.FileNames)
                     {
                         artist = Utils.GetArtist(file, type);
-                        if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
+                        if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\music\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\UserDef\music\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Movie", StringComparison.CurrentCulture))
+                        else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\movies\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\Scraper\music\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Game", StringComparison.CurrentCulture))
+                        else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\games\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\Scraper\movies\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Picture", StringComparison.CurrentCulture))
+                        else if (type.Equals("Movie User", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\pictures\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\UserDef\movies\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("Plugin", StringComparison.CurrentCulture))
+                        else if (type.Equals("Game User", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\plugins\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\UserDef\games\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
-                        else if (type.Equals("TV", StringComparison.CurrentCulture))
+                        else if (type.Equals("Picture User", StringComparison.CurrentCulture))
                         {
-                            newFilename = path + @"\Skin FanArt\tv\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\UserDef\pictures\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                        }
+                        else if (type.Equals("Plugin User", StringComparison.CurrentCulture))
+                        {
+                            newFilename = path + @"\Skin FanArt\UserDef\plugins\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                        }
+                        else if (type.Equals("TV User", StringComparison.CurrentCulture))
+                        {
+                            newFilename = path + @"\Skin FanArt\UserDef\tv\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
                         else
                         {
-                            newFilename = path + @"\Skin FanArt\scorecenter\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
+                            newFilename = path + @"\Skin FanArt\UserDef\scorecenter\" + artist + " (" + randNumber.Next(10000, 99999) + ").jpg";
                         }
                         File.Copy(file,newFilename);                       
                     }
@@ -2645,12 +2643,12 @@ namespace FanartHandler
                     string enabled = dataGridView4.CurrentRow.Cells[1].Value.ToString();
                     if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Game");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Game User");
                         dataGridView4.Rows[dataGridView4.CurrentRow.Index].Cells[1].Value = "False";
                     }
                     else
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Game");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Game User");
                         dataGridView4.Rows[dataGridView4.CurrentRow.Index].Cells[1].Value = "True";
                     }
                 }
@@ -2669,7 +2667,7 @@ namespace FanartHandler
                 {
                     pictureBox5.Image = null;
                     string sFileName = dataGridView4.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "Game");
+                    Utils.GetDbm().DeleteFanart(sFileName, "Game User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -2696,8 +2694,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDGame = 0;
-                    Utils.GetDbm().DeleteAllFanart("Game");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
+                    Utils.GetDbm().DeleteAllFanart("Game User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\games";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2705,7 +2703,7 @@ namespace FanartHandler
                     }
                     myDataTable4.Rows.Clear();
                     myDataTable4.AcceptChanges();
-                    label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game");
+                    label22.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Game User");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2719,7 +2717,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("Game");
+                int i = Utils.GetDbm().SyncDatabase("Game User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2732,7 +2730,7 @@ namespace FanartHandler
         {
             try
             {
-                ImportLocalFanart("Game");
+                ImportLocalFanart("Game User");
                 ImportLocalFanartAtStartup();
                 UpdateFanartTableGame();
             }
@@ -2752,12 +2750,12 @@ namespace FanartHandler
                     string enabled = dataGridView5.CurrentRow.Cells[1].Value.ToString();
                     if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Picture");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Picture User");
                         dataGridView5.Rows[dataGridView5.CurrentRow.Index].Cells[1].Value = "False";
                     }
                     else
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Picture");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Picture User");
                         dataGridView5.Rows[dataGridView5.CurrentRow.Index].Cells[1].Value = "True";
                     }
                 }
@@ -2776,7 +2774,7 @@ namespace FanartHandler
                 {
                     pictureBox6.Image = null;
                     string sFileName = dataGridView5.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "ScoreCenter");
+                    Utils.GetDbm().DeleteFanart(sFileName, "ScoreCenter User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -2803,8 +2801,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDPicture = 0;
-                    Utils.GetDbm().DeleteAllFanart("Picture");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
+                    Utils.GetDbm().DeleteAllFanart("Picture User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\pictures";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2812,7 +2810,7 @@ namespace FanartHandler
                     }
                     myDataTable5.Rows.Clear();
                     myDataTable5.AcceptChanges();
-                    label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture");
+                    label24.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Picture User");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2826,7 +2824,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("Picture");
+                int i = Utils.GetDbm().SyncDatabase("Picture User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2839,7 +2837,7 @@ namespace FanartHandler
         {
             try
             {
-                ImportLocalFanart("Picture");
+                ImportLocalFanart("Picture User");
                 ImportLocalFanartAtStartup();
                 UpdateFanartTablePicture();
             }
@@ -2859,12 +2857,12 @@ namespace FanartHandler
                     string enabled = dataGridView6.CurrentRow.Cells[1].Value.ToString();
                     if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Plugin");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "Plugin User");
                         dataGridView6.Rows[dataGridView6.CurrentRow.Index].Cells[1].Value = "False";
                     }
                     else
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Plugin");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "Plugin User");
                         dataGridView6.Rows[dataGridView6.CurrentRow.Index].Cells[1].Value = "True";
                     }
                 }
@@ -2883,7 +2881,7 @@ namespace FanartHandler
                 {
                     pictureBox7.Image = null;
                     string sFileName = dataGridView6.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "Plugin");
+                    Utils.GetDbm().DeleteFanart(sFileName, "Plugin User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -2910,8 +2908,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDPlugin = 0;
-                    Utils.GetDbm().DeleteAllFanart("Plugin");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
+                    Utils.GetDbm().DeleteAllFanart("Plugin User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\plugins";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -2919,7 +2917,7 @@ namespace FanartHandler
                     }
                     myDataTable6.Rows.Clear();
                     myDataTable6.AcceptChanges();
-                    label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin");
+                    label26.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("Plugin User");
                     MessageBox.Show("Done!");
                 }
             }
@@ -2933,7 +2931,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("Plugin");
+                int i = Utils.GetDbm().SyncDatabase("Plugin User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -2946,7 +2944,7 @@ namespace FanartHandler
         {
             try
             {
-                ImportLocalFanart("Plugin");
+                ImportLocalFanart("Plugin User");
                 ImportLocalFanartAtStartup();
                 UpdateFanartTablePlugin();
             }
@@ -2966,12 +2964,12 @@ namespace FanartHandler
                     string enabled = dataGridView7.CurrentRow.Cells[1].Value.ToString();
                     if (enabled != null && enabled.Equals("True", StringComparison.CurrentCulture))
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "TV");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, false, "TV User");
                         dataGridView7.Rows[dataGridView7.CurrentRow.Index].Cells[1].Value = "False";
                     }
                     else
                     {
-                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "TV");
+                        Utils.GetDbm().EnableFanartRandom(sFileName, true, "TV User");
                         dataGridView7.Rows[dataGridView7.CurrentRow.Index].Cells[1].Value = "True";
                     }
                 }
@@ -2990,7 +2988,7 @@ namespace FanartHandler
                 {
                     pictureBox8.Image = null;
                     string sFileName = dataGridView7.CurrentRow.Cells[3].Value.ToString();
-                    Utils.GetDbm().DeleteFanart(sFileName, "TV");
+                    Utils.GetDbm().DeleteFanart(sFileName, "TV User");
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -3017,8 +3015,8 @@ namespace FanartHandler
                 if (result == DialogResult.Yes)
                 {
                     lastIDTV = 0;
-                    Utils.GetDbm().DeleteAllFanart("TV");
-                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
+                    Utils.GetDbm().DeleteAllFanart("TV User");
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\tv";
                     string[] dirs = Directory.GetFiles(path, "*.jpg");
                     foreach (string dir in dirs)
                     {
@@ -3026,7 +3024,7 @@ namespace FanartHandler
                     }
                     myDataTable7.Rows.Clear();
                     myDataTable7.AcceptChanges();
-                    label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV");
+                    label28.Text = String.Empty + Utils.GetDbm().GetTotalRandomInFanartDatabase("TV User");
                     MessageBox.Show("Done!");
                 }
             }
@@ -3040,7 +3038,7 @@ namespace FanartHandler
         {
             try
             {
-                int i = Utils.GetDbm().SyncDatabase("TV");
+                int i = Utils.GetDbm().SyncDatabase("TV User");
                 MessageBox.Show("Successfully synchronised your fanart database. Removed " + i + " entries from your fanart database.");
             }
             catch (Exception ex)
@@ -3053,7 +3051,7 @@ namespace FanartHandler
         {
             try
             {
-                ImportLocalFanart("TV");
+                ImportLocalFanart("TV User");
                 ImportLocalFanartAtStartup();
                 UpdateFanartTableTV();
             }

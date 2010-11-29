@@ -233,15 +233,32 @@ namespace FanartHandler
                 logger.Info("NowPlayingScrape is starting for artist " + artist + ".");
                 TotArtistsBeingScraped = 2;
                 CurrArtistsBeingScraped = 0;
-                if (DoScrapeNew(artist) > 0)
+                bool bFound = false;
+                if (artist.Contains("|"))
                 {
+                    string[] artists = artist.Split('|');
+                    foreach (string thisArtist in artists)
+                    {
+                        if (DoScrapeNew(thisArtist) > 0)
+                        {
+                            bFound = true;
+                        }
+                    }
                     logger.Info("NowPlayingScrape is done.");
-                    return true;
+                    return bFound;
                 }
                 else
                 {
-                    logger.Info("NowPlayingScrape is done.");
-                    return false;
+                    if (DoScrapeNew(artist) > 0)
+                    {
+                        logger.Info("NowPlayingScrape is done.");
+                        return true;
+                    }
+                    else
+                    {
+                        logger.Info("NowPlayingScrape is done.");
+                        return false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -505,7 +522,7 @@ namespace FanartHandler
         /// <returns>Total number of initialized artists in the fanart handler database</returns>
         public int GetTotalArtistsInitialisedInFanartDatabase()
         {
-            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart');";
+            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart Scraper');";
             SQLiteResultSet result;
             lock (lockObject) result = dbClient.Execute(sqlQuery);
             int i = 0;
@@ -523,7 +540,7 @@ namespace FanartHandler
         /// <returns>Total number of movies in the fanart handler database</returns>
         public int GetTotalMoviesInFanartDatabase()
         {
-            string sqlQuery = "SELECT count(Artist) FROM Movie_Fanart where type = 'Movie';";
+            string sqlQuery = "SELECT count(Artist) FROM Movie_Fanart where type = 'Movie User';";
             SQLiteResultSet result;
             lock (lockObject) result = dbClient.Execute(sqlQuery);
             int i = 0;
@@ -578,7 +595,7 @@ namespace FanartHandler
         /// <returns>Return total uninitilised artists in the Fanart Handler database</returns>
         public int GetTotalArtistsUNInitialisedInFanartDatabase()
         {
-            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist not in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart');";
+            string sqlQuery = "SELECT count(t1.Artist) FROM Music_Artist t1 WHERE t1.Artist not in (SELECT distinct(t2.Artist) FROM Music_Fanart t2 WHERE t2.type = 'MusicFanart Scraper');";
             SQLiteResultSet result;
             lock (lockObject) result = dbClient.Execute(sqlQuery);
             int i = 0;
@@ -603,7 +620,7 @@ namespace FanartHandler
                 int y = m_db.GetArtistId(artist);
                 if (y > 0)
                 {
-                    string sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
+                    string sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart Scraper';";
                     SQLiteResultSet result;
                     lock (lockObject) result = dbClient.Execute(sqlQuery);
                     int i = 0;
@@ -697,7 +714,7 @@ namespace FanartHandler
                     filename = result.GetField(x, 0);
                     if (File.Exists(filename) == false)
                     {
-                        DeleteFanart(filename, "MusicFanart");
+                        DeleteFanart(filename, "MusicFanart Scraper");
                         i++;
                     }
                 }
@@ -728,7 +745,7 @@ namespace FanartHandler
                 Utils.SetDelayStop(true);
                 try
                 {
-                    string dbArtist = Utils.GetArtist(artist, "MusicFanart");
+                    string dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                     scraper = new Scraper();
                     string sqlQuery;
                     int totalImages = 0;
@@ -768,7 +785,7 @@ namespace FanartHandler
                         {
                             succThumb = "1";
                         }
-                        sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
+                        sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart Scraper';";
                         result = dbClient.Execute(sqlQuery);
                         if (successful_scrape == 1 && (succThumb.Equals("1", StringComparison.CurrentCulture) || succThumb.Equals("2", StringComparison.CurrentCulture)))
                         {
@@ -829,7 +846,7 @@ namespace FanartHandler
                 Utils.SetDelayStop(true);
                 try
                 {
-                    string dbArtist = Utils.GetArtist(artist, "MusicFanart");
+                    string dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                     scraper = new Scraper();
                     string sqlQuery;
                     int totalImages = 0;
@@ -840,7 +857,7 @@ namespace FanartHandler
                     {
                         InsertNewMusicArtist(dbArtist);
 
-                        sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
+                        sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart Scraper';";
                         SQLiteResultSet result;
                         lock (lockObject) result = dbClient.Execute(sqlQuery);
                         iTmp = Int32.Parse(result.GetField(0, 0), CultureInfo.CurrentCulture);
@@ -848,8 +865,6 @@ namespace FanartHandler
                         if (iTmp == 0)
                         {
                             int iMax = Convert.ToInt32(Utils.GetScraperMaxImages(), CultureInfo.CurrentCulture);
-                            //if (iMax >= 4)
-                            //  iMax = 4;
                             totalImages = scraper.GetImages(artist, iMax, this, false);
                             if (totalImages == 0)
                             {
@@ -953,7 +968,7 @@ namespace FanartHandler
             if (HTAnyMusicFanart == null || HTAnyMusicFanart.Count < 1)
             {
                 Hashtable htTmp = new Hashtable();
-                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Enabled = 'True' AND Type IN ('MusicFanart');";
+                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Enabled = 'True' AND Type IN ('MusicFanart Scraper');";
                 SQLiteResultSet result;
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
@@ -1013,9 +1028,10 @@ namespace FanartHandler
                     lock (lockObject) dbClient.Execute(sqlQuery);
                     logger.Info("Upgrading Step 2 - finished");
                     logger.Info("Upgraded Database to version 1.4");
+                    justUpgraded = true;
                     currVersion = "1.4";
                 }
-                if (tmpS != null && tmpS.Equals("1.4", StringComparison.CurrentCulture))
+                if ((tmpS != null && tmpS.Equals("1.4", StringComparison.CurrentCulture)) || justUpgraded)
                 {
                     logger.Info("Upgrading Database to version 1.5");
                     sqlQuery = "alter table music_artist add successful_thumb_scrape NUMERIC;";
@@ -1175,6 +1191,43 @@ namespace FanartHandler
                     logger.Info("Upgraded Database to version 2.1");
                     currVersion = "2.1";
                 }
+                if ((tmpS != null && tmpS.Equals("2.1", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.2");
+                    sqlQuery = "UPDATE game_fanart SET Type = 'Game User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef')";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    sqlQuery = "UPDATE movie_fanart SET Type = 'Movie User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef') WHERE Type = 'Movie'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 2 - finished");
+                    sqlQuery = "UPDATE music_fanart SET Type = 'MusicFanart Scraper', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\Scraper'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\Scraper') WHERE Type = 'MusicFanart'"; 
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 3 - finished");
+                    sqlQuery = "UPDATE music_fanart SET disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef') WHERE Type = 'Default'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 4 - finished");
+                    sqlQuery = "UPDATE picture_fanart SET Type = 'Picture User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef')";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 5 - finished");
+                    sqlQuery = "UPDATE plugin_fanart SET Type = 'Plugin User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef')";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 6 - finished");
+                    sqlQuery = "UPDATE scorecenter_fanart SET Type = 'Scorecenter User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef')";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 7 - finished");
+                    sqlQuery = "UPDATE tv_fanart SET Type = 'TV User', disk_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef'), source_image = replace(disk_image, 'Skin FanArt','Skin FanArt\\UserDef')";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 8 - finished");
+                    sqlQuery = "DELETE FROM Timestamps WHERE Key LIKE 'Directory -%';";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 9 - finished");
+                    sqlQuery = "UPDATE Version SET Version = '2.2'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    MigrateFanart();
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.2");
+                    currVersion = "2.2";
+                }
                 result = null;
                 sqlQuery = null;
                 tmpS = null;
@@ -1202,6 +1255,59 @@ namespace FanartHandler
             }
         }
 
+        private void MigrateFanart()
+        {
+            FanartHandlerSetup.SetupDirectoriesOLD();
+            string pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\games";
+            string pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\games";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 10 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\movies";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\movies";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 11 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\music";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
+            MigrateFanartMusic(pathOld, pathNew);
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 12 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\pictures";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\pictures";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 13 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\scorecenter";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\scorecenter";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 14 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\tv";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\tv";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 15 - finished");
+            pathOld = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\plugins";
+            pathNew = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\plugins";
+            MigrateFanart(pathOld, pathNew);
+            logger.Info("Upgrading Step 16 - finished");
+        }
+
+        private void MigrateFanartMusic(string pathOld, string pathNew)
+        {
+            if (File.Exists(pathOld+"\\default.jpg"))
+            {
+                File.Copy(pathOld + "\\default.jpg", pathNew.Replace("Scraper", "UserDef") + "\\default.jpg",true);
+            }
+        }
+
+        private void MigrateFanart(string pathOld, string pathNew)
+        {
+            DirectoryInfo diSource = new DirectoryInfo(pathOld);
+            foreach (FileInfo fi in diSource.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(pathNew, fi.Name), true);
+                fi.Delete();
+            }
+            Directory.Delete(pathOld);
+        }
+
         /// <summary>
         /// Deletes all fanart in the database and resets the initial flag.
         /// </summary>
@@ -1212,7 +1318,7 @@ namespace FanartHandler
             {
                 string sqlQuery = sqlQuery = "DELETE FROM " + GetTableName(type) + " WHERE Type = '" + Utils.PatchSql(type) + "';";
                 lock (lockObject) dbClient.Execute(sqlQuery);
-                if (type.StartsWith("MusicFanart", StringComparison.CurrentCulture))
+                if (type.StartsWith("MusicFanart Scraper", StringComparison.CurrentCulture))
                 {
                     DateTime saveNow = DateTime.Now;
                     sqlQuery = "UPDATE Music_Artist SET Successful_Scrape = 0, Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "';";
@@ -1379,7 +1485,7 @@ namespace FanartHandler
             SQLiteResultSet result = null;
             try
             {
-                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Music_Fanart WHERE Id > " + lastID + " AND Type = 'MusicFanart' order by Artist, Disk_Image;";
+                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Music_Fanart WHERE Id > " + lastID + " AND Type = 'MusicFanart Scraper' order by Artist, Disk_Image;";
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
@@ -1423,15 +1529,22 @@ namespace FanartHandler
             int x = 0;
             try
             {
-                string sqlQuery = "select distinct strArtist, strAlbum, dateAdded, strGenre from tracks order by dateAdded desc limit 10;";
+                string sqlQuery = "select distinct strArtist, strAlbum, dateAdded, strGenre, strPath from tracks order by dateAdded desc limit 50;";
                 List<Song> songInfo = new List<Song>();
                 m_db.GetSongsByFilter(sqlQuery, out songInfo, "tracks");
                 Hashtable ht = new Hashtable();
                 string key = string.Empty;
+                UtilsExternal.latestMusicAlbums = new Hashtable();
+                int i0 = 1;
                 foreach (Song mySong in songInfo)
                 {
                     string fanart = mySong.Artist;
                     string album = mySong.Album;
+                    string sPath = mySong.FileName;
+                    if (sPath != null && sPath.Length > 0 && sPath.IndexOf("\\") > 0)
+                    {
+                        sPath = sPath.Substring(0, sPath.LastIndexOf("\\"));
+                    }
                     string dateAdded = mySong.DateTimeModified.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
                     if (album == null || album.Trim().Length == 0)
                     {
@@ -1441,9 +1554,29 @@ namespace FanartHandler
                     key = fanart + "#" + album;
                     if (!ht.Contains(key))
                     {
-                        result.Add(new FanartHandler.Latest(dateAdded, null, null, null, null, fanart, mySong.Album, mySong.Genre.Replace("|", ""), null, null, null, null, null, null, null));
+                        //Get Fanart
+                        string CurrSelectedMusic = String.Empty;
+                        int PrevSelectedMusic = -1;
+                        string myArtist = mySong.Artist;//MediaPortal.Util.Utils.MakeFileName(mySong.Artist);
+                        CurrSelectedMusic = String.Empty;
+                        PrevSelectedMusic = -1;
+                        string sFilename1 = FanartHandlerSetup.GetFilename(myArtist, ref CurrSelectedMusic, ref PrevSelectedMusic, "MusicFanart Scraper", "FanartSelected", true, true);
+                        if (sFilename1.Length == 0)
+                        {
+                            sFilename1 = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrSelectedMusic, ref PrevSelectedMusic);
+                        }
+                        //string sFilenamePrev = CurrSelectedMusic;
+                        string sFilename2 = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref CurrSelectedMusic, ref PrevSelectedMusic, "MusicFanart Scraper", "FanartSelected", false, true);
+                        if (sFilename2.Length == 0)
+                        {
+                            sFilename2 = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrSelectedMusic, ref PrevSelectedMusic);
+                        }
+
+                        result.Add(new FanartHandler.Latest(dateAdded, null, null, null, null, fanart, mySong.Album, mySong.Genre.Replace("|", ""), null, null, null, null, null, null, null, null, null, sFilename1, sFilename2));
                         ht.Add(key, key);
                         x++;
+                        UtilsExternal.latestMusicAlbums.Add(i0, sPath);
+                        i0++;
                     }
 
                     if (x == 3)
@@ -1476,7 +1609,7 @@ namespace FanartHandler
             SQLiteResultSet result = null;
             try
             {
-                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Movie_Fanart WHERE Id > " + lastID + " AND type = 'Movie' order by Artist, Disk_Image;";
+                string sqlQuery = "SELECT Artist, Enabled, Disk_Image, Id FROM Movie_Fanart WHERE Id > " + lastID + " AND type = 'Movie User' order by Artist, Disk_Image;";
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
@@ -1496,7 +1629,7 @@ namespace FanartHandler
             SQLiteResultSet result = null;
             try
             {
-                string sqlQuery = "select music_artist.artist, count(music_fanart.type) from music_artist LEFT OUTER JOIN music_fanart ON music_artist.artist = music_fanart.artist and music_fanart.type = 'MusicFanart' group by music_artist.artist;";
+                string sqlQuery = "select music_artist.artist, count(music_fanart.type) from music_artist LEFT OUTER JOIN music_fanart ON music_artist.artist = music_fanart.artist and music_fanart.type = 'MusicFanart Scraper' group by music_artist.artist;";
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
@@ -1669,7 +1802,7 @@ namespace FanartHandler
                     sRestricted = "AND restricted = 0";
                 }
                 //string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True' AND Type = 'MusicFanart';";
-                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSql(artist)) + ") AND Enabled = 'True' AND Type = 'MusicFanart' " + sRestricted + ";";
+                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSql(artist)) + ") AND Enabled = 'True' AND Type = 'MusicFanart Scraper' " + sRestricted + ";";
                 SQLiteResultSet result;
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
@@ -1696,11 +1829,15 @@ namespace FanartHandler
         /// <returns>The table name</returns>
         private string GetTableName(string type)
         {
-            if (type.Equals("Game", StringComparison.CurrentCulture))
+            if (type.Equals("Game User", StringComparison.CurrentCulture))
             {
                 return "Game_Fanart";
             }
-            else if (type.Equals("Movie", StringComparison.CurrentCulture))
+            else if (type.Equals("Movie User", StringComparison.CurrentCulture))
+            {
+                return "Movie_Fanart";
+            }
+            else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
             {
                 return "Movie_Fanart";
             }
@@ -1724,7 +1861,11 @@ namespace FanartHandler
             {
                 return "Music_Fanart";
             }
-            else if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
+            else if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
+            {
+                return "Music_Fanart";
+            }
+            else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
             {
                 return "Music_Fanart";
             }
@@ -1740,10 +1881,6 @@ namespace FanartHandler
             {
                 return "Music_Fanart";
             }
-            /*            else if (type.Equals("MPGrooveshark"))
-                        {
-                            return "Music_Fanart";
-                        }                */
             else if (type.Equals("Youtube.FM", StringComparison.CurrentCulture))
             {
                 return "Music_Fanart";
@@ -1760,11 +1897,11 @@ namespace FanartHandler
             {
                 return "Music_Fanart";
             }
-            else if (type.Equals("Picture", StringComparison.CurrentCulture))
+            else if (type.Equals("Picture User", StringComparison.CurrentCulture))
             {
                 return "Picture_Fanart";
             }
-            else if (type.Equals("ScoreCenter", StringComparison.CurrentCulture))
+            else if (type.Equals("ScoreCenter User", StringComparison.CurrentCulture))
             {
                 return "Scorecenter_Fanart";
             }
@@ -1776,11 +1913,11 @@ namespace FanartHandler
             {
                 return "TVSeries_Fanart";
             }
-            else if (type.Equals("TV", StringComparison.CurrentCulture))
+            else if (type.Equals("TV User", StringComparison.CurrentCulture))
             {
                 return "TV_Fanart";
             }
-            else if (type.Equals("Plugin", StringComparison.CurrentCulture))
+            else if (type.Equals("Plugin User", StringComparison.CurrentCulture))
             {
                 return "Plugin_Fanart";
             }
@@ -1797,11 +1934,15 @@ namespace FanartHandler
         /// <returns>A hashtable with fanart data</returns>
         public Hashtable GetAnyHashtable(string type)
         {
-            if (type.Equals("Game", StringComparison.CurrentCulture))
+            if (type.Equals("Game User", StringComparison.CurrentCulture))
             {
                 return HTAnyGameFanart;
             }
-            else if (type.Equals("Movie", StringComparison.CurrentCulture))
+            else if (type.Equals("Movie User", StringComparison.CurrentCulture))
+            {
+                return HTAnyMovieFanart;
+            }
+            else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
             {
                 return HTAnyMovieFanart;
             }
@@ -1813,7 +1954,11 @@ namespace FanartHandler
             {
                 return HTAnyMusicFanart;
             }
-            else if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
+            else if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
+            {
+                return HTAnyMusicFanart;
+            }
+            else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
             {
                 return HTAnyMusicFanart;
             }
@@ -1821,11 +1966,11 @@ namespace FanartHandler
             {
                 return HTAnyMusicFanart;
             }
-            else if (type.Equals("Picture", StringComparison.CurrentCulture))
+            else if (type.Equals("Picture User", StringComparison.CurrentCulture))
             {
                 return HTAnyPictureFanart;
             }
-            else if (type.Equals("ScoreCenter", StringComparison.CurrentCulture))
+            else if (type.Equals("ScoreCenter User", StringComparison.CurrentCulture))
             {
                 return HTAnyScorecenter;
             }
@@ -1837,11 +1982,11 @@ namespace FanartHandler
             {
                 return HTAnyTVSeries;
             }
-            else if (type.Equals("TV", StringComparison.CurrentCulture))
+            else if (type.Equals("TV User", StringComparison.CurrentCulture))
             {
                 return HTAnyTVFanart;
             }
-            else if (type.Equals("Plugin", StringComparison.CurrentCulture))
+            else if (type.Equals("Plugin User", StringComparison.CurrentCulture))
             {
                 return HTAnyPluginFanart;
             }
@@ -1858,11 +2003,15 @@ namespace FanartHandler
         /// <param name="ht">Hashtable to add data to</param>
         private void AddToAnyHashtable(string type, Hashtable ht)
         {
-            if (type.Equals("Game", StringComparison.CurrentCulture))
+            if (type.Equals("Game User", StringComparison.CurrentCulture))
             {
                 HTAnyGameFanart = ht;
             }
-            else if (type.Equals("Movie", StringComparison.CurrentCulture))
+            else if (type.Equals("Movie User", StringComparison.CurrentCulture))
+            {
+                HTAnyMovieFanart = ht;
+            }
+            else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
             {
                 HTAnyMovieFanart = ht;
             }
@@ -1874,7 +2023,11 @@ namespace FanartHandler
             {
                 HTAnyMusicFanart = ht;
             }
-            else if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
+            else if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
+            {
+                HTAnyMusicFanart = ht;
+            }
+            else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
             {
                 HTAnyMusicFanart = ht;
             }
@@ -1882,11 +2035,11 @@ namespace FanartHandler
             {
                 HTAnyMusicFanart = ht;
             }
-            else if (type.Equals("Picture", StringComparison.CurrentCulture))
+            else if (type.Equals("Picture User", StringComparison.CurrentCulture))
             {
                 HTAnyPictureFanart = ht;
             }
-            else if (type.Equals("ScoreCenter", StringComparison.CurrentCulture))
+            else if (type.Equals("ScoreCenter User", StringComparison.CurrentCulture))
             {
                 HTAnyScorecenter = ht;
             }
@@ -1898,11 +2051,11 @@ namespace FanartHandler
             {
                 HTAnyTVSeries = ht;
             }
-            else if (type.Equals("TV", StringComparison.CurrentCulture))
+            else if (type.Equals("TV User", StringComparison.CurrentCulture))
             {
                 HTAnyTVFanart = ht;
             }
-            else if (type.Equals("Plugin", StringComparison.CurrentCulture))
+            else if (type.Equals("Plugin User", StringComparison.CurrentCulture))
             {
                 HTAnyPluginFanart = ht;
             }
@@ -2098,7 +2251,7 @@ namespace FanartHandler
                     sqlQuery = "INSERT INTO Music_Fanart (Id, Artist, Disk_Image, Source_Image, Type, Source, Enabled, Time_Stamp, Restricted) VALUES(null, '" + Utils.PatchSql(artist) + "','" + Utils.PatchSql(diskImage) + "','" + Utils.PatchSql(sourceImage) + "','" + Utils.PatchSql(type) + "','www.htbackdrops.com','True','" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "'," + restricted + ");";
                     lock (lockObject) dbClient.Execute(sqlQuery);
                     logger.Debug("Importing local fanart into fanart handler database (" + diskImage + ").");
-                    if (type.Equals("MusicFanart", StringComparison.CurrentCulture))
+                    if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
                     {
                         sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "';";
                         if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
