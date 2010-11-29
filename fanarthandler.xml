@@ -42,7 +42,7 @@
           <Build>2</Build>
           <Revision>0</Revision>
         </Version>
-        <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal.</ExtensionDescription>
+        <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal. WARNING! Version 2.2.2 requres skin chnages. Please make sure your skin supports this version before upgrading.</ExtensionDescription>
         <VersionDescription>WARNING!
 The plugin has undergone alot of changes to make it MP 1.2 compatible. MP 1.2 contains for example a new great feature for the myVideo plugin. The new feature allows MP to scrape movie fanart for movies handled by the myVideos plugin. This and a few other things has forced me to change the folder structure for the FanartHandler fanarts. More on this in the Fanart Handlers Wikis. This version require all skins to make changes to use the new structure. All community skinner has been notified but if you are unsure if your skin supports this new version then do not use this upgrade but wait instead for a new version of your used skin to be released.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
