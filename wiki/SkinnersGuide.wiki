@@ -45,6 +45,8 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 2.2.2 to 2.2.3==
+No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.1 to 2.2.2==
 Many changes. Most of the "Available Skin Tags" and "Define Tags" has changed name. New Latest Media properties for TVSeries Serie Poster added. New buttons for making latest media (music, moving pictures and tvseries) playable for basichome page. Changes are marked with strikeouts in the text below.
 ==Change Log - Version 2.2 to 2.2.1==
