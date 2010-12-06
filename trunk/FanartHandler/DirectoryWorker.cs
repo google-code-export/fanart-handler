@@ -120,7 +120,7 @@ namespace FanartHandler
                         Hashtable seriesHt = null;
                         try
                         {
-                            seriesHt = UtilsExternal.GetTVSeriesName("TVSeries");
+                            seriesHt = UtilsLatestTVSeries.GetTVSeriesName("TVSeries");
                         }
                         catch
                         {
@@ -149,7 +149,7 @@ namespace FanartHandler
 
                     try
                     {
-                        UtilsExternal.GetMovingPicturesBackdrops();
+                        UtilsLatestMovingPictures.GetMovingPicturesBackdrops();
                     }
                     catch 
                     {
@@ -194,14 +194,14 @@ namespace FanartHandler
                     string use4TR = xmlreader.GetValue("plugins", "For The Record TV");
                     if (use4TR != null && use4TR.Equals("yes", StringComparison.CurrentCulture))
                     {
-                        ResolveEventHandler assemblyResolve = UtilsExternal.OnAssemblyResolve;
+                        ResolveEventHandler assemblyResolve = UtilsLatest4TRRecordings.OnAssemblyResolve;
                         try
                         {
                             AppDomain currentDomain = AppDomain.CurrentDomain;
-                            currentDomain.AssemblyResolve += new ResolveEventHandler(UtilsExternal.OnAssemblyResolve);
-                            UtilsExternal.IsGetTypeRunningOnThisThread = true;
+                            currentDomain.AssemblyResolve += new ResolveEventHandler(UtilsLatest4TRRecordings.OnAssemblyResolve);
+                            UtilsLatest4TRRecordings.IsGetTypeRunningOnThisThread = true;
                             //Type.GetType("ForTheRecord.UI.Process");
-                            latestTVRecordings = UtilsExternal.Get4TRRecordings();
+                            latestTVRecordings = UtilsLatest4TRRecordings.Get4TRRecordings();
                             AppDomain.CurrentDomain.AssemblyResolve -= assemblyResolve;
                         }
                         catch
@@ -211,7 +211,7 @@ namespace FanartHandler
                     }
                     else
                     {
-                        latestTVRecordings = UtilsExternal.GetTVRecordings();                        
+                        latestTVRecordings = UtilsLatestTVRecordings.GetTVRecordings();
                     }
                 }
                 catch// (Exception ex)

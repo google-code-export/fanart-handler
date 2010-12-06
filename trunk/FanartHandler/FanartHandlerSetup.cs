@@ -665,7 +665,7 @@ namespace FanartHandler
             {
                 try
                 {
-                    restricted = UtilsExternal.MovingPictureIsRestricted();
+                    restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
                 }
                 catch { }
             }
@@ -1803,7 +1803,7 @@ namespace FanartHandler
 
                 try
                 {
-                    UtilsExternal.MovingPictureUpdateLatest(true);
+                    UtilsLatestMovingPictures.MovingPictureUpdateLatest(true);
                 }
                 catch 
                 {
@@ -1811,7 +1811,7 @@ namespace FanartHandler
 
                 try
                 {
-                    UtilsExternal.TVSeriesUpdateLatest(true);
+                    UtilsLatestTVSeries.TVSeriesUpdateLatest(true);
                 }
                 catch
                 {
@@ -1819,7 +1819,7 @@ namespace FanartHandler
 
                 try
                 {
-                    UtilsExternal.SetupMovingPicturesLatest();
+                    UtilsLatestMovingPictures.SetupMovingPicturesLatest();
                 }
                 catch
                 {
@@ -1827,7 +1827,7 @@ namespace FanartHandler
 
                 try
                 {
-                    UtilsExternal.SetupTVSeriesLatest();
+                    UtilsLatestTVSeries.SetupTVSeriesLatest();
                 }
                 catch
                 {
@@ -1874,7 +1874,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMovingPicture(1);
+                                    UtilsLatestMovingPictures.PlayMovingPicture(1);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1885,7 +1885,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMovingPicture(2);
+                                    UtilsLatestMovingPictures.PlayMovingPicture(2);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1896,7 +1896,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMovingPicture(3);
+                                    UtilsLatestMovingPictures.PlayMovingPicture(3);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1907,7 +1907,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayTVSeries(1);
+                                    UtilsLatestTVSeries.PlayTVSeries(1);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1919,7 +1919,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayTVSeries(2);
+                                    UtilsLatestTVSeries.PlayTVSeries(2);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1930,7 +1930,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayTVSeries(3);
+                                    UtilsLatestTVSeries.PlayTVSeries(3);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1941,7 +1941,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMusicAlbum(1);
+                                    Utils.GetDbm().PlayMusicAlbum(1);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1952,7 +1952,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMusicAlbum(2);
+                                    Utils.GetDbm().PlayMusicAlbum(2);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1963,7 +1963,7 @@ namespace FanartHandler
                             {
                                 try
                                 {
-                                    UtilsExternal.PlayMusicAlbum(3);
+                                    Utils.GetDbm().PlayMusicAlbum(3);
                                 }
                                 catch (Exception ex)
                                 {
@@ -2499,14 +2499,14 @@ namespace FanartHandler
                 }
                 try
                 {
-                    UtilsExternal.DisposeMovingPicturesLatest();
+                    UtilsLatestMovingPictures.DisposeMovingPicturesLatest();
                 }
                 catch
                 {
                 }
                 try
                 {
-                    UtilsExternal.DisposeTVSeriesLatest();
+                    UtilsLatestTVSeries.DisposeTVSeriesLatest();
                 }
                 catch
                 {
