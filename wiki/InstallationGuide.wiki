@@ -5,6 +5,11 @@
 
 ----
 =Change Logs=
+==Change Log (version 2.2.2 to 2.2.3)==
+  * For users that had the 2.2.2 Beta installed the 2.2.2 final version failed to upgrade.
+  * Videos with "the" in the movie name failed to parse in FH.
+  * Latest Music properties not set and wrongly dependent on external dll files.
+  * Music Vidoes no longer working due to wrongly dependent on dll files.
 ==Change Log (version 2.2.1 to 2.2.2)==
   * Now playing scrape improved for multiple artists
   * Scraping for new images improved
