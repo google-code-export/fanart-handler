@@ -1048,7 +1048,7 @@ namespace FanartHandler
             {
                 try
                 {
-                    restricted = UtilsExternal.MovingPictureIsRestricted();
+                    restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
                 }
                 catch { }
             }

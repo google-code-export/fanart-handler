@@ -513,7 +513,7 @@ namespace FanartHandler
                         return Utils.MovePrefixToBack(Utils.RemoveMPArtistPipes(sArtistName));
                     }
                     else
-                    {
+                    {                        
                         //on artist, album or track entry
                         MusicTag tag1 = (MusicTag)gli.MusicTag;
                         if (tag1 != null)
@@ -529,6 +529,7 @@ namespace FanartHandler
                         }
                         else
                         {
+                            logger.Debug("C*************************");
                             return null;
                         }
                     }
@@ -553,7 +554,7 @@ namespace FanartHandler
         {
             try
             {                
-                FanartHandlerSetup.SelectedItem = GetMusicArtistFromListControl();
+                FanartHandlerSetup.SelectedItem = GetMusicArtistFromListControl();                
                 if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Length > 0)
                 {
                     //do nothing

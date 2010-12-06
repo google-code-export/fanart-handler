@@ -39,7 +39,7 @@
         <Version>
           <Major>2</Major>
           <Minor>2</Minor>
-          <Build>2</Build>
+          <Build>3</Build>
           <Revision>0</Revision>
         </Version>
         <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal. WARNING! Version 2.2.2 requres skin chnages. Please make sure your skin supports this version before upgrading.</ExtensionDescription>

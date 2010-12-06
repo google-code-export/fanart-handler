@@ -18,6 +18,7 @@ namespace FanartHandler
     using MediaPortal.GUI.Library;
     using MediaPortal.Music.Database;
     using MediaPortal.Picture.Database;
+    using MediaPortal.TagReader;
     using NLog;
     using SQLite.NET;
     using System;
@@ -55,6 +56,8 @@ namespace FanartHandler
         private double totArtistsBeingScraped/* = 0*/;
         private double currArtistsBeingScraped/* = 0*/;
         private bool isInitialized/* = false*/;
+        public Hashtable latestMusicAlbums;
+        private MediaPortal.Playlists.PlayListPlayer playlistPlayer;
         #endregion
 
         public bool IsScraping
@@ -1308,6 +1311,28 @@ namespace FanartHandler
             Directory.Delete(pathOld);
         }
 
+        private void GetFiles(string folder, ref List<string> foundFiles, bool recursive)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(folder);
+                foundFiles.AddRange(files);
+
+                if (recursive)
+                {
+                    string[] subFolders = Directory.GetDirectories(folder);
+                    for (int i = 0; i < subFolders.Length; ++i)
+                    {
+                        GetFiles(subFolders[i], ref foundFiles, recursive);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error retrieving songs from folder: {0}. {1} {2}", folder, ex.Message, ex.StackTrace);
+            }
+        }
+
         /// <summary>
         /// Deletes all fanart in the database and resets the initial flag.
         /// </summary>
@@ -1525,7 +1550,7 @@ namespace FanartHandler
         /// <returns>Hashtable containg artist names</returns>
         public FanartHandler.LatestsCollection GetLatestMusic()
         {
-            FanartHandler.LatestsCollection result = new FanartHandler.LatestsCollection();
+            LatestsCollection result = new LatestsCollection();
             int x = 0;
             try
             {
@@ -1534,7 +1559,7 @@ namespace FanartHandler
                 m_db.GetSongsByFilter(sqlQuery, out songInfo, "tracks");
                 Hashtable ht = new Hashtable();
                 string key = string.Empty;
-                UtilsExternal.latestMusicAlbums = new Hashtable();
+                latestMusicAlbums = new Hashtable();
                 int i0 = 1;
                 foreach (Song mySong in songInfo)
                 {
@@ -1575,7 +1600,7 @@ namespace FanartHandler
                         result.Add(new FanartHandler.Latest(dateAdded, null, null, null, null, fanart, mySong.Album, mySong.Genre.Replace("|", ""), null, null, null, null, null, null, null, null, null, sFilename1, sFilename2));
                         ht.Add(key, key);
                         x++;
-                        UtilsExternal.latestMusicAlbums.Add(i0, sPath);
+                        latestMusicAlbums.Add(i0, sPath);
                         i0++;
                     }
 
@@ -1598,6 +1623,79 @@ namespace FanartHandler
 
             return result;
         }
+
+        public void PlayMusicAlbum(int index)
+        {
+            string _songFolder = latestMusicAlbums[index].ToString();
+            if (Directory.Exists(_songFolder))
+            {
+                LoadSongsFromFolder(_songFolder, false);
+            }
+            StartPlayback(0);
+        }
+
+        private void StartPlayback(int item)
+        {
+            // if we got a playlist start playing it
+            if (playlistPlayer.GetPlaylist(MediaPortal.Playlists.PlayListType.PLAYLIST_MUSIC).Count > 0)
+            {
+                playlistPlayer.CurrentPlaylistType = MediaPortal.Playlists.PlayListType.PLAYLIST_MUSIC;
+                playlistPlayer.Reset();
+                if (item == -1 || item > playlistPlayer.GetPlaylist(MediaPortal.Playlists.PlayListType.PLAYLIST_MUSIC).Count)
+                {
+                    item = 0;
+                }
+                playlistPlayer.Play(item);
+            }
+        }
+
+        private bool IsMusicFile(string fileName)
+        {
+            string supportedExtensions = ".mp3,.wma,.ogg,.flac,.wav,.cda,.m4a,.m4p,.mp4,.wv,.ape,.mpc,.aif,.aiff";
+            if (supportedExtensions.IndexOf(Path.GetExtension(fileName).ToLower()) > -1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void LoadSongsFromFolder(string folder, bool includeSubFolders)
+        {
+            // clear current playlist
+            playlistPlayer = MediaPortal.Playlists.PlayListPlayer.SingletonPlayer;
+            playlistPlayer.GetPlaylist(MediaPortal.Playlists.PlayListType.PLAYLIST_MUSIC).Clear();
+            int numSongs = 0;
+            try
+            {
+                List<string> files = new List<string>();
+                GetFiles(folder, ref files, includeSubFolders);
+                foreach (string file in files)
+                {
+                    if (IsMusicFile(file))
+                    {
+                        MediaPortal.Playlists.PlayListItem item = new MediaPortal.Playlists.PlayListItem();
+                        item.FileName = file;
+                        item.Type = MediaPortal.Playlists.PlayListItem.PlayListItemType.Audio;
+                        MusicTag tag = TagReader.ReadTag(file);
+                        if (tag != null)
+                        {
+                            item.Description = tag.Title;
+                            item.MusicTag = tag;
+                            item.Duration = tag.Duration;
+                            //                          SetMusicThumb(tag);
+                        }
+                        playlistPlayer.GetPlaylist(MediaPortal.Playlists.PlayListType.PLAYLIST_MUSIC).Add(item);
+                        numSongs++;
+                    }
+                }
+            }
+            catch //(Exception ex)
+            {
+                logger.Error("Error retrieving songs from folder.");
+            }
+        }
+
+
 
         /// <summary>
         /// Returns all data used by datagridview in the "Scraper Settings" tab for Scorecenter (In MP configuration).
@@ -1760,8 +1858,16 @@ namespace FanartHandler
                 {
                     sRestricted = "AND restricted = 0";
                 }
-                //string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + getTableName(type) + " WHERE Artist = '" + Utils.PatchSQL(artist) + "' AND Enabled = 'True';";
-                string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + GetTableName(type) + " WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSql(artist)) + ") AND Enabled = 'True' " + sRestricted + ";";
+
+                string sqlQuery = "";
+                if (type.Equals("MusicFanart Scraper"))
+                {
+                    sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + GetTableName(type) + " WHERE Artist IN (" + Utils.HandleMultipleArtistNamesForDBQuery(Utils.PatchSql(artist)) + ") AND Enabled = 'True' " + sRestricted + ";";
+                }
+                else
+                {
+                    sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM " + GetTableName(type) + " WHERE Artist IN ('" + Utils.PatchSql(artist) + "') AND Enabled = 'True' " + sRestricted + ";";
+                }
                 SQLiteResultSet result;
                 lock (lockObject) result = dbClient.Execute(sqlQuery);
                 for (int i = 0; i < result.Rows.Count; i++)
