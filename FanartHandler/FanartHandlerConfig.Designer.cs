@@ -77,6 +77,8 @@ namespace FanartHandler
             this.comboBoxMinResolution = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.tabPage20 = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -222,6 +224,7 @@ namespace FanartHandler
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -231,6 +234,7 @@ namespace FanartHandler
             this.groupBox7.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage8.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.tabPage20.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -694,6 +698,7 @@ namespace FanartHandler
             // 
             // tabPage8
             // 
+            this.tabPage8.Controls.Add(this.groupBox12);
             this.tabPage8.Controls.Add(this.groupBox2);
             this.tabPage8.Controls.Add(this.groupBox7);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
@@ -704,6 +709,32 @@ namespace FanartHandler
             this.tabPage8.Text = "General Options";
             this.tabPage8.UseVisualStyleBackColor = true;
             this.tabPage8.Click += new System.EventHandler(this.tabPage8_Click);
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.checkBox4);
+            this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold);
+            this.groupBox12.Location = new System.Drawing.Point(17, 206);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(342, 61);
+            this.groupBox12.TabIndex = 13;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Enable Async Image Loading";
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox4.Location = new System.Drawing.Point(12, 30);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(70, 20);
+            this.checkBox4.TabIndex = 10;
+            this.checkBox4.Text = "Enable";
+            this.toolTip1.SetToolTip(this.checkBox4, "Check this opton if you want for example basichome open faster. The downside by e" +
+                    "nabling this is that all images will not be displayed when the window open but a" +
+                    "fter a short delay.");
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // tabPage20
             // 
@@ -1446,11 +1477,12 @@ namespace FanartHandler
             // 
             // groupBox10
             // 
+            this.groupBox10.Controls.Add(this.checkBox8);
             this.groupBox10.Controls.Add(this.checkBox1);
             this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox10.Location = new System.Drawing.Point(6, 6);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(342, 98);
+            this.groupBox10.Size = new System.Drawing.Size(342, 112);
             this.groupBox10.TabIndex = 15;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Music Thumbnail Options";
@@ -1578,7 +1610,6 @@ namespace FanartHandler
             this.dataGridView9.Size = new System.Drawing.Size(731, 350);
             this.dataGridView9.TabIndex = 1;
             this.dataGridView9.VirtualMode = true;
-            //this.dataGridView9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView9_KeyDown);
             this.dataGridView9.SelectionChanged += new System.EventHandler(this.DataGridView9_SelectionChanged);
             // 
             // tabPage2
@@ -2563,6 +2594,21 @@ namespace FanartHandler
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Checked = true;
+            this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox8.Location = new System.Drawing.Point(12, 72);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(230, 20);
+            this.checkBox8.TabIndex = 10;
+            this.checkBox8.Text = "Do not replace existing thumbnails";
+            this.toolTip1.SetToolTip(this.checkBox8, "Check this opton if you do not want existing thumbnails to be replaced");
+            this.checkBox8.UseVisualStyleBackColor = true;
+            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
+            // 
             // FanartHandlerConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2594,6 +2640,8 @@ namespace FanartHandler
             this.groupBox7.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
             this.tabPage20.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
@@ -2838,5 +2886,8 @@ namespace FanartHandler
         private System.Windows.Forms.ProgressBar progressBar2;
         private System.Windows.Forms.DataGridView dataGridView9;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox8;
     }
 }

@@ -68,6 +68,7 @@ namespace FanartHandler
         private string scraperMPDatabase = null;
         private string scraperInterval = null;
         private string useAspectRatio = null;
+        private string useAsyncImageLoading = null;
         private string useDefaultBackdrop = null;
         private string scrapeThumbnails = null;
         private string latestPictures = null;
@@ -75,6 +76,7 @@ namespace FanartHandler
         private string latestMovingPictures = null;
         private string latestTVSeries = null;
         private string latestTVRecordings = null;
+        private string doNotReplaceExistingThumbs = null;
         private bool isScraping/* = false*/;
         public delegate void ScrollDelegate();
         private bool isStopping/* = false*/;
@@ -198,7 +200,8 @@ namespace FanartHandler
                     xmlwriter.SetValue("FanartHandler", "latestMovingPictures", checkBox7.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "latestTVSeries", checkBox2.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "latestTVRecordings", checkBox3.Checked ? true : false);
-                    
+                    xmlwriter.SetValue("FanartHandler", "useAsyncImageLoading", checkBox4.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "doNotReplaceExistingThumbs", checkBox8.Checked ? true : false);                                        
                 }
                 MessageBox.Show("Settings is stored in memory. Make sure to press Ok when exiting MP Configuration. Pressing Cancel when exiting MP Configuration will result in these setting NOT being saved!");
             }
@@ -309,7 +312,9 @@ namespace FanartHandler
                 latestMusic = xmlreader.GetValueAsString("FanartHandler", "latestMusic", String.Empty);
                 latestMovingPictures = xmlreader.GetValueAsString("FanartHandler", "latestMovingPictures", String.Empty);
                 latestTVSeries = xmlreader.GetValueAsString("FanartHandler", "latestTVSeries", String.Empty);
-                latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);   
+                latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);
+                useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
+                doNotReplaceExistingThumbs = xmlreader.GetValueAsString("FanartHandler", "doNotReplaceExistingThumbs", String.Empty);   
             }
 
             if (latestPictures != null && latestPictures.Length > 0)
@@ -445,6 +450,33 @@ namespace FanartHandler
                     useAlbum = "False";
                     checkBoxThumbsAlbum.Checked = false;
                 }
+
+                if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
+                {
+                    if (useAsyncImageLoading.Equals("True", StringComparison.CurrentCulture))
+                        checkBox4.Checked = true;
+                    else
+                        checkBox4.Checked = false;
+                }
+                else
+                {
+                    useAsyncImageLoading = "False";
+                    checkBox4.Checked = false;
+                }
+
+                if (doNotReplaceExistingThumbs != null && doNotReplaceExistingThumbs.Length > 0)
+                {
+                    if (doNotReplaceExistingThumbs.Equals("True", StringComparison.CurrentCulture))
+                        checkBox8.Checked = true;
+                    else
+                        checkBox8.Checked = false;
+                }
+                else
+                {
+                    doNotReplaceExistingThumbs = "False";
+                    checkBox8.Checked = false;
+                }
+            
                 if (useArtist != null && useArtist.Length > 0)
                 {
                     if (useArtist.Equals("True", StringComparison.CurrentCulture))
@@ -697,6 +729,7 @@ namespace FanartHandler
                     Utils.SetProxyDomain(proxyDomain);
                     Utils.SetScraperMaxImages(scraperMaxImages);
                     Utils.ScrapeThumbnails = scrapeThumbnails;
+                    Utils.DoNotReplaceExistingThumbs = doNotReplaceExistingThumbs;
                     Utils.InitiateDbm();
                     ImportLocalFanartAtStartup();
                     myDataTable = new DataTable();
@@ -3101,6 +3134,16 @@ namespace FanartHandler
         }
 
         private void button40_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
         {
 
         }

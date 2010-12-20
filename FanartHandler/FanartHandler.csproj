@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Core.dll</HintPath>
+      <HintPath>..\External\MP12\Core.dll</HintPath>
     </Reference>
     <Reference Include="Cornerstone">
       <SpecificVersion>False</SpecificVersion>
@@ -43,11 +43,11 @@
     </Reference>
     <Reference Include="Databases">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Databases.dll</HintPath>
+      <HintPath>..\External\MP12\Databases.dll</HintPath>
     </Reference>
     <Reference Include="Dialogs">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Dialogs.dll</HintPath>
+      <HintPath>..\External\MP12\Dialogs.dll</HintPath>
     </Reference>
     <Reference Include="ForTheRecord.Entities">
       <SpecificVersion>False</SpecificVersion>
@@ -71,11 +71,11 @@
     </Reference>
     <Reference Include="Gentle.Common">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Gentle.Common.dll</HintPath>
+      <HintPath>..\External\MP12\Gentle.Common.dll</HintPath>
     </Reference>
     <Reference Include="Gentle.Framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Gentle.Framework.dll</HintPath>
+      <HintPath>..\External\MP12\Gentle.Framework.dll</HintPath>
     </Reference>
     <Reference Include="MovingPictures">
       <SpecificVersion>False</SpecificVersion>
@@ -108,15 +108,15 @@
     <Reference Include="System.Xml" />
     <Reference Include="TVDatabase">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\TVDatabase.dll</HintPath>
+      <HintPath>..\External\MP12\TVDatabase.dll</HintPath>
     </Reference>
     <Reference Include="Utils">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\Utils.dll</HintPath>
+      <HintPath>..\External\MP12\Utils.dll</HintPath>
     </Reference>
     <Reference Include="WindowPlugins">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP112\WindowPlugins.dll</HintPath>
+      <HintPath>..\External\MP12\WindowPlugins.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

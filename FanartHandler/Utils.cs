@@ -37,7 +37,8 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
-        public const string GetMajorMinorVersionNumber = "2.2.3.197";  //Holds current pluginversion.
+        private const string RXMatchMPvs = @"{[0-9]}$"; // MyVideos fanart scraper filename index
+        public const string GetMajorMinorVersionNumber = "2.2.4.198";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -50,12 +51,18 @@ namespace FanartHandler
         private static string scrapeThumbnails = null;  //scrape for thums or not        
         private static bool delayStop/* = false*/;
         private static int idleTimeInMillis = 150;//250;
+        private static string doNotReplaceExistingThumbs = null;
         #endregion
 
         /// <summary>
         /// Return value.
         /// </summary>
-        
+
+        public static string DoNotReplaceExistingThumbs
+        {
+            get { return Utils.doNotReplaceExistingThumbs; }
+            set { Utils.doNotReplaceExistingThumbs = value; }
+        }
 
         public static int IdleTimeInMillis
         {
@@ -243,9 +250,11 @@ namespace FanartHandler
                 return string.Empty;
             }
 
-
             // Convert title to lowercase culture invariant
             string newTitle = self.ToLowerInvariant();
+
+            //Remove MyVideos scraper fanart filename index
+            newTitle = Regex.Replace(newTitle, RXMatchMPvs, String.Empty).Trim();
 
             // Replace non-descriptive characters with spaces
             newTitle = Regex.Replace(newTitle, RXMatchNonWordCharacters, " ");
@@ -470,7 +479,13 @@ namespace FanartHandler
                     key = key.Substring(0, key.IndexOf("-", StringComparison.CurrentCulture));
                 }
             }
-            key = RemoveTrailingDigits(key);
+            //key = RemoveTrailingDigits(key);
+            // Don't delete trailing digits in myVideos for proper fanart title selection
+            // of movie sequal (ie. Die Hard & Die Hard 2)
+            if (!type.Equals("myVideos", StringComparison.CurrentCulture))
+            {
+                key = RemoveTrailingDigits(key);
+            }
             key = key.Equalize();
             key = key.MovePrefixToFront();            
             return key;
