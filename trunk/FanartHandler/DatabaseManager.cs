@@ -41,9 +41,11 @@ namespace FanartHandler
         private string dbFilename = "FanartHandler.db3";
         private string dbFilenameOrg = "FanartHandler.org";
         private Hashtable htAnyGameFanart;
-        private Hashtable htAnyMovieFanart;
+        private Hashtable htAnyMovieFanartUser;
+        private Hashtable htAnyMovieFanartScraper;
         private Hashtable htAnyMovingPicturesFanart;
-        private Hashtable htAnyMusicFanart;
+        private Hashtable htAnyMusicFanartUser;
+        private Hashtable htAnyMusicFanartScraper;
         private Hashtable htAnyPictureFanart;
         private Hashtable htAnyScorecenter;
         private Hashtable htAnyTVSeries;
@@ -114,10 +116,16 @@ namespace FanartHandler
             set { htAnyPictureFanart = value; }
         }
 
-        public Hashtable HTAnyMusicFanart
+        public Hashtable HTAnyMusicFanartUser
         {
-            get { return htAnyMusicFanart; }
-            set { htAnyMusicFanart = value; }
+            get { return htAnyMusicFanartUser; }
+            set { htAnyMusicFanartUser = value; }
+        }
+
+        public Hashtable HTAnyMusicFanartScraper
+        {
+            get { return htAnyMusicFanartScraper; }
+            set { htAnyMusicFanartScraper = value; }
         }
 
         public Hashtable HTAnyMovingPicturesFanart
@@ -126,10 +134,16 @@ namespace FanartHandler
             set { htAnyMovingPicturesFanart = value; }
         }
 
-        public Hashtable HTAnyMovieFanart
+        public Hashtable HTAnyMovieFanartUser
         {
-            get { return htAnyMovieFanart; }
-            set { htAnyMovieFanart = value; }
+            get { return htAnyMovieFanartUser; }
+            set { htAnyMovieFanartUser = value; }
+        }
+
+        public Hashtable HTAnyMovieFanartScraper
+        {
+            get { return htAnyMovieFanartScraper; }
+            set { htAnyMovieFanartScraper = value; }
         }
 
         public Hashtable HTAnyGameFanart
@@ -242,7 +256,7 @@ namespace FanartHandler
                     string[] artists = artist.Split('|');
                     foreach (string thisArtist in artists)
                     {
-                        if (DoScrapeNew(thisArtist) > 0)
+                        if (DoScrapeNew(thisArtist.Trim()) > 0)
                         {
                             bFound = true;
                         }
@@ -968,7 +982,7 @@ namespace FanartHandler
         /// </summary>
         private void AddScapedFanartToAnyHash()
         {
-            if (HTAnyMusicFanart == null || HTAnyMusicFanart.Count < 1)
+            if (HTAnyMusicFanartScraper == null || HTAnyMusicFanartScraper.Count < 1)
             {
                 Hashtable htTmp = new Hashtable();
                 string sqlQuery = "SELECT Id, Artist, Disk_Image, Source_Image, Type, Source FROM Music_Fanart WHERE Enabled = 'True' AND Type IN ('MusicFanart Scraper');";
@@ -983,7 +997,7 @@ namespace FanartHandler
                 result = null;
                 sqlQuery = null;
                 Utils.Shuffle(ref htTmp);
-                HTAnyMusicFanart = htTmp;
+                HTAnyMusicFanartScraper = htTmp;
             }
         }
 
@@ -2046,31 +2060,31 @@ namespace FanartHandler
             }
             else if (type.Equals("Movie User", StringComparison.CurrentCulture))
             {
-                return HTAnyMovieFanart;
+                return HTAnyMovieFanartUser;
             }
             else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
             {
-                return HTAnyMovieFanart;
+                return HTAnyMovieFanartScraper;
             }
             else if (type.Equals("MusicAlbum", StringComparison.CurrentCulture))
             {
-                return HTAnyMusicFanart;
+                return HTAnyMusicFanartScraper;
             }
             else if (type.Equals("MusicArtist", StringComparison.CurrentCulture))
             {
-                return HTAnyMusicFanart;
+                return HTAnyMusicFanartScraper;
             }
             else if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
             {
-                return HTAnyMusicFanart;
+                return HTAnyMusicFanartUser;
             }
             else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
             {
-                return HTAnyMusicFanart;
+                return HTAnyMusicFanartScraper;
             }
             else if (type.Equals("Default", StringComparison.CurrentCulture))
             {
-                return HTAnyMusicFanart;
+                return HTAnyMusicFanartScraper;
             }
             else if (type.Equals("Picture User", StringComparison.CurrentCulture))
             {
@@ -2115,31 +2129,31 @@ namespace FanartHandler
             }
             else if (type.Equals("Movie User", StringComparison.CurrentCulture))
             {
-                HTAnyMovieFanart = ht;
+                HTAnyMovieFanartUser = ht;
             }
             else if (type.Equals("Movie Scraper", StringComparison.CurrentCulture))
             {
-                HTAnyMovieFanart = ht;
+                HTAnyMovieFanartScraper = ht;
             }
             else if (type.Equals("MusicAlbum", StringComparison.CurrentCulture))
             {
-                HTAnyMusicFanart = ht;
+                HTAnyMusicFanartScraper = ht;
             }
             else if (type.Equals("MusicArtist", StringComparison.CurrentCulture))
             {
-                HTAnyMusicFanart = ht;
+                HTAnyMusicFanartScraper = ht;
             }
             else if (type.Equals("MusicFanart User", StringComparison.CurrentCulture))
             {
-                HTAnyMusicFanart = ht;
+                HTAnyMusicFanartUser = ht;
             }
             else if (type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture))
             {
-                HTAnyMusicFanart = ht;
+                HTAnyMusicFanartScraper = ht;
             }
             else if (type.Equals("Default", StringComparison.CurrentCulture))
             {
-                HTAnyMusicFanart = ht;
+                HTAnyMusicFanartScraper = ht;
             }
             else if (type.Equals("Picture User", StringComparison.CurrentCulture))
             {

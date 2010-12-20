@@ -54,8 +54,15 @@ namespace FanartHandler
         public ArrayList ListSelectedScorecenter = null;
         private int currCount/* = 0*/;
         private Hashtable properties; //used to hold properties to be updated (Selected or Any)                                    
-        private Hashtable currentArtistsImageNames = null;        
+        private Hashtable currentArtistsImageNames = null;
+        private bool foundItem = false;        
         #endregion
+
+        public bool FoundItem
+        {
+            get { return foundItem; }
+            set { foundItem = value; }
+        }
 
         public Hashtable CurrentArtistsImageNames
         {
@@ -140,6 +147,7 @@ namespace FanartHandler
             try
             {
                 bool isMusic = false;
+                FoundItem = false;
                 if (property.Equals("music", StringComparison.CurrentCulture))
                 {
                     isMusic = true;
@@ -177,6 +185,10 @@ namespace FanartHandler
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem2");
                 }
+                else if (GUIWindowManager.ActiveWindow == 2003)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#title");
+                } 
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
@@ -185,7 +197,7 @@ namespace FanartHandler
                 {
                     if ((GUIWindowManager.ActiveWindow == 4755 && GUIWindowManager.GetWindow(4755).GetControl(51).IsVisible) || ((GUIWindowManager.ActiveWindow == 6 || GUIWindowManager.ActiveWindow == 25) && FanartHandlerSetup.SelectedItem.Equals("..", StringComparison.CurrentCulture) == true))
                     {
-                        //online videos or myvideo, do not update if in details view                        
+                        //online videos or myvideo, do not update if in details view  
                     }
                     else
                     {
@@ -223,6 +235,7 @@ namespace FanartHandler
                             }
                             else
                             {
+                                FoundItem = true;
                                 FanartAvailable = true;
                             }
                             if (DoShowImageOne)
@@ -266,6 +279,7 @@ namespace FanartHandler
                             }
                             else
                             {
+                                FoundItem = true;
                                 FanartAvailable = true;
                             }
                             if (DoShowImageOne)
@@ -295,9 +309,13 @@ namespace FanartHandler
                     PrevSelectedGeneric = -1;
                     FanartAvailable = false;
                     if (DoShowImageOne)
+                    {
                         AddProperty("#fanarthandler." + property + ".backdrop1.selected", string.Empty, ref ListSelectedMusic);
+                    }
                     else
+                    {
                         AddProperty("#fanarthandler." + property + ".backdrop2.selected", string.Empty, ref ListSelectedMusic);
+                    }
                     ResetCurrCount();
                     currSelectedGenericTitle = String.Empty;
                     SetCurrentArtistsImageNames(null);
@@ -529,7 +547,6 @@ namespace FanartHandler
                         }
                         else
                         {
-                            logger.Debug("C*************************");
                             return null;
                         }
                     }
@@ -589,6 +606,7 @@ namespace FanartHandler
                         }
                         else
                         {
+                            FoundItem = true;
                             FanartAvailable = true;
                         }
                         if (DoShowImageOne)
@@ -625,6 +643,7 @@ namespace FanartHandler
                         }
                         else
                         {
+                            FoundItem = true;
                             FanartAvailable = true;
                         }
                         if (DoShowImageOne)

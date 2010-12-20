@@ -156,9 +156,11 @@ namespace FanartHandler
                     }
                     
                     Utils.GetDbm().HTAnyGameFanart = null; //20200429
-                    Utils.GetDbm().HTAnyMovieFanart = null; //20200429
+                    Utils.GetDbm().HTAnyMovieFanartUser = null; //20200429
+                    Utils.GetDbm().HTAnyMovieFanartScraper = null; //20200429
                     Utils.GetDbm().HTAnyMovingPicturesFanart = null; //20200429
-                    Utils.GetDbm().HTAnyMusicFanart = null; //20200429
+                    Utils.GetDbm().HTAnyMusicFanartUser = null; //20200429
+                    Utils.GetDbm().HTAnyMusicFanartScraper = null; //20200429
                     Utils.GetDbm().HTAnyPictureFanart = null; //20200429
                     Utils.GetDbm().HTAnyScorecenter = null; //20200429
                     Utils.GetDbm().HTAnyTVSeries = null; //20200429
@@ -220,7 +222,6 @@ namespace FanartHandler
                 }
                 if (latestTVRecordings != null)
                 {
-                    //logger.Debug("Updating Latest Media Info: New tv recordings added");
                     for (int i = 0; i < latestTVRecordings.Count; i++)
                     {
                         logger.Debug("Updating Latest Media Info: Latest tv recording " + z + ": " + latestTVRecordings[i].Title);
@@ -246,7 +247,6 @@ namespace FanartHandler
                     FanartHandler.LatestsCollection ht = edbm.GetLatestPictures();
                     if (ht != null)
                     {
-                        //logger.Debug("Updating Latest Media Info: New pictures added");
                         for (int i = 0; i < ht.Count; i++)
                         {
                             logger.Debug("Updating Latest Media Info: Latest picture " + z + ": " + ht[i].Thumb);
@@ -274,7 +274,6 @@ namespace FanartHandler
                 FanartHandler.LatestsCollection hTable = Utils.GetDbm().GetLatestMusic();
                 if (hTable != null)
                 {
-                    //logger.Debug("Updating Latest Media Info: New music added");
                     for (int i = 0; i < hTable.Count; i++)
                     {
                         string thumb = string.Empty;

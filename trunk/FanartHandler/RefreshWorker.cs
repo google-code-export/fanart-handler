@@ -149,14 +149,6 @@ namespace FanartHandler
                                 FanartHandlerSetup.FS.RefreshMusicSelectedProperties();
                                 Report(e);
                             }
-                            /*else if (windowId == 500)
-                            {
-                                //User are in music playlist
-                                FanartHandlerSetup.IsSelectedMusic = true;
-                                resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.FS.ListSelectedMusic, "Music Playlist", ref FanartHandlerSetup.FS.CurrSelectedMusic, ref FanartHandlerSetup.FS.CurrSelectedMusicArtist);
-                                Report(e);
-                            }*/
                             else if (windowId == 6622)
                             {
                                 //User are in music playlist
@@ -220,7 +212,7 @@ namespace FanartHandler
                     {
                         if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
-                            if (windowId == 6 || windowId == 25 || windowId == 28)
+                            if (windowId == 6 || windowId == 25 || windowId == 28 || windowId == 2003)
                             {
                                 //User are in myVideo, myVideoTitle window or myvideoplaylist
                                 FanartHandlerSetup.IsSelectedVideo = true;
@@ -244,7 +236,7 @@ namespace FanartHandler
                                 FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "myVideos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }
-                            else if (!FanartHandlerSetup.IsSelectedMusic)
+                            else if (!FanartHandlerSetup.FS.FoundItem)
                             {
                                 //User are in myonlinevideos, mytrailers or UNKNOW/NOT SPECIFIED plugin that supports fanart handler
                                 FanartHandlerSetup.IsSelectedVideo = true;

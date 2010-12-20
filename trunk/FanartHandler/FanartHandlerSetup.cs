@@ -94,6 +94,8 @@ namespace FanartHandler
         private static string useMusicFanart = null;  // Holds info read from fanarthandler.xml settings file        
         private static string useVideoFanart = null;  // Holds info read from fanarthandler.xml settings file        
         private static string useScoreCenterFanart = null;  // Holds info read from fanarthandler.xml settings file        
+        private static string useAsyncImageLoading = null;
+        private static string doNotReplaceExistingThumbs = null;
         private string imageInterval = null;  // Holds info read from fanarthandler.xml settings file
         private static string minResolution = null;  // Holds info read from fanarthandler.xml settings file
         private string defaultBackdrop = null;  // Holds info read from fanarthandler.xml settings file
@@ -683,6 +685,7 @@ namespace FanartHandler
                     {
                         tmp = FS.GetCurrentArtistsImageNames();
                     }
+
                     if (newArtist || tmp == null || tmp.Count == 0)
                     {
                         if (isMusic)
@@ -952,22 +955,25 @@ namespace FanartHandler
                     FP.UpdateVisibilityCountPlay = 0;
                     //release unused image resources
                     HandleOldImages(ref FP.ListPlayMusic);
-                }                       
-               
-             /*   logger.Debug("listAnyGames: " + fr.listAnyGames.Count);
-                logger.Debug("listAnyMovies: " + fr.listAnyMovies.Count);
-                logger.Debug("listAnyMovingPictures: " + fr.listAnyMovingPictures.Count);
-                logger.Debug("listAnyMusic: " + fr.listAnyMusic.Count);
-                logger.Debug("listAnyPictures: " + fr.listAnyPictures.Count);
-                logger.Debug("listAnyScorecenter: " + fr.listAnyScorecenter.Count);
-                logger.Debug("listAnyTVSeries: " + fr.listAnyTVSeries.Count);
-                logger.Debug("listAnyTV: " + fr.listAnyTV.Count);
-                logger.Debug("listAnyPlugins: " + fr.listAnyPlugins.Count); 
-                logger.Debug("listSelectedMovies: " + fs.listSelectedMovies.Count); 
-                logger.Debug("listSelectedMusic: " + fs.listSelectedMusic.Count); 
-                logger.Debug("listSelectedScorecenter: " + fs.listSelectedScorecenter.Count);
-                logger.Debug("listPlayMusic: " + fp.listPlayMusic.Count);               
-                */
+                }
+
+/*                logger.Debug("*************************************************");
+                logger.Debug("listAnyGames: " + FR.ListAnyGamesUser.Count);
+                logger.Debug("listAnyMoviesUser: " + FR.ListAnyMoviesUser.Count);
+                logger.Debug("listAnyMoviesScraper: " + FR.ListAnyMoviesScraper.Count);
+                logger.Debug("listAnyMovingPictures: " + FR.ListAnyMovingPictures.Count);
+                logger.Debug("listAnyMusicUser: " + FR.ListAnyMusicUser.Count);
+                logger.Debug("listAnyMusicScraper: " + FR.ListAnyMusicScraper.Count);
+                logger.Debug("listAnyPictures: " + FR.ListAnyPicturesUser.Count);
+                logger.Debug("listAnyScorecenter: " + FR.ListAnyScorecenterUser.Count);
+                logger.Debug("listAnyTVSeries: " + FR.ListAnyTVSeries.Count);
+                logger.Debug("listAnyTV: " + FR.ListAnyTVUser.Count);
+                logger.Debug("listAnyPlugins: " + FR.ListAnyPluginsUser.Count); 
+                logger.Debug("listSelectedMovies: " + FS.ListSelectedMovies.Count); 
+                logger.Debug("listSelectedMusic: " + FS.ListSelectedMusic.Count); 
+                logger.Debug("listSelectedScorecenter: " + FS.ListSelectedScorecenter.Count);
+                logger.Debug("listPlayMusic: " + FP.ListPlayMusic.Count);               
+*/                
             }
             catch (Exception ex)
             {
@@ -1443,7 +1449,9 @@ namespace FanartHandler
                     latestMusic = xmlreader.GetValueAsString("FanartHandler", "latestMusic", String.Empty);
                     latestMovingPictures = xmlreader.GetValueAsString("FanartHandler", "latestMovingPictures", String.Empty);
                     latestTVSeries = xmlreader.GetValueAsString("FanartHandler", "latestTVSeries", String.Empty);
-                    latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);   
+                    latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);
+                    useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
+                    doNotReplaceExistingThumbs = xmlreader.GetValueAsString("FanartHandler", "doNotReplaceExistingThumbs", String.Empty);    
                 }
 
                 if (latestPictures != null && latestPictures.Length > 0)
@@ -1455,6 +1463,24 @@ namespace FanartHandler
                     latestPictures = "True";
                 }
 
+                if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
+                {
+                    //donothing
+                }
+                else
+                {
+                    useAsyncImageLoading = "True";
+                }
+
+                if (doNotReplaceExistingThumbs != null && doNotReplaceExistingThumbs.Length > 0)
+                {
+                    //donothing
+                }
+                else
+                {
+                    doNotReplaceExistingThumbs = "False";
+                }
+                
                 if (latestMusic != null && latestMusic.Length > 0)
                 {
                     //donothing
@@ -1776,6 +1802,7 @@ namespace FanartHandler
                 Utils.SetProxyDomain(proxyDomain);
                 Utils.SetScraperMaxImages(ScraperMaxImages);
                 Utils.ScrapeThumbnails = scrapeThumbnails;
+                Utils.DoNotReplaceExistingThumbs = doNotReplaceExistingThumbs;
                 Utils.InitiateDbm();
                 MDB = MusicDatabase.Instance;
                 myDirectoryTimer = new TimerCallback(UpdateDirectoryTimer);
@@ -2080,18 +2107,88 @@ namespace FanartHandler
                     }
                     if (FR.WindowsUsingFanartRandom.ContainsKey(windowId))
                     {
-                        FR.WindowOpen = true;
-                        if (FR.DoShowImageOneRandom)
+                        if (useAsyncImageLoading != null && useAsyncImageLoading.Equals("True"))
                         {
-                            FR.ShowImageTwoRandom(activeWindowId);
+                            /*ASYNC ON RANDOM IMAGES*********************/
+                            FR.WindowOpen = true;
+                            if (FR.DoShowImageOneRandom)
+                            {
+                                FR.ShowImageTwoRandom(activeWindowId);
+                            }
+                            else
+                            {
+                                FR.ShowImageOneRandom(activeWindowId);
+                            }
+                            if (refreshTimer != null && !refreshTimer.Enabled) 
+                            {
+                                refreshTimer.Start();
+                            }
+                         }
+                         else
+                         {                        
+                            /*SYNC ON RANDOM IMAGES*********************/
+                            FR.WindowOpen = true;
+                            IsRandom = true;
+                            FR.ResetCurrCountRandom();
+                            FR.RefreshRandomImageProperties(null);
+                            FR.UpdatePropertiesRandom();
+
+                            if (FR.DoShowImageOneRandom)
+                            {
+                                FR.ShowImageOneRandom(activeWindowId);
+                                FR.DoShowImageOneRandom = true;// false;
+                            }
+                            else
+                            {
+                                FR.ShowImageTwoRandom(activeWindowId);
+                                FR.DoShowImageOneRandom = false;// true;
+                            }
+
+                            if (refreshTimer != null && !refreshTimer.Enabled)
+                            {
+                                refreshTimer.Start();
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (IsRandom)
                         {
-                            FR.ShowImageOneRandom(activeWindowId);
-                        }
-                        if (refreshTimer != null && !refreshTimer.Enabled)
-                        {
-                            refreshTimer.Start();
+                            SetProperty("#fanarthandler.games.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.games.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.movie.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.movie.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.movie.scraper.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.movie.scraper.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.music.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.music.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.music.scraper.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.music.scraper.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.picture.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.picture.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.scorecenter.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.scorecenter.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.tv.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.tv.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.plugins.userdef.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.plugins.userdef.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.movingpicture.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.movingpicture.backdrop2.any", string.Empty);
+                            SetProperty("#fanarthandler.tvseries.backdrop1.any", string.Empty);
+                            SetProperty("#fanarthandler.tvseries.backdrop2.any", string.Empty);
+                            FR.CurrCountRandom = 0;
+                            EmptyAllImages(ref FR.ListAnyGamesUser);
+                            EmptyAllImages(ref FR.ListAnyMoviesUser);
+                            EmptyAllImages(ref FR.ListAnyMoviesScraper);                            
+                            EmptyAllImages(ref FR.ListAnyMovingPictures);
+                            EmptyAllImages(ref FR.ListAnyMusicUser);
+                            EmptyAllImages(ref FR.ListAnyMusicScraper);
+                            EmptyAllImages(ref FR.ListAnyPicturesUser);
+                            EmptyAllImages(ref FR.ListAnyScorecenterUser);
+                            EmptyAllImages(ref FR.ListAnyTVSeries);
+                            EmptyAllImages(ref FR.ListAnyTVUser);
+                            EmptyAllImages(ref FR.ListAnyPluginsUser);
+                            IsRandom = false;
                         }
                     }
                 }
@@ -2104,6 +2201,22 @@ namespace FanartHandler
                     }
                 }
                 PreventRefresh = false;
+                /*logger.Debug("*************************************************");
+                logger.Debug("listAnyGames: " + FR.ListAnyGamesUser.Count);
+                logger.Debug("listAnyMoviesUser: " + FR.ListAnyMoviesUser.Count);
+                logger.Debug("listAnyMoviesScraper: " + FR.ListAnyMoviesScraper.Count);
+                logger.Debug("listAnyMovingPictures: " + FR.ListAnyMovingPictures.Count);
+                logger.Debug("listAnyMusicUser: " + FR.ListAnyMusicUser.Count);
+                logger.Debug("listAnyMusicScraper: " + FR.ListAnyMusicScraper.Count);
+                logger.Debug("listAnyPictures: " + FR.ListAnyPicturesUser.Count);
+                logger.Debug("listAnyScorecenter: " + FR.ListAnyScorecenterUser.Count);
+                logger.Debug("listAnyTVSeries: " + FR.ListAnyTVSeries.Count);
+                logger.Debug("listAnyTV: " + FR.ListAnyTVUser.Count);
+                logger.Debug("listAnyPlugins: " + FR.ListAnyPluginsUser.Count);
+                logger.Debug("listSelectedMovies: " + FS.ListSelectedMovies.Count);
+                logger.Debug("listSelectedMusic: " + FS.ListSelectedMusic.Count);
+                logger.Debug("listSelectedScorecenter: " + FS.ListSelectedScorecenter.Count);
+                logger.Debug("listPlayMusic: " + FP.ListPlayMusic.Count); */
             }
             catch (Exception ex)
             {
@@ -2141,6 +2254,8 @@ namespace FanartHandler
                     FS.SetCurrentArtistsImageNames(null);
                     FS.CurrCount = 0;
                     FS.UpdateVisibilityCount = 0;
+                    FS.FanartAvailable = false; //20101213
+                    FS.FanartIsNotAvailable(GUIWindowManager.ActiveWindow); //20101213
                     SetProperty("#fanarthandler.music.backdrop1.selected", string.Empty);
                     SetProperty("#fanarthandler.music.backdrop2.selected", string.Empty);
                     IsSelectedMusic = false;
@@ -2153,6 +2268,8 @@ namespace FanartHandler
                     FS.SetCurrentArtistsImageNames(null);
                     FS.CurrCount = 0;
                     FS.UpdateVisibilityCount = 0;
+                    FS.FanartAvailable = false; //20101213
+                    FS.FanartIsNotAvailable(GUIWindowManager.ActiveWindow); //20101213
                     SetProperty("#fanarthandler.movie.backdrop1.selected", string.Empty);
                     SetProperty("#fanarthandler.movie.backdrop2.selected", string.Empty);
                     IsSelectedVideo = false;
@@ -2165,10 +2282,12 @@ namespace FanartHandler
                     FS.SetCurrentArtistsImageNames(null);
                     FS.CurrCount = 0;
                     FS.UpdateVisibilityCount = 0;
+                    FS.FanartAvailable = false; //20101213
+                    FS.FanartIsNotAvailable(GUIWindowManager.ActiveWindow); //20101213
                     SetProperty("#fanarthandler.scorecenter.backdrop1.selected", string.Empty);
                     SetProperty("#fanarthandler.scorecenter.backdrop2.selected", string.Empty);
                     IsSelectedScoreCenter = false;
-                }
+                }                
                 if (IsRandom)
                 {
                     SetProperty("#fanarthandler.games.userdef.backdrop1.any", string.Empty);
