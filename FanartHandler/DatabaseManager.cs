@@ -52,6 +52,7 @@ namespace FanartHandler
         private Hashtable htAnyTVFanart;
         private Hashtable htAnyPluginFanart;
         private ArrayList musicDatabaseArtists;
+        private List<AlbumInfo> musicDatabaseAlbums;
         private MusicDatabase m_db = null;
         private bool isScraping/* = false*/;
         private Scraper scraper;
@@ -243,7 +244,7 @@ namespace FanartHandler
         /// <param name="artist">Name of the artist</param>
         /// <param name="swnp">ScraperWorkerNowPlaying object</param>
         /// <returns>True if scraping has occured successfully</returns>
-        public bool NowPlayingScrape(string artist)
+        public bool NowPlayingScrape(string artist, string album)
         {
             try
             {
@@ -256,7 +257,7 @@ namespace FanartHandler
                     string[] artists = artist.Split('|');
                     foreach (string thisArtist in artists)
                     {
-                        if (DoScrapeNew(thisArtist.Trim()) > 0)
+                        if (DoScrapeNew(thisArtist.Trim(), album) > 0)
                         {
                             bFound = true;
                         }
@@ -266,7 +267,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    if (DoScrapeNew(artist) > 0)
+                    if (DoScrapeNew(artist, album) > 0)
                     {
                         logger.Info("NowPlayingScrape is done.");
                         return true;
@@ -856,7 +857,7 @@ namespace FanartHandler
         /// <param name="useStopScraper">Use the stop scraper parameter or not</param>
         /// <param name="swnp">ScraperWorkerNowPlaying object</param>
         /// <returns>Number of scraped images</returns>
-        public int DoScrapeNew(string artist)
+        public int DoScrapeNew(string artist, string album)
         {
             if (StopScraper == false)
             {
@@ -887,6 +888,7 @@ namespace FanartHandler
                             {
                                 logger.Debug("No fanart found for artist " + artist + ".");
                             }
+                            scraper.GetLastFMAlbumImages(artist, album);
                         }
                         if (totalImages != 99)
                         {
@@ -924,7 +926,9 @@ namespace FanartHandler
                 logger.Info("InitialScrape is starting...");
                 bool firstRun = true;
                 musicDatabaseArtists = new ArrayList();
+                musicDatabaseAlbums = new List<AlbumInfo>();
                 m_db.GetAllArtists(ref musicDatabaseArtists);
+                m_db.GetAllAlbums(ref musicDatabaseAlbums);
                 ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
                 if (al != null && al.Count > 0)
                 {
@@ -932,12 +936,13 @@ namespace FanartHandler
                 }
 
                 string artist;
+                string album;
                 if (FanartHandlerSetup.MyScraperWorker != null)
                 {
                     FanartHandlerSetup.MyScraperWorker.ReportProgress(0, "Start");
                 }
 
-                TotArtistsBeingScraped = musicDatabaseArtists.Count;
+                TotArtistsBeingScraped = musicDatabaseArtists.Count + musicDatabaseAlbums.Count;
                 if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
                 {
                     for (int i = 0; i < musicDatabaseArtists.Count; i++)
@@ -963,10 +968,48 @@ namespace FanartHandler
                         }
                     }
                 }
+
+                if (musicDatabaseAlbums != null && musicDatabaseAlbums.Count > 0)
+                {
+                    scraper = new Scraper();
+                    string succThumb = String.Empty;
+                    for (int i = 0; i < musicDatabaseAlbums.Count; i++)
+                    {                        
+                        album = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Album);
+                        artist = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Artist);
+                        string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
+                        string urlAlbum = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(album);
+                        urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
+                        urlAlbum = Utils.GetArtist(urlAlbum, "MusicFanart Scraper");
+                        InsertNewMusicAlbum(urlArtist, urlAlbum);
+                        string sqlQuery;
+                        sqlQuery = "SELECT Successful_Scrape FROM Music_Album WHERE Artist = '" + Utils.PatchSql(urlArtist) + "' AND Album = '" + Utils.PatchSql(urlAlbum) + "';";
+                        SQLiteResultSet result;
+                        lock (lockObject) result = dbClient.Execute(sqlQuery);
+                        succThumb = result.GetField(0, 0);
+                        if (succThumb != null && succThumb.Equals("0"))
+                        {                        
+                            if (StopScraper == true || Utils.GetIsStopping())
+                            {
+                                break;
+                            }
+                            scraper.GetLastFMAlbumImages(artist, album);
+                            SetSuccessfulAlbumScrape(urlArtist, urlAlbum);
+                        }
+
+                        CurrArtistsBeingScraped++;
+                        if (TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperWorker != null)
+                        {
+                            FanartHandlerSetup.MyScraperWorker.ReportProgress(Convert.ToInt32((CurrArtistsBeingScraped / TotArtistsBeingScraped) * 100), "Ongoing");
+                        }
+                    }
+                    scraper = null;
+                }
                 //                Utils.GetDbm().SetTimeStamp("Fanart Handler Last Scrape", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 logger.Info("InitialScrape is done.");
                 //                IsScraping = false;
                 musicDatabaseArtists = null;
+                musicDatabaseAlbums = null;
                 AddScapedFanartToAnyHash();
             }
             catch (Exception ex)
@@ -1245,6 +1288,18 @@ namespace FanartHandler
                     logger.Info("Upgraded Database to version 2.2");
                     currVersion = "2.2";
                 }
+                if ((tmpS != null && tmpS.Equals("2.2", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.3");
+                    sqlQuery = "CREATE TABLE Music_Album (Id INTEGER PRIMARY KEY, Artist TEXT, Album TEXT, Successful_Scrape NUMERIC, Time_Stamp TEXT);";
+                    result = dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    sqlQuery = "UPDATE Version SET Version = '2.3'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.3");
+                    currVersion = "2.3";
+                }                
                 result = null;
                 sqlQuery = null;
                 tmpS = null;
@@ -2390,6 +2445,35 @@ namespace FanartHandler
             {
                 logger.Error("loadMusicFanart: " + ex.ToString());
             }
+        }        
+
+        /// <summary>
+        /// Inserts a new artist into the database.
+        /// </summary>
+        /// <param name="artist">The artist name</param>
+        /// <param name="type">The type to run the query on</param>
+        public void InsertNewMusicAlbum(string artist, string album)
+        {
+            try
+            {
+                string sqlQuery = String.Empty;
+                DateTime saveNow = DateTime.Now;
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Album WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    sqlQuery = "INSERT INTO Music_Album (Id, Artist, Album, Successful_Scrape, Time_Stamp) VALUES(null, '" + Utils.PatchSql(artist) + "', '" + Utils.PatchSql(album) + "',0,'" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "');";
+                }
+
+                lock (lockObject) dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("InsertNewMusicAlbum: " + ex.ToString());
+            }
         }
 
         /// <summary>
@@ -2445,6 +2529,34 @@ namespace FanartHandler
             catch (Exception ex)
             {
                 logger.Error("SetSuccessfulScrapeThumb: " + ex.ToString());
+            }
+        }
+
+        
+        /// <summary>
+        /// Flags an artist as being done with the initial scrape.
+        /// </summary>
+        /// <param name="artist">The artist name</param>
+        public void SetSuccessfulAlbumScrape(string artist, string album)
+        {
+            try
+            {
+                string sqlQuery = String.Empty;
+                DateTime saveNow = DateTime.Now;
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Album WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
+                {
+                    sqlQuery = "UPDATE Music_Album SET Successful_Scrape = 1, Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                }
+                else
+                {
+                    //do not allow insert                
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("SetSuccessfulAlbumScrape: " + ex.ToString());
             }
         }
 

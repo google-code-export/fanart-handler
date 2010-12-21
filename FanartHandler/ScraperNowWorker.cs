@@ -24,7 +24,8 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private string artist;        
+        private string artist;
+        private string album;  
         private bool triggerRefresh/* = false*/;        
         #endregion
 
@@ -32,6 +33,12 @@ namespace FanartHandler
         {
             get { return artist; }
             set { artist = value; }
+        }
+
+        public string Album
+        {
+            get { return album; }
+            set { album = value; }
         }
 
         public bool TriggerRefresh
@@ -62,13 +69,14 @@ namespace FanartHandler
                         Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                     }
                     Thread.CurrentThread.Name = "ScraperNowWorker";
-                    this.artist = (string) e.Argument;
+                    string [] s = e.Argument as string[];
+                    this.artist = s[0];
+                    this.album = s[1];                    
                     this.triggerRefresh = false;
-
                     Utils.GetDbm().IsScraping = true;
                     FanartHandlerSetup.ShowScraperProgressIndicator();
                     FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", "Now Playing Scrape");
-                    Utils.GetDbm().NowPlayingScrape(artist);
+                    Utils.GetDbm().NowPlayingScrape(artist, album);
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
                     Utils.SetDelayStop(false);

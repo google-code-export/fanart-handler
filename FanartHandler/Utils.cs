@@ -38,7 +38,7 @@ namespace FanartHandler
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
         private const string RXMatchMPvs = @"{[0-9]}$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.2.4.198";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.2.4.199";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -539,6 +539,21 @@ namespace FanartHandler
 //            s = s.Trim();
             return s;
         }
+
+        /// <summary>
+        /// Removes MP artist pipe (| artist |) in artist name
+        /// </summary>    
+        public static string RemoveMPArtistPipe(string s)
+        {
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
+            s = s.Replace("|",String.Empty);
+            s = s.Trim();
+            return s;
+        }      
 
         /// <summary>
         /// Get music videos artists.

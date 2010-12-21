@@ -69,7 +69,8 @@ namespace FanartHandler
         private static string fhThreadPriority = "Lowest";                
         private System.Threading.Timer scraperTimer = null;
 
-        private static string m_CurrentTrackTag = null;  //is music playing and if so this holds current artist name                        
+        private static string m_CurrentTrackTag = null;  //is music playing and if so this holds current artist name                
+        private static string m_CurrentAlbumTag = null;  //is music playing and if so this holds current album name                
         private static bool isPlaying/* = false*/; //hold true if MP plays music        
         private static bool isSelectedMusic/* = false*/;
         private static bool isSelectedVideo/* = false*/;
@@ -258,6 +259,12 @@ namespace FanartHandler
         {
             get { return FanartHandlerSetup.m_CurrentTrackTag; }
             set { FanartHandlerSetup.m_CurrentTrackTag = value; }
+        }
+
+        public static string CurrentAlbumTag
+        {
+            get { return FanartHandlerSetup.m_CurrentAlbumTag; }
+            set { FanartHandlerSetup.m_CurrentAlbumTag = value; }
         }
 
         public static bool PreventRefresh
@@ -1147,6 +1154,7 @@ namespace FanartHandler
             SyncPointDirectory = 0;
             SyncPointScraper = 0;
             m_CurrentTrackTag = null;
+            m_CurrentAlbumTag = null;
             m_CurrentTitleTag = null;
             m_SelectedItem = null;
             SetProperty("#fanarthandler.scraper.percent.completed", String.Empty);
@@ -2458,7 +2466,7 @@ namespace FanartHandler
             }
         }
 
-        public static void StartScraperNowPlaying(string artist)
+        public static void StartScraperNowPlaying(string artist, string album)
         {
             try
             {
@@ -2470,7 +2478,10 @@ namespace FanartHandler
                     MyScraperNowWorker = new ScraperNowWorker();
                     MyScraperNowWorker.ProgressChanged += MyScraperNowWorker.OnProgressChanged;
                     MyScraperNowWorker.RunWorkerCompleted += MyScraperNowWorker.OnRunWorkerCompleted;
-                    MyScraperNowWorker.RunWorkerAsync(artist);          
+                    string[] s = new string[2];
+                    s[0] = artist;
+                    s[1] = album;
+                    MyScraperNowWorker.RunWorkerAsync(s);          
                 }
             }
             catch (Exception ex)
