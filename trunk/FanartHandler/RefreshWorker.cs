@@ -68,10 +68,12 @@ namespace FanartHandler
                     if (windowId == 730718)
                     {
                         FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#mpgrooveshark.current.artist");
+                        FanartHandlerSetup.CurrentAlbumTag = GUIPropertyManager.GetProperty("#mpgrooveshark.current.album");
                     }
                     else
                     {
                         FanartHandlerSetup.CurrentTrackTag = GUIPropertyManager.GetProperty("#Play.Current.Artist");
+                        FanartHandlerSetup.CurrentAlbumTag = GUIPropertyManager.GetProperty("#Play.Current.Album");
                     }
                     if (FanartHandlerSetup.ScraperMPDatabase != null && FanartHandlerSetup.ScraperMPDatabase.Equals("True", StringComparison.CurrentCulture) && ((FanartHandlerSetup.MyScraperWorker != null && FanartHandlerSetup.MyScraperWorker.TriggerRefresh) || (FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh)))
                     {
@@ -91,7 +93,7 @@ namespace FanartHandler
                         {
                             if (FanartHandlerSetup.ScraperMusicPlaying != null && FanartHandlerSetup.ScraperMusicPlaying.Equals("True", StringComparison.CurrentCulture) && Utils.GetDbm().GetIsScraping() == false && ((FanartHandlerSetup.MyScraperNowWorker != null && FanartHandlerSetup.MyScraperNowWorker.IsBusy == false) || FanartHandlerSetup.MyScraperNowWorker == null))
                             {
-                                FanartHandlerSetup.StartScraperNowPlaying(FanartHandlerSetup.CurrentTrackTag);
+                                FanartHandlerSetup.StartScraperNowPlaying(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.CurrentAlbumTag);
                             }
                         }
                         FanartHandlerSetup.FP.RefreshMusicPlayingProperties();

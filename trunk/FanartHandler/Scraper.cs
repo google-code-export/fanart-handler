@@ -174,7 +174,7 @@ namespace FanartHandler
                             sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                             if (dbm.SourceImageExist(dbArtist, ((SearchResults)alSearchResults[x]).Id) == false)
                             {
-                                if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
+                                if (DownloadImage(ref dbArtist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
                                 {
                                     iCount = iCount + 1;
                                     dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
@@ -205,7 +205,7 @@ namespace FanartHandler
                             //Artist Thumbnail
                             logger.Debug("Found thumbnail for artist " + sArtist + ".");
                             sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
-                            if (DownloadImage(ref sArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicThumbs"))
+                            if (DownloadImage(ref sArtist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
                             {
                                 dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicThumbnails", 0);                               
                                 dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
@@ -314,17 +314,30 @@ namespace FanartHandler
         /// <summary>
         /// Downloads and saves images from htbackdrops.com.
         /// </summary>
-        private bool DownloadImage(ref string sArtist, ref string sourceFilename, ref string path, ref string filename, ref HttpWebRequest requestPic, ref WebResponse responsePic, string type)
+        private bool DownloadImage(ref string sArtist, string album, ref string sourceFilename, ref string path, ref string filename, ref HttpWebRequest requestPic, ref WebResponse responsePic, string type)
         {
             int maxCount = 0;
             long position = 0;
             string status = "Resume";
-            if (type.Equals("MusicThumbs", StringComparison.CurrentCulture))
+            string oldFilenameL = null;
+            string oldFilename = null;
+            if (type.Equals("MusicArtistThumbs", StringComparison.CurrentCulture))
             {
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
                 filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + "_tmp.jpg"; ;// +"L.jpg";
-                logger.Debug("Downloading tumbnail for " + sArtist + " (" + filename + ").");
+                logger.Debug("Downloading artist tumbnail for " + sArtist + " (" + filename + ").");
+                oldFilenameL = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + "L.jpg";
+                oldFilename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + ".jpg";
             }
+            else if (type.Equals("MusicAlbumThumbs", StringComparison.CurrentCulture))
+            {
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
+                string sFileName = MediaPortal.Util.Utils.GetAlbumThumbName(sArtist, album);                
+                filename = sFileName.Substring(0,sFileName.IndexOf(".jpg")) + "_tmp.jpg"; ;// +"L.jpg";
+                logger.Debug("Downloading album tumbnail for " + sArtist + " (" + filename + ").");
+                oldFilenameL = MediaPortal.Util.Utils.ConvertToLargeCoverArt(sFileName);
+                oldFilename = sFileName;
+            }            
             else
             {
                 path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\Scraper\music";
@@ -340,11 +353,8 @@ namespace FanartHandler
                 status = "Success";
                 try
                 {
-                    if (type.Equals("MusicThumbs", StringComparison.CurrentCulture))
-                    {
-                        string oldFilenameL = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + "L.jpg";
-                        string oldFilename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + ".jpg";
-                        
+                    if (type.Equals("MusicArtistThumbs", StringComparison.CurrentCulture) || type.Equals("MusicAlbumThumbs", StringComparison.CurrentCulture))
+                    {                                                
                         if (File.Exists(oldFilenameL) && Utils.DoNotReplaceExistingThumbs.Equals("True"))
                         {
                             doDownload = false;
@@ -424,11 +434,8 @@ namespace FanartHandler
                             status = "Stop";
                             logger.Error("DownloadImage: Deleting downloaded file because it is corrupt.");
                         }
-                        if (type.Equals("MusicThumbs", StringComparison.CurrentCulture))
+                        if (type.Equals("MusicArtistThumbs", StringComparison.CurrentCulture)||type.Equals("MusicAlbumThumbs", StringComparison.CurrentCulture))
                         {
-                            string oldFilenameL = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + "L.jpg";
-                            string oldFilename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(sArtist) + ".jpg";
-
                             if (File.Exists(oldFilenameL) && Utils.DoNotReplaceExistingThumbs.Equals("False"))
                             {
                                 HandleOldThumbs(oldFilenameL, filename, ref doDownload);                                
@@ -567,19 +574,7 @@ namespace FanartHandler
             }
 
             try
-            {
-                /*origImg = (System.Drawing.Bitmap)CreateNonIndexedImage(aInputFilename);// Image.FromFile(aInputFilename).Clone(); a
-                newImg = new Bitmap(iWidth, iHeight);
-
-                using (Graphics g = Graphics.FromImage((Image)newImg))
-                {
-                    g.CompositingQuality = Thumbs.Compositing;
-                    g.InterpolationMode = Thumbs.Interpolation;
-                    g.SmoothingMode = Thumbs.Smoothing;
-                    g.DrawImage(origImg, new Rectangle(0, 0, iWidth, iHeight));
-                }
-                bool result = SaveThumbnail(aThumbTargetPath, newImg); 
-                 */
+            {                
                 bool result = CropImage(aInputFilename, iWidth, iHeight, aThumbTargetPath);
                 if (result && MediaPortal.Util.Utils.IsFileExistsCacheEnabled())
                 {
@@ -605,107 +600,71 @@ namespace FanartHandler
         public bool CropImage(string OriginalFile, int templateWidth, int templateHeight, string NewFile)
         {
             System.Drawing.Image initImage = System.Drawing.Image.FromFile(OriginalFile);
-            /*if (initImage.Width <= templateWidth && initImage.Height <= templateHeight)
+            double templateRate = double.Parse(templateWidth.ToString()) / templateHeight;
+            double initRate = double.Parse(initImage.Width.ToString()) / initImage.Height;
+            if (templateRate == initRate)
             {
-                initImage.Save(NewFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                System.Drawing.Image templateImage = new System.Drawing.Bitmap(templateWidth, templateHeight);
+                System.Drawing.Graphics templateG = System.Drawing.Graphics.FromImage(templateImage);
+                templateG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+                templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                templateG.Clear(Color.White);
+                templateG.DrawImage(initImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, initImage.Width, initImage.Height), System.Drawing.GraphicsUnit.Pixel);
+                templateImage.Save(NewFile, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
             else
-            {*/
-                double templateRate = double.Parse(templateWidth.ToString()) / templateHeight;
-                double initRate = double.Parse(initImage.Width.ToString()) / initImage.Height;
-                if (templateRate == initRate)
+            {
+                System.Drawing.Image pickedImage = null;
+                System.Drawing.Graphics pickedG = null;
+                Rectangle fromR = new Rectangle(0, 0, 0, 0);
+                Rectangle toR = new Rectangle(0, 0, 0, 0);
+                if (templateRate > initRate)
                 {
-                    System.Drawing.Image templateImage = new System.Drawing.Bitmap(templateWidth, templateHeight);
-                    System.Drawing.Graphics templateG = System.Drawing.Graphics.FromImage(templateImage);
-                    templateG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-                    templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                    templateG.Clear(Color.White);
-                    templateG.DrawImage(initImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, initImage.Width, initImage.Height), System.Drawing.GraphicsUnit.Pixel);
-                    templateImage.Save(NewFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    pickedImage = new System.Drawing.Bitmap(initImage.Width, int.Parse(Math.Floor(initImage.Width / templateRate).ToString()));
+                    pickedG = System.Drawing.Graphics.FromImage(pickedImage);
+                    fromR.X = 0;
+                    fromR.Y = int.Parse(Math.Floor((initImage.Height - initImage.Width / templateRate) / 2).ToString());
+                    fromR.Width = initImage.Width;
+                    fromR.Height = int.Parse(Math.Floor(initImage.Width / templateRate).ToString());
+                    toR.X = 0;
+                    toR.Y = 0;
+                    toR.Width = initImage.Width;
+                    toR.Height = int.Parse(Math.Floor(initImage.Width / templateRate).ToString());
                 }
                 else
                 {
-                    System.Drawing.Image pickedImage = null;
-                    System.Drawing.Graphics pickedG = null;
-                    Rectangle fromR = new Rectangle(0, 0, 0, 0);
-                    Rectangle toR = new Rectangle(0, 0, 0, 0);
-                    if (templateRate > initRate)
-                    {
-                        pickedImage = new System.Drawing.Bitmap(initImage.Width, int.Parse(Math.Floor(initImage.Width / templateRate).ToString()));
-                        pickedG = System.Drawing.Graphics.FromImage(pickedImage);
-                        fromR.X = 0;
-                        fromR.Y = int.Parse(Math.Floor((initImage.Height - initImage.Width / templateRate) / 2).ToString());
-                        fromR.Width = initImage.Width;
-                        fromR.Height = int.Parse(Math.Floor(initImage.Width / templateRate).ToString());
-                        toR.X = 0;
-                        toR.Y = 0;
-                        toR.Width = initImage.Width;
-                        toR.Height = int.Parse(Math.Floor(initImage.Width / templateRate).ToString());
-                    }
-                    else
-                    {
-                        pickedImage = new System.Drawing.Bitmap(int.Parse(Math.Floor(initImage.Height * templateRate).ToString()), initImage.Height);
-                        pickedG = System.Drawing.Graphics.FromImage(pickedImage);
-                        fromR.X = int.Parse(Math.Floor((initImage.Width - initImage.Height * templateRate) / 2).ToString());
-                        fromR.Y = 0;
-                        fromR.Width = int.Parse(Math.Floor(initImage.Height * templateRate).ToString());
-                        fromR.Height = initImage.Height;
-                        toR.X = 0;
-                        toR.Y = 0;
-                        toR.Width = int.Parse(Math.Floor(initImage.Height * templateRate).ToString());
-                        toR.Height = initImage.Height;
-                    }
-                    pickedG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    pickedG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                    pickedG.DrawImage(initImage, toR, fromR, System.Drawing.GraphicsUnit.Pixel);
-                    System.Drawing.Image templateImage = new System.Drawing.Bitmap(templateWidth, templateHeight);
-                    System.Drawing.Graphics templateG = System.Drawing.Graphics.FromImage(templateImage);
-                    templateG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-                    templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                    templateG.Clear(Color.White);
-                    templateG.DrawImage(pickedImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, pickedImage.Width, pickedImage.Height), System.Drawing.GraphicsUnit.Pixel);
-                    templateImage.Save(NewFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-                    templateG.Dispose();
-                    templateImage.Dispose();
-
-                    pickedG.Dispose();
-                    pickedImage.Dispose();
+                    pickedImage = new System.Drawing.Bitmap(int.Parse(Math.Floor(initImage.Height * templateRate).ToString()), initImage.Height);
+                    pickedG = System.Drawing.Graphics.FromImage(pickedImage);
+                    fromR.X = int.Parse(Math.Floor((initImage.Width - initImage.Height * templateRate) / 2).ToString());
+                    fromR.Y = 0;
+                    fromR.Width = int.Parse(Math.Floor(initImage.Height * templateRate).ToString());
+                    fromR.Height = initImage.Height;
+                    toR.X = 0;
+                    toR.Y = 0;
+                    toR.Width = int.Parse(Math.Floor(initImage.Height * templateRate).ToString());
+                    toR.Height = initImage.Height;
                 }
-            //}
+                pickedG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                pickedG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                pickedG.DrawImage(initImage, toR, fromR, System.Drawing.GraphicsUnit.Pixel);
+                System.Drawing.Image templateImage = new System.Drawing.Bitmap(templateWidth, templateHeight);
+                System.Drawing.Graphics templateG = System.Drawing.Graphics.FromImage(templateImage);
+                templateG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+                templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                templateG.Clear(Color.White);
+                templateG.DrawImage(pickedImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, pickedImage.Width, pickedImage.Height), System.Drawing.GraphicsUnit.Pixel);
+                templateImage.Save(NewFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                templateG.Dispose();
+                templateImage.Dispose();
+
+                pickedG.Dispose();
+                pickedImage.Dispose();
+            }
             initImage.Dispose();
             File.SetAttributes(NewFile, File.GetAttributes(NewFile) | FileAttributes.Hidden);
             return true;
         } 
-
-        public static bool SaveThumbnail(string aThumbTargetPath, Image myImage)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(aThumbTargetPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
-                {
-                    using (Bitmap bmp = new Bitmap(myImage))
-                    {
-                        bmp.Save(fs, Thumbs.ThumbCodecInfo, Thumbs.ThumbEncoderParams);
-                    }
-                    fs.Flush();
-                }
-
-                File.SetAttributes(aThumbTargetPath, File.GetAttributes(aThumbTargetPath) | FileAttributes.Hidden);
-                // even if run in background thread wait a little so the main process does not starve on IO
-                if (MediaPortal.Player.g_Player.Playing)
-                    Thread.Sleep(100);
-                else
-                    Thread.Sleep(1);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.Debug("SaveThumbnail: Error saving new thumbnail {0} - {1}", aThumbTargetPath, ex.Message);
-                return false;
-            }
-        }
-
 
         private bool IsFileValid(string filename)
         {
@@ -901,7 +860,7 @@ namespace FanartHandler
                                     sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                                     if (dbm.SourceImageExist(dbArtist, ((SearchResults)alSearchResults[x]).Id) == false)
                                     {
-                                        if (DownloadImage(ref dbArtist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
+                                        if (DownloadImage(ref dbArtist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicFanart Scraper"))
                                         {
                                             iCount = iCount + 1;
                                             dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
@@ -922,7 +881,7 @@ namespace FanartHandler
                                 //Artist Thumbnail
                                 logger.Debug("Found thumbnail for artist " + artist + ".");
                                 sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
-                                if (DownloadImage(ref artist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicThumbs"))
+                                if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
                                 {
                                     //dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicThumbnails", 0);
                                     dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
@@ -942,7 +901,7 @@ namespace FanartHandler
                     if (!foundThumb)
                     {
                         dbm.SetSuccessfulScrapeThumb(dbArtist, 1);
-                        GetLastFMImages(artist, dbm);
+                        GetLastFMArtistImages(artist, dbm);
                     }
                 }
                 
@@ -970,80 +929,84 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on Last FM.
         /// </summary>
-        public int GetLastFMImages(string artist, DatabaseManager dbm)
+        public int GetLastFMArtistImages(string artist, DatabaseManager dbm)
         {
             try
             {
-                Encoding enc = Encoding.GetEncoding("iso-8859-1"); 
-                string strResult = null;
-                string dbArtist = null;
-                string path = null;
-                string filename = null;
-                bool b = true;
-                HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://ws.audioscrobbler.com/2.0/?method=artist.getimages");
-                if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
-                {
-                    proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
-                    proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                    objRequest.Proxy = proxy;
-                }
-                objRequest.ServicePoint.Expect100Continue = false;
-                string values = "&artist=" + artist;
-                values += "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
-                objRequest.Method = "POST";
-                objRequest.ContentType = "application/x-www-form-urlencoded";
-                objRequest.ContentLength = values.Length;
-                using (StreamWriter writer = new StreamWriter(objRequest.GetRequestStream(),enc))
-                {
-                    writer.Write(values);
-                }
-                WebResponse objResponse = objRequest.GetResponse();
-                using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
-                {
-                    strResult = sr.ReadToEnd();
-                    sr.Close();
-                }
-                if (objResponse != null)
-                {
-                    objResponse.Close();
-                }
                 int iCount = 0;
-                HttpWebRequest requestPic = null;
-                WebResponse responsePic = null;
-                string sourceFilename = null;
-                logger.Debug("Trying to find Last.FM thumbnail for artist " + artist + ".");  
-                try
-                {                    
-                    if (strResult != null && strResult.Length > 0)
-                    {                                                
-                        while (b && strResult.Length > 0)
-                        {
-                            sourceFilename = strResult.Substring((strResult.IndexOf("\">http") + 2), ((strResult.IndexOf("</size>")) - (strResult.IndexOf("\">http") + 2)));
-                            if (sourceFilename.IndexOf(".jpg") > 0)
-                            {
-                                b = false;
-                            }
-                            else
-                            {
-                                strResult = strResult.Substring((strResult.IndexOf("</size>") + 7));
-                            }
-                        }                         
-                    }
-                }
-                catch (Exception ex)
+                if (artist != null && artist.Length > 0)
                 {
-                    logger.Debug(ex.ToString());
-                }
-                if (sourceFilename != null && !b)
-                {                                     
-                   dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
-                   if (DownloadImage(ref artist, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicThumbs"))
-                   {
-//                       dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicThumbnails", 0);
-                       dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
-                   }
-                }                        
-                objRequest = null;
+                    string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
+                    Encoding enc = Encoding.GetEncoding("iso-8859-1");
+                    string strResult = null;
+                    string dbArtist = null;
+                    string path = null;
+                    string filename = null;
+                    bool b = true;
+                    HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://ws.audioscrobbler.com/2.0/?method=artist.getimages");
+                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+                    {
+                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
+                        proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
+                        objRequest.Proxy = proxy;
+                    }
+                    objRequest.ServicePoint.Expect100Continue = false;
+                    string values = "&artist=" + urlArtist;
+                    values += "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
+                    objRequest.Method = "POST";
+                    objRequest.ContentType = "application/x-www-form-urlencoded";
+                    objRequest.ContentLength = values.Length;
+                    using (StreamWriter writer = new StreamWriter(objRequest.GetRequestStream(), enc))
+                    {
+                        writer.Write(values);
+                    }
+                    WebResponse objResponse = objRequest.GetResponse();
+                    using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+                    {
+                        strResult = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    if (objResponse != null)
+                    {
+                        objResponse.Close();
+                    }
+                    HttpWebRequest requestPic = null;
+                    WebResponse responsePic = null;
+                    string sourceFilename = null;
+                    logger.Debug("Trying to find Last.FM thumbnail for artist " + artist + ".");
+                    try
+                    {
+                        if (strResult != null && strResult.Length > 0 && strResult.IndexOf("\">http") > 0)
+                        {
+                            while (b && strResult.Length > 0)
+                            {
+                                sourceFilename = strResult.Substring((strResult.IndexOf("\">http") + 2), ((strResult.IndexOf("</size>")) - (strResult.IndexOf("\">http") + 2)));
+                                if (sourceFilename.ToLower().IndexOf(".jpg") > 0 || sourceFilename.ToLower().IndexOf(".png") > 0)
+                                {
+                                    b = false;
+                                }
+                                else
+                                {
+                                    strResult = strResult.Substring((strResult.IndexOf("</size>") + 7));
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex.ToString());
+                    }
+                    if (sourceFilename != null && !b)
+                    {
+                        dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
+                        if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
+                        {
+                            //                       dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicThumbnails", 0);
+                            dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
+                        }
+                    }
+                    objRequest = null;
+                }            
                 return iCount;
             }
             catch (Exception ex)
@@ -1053,12 +1016,107 @@ namespace FanartHandler
                     alSearchResults.Clear();
                 }                
                 alSearchResults = null;
-                logger.Error("GetLastFMImages: " + ex.ToString());  
+                logger.Error("GetLastFMArtistImages: " + ex.ToString());  
             }
             return 9999;
         }
-        
-    
+
+        public int GetLastFMAlbumImages(string artist, string album)
+        {
+            try
+            {
+                int iCount = 0;
+                if (artist != null && artist.Length > 0 && album != null && album.Length > 0)
+                {
+                    string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
+                    string urlAlbum = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(album);                    
+                    Encoding enc = Encoding.GetEncoding("iso-8859-1");
+                    string strResult = null;
+                    string dbArtist = null;
+                    string path = null;
+                    string filename = null;
+                    bool b = true;
+                    HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://ws.audioscrobbler.com/2.0/?method=album.getinfo");
+                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+                    {
+                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
+                        proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
+                        objRequest.Proxy = proxy;
+                    }
+                    objRequest.ServicePoint.Expect100Continue = false;
+                    string values = "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
+                    values += "&artist=" + urlArtist;
+                    values += "&album=" + urlAlbum;
+                    objRequest.Method = "POST";
+                    objRequest.ContentType = "application/x-www-form-urlencoded";
+                    objRequest.ContentLength = values.Length;
+                    using (StreamWriter writer = new StreamWriter(objRequest.GetRequestStream(), enc))
+                    {
+                        writer.Write(values);
+                    }
+                    WebResponse objResponse = objRequest.GetResponse();
+                    using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+                    {
+                        strResult = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    if (objResponse != null)
+                    {
+                        objResponse.Close();
+                    }                    
+                    HttpWebRequest requestPic = null;
+                    WebResponse responsePic = null;
+                    string sourceFilename = null;
+                    logger.Debug("Trying to find Last.FM thumbnail for artist/album " + artist + "/" + album + ".");
+                    try
+                    {
+                        if (strResult != null && strResult.Length > 0)
+                        {
+                            while (b && strResult.Length > 0 && strResult.IndexOf("size=\"extralarge\">") > 0)
+                            {
+                                sourceFilename = strResult.Substring((strResult.IndexOf("size=\"extralarge\">") + 18));
+                                sourceFilename = sourceFilename.Substring(0, sourceFilename.IndexOf("</image>"));
+
+                                if (sourceFilename.ToLower().IndexOf(".jpg") > 0 || sourceFilename.ToLower().IndexOf(".png") > 0)
+                                {
+                                    b = false;
+                                }
+                                else
+                                {
+                                    strResult = strResult.Substring((strResult.IndexOf("</image>") + 8));
+                                }
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex.ToString());
+                    }
+                    if (sourceFilename != null && !b)
+                    {
+                        dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
+                        if (DownloadImage(ref artist, album, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicAlbumThumbs"))
+                        {
+                            //                       dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicThumbnails", 0);
+                            //dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
+                        }
+                    }
+                    objRequest = null;
+                }
+                return iCount;
+            }
+            catch (Exception ex)
+            {
+                if (alSearchResults != null)
+                {
+                    alSearchResults.Clear();
+                }
+                alSearchResults = null;
+                logger.Error("GetLastFMAlbumImages: " + ex.ToString());
+            }
+            return 9999;
+        }
 
     }
 
