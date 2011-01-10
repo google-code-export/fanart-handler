@@ -153,6 +153,9 @@
     <Compile Include="ScraperNowWorker.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ScraperThumbWorker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ScraperWorker.cs">
       <SubType>Component</SubType>
     </Compile>

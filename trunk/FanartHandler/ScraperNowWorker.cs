@@ -79,7 +79,7 @@ namespace FanartHandler
                     Utils.GetDbm().NowPlayingScrape(artist, album);
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
-                    Utils.SetDelayStop(false);
+                    Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                     //FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
                     FanartHandlerSetup.SyncPointScraper = 0;
                     e.Result = 0;
@@ -87,6 +87,7 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
+                Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                 FanartHandlerSetup.SyncPointScraper = 0;
                 logger.Error("OnDoWork: " + ex.ToString());
             }

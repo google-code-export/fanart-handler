@@ -202,12 +202,7 @@ namespace FanartHandler
         {
             try
             {
-                //if (!initialSetup)
-                //{
-                //    logger.Debug("Updating Latest Media Info: New movie added in MovingPicture");
-                //}
                 int z = 1;
-                //                string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture) // COMMENTED BY CODEIT.RIGHT;
                 if (FanartHandlerSetup.LatestMovingPictures.Equals("True", StringComparison.CurrentCulture))// && !(windowId.Equals("96742")))
                 {
                     //Moving Pictures

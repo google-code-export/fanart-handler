@@ -18,7 +18,8 @@ namespace FanartHandler
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;  
+    using System.Text;
+    using MediaPortal.Configuration;
 
     /// <summary>
     /// Class handling fanart for now playing music.
@@ -160,6 +161,32 @@ namespace FanartHandler
             }
         }
 
+        private void AddPlayingArtistThumbProperty(string artist, bool DoShowImageOnePlay)
+        {
+            string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+            string filename = null;
+            if (artist.Contains("|"))
+            {
+                string[] artists = artist.Split('|');
+                if (artists != null && artists.Length >= 1 && DoShowImageOnePlay)
+                {
+                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                }
+                else if (artists != null && artists.Length >= 2 && !DoShowImageOnePlay)
+                {
+                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[1].Trim()) + "L.jpg";
+                }
+                else if (artists != null && artists.Length >= 1 && !DoShowImageOnePlay)
+                {
+                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                }
+            }
+            else
+            {
+                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artist) + "L.jpg";
+            }
+            AddPropertyPlay("#fanarthandler.music.artisthumb.play", filename, ref ListPlayMusic);
+        }
 
         /// <summary>
         /// Get and set properties for now playing music
@@ -170,6 +197,7 @@ namespace FanartHandler
             {                
                 if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag, StringComparison.CurrentCulture) == false)
                 {
+                    AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, DoShowImageOnePlay);
                     string sFilenamePrev = CurrPlayMusic;
                     CurrPlayMusic = String.Empty;
                     PrevPlayMusic = -1;
@@ -223,6 +251,7 @@ namespace FanartHandler
                 }
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
+                    AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, DoShowImageOnePlay);
                     string sFilenamePrev = CurrPlayMusic;
                     string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart Scraper", "FanartPlaying", false, true);
                     if (sFilename.Length == 0)

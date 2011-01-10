@@ -140,15 +140,19 @@ namespace FanartHandler
             this.tabControl6 = new System.Windows.Forms.TabControl();
             this.tabPage21 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage22 = new System.Windows.Forms.TabPage();
+            button44 = new System.Windows.Forms.Button();
+            button43 = new System.Windows.Forms.Button();
+            button42 = new System.Windows.Forms.Button();
+            button41 = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.button39 = new System.Windows.Forms.Button();
-            this.button40 = new System.Windows.Forms.Button();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
-            this.dataGridView9 = new System.Windows.Forms.DataGridView();
+            progressBar2 = new System.Windows.Forms.ProgressBar();
+            dataGridView9 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage9 = new System.Windows.Forms.TabPage();
@@ -224,7 +228,9 @@ namespace FanartHandler
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button39 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -254,7 +260,7 @@ namespace FanartHandler
             this.groupBox10.SuspendLayout();
             this.tabPage22.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(dataGridView9)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage9.SuspendLayout();
@@ -713,6 +719,7 @@ namespace FanartHandler
             // groupBox12
             // 
             this.groupBox12.Controls.Add(this.checkBox4);
+            this.groupBox12.Enabled = false;
             this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold);
             this.groupBox12.Location = new System.Drawing.Point(17, 206);
             this.groupBox12.Name = "groupBox12";
@@ -720,6 +727,7 @@ namespace FanartHandler
             this.groupBox12.TabIndex = 13;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Enable Async Image Loading";
+            this.groupBox12.Visible = false;
             // 
             // checkBox4
             // 
@@ -1477,15 +1485,46 @@ namespace FanartHandler
             // 
             // groupBox10
             // 
+            this.groupBox10.Controls.Add(this.checkBox9);
             this.groupBox10.Controls.Add(this.checkBox8);
             this.groupBox10.Controls.Add(this.checkBox1);
             this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox10.Location = new System.Drawing.Point(6, 6);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(342, 112);
+            this.groupBox10.Size = new System.Drawing.Size(342, 166);
             this.groupBox10.TabIndex = 15;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Music Thumbnail Options";
+            // 
+            // checkBox9
+            // 
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.Checked = true;
+            this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox9.Location = new System.Drawing.Point(12, 77);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(272, 20);
+            this.checkBox9.TabIndex = 11;
+            this.checkBox9.Text = "Enable Music Album Thumbnail Scraping";
+            this.toolTip1.SetToolTip(this.checkBox9, "Check this opton if you want to enable scraping music album thumbnail scraping in" +
+                    " MP.");
+            this.checkBox9.UseVisualStyleBackColor = true;
+            // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Checked = true;
+            this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox8.Location = new System.Drawing.Point(12, 122);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(230, 20);
+            this.checkBox8.TabIndex = 10;
+            this.checkBox8.Text = "Do not replace existing thumbnails";
+            this.toolTip1.SetToolTip(this.checkBox8, "Check this opton if you do not want existing thumbnails to be replaced");
+            this.checkBox8.UseVisualStyleBackColor = true;
+            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
             // 
             // checkBox1
             // 
@@ -1498,19 +1537,25 @@ namespace FanartHandler
             this.checkBox1.Size = new System.Drawing.Size(263, 20);
             this.checkBox1.TabIndex = 9;
             this.checkBox1.Text = "Enable Music Artist Thumbnail Scraping";
-            this.toolTip1.SetToolTip(this.checkBox1, "Check this opton if you want to enable scraping ");
+            this.toolTip1.SetToolTip(this.checkBox1, "Check this opton if you want to enable scraping music artist thumbnail scraping i" +
+                    "n MP.");
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // tabPage22
             // 
+            this.tabPage22.Controls.Add(this.button39);
+            this.tabPage22.Controls.Add(this.comboBox1);
+            this.tabPage22.Controls.Add(this.label34);
+            this.tabPage22.Controls.Add(button44);
+            this.tabPage22.Controls.Add(button43);
+            this.tabPage22.Controls.Add(button42);
+            this.tabPage22.Controls.Add(button41);
             this.tabPage22.Controls.Add(this.label33);
             this.tabPage22.Controls.Add(this.pictureBox9);
             this.tabPage22.Controls.Add(this.label32);
-            this.tabPage22.Controls.Add(this.button39);
-            this.tabPage22.Controls.Add(this.button40);
-            this.tabPage22.Controls.Add(this.progressBar2);
-            this.tabPage22.Controls.Add(this.dataGridView9);
+            this.tabPage22.Controls.Add(progressBar2);
+            this.tabPage22.Controls.Add(dataGridView9);
             this.tabPage22.Location = new System.Drawing.Point(4, 22);
             this.tabPage22.Name = "tabPage22";
             this.tabPage22.Padding = new System.Windows.Forms.Padding(3);
@@ -1518,6 +1563,56 @@ namespace FanartHandler
             this.tabPage22.TabIndex = 1;
             this.tabPage22.Text = "Manage Thumbnails";
             this.tabPage22.UseVisualStyleBackColor = true;
+            // 
+            // button44
+            // 
+            button44.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            button44.Location = new System.Drawing.Point(432, 452);
+            button44.Name = "button44";
+            button44.Size = new System.Drawing.Size(186, 22);
+            button44.TabIndex = 25;
+            button44.Text = "Scrape for all Artist/Album Thumbnails";
+            this.toolTip1.SetToolTip(button44, "This will start scraping for Artist/Album thumbnails\r\n    for all artists/albums " +
+                    "regardless if thumbnail allready exists. \r\n    This can take quite some time.");
+            button44.UseVisualStyleBackColor = true;
+            button44.Click += new System.EventHandler(this.button44_Click);
+            // 
+            // button43
+            // 
+            button43.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            button43.Location = new System.Drawing.Point(432, 429);
+            button43.Name = "button43";
+            button43.Size = new System.Drawing.Size(186, 22);
+            button43.TabIndex = 24;
+            button43.Text = "Scrape for missing Artist/Album Thumbnails";
+            this.toolTip1.SetToolTip(button43, "This will start scraping for Artist/Album thumbnails\r\n    for all artists/albums " +
+                    "that does not have a thumbnail today.");
+            button43.UseVisualStyleBackColor = true;
+            button43.Click += new System.EventHandler(this.button43_Click);
+            // 
+            // button42
+            // 
+            button42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            button42.Location = new System.Drawing.Point(432, 406);
+            button42.Name = "button42";
+            button42.Size = new System.Drawing.Size(186, 22);
+            button42.TabIndex = 23;
+            button42.Text = "Delete All Thumbnails [X]";
+            this.toolTip1.SetToolTip(button42, resources.GetString("button42.ToolTip"));
+            button42.UseVisualStyleBackColor = true;
+            button42.Click += new System.EventHandler(this.button42_Click);
+            // 
+            // button41
+            // 
+            button41.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            button41.Location = new System.Drawing.Point(432, 384);
+            button41.Name = "button41";
+            button41.Size = new System.Drawing.Size(186, 22);
+            button41.TabIndex = 22;
+            button41.Text = "Delete Selected Thumbnail [Del]";
+            this.toolTip1.SetToolTip(button41, resources.GetString("button41.ToolTip"));
+            button41.UseVisualStyleBackColor = true;
+            button41.Click += new System.EventHandler(this.button41_Click);
             // 
             // label33
             // 
@@ -1545,72 +1640,45 @@ namespace FanartHandler
             // 
             this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(198, 437);
+            this.label32.Location = new System.Drawing.Point(187, 437);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(88, 13);
             this.label32.TabIndex = 19;
             this.label32.Text = "Scraper Progress";
-            this.label32.Visible = false;
-            // 
-            // button39
-            // 
-            this.button39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button39.Location = new System.Drawing.Point(6, 429);
-            this.button39.Name = "button39";
-            this.button39.Size = new System.Drawing.Size(103, 22);
-            this.button39.TabIndex = 16;
-            this.button39.Text = "Reset Scraper [R]";
-            this.toolTip1.SetToolTip(this.button39, resources.GetString("button39.ToolTip"));
-            this.button39.UseVisualStyleBackColor = true;
-            this.button39.Visible = false;
-            this.button39.Click += new System.EventHandler(this.button39_Click);
-            // 
-            // button40
-            // 
-            this.button40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button40.Location = new System.Drawing.Point(6, 452);
-            this.button40.Name = "button40";
-            this.button40.Size = new System.Drawing.Size(103, 22);
-            this.button40.TabIndex = 17;
-            this.button40.Text = "Start Scraper [S]";
-            this.toolTip1.SetToolTip(this.button40, "Initiates a new scrape.");
-            this.button40.UseVisualStyleBackColor = true;
-            this.button40.Visible = false;
-            this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
             // progressBar2
             // 
-            this.progressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBar2.Location = new System.Drawing.Point(120, 454);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(239, 18);
-            this.progressBar2.TabIndex = 18;
-            this.progressBar2.Visible = false;
+            progressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            progressBar2.Location = new System.Drawing.Point(6, 454);
+            progressBar2.Name = "progressBar2";
+            progressBar2.Size = new System.Drawing.Size(418, 18);
+            progressBar2.TabIndex = 18;
             // 
             // dataGridView9
             // 
-            this.dataGridView9.AllowUserToAddRows = false;
-            this.dataGridView9.AllowUserToResizeColumns = false;
-            this.dataGridView9.AllowUserToResizeRows = false;
-            this.dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            dataGridView9.AllowUserToAddRows = false;
+            dataGridView9.AllowUserToResizeColumns = false;
+            dataGridView9.AllowUserToResizeRows = false;
+            dataGridView9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dataGridView9.CausesValidation = false;
-            this.dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView9.Location = new System.Drawing.Point(3, 6);
-            this.dataGridView9.MultiSelect = false;
-            this.dataGridView9.Name = "dataGridView9";
-            this.dataGridView9.ReadOnly = true;
-            this.dataGridView9.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView9.ShowCellErrors = false;
-            this.dataGridView9.ShowCellToolTips = false;
-            this.dataGridView9.ShowEditingIcon = false;
-            this.dataGridView9.ShowRowErrors = false;
-            this.dataGridView9.Size = new System.Drawing.Size(731, 350);
-            this.dataGridView9.TabIndex = 1;
-            this.dataGridView9.VirtualMode = true;
-            this.dataGridView9.SelectionChanged += new System.EventHandler(this.DataGridView9_SelectionChanged);
+            dataGridView9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView9.CausesValidation = false;
+            dataGridView9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView9.Location = new System.Drawing.Point(3, 6);
+            dataGridView9.MultiSelect = false;
+            dataGridView9.Name = "dataGridView9";
+            dataGridView9.ReadOnly = true;
+            dataGridView9.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            dataGridView9.ShowCellErrors = false;
+            dataGridView9.ShowCellToolTips = false;
+            dataGridView9.ShowEditingIcon = false;
+            dataGridView9.ShowRowErrors = false;
+            dataGridView9.Size = new System.Drawing.Size(731, 350);
+            dataGridView9.TabIndex = 1;
+            dataGridView9.VirtualMode = true;
+            dataGridView9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView9_KeyDown);
+            dataGridView9.SelectionChanged += new System.EventHandler(this.DataGridView9_SelectionChanged);
             // 
             // tabPage2
             // 
@@ -2594,20 +2662,43 @@ namespace FanartHandler
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // checkBox8
+            // label34
             // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Checked = true;
-            this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox8.Location = new System.Drawing.Point(12, 72);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(230, 20);
-            this.checkBox8.TabIndex = 10;
-            this.checkBox8.Text = "Do not replace existing thumbnails";
-            this.toolTip1.SetToolTip(this.checkBox8, "Check this opton if you do not want existing thumbnails to be replaced");
-            this.checkBox8.UseVisualStyleBackColor = true;
-            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
+            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 362);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(29, 13);
+            this.label34.TabIndex = 26;
+            this.label34.Text = "Filter";
+            this.label34.Click += new System.EventHandler(this.label34_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(9, 378);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(219, 21);
+            this.comboBox1.TabIndex = 27;
+            this.toolTip1.SetToolTip(this.comboBox1, "Choose how many images the scraper will try to\r\ndownload for every artist. Choosi" +
+                    "ng a higher number\r\nwill consume more harddisk space. ");
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            // 
+            // button39
+            // 
+            this.button39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button39.Location = new System.Drawing.Point(432, 362);
+            this.button39.Name = "button39";
+            this.button39.Size = new System.Drawing.Size(186, 22);
+            this.button39.TabIndex = 28;
+            this.button39.Text = "Lock/Unlock Selected Thumbnail";
+            this.toolTip1.SetToolTip(this.button39, "Press this button to lock/unlock selected thumbnail.\r\nLocking means that the tumb" +
+                    "nail will  not be overwritten\r\nby future scrapes. Unlocked images may be overwri" +
+                    "tten.");
+            this.button39.UseVisualStyleBackColor = true;
+            this.button39.Click += new System.EventHandler(this.button39_Click_1);
             // 
             // FanartHandlerConfig
             // 
@@ -2667,7 +2758,7 @@ namespace FanartHandler
             this.tabPage22.ResumeLayout(false);
             this.tabPage22.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(dataGridView9)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
@@ -2881,13 +2972,19 @@ namespace FanartHandler
         private System.Windows.Forms.TabPage tabPage22;
         private System.Windows.Forms.PictureBox pictureBox9;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.Button button39;
-        private System.Windows.Forms.Button button40;
-        private System.Windows.Forms.ProgressBar progressBar2;
-        private System.Windows.Forms.DataGridView dataGridView9;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.CheckBox checkBox9;
+        private System.Windows.Forms.Label label34;
+        private static System.Windows.Forms.ProgressBar progressBar2;
+        private static System.Windows.Forms.DataGridView dataGridView9;
+        private static System.Windows.Forms.Button button43;
+        private static System.Windows.Forms.Button button42;
+        private static System.Windows.Forms.Button button41;
+        private static System.Windows.Forms.Button button44;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button39;
     }
 }

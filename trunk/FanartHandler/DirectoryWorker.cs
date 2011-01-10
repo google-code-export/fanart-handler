@@ -49,7 +49,7 @@ namespace FanartHandler
                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             }
             Thread.CurrentThread.Name = "DirectoryWorker";
-            Utils.SetDelayStop(true);
+            Utils.AllocateDelayStop("DirectoryWorker-OnDoWork");
             logger.Info("Refreshing local fanart is starting.");
             if (Utils.GetIsStopping() == false)
             {
@@ -170,12 +170,12 @@ namespace FanartHandler
                 }
                 catch (Exception ex)
                 {
-                    Utils.SetDelayStop(false);
+                    Utils.ReleaseDelayStop("DirectoryWorker-OnDoWork");
                     FanartHandlerSetup.SyncPointDirectory = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }                
             }
-            Utils.SetDelayStop(false);
+            Utils.ReleaseDelayStop("DirectoryWorker-OnDoWork");
             logger.Info("Refreshing local fanart is done.");
         }
 
