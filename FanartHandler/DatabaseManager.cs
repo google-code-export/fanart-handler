@@ -257,10 +257,14 @@ namespace FanartHandler
                     string[] artists = artist.Split('|');
                     foreach (string thisArtist in artists)
                     {
+                        if (StopScraper)
+                        {
+                            break;
+                        }
                         if (DoScrapeNew(thisArtist.Trim(), album) > 0)
                         {
                             bFound = true;
-                        }
+                        }                        
                     }
                     logger.Info("NowPlayingScrape is done.");
                     return bFound;
@@ -625,6 +629,8 @@ namespace FanartHandler
             return i;
         }
 
+
+
         /// <summary>
         /// Return the current number of images an artist has.
         /// </summary>
@@ -658,6 +664,88 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Return the current number of images an artist has.
+        /// </summary>
+        /// <param name="artist">The artist name</param>
+        /// <param name="dbArtist">The db artist name</param>
+        /// <returns>Get total number of images an artist has.</returns>
+        public bool HasArtistThumb(string artist)
+        {
+            bool success = false;
+            try
+            {
+                string sqlQuery = "SELECT successful_thumb_scrape FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "';";
+                SQLiteResultSet result;
+                lock (lockObject) result = dbClient.Execute(sqlQuery);
+                for (int x = 0; x < result.Rows.Count; x++)
+                {
+                    string s = result.GetField(x, 0);
+                    if (s != null && s.Equals("2"))
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("HasArtistThumb: " + ex.ToString());
+            }
+            return success;
+        }
+
+        /// <summary>
+        /// Return the current number of images an artist has.
+        /// </summary>
+        /// <param name="artist">The artist name</param>
+        /// <param name="dbArtist">The db artist name</param>
+        /// <returns>Get total number of images an artist has.</returns>
+        public bool HasAlbumThumb(string artist, string album)
+        {
+            bool success = false;
+            try
+            {
+                string sqlQuery = "SELECT successful_scrape FROM Music_Album WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                SQLiteResultSet result;
+                lock (lockObject) result = dbClient.Execute(sqlQuery);
+                for (int x = 0; x < result.Rows.Count; x++)
+                {
+                    string s = result.GetField(x, 0);
+                    if (s != null && s.Equals("2"))
+                    {
+                        success = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("HasAlbumThumb: " + ex.ToString());
+            }
+            return success;
+        }
+
+        public string GetThumbLock(string diskImage)
+        {
+            string sOut = "False";
+            try
+            {
+                string sqlQuery = "SELECT Enabled FROM Music_Fanart WHERE Disk_Image = '" + Utils.PatchSql(diskImage) + "';";
+                SQLiteResultSet result;
+                lock (lockObject) result = dbClient.Execute(sqlQuery);
+                for (int x = 0; x < result.Rows.Count; x++)
+                {
+                    sOut = result.GetField(x, 0);                    
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("GetThumbLock: " + ex.ToString());
+            }
+            return sOut;
+        }
+
+        
+
+        /// <summary>
         /// Return the current number of thumbnail images an artist has.
         /// </summary>
         /// <param name="artist">The artist name</param>
@@ -670,7 +758,7 @@ namespace FanartHandler
                 int y = m_db.GetArtistId(artist);
                 if (y > 0)
                 {
-                    string sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicThumbnails';";
+                    string sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Successful_Thumb_Scrape <> 2;";
                     SQLiteResultSet result;
                     lock (lockObject) result = dbClient.Execute(sqlQuery);
                     int i = 0;
@@ -686,7 +774,7 @@ namespace FanartHandler
                 logger.Error("GetArtistThumbsCount: " + ex.ToString());
             }
 
-            return 999;
+            return 0;
         }
 
 
@@ -698,7 +786,7 @@ namespace FanartHandler
         {
             if (StopScraper == false)
             {
-                Utils.SetDelayStop(true);
+                Utils.AllocateDelayStop("FanartHandlerSetup-StartScraper");
                 try
                 {
                     scraper = new Scraper();
@@ -747,6 +835,33 @@ namespace FanartHandler
             return i;
         }
 
+        public void ResetInitialThumbsScrape()
+        {
+            try
+            {
+                string sqlQuery = "UPDATE Music_Artist SET Successful_Thumb_Scrape = 0;";
+                lock (lockObject) dbClient.Execute(sqlQuery);
+                sqlQuery = "DELETE FROM Music_Album";
+                lock (lockObject) dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("ResetInitialThumbsScrape: " + ex.ToString());
+            }
+        }
+
+        public void ResetInitialAlbumThumbsScrape(string artist)
+        {
+            try
+            {
+                string sqlQuery = "DELETE FROM Music_Album where Artist = '"+artist+"'";
+                lock (lockObject) dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("ResetInitialThumbsScrape: " + ex.ToString());
+            }
+        }
 
         /// <summary>
         /// Performs the scrape (now playing or initial).
@@ -760,7 +875,7 @@ namespace FanartHandler
         {
             if (StopScraper == false)
             {
-                Utils.SetDelayStop(true);
+                Utils.AllocateDelayStop("FanartHandlerSetup-StartScraper");
                 try
                 {
                     string dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
@@ -817,19 +932,17 @@ namespace FanartHandler
                             iTmp = Int32.Parse(result.GetField(0, 0), CultureInfo.CurrentCulture);
                         }
                         int maxScrapes = Convert.ToInt32(Utils.GetScraperMaxImages(), CultureInfo.CurrentCulture) - iTmp;
-                        if (maxScrapes > 0)
+                        totalImages = scraper.GetImages(artist, maxScrapes, this, true);
+                        if (totalImages == 0)
                         {
-                            totalImages = scraper.GetImages(artist, maxScrapes, this, true);
-                            if (totalImages == 0)
-                            {
-                                logger.Debug("No fanart found for artist " + artist + ".");
-                            }
+                            logger.Debug("No fanart found for artist " + artist + ".");
                         }
-                        else
+                        if (totalImages == 8888)
                         {
                             logger.Debug("Artist " + artist + " has already maximum number of images. Will not download anymore images for this artist.");
                         }
-                        if (totalImages != 99)
+
+                        if (totalImages != 9999)
                         {
                             SetSuccessfulScrape(dbArtist);
                         }
@@ -849,6 +962,86 @@ namespace FanartHandler
             return 0;
         }
 
+        public int doScrapeThumbs(string artist, bool onlyMissing)
+        {
+            if (StopScraper == false)
+            {
+                Utils.AllocateDelayStop("FanartHandlerSetup-StartScraper");
+                try
+                {
+                    string dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
+                    scraper = new Scraper();
+                    string sqlQuery;
+                    int totalImages = 0;
+                    int successful_scrape = 0;
+                    string succFanart = String.Empty;
+                    string succThumb = String.Empty;
+                    lock (lockObject) dbClient.Execute("BEGIN TRANSACTION;");
+                    if (artist != null && artist.Trim().Length > 0)
+                    {
+                        InsertNewMusicArtist(dbArtist);
+                        sqlQuery = "SELECT successful_scrape, successful_thumb_scrape FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(dbArtist) + "';";
+                        SQLiteResultSet result;
+                        lock (lockObject) result = dbClient.Execute(sqlQuery);
+                        succFanart = result.GetField(0, 0);
+                        succThumb = result.GetField(0, 1);
+                        if (succFanart != null && succFanart.Length > 0)
+                        {
+                            successful_scrape = Int32.Parse(succFanart, CultureInfo.CurrentCulture);
+                        }
+                        else
+                        {
+                            successful_scrape = 0;
+                        }
+                        if (Utils.ScrapeThumbnails.Equals("True", StringComparison.CurrentCulture))
+                        {
+                            if (succThumb != null && succThumb.Length > 0)
+                            {
+                                //do nothing
+                            }
+                            else
+                            {
+                                succThumb = "0";
+                            }
+                        }
+                        else
+                        {
+                            succThumb = "1";
+                        }
+                        sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart Scraper';";
+                        result = dbClient.Execute(sqlQuery);
+                        if (successful_scrape == 1 && (succThumb.Equals("1", StringComparison.CurrentCulture) || succThumb.Equals("2", StringComparison.CurrentCulture)))
+                        {
+                            SetSuccessfulScrape(dbArtist);
+                            lock (lockObject) dbClient.Execute("COMMIT;");
+                            scraper = null;
+                            return 0;
+                        }
+                        totalImages = scraper.GetThumbsImages(artist, this);
+                        if (totalImages == 0)
+                        {
+                            logger.Debug("No fanart found for artist " + artist + ".");
+                        }
+                        if (totalImages != 9999)
+                        {
+                            SetSuccessfulScrape(dbArtist);
+                        }
+                        result = null;
+                        scraper = null;
+                    }
+                    lock (lockObject) dbClient.Execute("COMMIT;");
+                    return totalImages;
+                }
+                catch (Exception ex)
+                {
+                    lock (lockObject) dbClient.Execute("ROLLBACK;");
+                    logger.Error("doScrapeThumbs: " + ex.ToString());
+                }
+            }
+
+            return 0;
+        }
+
         /// <summary>
         /// Performs the scrape (now playing or initial).
         /// </summary>
@@ -861,7 +1054,7 @@ namespace FanartHandler
         {
             if (StopScraper == false)
             {
-                Utils.SetDelayStop(true);
+                Utils.AllocateDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                 try
                 {
                     string dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
@@ -880,16 +1073,36 @@ namespace FanartHandler
                         lock (lockObject) result = dbClient.Execute(sqlQuery);
                         iTmp = Int32.Parse(result.GetField(0, 0), CultureInfo.CurrentCulture);
 
-                        if (iTmp == 0)
+                        int iMax = Convert.ToInt32(Utils.GetScraperMaxImages(), CultureInfo.CurrentCulture);
+                        iMax = iMax - iTmp;
+                        if (iMax < 0)
                         {
-                            int iMax = Convert.ToInt32(Utils.GetScraperMaxImages(), CultureInfo.CurrentCulture);
-                            totalImages = scraper.GetImages(artist, iMax, this, false);
-                            if (totalImages == 0)
-                            {
-                                logger.Debug("No fanart found for artist " + artist + ".");
-                            }
-                            scraper.GetLastFMAlbumImages(artist, album);
+                            iMax = 0;
                         }
+                        totalImages = scraper.GetImages(artist, iMax, this, false);
+                        if (totalImages == 0)
+                        {
+                            logger.Debug("No fanart found for artist " + artist + ".");
+                        }
+                        if (totalImages == 8888)
+                        {
+                            logger.Debug("Artist " + artist + " has already maximum number of images. Will not download anymore images for this artist.");
+                        }
+                        if (StopScraper == true)
+                        {
+                            return totalImages;
+                        }
+                        string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
+                        string urlAlbum = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(album);
+                        urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
+                        urlAlbum = Utils.GetArtist(urlAlbum, "MusicFanart Scraper");
+                        InsertNewMusicAlbum(urlArtist, urlAlbum);
+                        if (!Utils.GetDbm().HasAlbumThumb(urlArtist, urlAlbum) && Utils.ScrapeThumbnailsAlbum.Equals("True", StringComparison.CurrentCulture))
+                        {
+                            SetSuccessfulAlbumScrape(urlArtist, urlAlbum, "1");
+                            scraper.GetLastFMAlbumImages(artist, album);                                
+                        }
+
                         if (totalImages != 99)
                         {
                             SetSuccessfulScrape(dbArtist);
@@ -969,14 +1182,14 @@ namespace FanartHandler
                     }
                 }
 
-                if (musicDatabaseAlbums != null && musicDatabaseAlbums.Count > 0)
+                if (musicDatabaseAlbums != null && musicDatabaseAlbums.Count > 0 && Utils.ScrapeThumbnailsAlbum.Equals("True", StringComparison.CurrentCulture))
                 {
                     scraper = new Scraper();
                     string succThumb = String.Empty;
                     for (int i = 0; i < musicDatabaseAlbums.Count; i++)
                     {                        
-                        album = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Album);
-                        artist = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Artist);
+                        album = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Album).Trim();
+                        artist = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Artist).Trim();
                         string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
                         string urlAlbum = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(album);
                         urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
@@ -993,8 +1206,8 @@ namespace FanartHandler
                             {
                                 break;
                             }
-                            scraper.GetLastFMAlbumImages(artist, album);
-                            SetSuccessfulAlbumScrape(urlArtist, urlAlbum);
+                            SetSuccessfulAlbumScrape(urlArtist, urlAlbum, "1");
+                            scraper.GetLastFMAlbumImages(artist, album);                            
                         }
 
                         CurrArtistsBeingScraped++;
@@ -1018,6 +1231,83 @@ namespace FanartHandler
                 logger.Error("InitialScrape: " + ex.ToString());
             }
         }
+
+        public void InitialThumbScrape(bool onlyMissing)
+        {
+            try
+            {
+                logger.Info("InitialThumbScrape is starting...");
+                musicDatabaseArtists = new ArrayList();
+                musicDatabaseAlbums = new List<AlbumInfo>();
+                m_db.GetAllArtists(ref musicDatabaseArtists);
+                m_db.GetAllAlbums(ref musicDatabaseAlbums);
+                ArrayList al = Utils.GetMusicVideoArtists("MusicVids.db3");
+                if (al != null && al.Count > 0)
+                {
+                    musicDatabaseArtists.AddRange(al);
+                }
+
+                string artist;
+                string album;
+
+                TotArtistsBeingScraped = musicDatabaseArtists.Count + musicDatabaseAlbums.Count;
+                if (musicDatabaseArtists != null && musicDatabaseArtists.Count > 0)
+                {
+                    for (int i = 0; i < musicDatabaseArtists.Count; i++)
+                    {
+                        artist = musicDatabaseArtists[i].ToString();
+                        if (StopScraper == true || Utils.GetIsStopping())
+                        {
+                            break;
+                        }
+                        this.doScrapeThumbs(artist, onlyMissing);
+                        CurrArtistsBeingScraped++;
+                    }
+                }
+
+                if (musicDatabaseAlbums != null && musicDatabaseAlbums.Count > 0 && Utils.ScrapeThumbnailsAlbum.Equals("True", StringComparison.CurrentCulture))
+                {
+                    scraper = new Scraper();
+                    string succThumb = String.Empty;
+                    for (int i = 0; i < musicDatabaseAlbums.Count; i++)
+                    {
+                        album = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Album).Trim();
+                        artist = Utils.RemoveMPArtistPipe(musicDatabaseAlbums[i].Artist).Trim();
+                        string urlArtist = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(MediaPortal.Music.Database.AudioscrobblerBase.UndoArtistPrefix(artist));
+                        string urlAlbum = MediaPortal.Music.Database.AudioscrobblerBase.getValidURLLastFMString(album);
+                        urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
+                        urlAlbum = Utils.GetArtist(urlAlbum, "MusicFanart Scraper");
+                        InsertNewMusicAlbum(urlArtist, urlAlbum);
+                        string sqlQuery;
+                        sqlQuery = "SELECT Successful_Scrape FROM Music_Album WHERE Artist = '" + Utils.PatchSql(urlArtist) + "' AND Album = '" + Utils.PatchSql(urlAlbum) + "';";
+                        SQLiteResultSet result;
+                        lock (lockObject) result = dbClient.Execute(sqlQuery);
+                        succThumb = result.GetField(0, 0);
+                        if ((succThumb != null && succThumb.Equals("0")) || !onlyMissing)
+                        {
+                            if (StopScraper == true || Utils.GetIsStopping())
+                            {
+                                break;
+                            }
+                            SetSuccessfulAlbumScrape(urlArtist, urlAlbum, "1");
+                            scraper.GetLastFMAlbumImages(artist, album);
+                        }
+
+                        CurrArtistsBeingScraped++;
+                    }
+                    scraper = null;
+                }
+                logger.Info("InitialThumbScrape is done.");
+                musicDatabaseArtists = null;
+                musicDatabaseAlbums = null;
+                //AddScapedFanartToAnyHash();
+                
+            }
+            catch (Exception ex)
+            {
+                logger.Error("InitialThumbScrape: " + ex.ToString());
+            }
+        }        
 
         /// <summary>
         /// Refreshes the music "any" fanart if no images at all was available upon 
@@ -1432,12 +1722,27 @@ namespace FanartHandler
         {
             try
             {
-                string sqlQuery = "UPDATE Music_Artist SET Successful_Scrape = 0;";
+                string sqlQuery = "UPDATE Music_Artist SET Successful_Scrape = 0, Successful_Thumb_Scrape = 0;";
                 lock (lockObject) dbClient.Execute(sqlQuery);
             }
             catch (Exception ex)
             {
                 logger.Error("ResetInitialScrape: " + ex.ToString());
+            }
+        }
+
+        public void ResetSuccessfulScrapeThumb(string artist, int value)
+        {
+            try
+            {
+                string sqlQuery = String.Empty;
+                DateTime saveNow = DateTime.Now;
+                sqlQuery = "UPDATE Music_Artist SET Successful_Thumb_Scrape = " + value + ", Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "';";
+                lock (lockObject) dbClient.Execute(sqlQuery);                
+            }
+            catch (Exception ex)
+            {
+                logger.Error("ResetSuccessfulScrapeThumb: " + ex.ToString());
             }
         }
 
@@ -1492,6 +1797,45 @@ namespace FanartHandler
             catch (Exception ex)
             {
                 logger.Error("EnableFanartMovie: " + ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Sets the enabled column in the database. Controls if fanart is enabled or disabled.
+        /// </summary>
+        /// <param name="diskImage">Filename on disk</param>
+        /// <param name="action">Enable or disable</param>
+        public void SetThumbLock(string artist, string diskImage, bool action)
+        {
+            try
+            {                
+                string sqlQuery = String.Empty;
+                DateTime saveNow = DateTime.Now;
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Fanart WHERE Disk_Image = '" + Utils.PatchSql(diskImage) + "';";
+                if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    sqlQuery = "INSERT INTO Music_Fanart (Id, Artist, Disk_Image, Source_Image, Type, Source, Enabled, Time_Stamp, Restricted) VALUES(null, '" + Utils.PatchSql(artist) + "','" + Utils.PatchSql(diskImage) + "','" + Utils.PatchSql(diskImage) + "','MusicThumb',null, 'True', '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "',0);";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                }
+
+                if (action == true)
+                {
+                    sqlQuery = "UPDATE Music_Fanart SET Enabled = 'True' WHERE Disk_Image = '" + Utils.PatchSql(diskImage) + "';";
+                }
+                else
+                {
+                    sqlQuery = "UPDATE Music_Fanart SET Enabled = 'False' WHERE Disk_Image = '" + Utils.PatchSql(diskImage) + "';";
+                }
+
+                lock (lockObject) dbClient.Execute(sqlQuery);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("SetThumbLock: " + ex.ToString());
             }
         }
 
@@ -1589,7 +1933,7 @@ namespace FanartHandler
 
             return result;
         }
-
+        
         /// <summary>
         /// Returns all data used by datagridview in the "Thumbnails" tab for Music (In MP configuration).
         /// </summary>
@@ -2494,7 +2838,7 @@ namespace FanartHandler
                 }
                 else
                 {
-                    sqlQuery = "INSERT INTO Music_Artist (Id, Artist, Successful_Scrape, Time_Stamp) VALUES(null, '" + Utils.PatchSql(artist) + "',0,'" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "');";
+                    sqlQuery = "INSERT INTO Music_Artist (Id, Artist, Successful_Scrape, Successful_Thumb_Scrape, Time_Stamp) VALUES(null, '" + Utils.PatchSql(artist) + "',0,0,'" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "');";
                 }
 
                 lock (lockObject) dbClient.Execute(sqlQuery);
@@ -2510,12 +2854,12 @@ namespace FanartHandler
         /// </summary>
         /// <param name="artist">The artist name</param>
         public void SetSuccessfulScrapeThumb(string artist, int value)
-        {
+        {         
             try
             {
                 string sqlQuery = String.Empty;
                 DateTime saveNow = DateTime.Now;
-                sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "';";
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Successful_Thumb_Scrape <> 2;";
                 if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
                 {
                     sqlQuery = "UPDATE Music_Artist SET Successful_Thumb_Scrape = " + value + ", Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "';";
@@ -2537,16 +2881,16 @@ namespace FanartHandler
         /// Flags an artist as being done with the initial scrape.
         /// </summary>
         /// <param name="artist">The artist name</param>
-        public void SetSuccessfulAlbumScrape(string artist, string album)
+        public void SetSuccessfulAlbumScrape(string artist, string album, string value)
         {
             try
             {
                 string sqlQuery = String.Empty;
                 DateTime saveNow = DateTime.Now;
-                sqlQuery = "SELECT COUNT(Artist) FROM Music_Album WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Album WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "' AND Successful_Scrape <> 2;";
                 if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
                 {
-                    sqlQuery = "UPDATE Music_Album SET Successful_Scrape = 1, Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
+                    sqlQuery = "UPDATE Music_Album SET Successful_Scrape = " + value + ", Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Album = '" + Utils.PatchSql(album) + "';";
                     lock (lockObject) dbClient.Execute(sqlQuery);
                 }
                 else
@@ -2570,7 +2914,7 @@ namespace FanartHandler
             {
                 string sqlQuery = String.Empty;
                 DateTime saveNow = DateTime.Now;
-                sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "';";
+                sqlQuery = "SELECT COUNT(Artist) FROM Music_Artist WHERE Artist = '" + Utils.PatchSql(artist) + "' AND Successful_Scrape <> 2;";
                 if (DatabaseUtility.GetAsInt(dbClient.Execute(sqlQuery), 0, 0) > 0)
                 {
                     sqlQuery = "UPDATE Music_Artist SET Successful_Scrape = 1, Time_Stamp = '" + saveNow.ToString(@"yyyyMMdd", CultureInfo.CurrentCulture) + "' WHERE Artist = '" + Utils.PatchSql(artist) + "';";

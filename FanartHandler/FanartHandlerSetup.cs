@@ -95,7 +95,7 @@ namespace FanartHandler
         private static string useMusicFanart = null;  // Holds info read from fanarthandler.xml settings file        
         private static string useVideoFanart = null;  // Holds info read from fanarthandler.xml settings file        
         private static string useScoreCenterFanart = null;  // Holds info read from fanarthandler.xml settings file        
-        private static string useAsyncImageLoading = null;
+        //private static string useAsyncImageLoading = null;
         private static string doNotReplaceExistingThumbs = null;
         private string imageInterval = null;  // Holds info read from fanarthandler.xml settings file
         private static string minResolution = null;  // Holds info read from fanarthandler.xml settings file
@@ -121,6 +121,7 @@ namespace FanartHandler
         private static bool useBasichomeFade = true;
         private static string m_CurrentTitleTag = null;
         private static string scrapeThumbnails = null;
+        private static string scrapeThumbnailsAlbum = null;
         private static string latestPictures = null;
         private static string latestMusic = null;
         private static string latestMovingPictures = null;
@@ -163,6 +164,12 @@ namespace FanartHandler
         {
             get { return FanartHandlerSetup.scrapeThumbnails; }
             set { FanartHandlerSetup.scrapeThumbnails = value; }
+        }
+
+        public static string ScrapeThumbnailsAlbum
+        {
+            get { return FanartHandlerSetup.scrapeThumbnailsAlbum; }
+            set { FanartHandlerSetup.scrapeThumbnailsAlbum = value; }
         }
 
         public static ScraperNowWorker MyScraperNowWorker
@@ -523,6 +530,40 @@ namespace FanartHandler
                 logger.Error("SetupFilenames: " + ex.ToString());                
             }
         }
+
+        /// <summary>
+        /// Add files in directory to hashtable
+        /// </summary>
+        public static ArrayList GetThumbnails(string s, string filter)
+        {
+            ArrayList al = new ArrayList();
+            try
+            {
+                if (Directory.Exists(s))
+                {
+                    DirectoryInfo dir1 = new DirectoryInfo(s);
+                    FileInfo[] fileList = dir1.GetFiles(filter, SearchOption.AllDirectories);
+                    foreach (FileInfo dir in fileList)
+                    {
+                        if (Utils.GetIsStopping())
+                        {
+                            break;
+                        }
+                        al.Add(dir.FullName);
+                    }
+                    fileList = null;
+                    dir1 = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("GetThumbnails: " + ex.ToString());
+            }
+            return al;
+        }
+
+
+
 
         /// <summary>
         /// Add files in directory to hashtable
@@ -964,7 +1005,7 @@ namespace FanartHandler
                     HandleOldImages(ref FP.ListPlayMusic);
                 }
 
-/*                logger.Debug("*************************************************");
+                /*logger.Debug("*************************************************");
                 logger.Debug("listAnyGames: " + FR.ListAnyGamesUser.Count);
                 logger.Debug("listAnyMoviesUser: " + FR.ListAnyMoviesUser.Count);
                 logger.Debug("listAnyMoviesScraper: " + FR.ListAnyMoviesScraper.Count);
@@ -980,7 +1021,7 @@ namespace FanartHandler
                 logger.Debug("listSelectedMusic: " + FS.ListSelectedMusic.Count); 
                 logger.Debug("listSelectedScorecenter: " + FS.ListSelectedScorecenter.Count);
                 logger.Debug("listPlayMusic: " + FP.ListPlayMusic.Count);               
-*/                
+                */
             }
             catch (Exception ex)
             {
@@ -1174,6 +1215,7 @@ namespace FanartHandler
             SetProperty("#fanarthandler.music.scraper.backdrop1.any", string.Empty);
             SetProperty("#fanarthandler.music.scraper.backdrop2.any", string.Empty);
             SetProperty("#fanarthandler.music.overlay.play", string.Empty);
+            SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
             SetProperty("#fanarthandler.music.backdrop1.play", string.Empty);
             SetProperty("#fanarthandler.music.backdrop2.play", string.Empty);
             SetProperty("#fanarthandler.music.backdrop1.selected", string.Empty);
@@ -1304,6 +1346,7 @@ namespace FanartHandler
             FS.Properties = new Hashtable();
             FP.PropertiesPlay = new Hashtable();
             FR.PropertiesRandom = new Hashtable();
+            FR.PropertiesRandomPerm = new Hashtable();
             DefaultBackdropImages = new Hashtable();
             FR.ListAnyGamesUser = new ArrayList();
             FR.ListAnyMoviesUser = new ArrayList();
@@ -1420,6 +1463,7 @@ namespace FanartHandler
         {
             try
             {
+                Utils.DelayStop = new Hashtable();
                 Utils.SetIsStopping(false); 
                 InitLogger();             
                 logger.Info("Fanart Handler is starting.");
@@ -1453,12 +1497,13 @@ namespace FanartHandler
                     proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", String.Empty);
                     useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);
                     scrapeThumbnails = xmlreader.GetValueAsString("FanartHandler", "scrapeThumbnails", String.Empty);
+                    scrapeThumbnailsAlbum = xmlreader.GetValueAsString("FanartHandler", "scrapeThumbnailsAlbum", String.Empty);
                     latestPictures = xmlreader.GetValueAsString("FanartHandler", "latestPictures", String.Empty);
                     latestMusic = xmlreader.GetValueAsString("FanartHandler", "latestMusic", String.Empty);
                     latestMovingPictures = xmlreader.GetValueAsString("FanartHandler", "latestMovingPictures", String.Empty);
                     latestTVSeries = xmlreader.GetValueAsString("FanartHandler", "latestTVSeries", String.Empty);
                     latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);
-                    useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
+//                    useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
                     doNotReplaceExistingThumbs = xmlreader.GetValueAsString("FanartHandler", "doNotReplaceExistingThumbs", String.Empty);    
                 }
 
@@ -1471,14 +1516,14 @@ namespace FanartHandler
                     latestPictures = "True";
                 }
 
-                if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
+               /* if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
                 {
                     //donothing
                 }
                 else
                 {
                     useAsyncImageLoading = "True";
-                }
+                }*/
 
                 if (doNotReplaceExistingThumbs != null && doNotReplaceExistingThumbs.Length > 0)
                 {
@@ -1532,6 +1577,15 @@ namespace FanartHandler
                 else
                 {
                     scrapeThumbnails = "True";
+                }
+
+                if (scrapeThumbnailsAlbum != null && scrapeThumbnailsAlbum.Length > 0)
+                {
+                    //donothing
+                }
+                else
+                {
+                    scrapeThumbnailsAlbum = "True";
                 }
 
                 string tmpFile = Config.GetFolder(Config.Dir.Config) + @"\XFactor.xml";
@@ -1810,6 +1864,7 @@ namespace FanartHandler
                 Utils.SetProxyDomain(proxyDomain);
                 Utils.SetScraperMaxImages(ScraperMaxImages);
                 Utils.ScrapeThumbnails = scrapeThumbnails;
+                Utils.ScrapeThumbnailsAlbum = scrapeThumbnailsAlbum;
                 Utils.DoNotReplaceExistingThumbs = doNotReplaceExistingThumbs;
                 Utils.InitiateDbm();
                 MDB = MusicDatabase.Instance;
@@ -2100,6 +2155,7 @@ namespace FanartHandler
                                 FP.FanartAvailablePlay = false;
                                 FP.FanartIsNotAvailablePlay(activeWindowId);
                                 FP.PrevPlayMusic = -1;
+                                SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
                                 SetProperty("#fanarthandler.music.overlay.play", string.Empty);
                                 SetProperty("#fanarthandler.music.backdrop1.play", string.Empty);
                                 SetProperty("#fanarthandler.music.backdrop2.play", string.Empty);
@@ -2115,9 +2171,9 @@ namespace FanartHandler
                     }
                     if (FR.WindowsUsingFanartRandom.ContainsKey(windowId))
                     {
-                        if (useAsyncImageLoading != null && useAsyncImageLoading.Equals("True"))
+                        /*if (useAsyncImageLoading != null && useAsyncImageLoading.Equals("True"))
                         {
-                            /*ASYNC ON RANDOM IMAGES*********************/
+                            //ASYNC ON RANDOM IMAGES*********************
                             FR.WindowOpen = true;
                             if (FR.DoShowImageOneRandom)
                             {
@@ -2134,11 +2190,11 @@ namespace FanartHandler
                          }
                          else
                          {                        
-                            /*SYNC ON RANDOM IMAGES*********************/
+                            //SYNC ON RANDOM IMAGES*********************
                             FR.WindowOpen = true;
                             IsRandom = true;
                             FR.ResetCurrCountRandom();
-                            FR.RefreshRandomImageProperties(null);
+                            FR.RefreshRandomImagePropertiesPerm();
                             FR.UpdatePropertiesRandom();
 
                             if (FR.DoShowImageOneRandom)
@@ -2156,6 +2212,28 @@ namespace FanartHandler
                             {
                                 refreshTimer.Start();
                             }
+                        }
+                    */
+                        FR.WindowOpen = true;
+                        IsRandom = true;
+                        FR.ResetCurrCountRandom();
+                        FR.RefreshRandomImagePropertiesPerm();
+                        FR.UpdatePropertiesRandom();
+
+                        if (FR.DoShowImageOneRandom)
+                        {
+                            FR.ShowImageOneRandom(activeWindowId);
+                            FR.DoShowImageOneRandom = true;
+                        }
+                        else
+                        {
+                            FR.ShowImageTwoRandom(activeWindowId);
+                            FR.DoShowImageOneRandom = false;
+                        }
+
+                        if (refreshTimer != null && !refreshTimer.Enabled)
+                        {
+                            refreshTimer.Start();
                         }
                     }
                     else
@@ -2247,6 +2325,7 @@ namespace FanartHandler
                     FP.FanartAvailablePlay = false;
                     FP.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                     FP.PrevPlayMusic = -1;
+                    SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
                     SetProperty("#fanarthandler.music.overlay.play", string.Empty);
                     SetProperty("#fanarthandler.music.backdrop1.play", string.Empty);
                     SetProperty("#fanarthandler.music.backdrop2.play", string.Empty);
@@ -2452,7 +2531,7 @@ namespace FanartHandler
                 {
                     Utils.GetDbm().TotArtistsBeingScraped = 0;
                     Utils.GetDbm().CurrArtistsBeingScraped = 0;
-                    Utils.SetDelayStop(true);
+                    Utils.AllocateDelayStop("FanartHandlerSetup-StartScraper");
                     MyScraperWorker = new ScraperWorker();
                     MyScraperWorker.ProgressChanged += MyScraperWorker.OnProgressChanged;
                     MyScraperWorker.RunWorkerCompleted += MyScraperWorker.OnRunWorkerCompleted;
@@ -2461,7 +2540,7 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                Utils.SetDelayStop(false);
+                Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraper");
                 logger.Error("startScraper: " + ex.ToString());
             }
         }
@@ -2474,7 +2553,7 @@ namespace FanartHandler
                 {
                     Utils.GetDbm().TotArtistsBeingScraped = 0;
                     Utils.GetDbm().CurrArtistsBeingScraped = 0;
-                    Utils.SetDelayStop(true);
+                    Utils.AllocateDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                     MyScraperNowWorker = new ScraperNowWorker();
                     MyScraperNowWorker.ProgressChanged += MyScraperNowWorker.OnProgressChanged;
                     MyScraperNowWorker.RunWorkerCompleted += MyScraperNowWorker.OnRunWorkerCompleted;
@@ -2486,7 +2565,7 @@ namespace FanartHandler
             }
             catch (Exception ex)
             {
-                Utils.SetDelayStop(false);
+                Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                 logger.Error("startScraperNowPlaying: " + ex.ToString());
             }
         }
@@ -2497,7 +2576,7 @@ namespace FanartHandler
             {
                 if (MyScraperNowWorker != null)
                 {
-                    Utils.SetDelayStop(false);
+                    Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                     MyScraperNowWorker.CancelAsync();
                     MyScraperNowWorker.Dispose();
                 }
@@ -2517,7 +2596,10 @@ namespace FanartHandler
         {
             try
             {
-                GUITextureManager.ReleaseTexture(filename);
+                if (!FR.IsPropertyRandomPerm(filename))
+                {
+                    GUITextureManager.ReleaseTexture(filename);
+                }
             }
             catch (Exception ex)
             {
@@ -2584,7 +2666,7 @@ namespace FanartHandler
                 GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GuiWindowManagerOnActivateWindow);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
                 int ix = 0;
-                while (Utils.GetDelayStop() && ix < 12)
+                while (Utils.GetDelayStop() && ix < 20)
                 {
                     System.Threading.Thread.Sleep(500);
                     ix++;
@@ -2708,6 +2790,7 @@ namespace FanartHandler
                 FP = null;
                 FS = null;
                 FR = null;
+                Utils.DelayStop = new Hashtable();
             }
             catch (Exception ex)
             {

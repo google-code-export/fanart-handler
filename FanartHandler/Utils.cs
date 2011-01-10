@@ -24,7 +24,8 @@ namespace FanartHandler
     using System.Globalization;
     using System.IO;
     using System.Linq;
-
+    using System.Runtime.InteropServices;
+    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
 
@@ -49,7 +50,9 @@ namespace FanartHandler
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
         private static string scrapeThumbnails = null;  //scrape for thums or not        
-        private static bool delayStop/* = false*/;
+        private static string scrapeThumbnailsAlbum = null;  //scrape for thums or not        
+        //private static bool delayStop/* = false*/;
+        private static Hashtable delayStop = null;
         private static int idleTimeInMillis = 150;//250;
         private static string doNotReplaceExistingThumbs = null;
         #endregion
@@ -62,6 +65,12 @@ namespace FanartHandler
         {
             get { return Utils.doNotReplaceExistingThumbs; }
             set { Utils.doNotReplaceExistingThumbs = value; }
+        }
+
+        public static Hashtable DelayStop
+        {
+            get { return Utils.delayStop; }
+            set { Utils.delayStop = value; }
         }
 
         public static int IdleTimeInMillis
@@ -81,23 +90,51 @@ namespace FanartHandler
         {
             dbm = new DatabaseManager();
             dbm.InitDB();
-        }        
+        }
 
-        /// <summary>
-        /// Return value.
-        /// </summary>
         public static bool GetDelayStop()
         {
-            return delayStop;
+            if (DelayStop.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                int i = 0;
+                foreach (DictionaryEntry de in DelayStop)
+                {
+                    logger.Debug("DelayStop (" + i + "):" + de.Key.ToString());
+                    i++;
+                }
+                return true;
+            }
         }
 
-        /// <summary>
-        /// Set value.
-        /// </summary>
-        public static void SetDelayStop(bool b)
+        public static void LogDevMsg(string msg)
         {
-            delayStop = b;
+            logger.Debug("DEV MSG: " + msg);
         }
+
+        public static void AllocateDelayStop(string key)
+        {
+            if (DelayStop.Contains(key))
+            {
+                DelayStop[key] = "1";
+            }
+            else
+            {
+                DelayStop.Add(key, "1");
+            }
+        }
+
+        public static void ReleaseDelayStop(string key)
+        {            
+            if (DelayStop.Contains(key))
+            {
+                DelayStop.Remove(key);
+            }            
+        }
+
 
         /// <summary>
         /// Return value.
@@ -138,6 +175,15 @@ namespace FanartHandler
         {
             get { return Utils.scrapeThumbnails; }
             set { Utils.scrapeThumbnails = value; }
+        }
+
+        /// <summary>
+        /// Scrape for thumbnail or not
+        /// </summary>
+        public static string ScrapeThumbnailsAlbum
+        {
+            get { return Utils.scrapeThumbnailsAlbum; }
+            set { Utils.scrapeThumbnailsAlbum = value; }
         }
 
         /// <summary>
@@ -924,6 +970,38 @@ namespace FanartHandler
             }
         }
 
+        [DllImport("gdiplus.dll", CharSet = CharSet.Unicode)]
+        private static extern int GdipLoadImageFromFile(string filename, out IntPtr image);
+
+        // Loads an Image from a File by invoking GDI Plus instead of using build-in 
+        // .NET methods, or falls back to Image.FromFile. GDI Plus should be faster.
+        //Method from MovingPictures plugin.
+        public static Image LoadImageFastFromFile(string filename)
+        {
+            IntPtr imagePtr = IntPtr.Zero;
+            Image image = null;
+
+            try
+            {
+                if (GdipLoadImageFromFile(filename, out imagePtr) != 0)
+                {
+                    logger.Warn("gdiplus.dll method failed. Will degrade performance.");
+                    image = Image.FromFile(filename);
+                }
+
+                else
+                    image = (Image)typeof(Bitmap).InvokeMember("FromGDIplus", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, new object[] { imagePtr });
+            }
+            catch (Exception)
+            {
+                logger.Error("Failed to load image from " + filename);
+                image = null;
+            }
+
+            return image;
+
+        }
+
         /// <summary>
         /// Decide if image is corropt or not
         /// </summary>
@@ -937,7 +1015,7 @@ namespace FanartHandler
             Image checkImage = null;
             try
             {
-                checkImage = Image.FromFile(filename);
+                checkImage = Utils.LoadImageFastFromFile(filename);
                 if (checkImage != null && checkImage.Width > 0)
                 {
                     checkImage.Dispose();

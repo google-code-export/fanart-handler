@@ -55,7 +55,7 @@ namespace FanartHandler
                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             }
             Thread.CurrentThread.Name = "RefreshWorker";
-            Utils.SetDelayStop(true);
+            Utils.AllocateDelayStop("RefreshWorker-OnDoWork");
             if (Utils.GetIsStopping() == false)
             {
                 bool isIdle = Utils.IsIdle();
@@ -112,6 +112,7 @@ namespace FanartHandler
                             FanartHandlerSetup.FP.FanartAvailablePlay = false;
                             FanartHandlerSetup.FP.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                             FanartHandlerSetup.FP.PrevPlayMusic = -1;
+                            FanartHandlerSetup.SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.overlay.play", string.Empty);
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop1.play", string.Empty);
                             FanartHandlerSetup.SetProperty("#fanarthandler.music.backdrop2.play", string.Empty);
@@ -353,7 +354,7 @@ namespace FanartHandler
                         FanartHandlerSetup.FR.UpdateVisibilityCountRandom = FanartHandlerSetup.FR.UpdateVisibilityCountRandom + 1;
                     }
                     FanartHandlerSetup.UpdateDummyControls();
-                    Utils.SetDelayStop(false);
+                    Utils.ReleaseDelayStop("RefreshWorker-OnDoWork");
                     Report(e);
                     e.Result = 0;
                     // Release control of syncPoint.
@@ -361,7 +362,7 @@ namespace FanartHandler
                 }
                 catch (Exception ex)
                 {
-                    Utils.SetDelayStop(false);
+                    Utils.ReleaseDelayStop("RefreshWorker-OnDoWork");
                     FanartHandlerSetup.SyncPointRefresh = 0;
                     logger.Error("OnDoWork: " + ex.ToString());
                 }

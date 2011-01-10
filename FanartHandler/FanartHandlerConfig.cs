@@ -36,6 +36,8 @@ namespace FanartHandler
 {    
     public partial class FanartHandlerConfig : Form
     {
+        public static FileSystemWatcher watcher1;
+        public static FileSystemWatcher watcher2;
         private DataTable myDataTable = null;
         private DataTable myDataTable2 = null;
         private DataTable myDataTable3 = null;
@@ -44,11 +46,12 @@ namespace FanartHandler
         private DataTable myDataTable6 = null;
         private DataTable myDataTable7 = null;
         private DataTable myDataTable8 = null;
-        private DataTable myDataTable9 = null;
+        private static DataTable myDataTable9 = null;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string LogFileName = "fanarthandler_config.log";
         private const string OldLogFileName = "fanarthandler_config.old.log";
-        private ScraperWorker myScraperWorker = null;        
+        private ScraperWorker myScraperWorker = null;
+        private static ScraperThumbWorker myScraperThumbWorker = null;  
         private System.Timers.Timer scraperTimer = null;
         private string useArtist = null;
         private string useAlbum = null;
@@ -68,26 +71,30 @@ namespace FanartHandler
         private string scraperMPDatabase = null;
         private string scraperInterval = null;
         private string useAspectRatio = null;
-        private string useAsyncImageLoading = null;
+        //private string useAsyncImageLoading = null;
         private string useDefaultBackdrop = null;
         private string scrapeThumbnails = null;
+        private string scrapeThumbnailsAlbum = null;        
         private string latestPictures = null;
         private string latestMusic = null;
         private string latestMovingPictures = null;
         private string latestTVSeries = null;
         private string latestTVRecordings = null;
         private string doNotReplaceExistingThumbs = null;
-        private bool isScraping/* = false*/;
+        private DateTime useFilter1;
+        private DateTime useFilter2;
+        private static bool isScraping/* = false*/;
         public delegate void ScrollDelegate();
         private bool isStopping/* = false*/;
         private int lastID/* = 0*/;
-        private int lastIDThumb/* = 0*/;
+//        private int lastIDThumb/* = 0*/;
         private int lastIDMovie/* = 0*/;
         private int lastIDScoreCenter/* = 0*/;
         private int lastIDGame/* = 0*/;
         private int lastIDPicture/* = 0*/;
         private int lastIDPlugin/* = 0*/;
-        private int lastIDTV/* = 0*/; 
+        private int lastIDTV/* = 0*/;
+        public static string oMissing = null;
         private string proxyHostname = null;
         private string proxyPort = null;
         private string proxyUsername = null;
@@ -95,7 +102,8 @@ namespace FanartHandler
         private string proxyDomain = null;
         private string useProxy = null;
         private System.Text.StringBuilder sb = null;
-        private ScrollDelegate s_del;      
+        private ScrollDelegate s_del;
+        public static int SyncPointFileWatcher/* = 0*/;
 
         public FanartHandlerConfig()
         {
@@ -195,6 +203,7 @@ namespace FanartHandler
                     xmlwriter.SetValue("FanartHandler", "proxyDomain", textBoxProxyDomain.Text);
                     xmlwriter.SetValue("FanartHandler", "useProxy", checkBoxProxy.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "scrapeThumbnails", checkBox1.Checked ? true : false);
+                    xmlwriter.SetValue("FanartHandler", "scrapeThumbnailsAlbum", checkBox9.Checked ? true : false);                    
                     xmlwriter.SetValue("FanartHandler", "latestPictures", checkBox5.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "latestMusic", checkBox6.Checked ? true : false);
                     xmlwriter.SetValue("FanartHandler", "latestMovingPictures", checkBox7.Checked ? true : false);
@@ -239,6 +248,8 @@ namespace FanartHandler
         private void FanartHandlerConfig_Load(object sender, EventArgs e)
         {
             label11.Text = "Version "+Utils.GetAllVersionNumber();
+            SyncPointFileWatcher = 0;
+            Utils.DelayStop = new Hashtable();
             comboBoxInterval.Enabled = true;
             comboBoxInterval.Items.Clear();
             comboBoxInterval.Items.Add("20");
@@ -247,6 +258,12 @@ namespace FanartHandler
             comboBoxInterval.Items.Add("60");
             comboBoxInterval.Items.Add("90");
             comboBoxInterval.Items.Add("120");
+            comboBox1.Enabled = true;
+            comboBox1.Items.Clear();
+            comboBox1.Items.Add("Artists");
+            comboBox1.Items.Add("Albums");
+            comboBox1.Items.Add("Artists and Albums");
+            comboBox1.SelectedItem = "Artists and Albums";
             comboBoxMaxImages.Enabled = true;
             comboBoxMaxImages.Items.Clear();
             comboBoxMaxImages.Items.Add("1");
@@ -308,12 +325,13 @@ namespace FanartHandler
                 proxyDomain = xmlreader.GetValueAsString("FanartHandler", "proxyDomain", String.Empty);
                 useProxy = xmlreader.GetValueAsString("FanartHandler", "useProxy", String.Empty);   
                 scrapeThumbnails = xmlreader.GetValueAsString("FanartHandler", "scrapeThumbnails", String.Empty);
+                scrapeThumbnailsAlbum = xmlreader.GetValueAsString("FanartHandler", "scrapeThumbnailsAlbum", String.Empty);
                 latestPictures = xmlreader.GetValueAsString("FanartHandler", "latestPictures", String.Empty);
                 latestMusic = xmlreader.GetValueAsString("FanartHandler", "latestMusic", String.Empty);
                 latestMovingPictures = xmlreader.GetValueAsString("FanartHandler", "latestMovingPictures", String.Empty);
                 latestTVSeries = xmlreader.GetValueAsString("FanartHandler", "latestTVSeries", String.Empty);
                 latestTVRecordings = xmlreader.GetValueAsString("FanartHandler", "latestTVRecordings", String.Empty);
-                useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
+                //useAsyncImageLoading = xmlreader.GetValueAsString("FanartHandler", "useAsyncImageLoading", String.Empty);
                 doNotReplaceExistingThumbs = xmlreader.GetValueAsString("FanartHandler", "doNotReplaceExistingThumbs", String.Empty);   
             }
 
@@ -395,6 +413,19 @@ namespace FanartHandler
                     checkBox1.Checked = true;
                 }
 
+                if (scrapeThumbnailsAlbum != null && scrapeThumbnailsAlbum.Length > 0)
+                {
+                    if (scrapeThumbnailsAlbum.Equals("True", StringComparison.CurrentCulture))
+                        checkBox9.Checked = true;
+                    else
+                        checkBox9.Checked = false;
+                }
+                else
+                {
+                    scrapeThumbnailsAlbum = "True";
+                    checkBox9.Checked = true;
+                }
+
                 if (useFanart != null && useFanart.Length > 0)
                 {
                     if (useFanart.Equals("True", StringComparison.CurrentCulture))
@@ -451,7 +482,7 @@ namespace FanartHandler
                     checkBoxThumbsAlbum.Checked = false;
                 }
 
-                if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
+               /* if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
                 {
                     if (useAsyncImageLoading.Equals("True", StringComparison.CurrentCulture))
                         checkBox4.Checked = true;
@@ -462,7 +493,7 @@ namespace FanartHandler
                 {
                     useAsyncImageLoading = "False";
                     checkBox4.Checked = false;
-                }
+                }*/
 
                 if (doNotReplaceExistingThumbs != null && doNotReplaceExistingThumbs.Length > 0)
                 {
@@ -729,6 +760,7 @@ namespace FanartHandler
                     Utils.SetProxyDomain(proxyDomain);
                     Utils.SetScraperMaxImages(scraperMaxImages);
                     Utils.ScrapeThumbnails = scrapeThumbnails;
+                    Utils.ScrapeThumbnailsAlbum = scrapeThumbnailsAlbum;
                     Utils.DoNotReplaceExistingThumbs = doNotReplaceExistingThumbs;
                     Utils.InitiateDbm();
                     ImportLocalFanartAtStartup();
@@ -747,6 +779,7 @@ namespace FanartHandler
                     sb = new System.Text.StringBuilder(textBoxDefaultBackdrop.Text + "                                          ");
                     s_del = new ScrollDelegate(ScrollText);
                     s_del.BeginInvoke(null, null);
+                    dataGridView1.Sort(dataGridView1.Columns["Artist"], ListSortDirection.Ascending);
                     logger.Info("Fanart Handler configuration is started.");
                 }
                 catch (Exception ex)
@@ -759,29 +792,42 @@ namespace FanartHandler
                     myDataTable.Columns.Add("Image Path");
                     dataGridView1.DataSource = myDataTable;
                     dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridView1.Sort(dataGridView1.Columns["Artist"], ListSortDirection.Ascending);
+
                 }
                 try
                 {
                     myDataTable9 = new DataTable();
                     myDataTable9.Columns.Add("Artist");
+                    myDataTable9.Columns.Add("Type");
+                    myDataTable9.Columns.Add("Locked");
                     myDataTable9.Columns.Add("Image");
                     myDataTable9.Columns.Add("Image Path");
                     dataGridView9.DataSource = myDataTable9;
-                    UpdateThumbnailTableOnStartup();
+                    string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
+                    UpdateThumbnailTableOnStartup(path, "Album");
+                    path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                    UpdateThumbnailTableOnStartup(path, "Artist");
                     dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                     dataGridView9.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     dataGridView9.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                    dataGridView9.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridView9.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    dataGridView9.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    dataGridView9.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
                 }
                 catch (Exception ex)
                 {
                     logger.Error("FanartHandlerConfig_Load: " + ex.ToString());
                     myDataTable9 = new DataTable();
                     myDataTable9.Columns.Add("Artist");
+                    myDataTable9.Columns.Add("Type");
+                    myDataTable9.Columns.Add("Locked");
                     myDataTable9.Columns.Add("Image");
                     myDataTable9.Columns.Add("Image Path");
                     dataGridView9.DataSource = myDataTable9;
                     dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
                 }
                 try
                 {
@@ -963,7 +1009,49 @@ namespace FanartHandler
 
         }
 
-        
+        private void FilterThumbGrid()
+        {
+            try
+            {
+                myDataTable9 = new DataTable();
+                myDataTable9.Columns.Add("Artist");
+                myDataTable9.Columns.Add("Type");
+                myDataTable9.Columns.Add("Locked");
+                myDataTable9.Columns.Add("Image");
+                myDataTable9.Columns.Add("Image Path");
+                dataGridView9.DataSource = myDataTable9;
+                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
+                if (comboBox1.SelectedItem.ToString().Equals("Artists and Albums") || comboBox1.SelectedItem.ToString().Equals("Albums"))
+                {
+                    UpdateThumbnailTableOnStartup(path, "Album");
+                }
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                if (comboBox1.SelectedItem.ToString().Equals("Artists and Albums") || comboBox1.SelectedItem.ToString().Equals("Artists"))
+                {
+                    UpdateThumbnailTableOnStartup(path, "Artist");
+                }
+                dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView9.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView9.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView9.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView9.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView9.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("FanartHandlerConfig_Load: " + ex.ToString());
+                myDataTable9 = new DataTable();
+                myDataTable9.Columns.Add("Artist");
+                myDataTable9.Columns.Add("Type");
+                myDataTable9.Columns.Add("Locked");
+                myDataTable9.Columns.Add("Image");
+                myDataTable9.Columns.Add("Image Path");
+                dataGridView9.DataSource = myDataTable9;
+                dataGridView9.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
+            }
+        }
 
         /// <summary>
         /// Setup logger. This funtion made by the team behind Moving Pictures 
@@ -1111,19 +1199,27 @@ namespace FanartHandler
                 if (dataGridView1 != null && dataGridView1.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView1[3, dgv.CurrentRow.Index].Value.ToString());
-                    label30.Text = "Resolution: " + img.Width + "x" + img.Height;
-                    Size imgSize = new Size(182, 110);
-                    Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
-                    Graphics gfx = Graphics.FromImage(finalImg);
-                    gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    gfx.Dispose();
-                    pictureBox1.Image = null;
-                    pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-                    pictureBox1.Image = finalImg;                    
-                    img.Dispose();
-                    img = null;
-                    gfx = null;                    
+                    string sFile = dataGridView1[3, dgv.CurrentRow.Index].Value.ToString();
+                    if (File.Exists(sFile))
+                    {
+                        Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView1[3, dgv.CurrentRow.Index].Value.ToString());
+                        label30.Text = "Resolution: " + img.Width + "x" + img.Height;
+                        Size imgSize = new Size(182, 110);
+                        Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
+                        Graphics gfx = Graphics.FromImage(finalImg);
+                        gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        gfx.Dispose();
+                        pictureBox1.Image = null;
+                        pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                        pictureBox1.Image = finalImg;
+                        img.Dispose();
+                        img = null;
+                        gfx = null;
+                    }
+                    else
+                    {
+                        pictureBox1.Image = null;
+                    }
                 }
                 else
                 {
@@ -1132,6 +1228,7 @@ namespace FanartHandler
             }
             catch //(Exception ex)
             {
+                pictureBox1.Image = null;
                     //MessageBox.Show(ex.ToString());
             }
         }
@@ -1143,19 +1240,27 @@ namespace FanartHandler
                 if (dataGridView9 != null && dataGridView9.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView9[2, dgv.CurrentRow.Index].Value.ToString());
-                    label33.Text = "Resolution: " + img.Width + "x" + img.Height;
-                    Size imgSize = new Size(110, 110);
-                    Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
-                    Graphics gfx = Graphics.FromImage(finalImg);
-                    gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    gfx.Dispose();
-                    pictureBox9.Image = null;
-                    pictureBox9.SizeMode = PictureBoxSizeMode.CenterImage;
-                    pictureBox9.Image = finalImg;
-                    img.Dispose();
-                    img = null;
-                    gfx = null;
+                    string sFile = dataGridView9[4, dgv.CurrentRow.Index].Value.ToString();
+                    if (File.Exists(sFile))
+                    {
+                        Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(sFile);
+                        label33.Text = "Resolution: " + img.Width + "x" + img.Height;
+                        Size imgSize = new Size(110, 110);
+                        Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
+                        Graphics gfx = Graphics.FromImage(finalImg);
+                        gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        gfx.Dispose();
+                        pictureBox9.Image = null;
+                        pictureBox9.SizeMode = PictureBoxSizeMode.CenterImage;
+                        pictureBox9.Image = finalImg;
+                        img.Dispose();
+                        img = null;
+                        gfx = null;
+                    }
+                    else
+                    {
+                        pictureBox9.Image = null;
+                    }
                 }
                 else
                 {
@@ -1164,6 +1269,7 @@ namespace FanartHandler
             }
             catch //(Exception ex)
             {
+                pictureBox9.Image = null;
                 //MessageBox.Show(ex.ToString());
             }
         }
@@ -1175,7 +1281,7 @@ namespace FanartHandler
                 if (dataGridView2 != null && dataGridView2.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView2[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView2[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1206,7 +1312,7 @@ namespace FanartHandler
                 if (dataGridView3 != null && dataGridView3.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView3[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView3[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1236,7 +1342,7 @@ namespace FanartHandler
                 if (dataGridView4 != null && dataGridView4.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView4[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView4[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1266,7 +1372,7 @@ namespace FanartHandler
                 if (dataGridView5 != null && dataGridView5.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView5[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView5[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1296,7 +1402,7 @@ namespace FanartHandler
                 if (dataGridView6 != null && dataGridView6.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView6[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView6[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1326,7 +1432,7 @@ namespace FanartHandler
                 if (dataGridView7 != null && dataGridView7.RowCount > 0)
                 {
                     DataGridView dgv = (DataGridView)sender;
-                    Bitmap img = (Bitmap)Image.FromFile(dataGridView7[3, dgv.CurrentRow.Index].Value.ToString());
+                    Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(dataGridView7[3, dgv.CurrentRow.Index].Value.ToString());
                     Size imgSize = new Size(182, 110);
                     Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
                     Graphics gfx = Graphics.FromImage(finalImg);
@@ -1364,6 +1470,7 @@ namespace FanartHandler
                     string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
                     
                     Utils.GetDbm().DeleteFanart(sFileName, "MusicFanart Scraper");
+
                     if (File.Exists(sFileName) == true)
                     {
                         File.Delete(sFileName);
@@ -1453,6 +1560,135 @@ namespace FanartHandler
             else if (e.KeyData == Keys.I)
             {
                 ImportMusicFanart();
+            }
+        }
+
+        private void DataGridView9_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                LockUnlockThumb();
+            }
+            else if (e.KeyData == Keys.Delete)
+            {
+                DeleteSelectedThumbsImages(false);
+            }
+            else if (e.KeyData == Keys.X)
+            {
+                DeleteAllThumbsImages();
+            }            
+        }
+
+        private void DeleteSelectedThumbsImages(bool doRemove)
+        {
+            try
+            {
+                if (dataGridView9.CurrentRow.Index >= 0)
+                {
+                    string sFileName = dataGridView9.CurrentRow.Cells[4].Value.ToString();
+                    if (Utils.GetDbm().GetThumbLock(sFileName).Equals("False"))
+                    {
+                        pictureBox9.Image = null;
+                        Utils.GetDbm().ResetSuccessfulScrapeThumb(Utils.GetArtist(dataGridView9.CurrentRow.Cells[0].Value.ToString(), "MusicFanart Scraper"), 0);
+                        Utils.GetDbm().ResetInitialAlbumThumbsScrape(Utils.GetArtist(dataGridView9.CurrentRow.Cells[0].Value.ToString(), "MusicFanart Scraper"));
+
+                        if (File.Exists(sFileName) == true)
+                        {
+                            File.Delete(sFileName);
+                        }
+                        if (doRemove)
+                        {
+                            dataGridView9.Rows.Remove(dataGridView9.CurrentRow);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to delete a thumbnail that you have locked. Please unlock first.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("DeleteSelectedThumbsImages: " + ex.ToString());
+            } 
+        }
+
+        private void LockUnlockThumb()
+        {
+            try
+            {
+                if (dataGridView9.CurrentRow.Index >= 0)
+                {
+                    string sArtist = dataGridView9.CurrentRow.Cells[0].Value.ToString();
+                    string sFileName = dataGridView9.CurrentRow.Cells[4].Value.ToString();
+                    string locked = dataGridView9.CurrentRow.Cells[2].Value.ToString();
+                    if (locked != null && locked.Equals("True", StringComparison.CurrentCulture))
+                    {
+                        Utils.GetDbm().SetThumbLock(sArtist, sFileName, false);
+                        dataGridView9.Rows[dataGridView9.CurrentRow.Index].Cells[2].Value = "False";
+                    }
+                    else
+                    {
+                        Utils.GetDbm().SetThumbLock(sArtist, sFileName, true);
+                        dataGridView9.Rows[dataGridView9.CurrentRow.Index].Cells[2].Value = "True";
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("LockUnlockThumb: " + ex.ToString());
+            }
+        }
+
+        private void DeleteAllThumbsImages()
+        {
+            try
+            {
+                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";                                
+                if (Directory.Exists(path))
+                {
+                    DirectoryInfo dir1 = new DirectoryInfo(path);
+                    FileInfo[] fileList = dir1.GetFiles("*.jpg", SearchOption.AllDirectories);
+                    foreach (FileInfo dir in fileList)
+                    {
+                        if (Utils.GetIsStopping())
+                        {
+                            break;
+                        }
+                        if (Utils.GetDbm().GetThumbLock(dir.FullName).Equals("False"))
+                        {
+                            Utils.GetDbm().ResetInitialThumbsScrape();
+                            File.Delete(dir.FullName);
+                        }
+/*                        else
+                        {
+                            MessageBox.Show("Unable to delete a thumbnail ("+dir.FullName+") that you have locked. Please unlock first.");
+                        }*/
+                    }
+                    fileList = null;
+                    dir1 = null;
+                }
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                if (Directory.Exists(path))
+                {
+                    DirectoryInfo dir1 = new DirectoryInfo(path);
+                    FileInfo[] fileList = dir1.GetFiles("*.jpg", SearchOption.AllDirectories);
+                    foreach (FileInfo dir in fileList)
+                    {
+                        if (Utils.GetIsStopping())
+                        {
+                            break;
+                        }
+                        File.Delete(dir.FullName);
+                    }
+                    fileList = null;
+                    dir1 = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("DeleteAllThumbsImages: " + ex.ToString());
             }
         }
 
@@ -1598,6 +1834,199 @@ namespace FanartHandler
             }
         }
 
+        private void StartThumbsScraper(string onlyMissing)
+        {
+            try
+            {
+                if (onlyMissing.Equals("True"))
+                {
+                    button43.Enabled = false;
+                }
+                else
+                {
+                    button44.Enabled = false;
+                }
+                Utils.GetDbm().TotArtistsBeingScraped = 0;
+                Utils.GetDbm().CurrArtistsBeingScraped = 0;
+
+                myScraperThumbWorker = new ScraperThumbWorker();
+                myScraperThumbWorker.ProgressChanged += myScraperThumbWorker.OnProgressChanged;
+                myScraperThumbWorker.RunWorkerCompleted += myScraperThumbWorker.OnRunWorkerCompleted;
+                string[] s = new string[1];
+                s[0] = onlyMissing;
+                myScraperThumbWorker.RunWorkerAsync(s);                
+                if (onlyMissing.Equals("True"))
+                {
+                    button43.Enabled = true;
+                }
+                else
+                {
+                    button44.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("StartThumbsScraper: " + ex.ToString());
+            }
+        }
+
+        private void StartThumbsScrape(string onlyMissing)
+        {
+            try
+            {                
+                if (isScraping == false)
+                {
+                    isScraping = true;
+                    dataGridView9.Enabled = false;
+                    if (onlyMissing.Equals("True"))
+                    {
+                        button43.Text = "Stop Scraper";
+                        button44.Enabled = false;
+                    }
+                    else
+                    {
+                        button44.Text = "Stop Scraper";
+                        button43.Enabled = false;
+                    }
+                    button41.Enabled = false;
+                    button42.Enabled = false;                    
+                    progressBar2.Minimum = 0;
+                    progressBar2.Maximum = 0;
+                    progressBar2.Value = 0;
+                    
+                    oMissing = onlyMissing;
+                    
+                    watcher1 = new FileSystemWatcher();
+                    string path1 = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
+                    watcher1.Path = path1;
+                    //watcher1.NotifyFilter = NotifyFilters.CreationTime;
+                    watcher1.Filter = "*.jpg";
+                    watcher1.Created += new FileSystemEventHandler(FileWatcher_Created);
+                    watcher1.IncludeSubdirectories = false;
+                    watcher1.EnableRaisingEvents = true;                    
+
+                    watcher2 = new FileSystemWatcher();
+                    string path2 = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                    watcher2.Path = path2;
+                    //watcher2.NotifyFilter = NotifyFilters.CreationTime;
+                    watcher2.Filter = "*.jpg";
+                    watcher2.Created += new FileSystemEventHandler(FileWatcher_Created);
+                    watcher2.IncludeSubdirectories = false;
+                    watcher2.EnableRaisingEvents = true;
+                     
+                    UpdateScraperThumbTimer(onlyMissing);
+                    dataGridView9.Enabled = true;                    
+                    
+                }
+                else
+                {
+                    if (onlyMissing.Equals("True"))
+                    {
+                        button43.Text = "Scrape for missing Artist/Album Thumbnails";
+                    }
+                    else
+                    {
+                        button44.Text = "Scrape for all Artist/Album Thumbnails";
+                    }
+                    dataGridView9.Enabled = false;
+                    StopThumbScraper(onlyMissing);
+                    isScraping = false;
+                    button41.Enabled = true;
+                    button42.Enabled = true;
+                    button43.Enabled = true;
+                    button44.Enabled = true;
+                    Utils.GetDbm().StopScraper = false;
+                    progressBar2.Minimum = 0;
+                    progressBar2.Maximum = 0;
+                    progressBar2.Value = 0;
+                    dataGridView9.Enabled = true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                logger.Error("StartThumbsScrape: " + ex.ToString());
+                dataGridView9.Enabled = true;
+            }
+        }
+
+        public static ProgressBar GetProgressBar2()
+        {
+            return progressBar2;
+        }
+
+        private delegate void UpdateThumbTableDelegate(string path);
+        private static void UpdateFanartThumbTable(string path)
+        {
+            try
+            {
+                if (dataGridView9.InvokeRequired)
+                {
+                    // Pass the same function to BeginInvoke,
+                    // but the call would come on the correct
+                    // thread and InvokeRequired will be false.
+                    UpdateThumbTableDelegate del = new UpdateThumbTableDelegate(UpdateFanartThumbTable);
+                    //this.BeginInvoke(new UpdateThumbTableDelegate(UpdateFanartThumbTable));
+                    dataGridView9.BeginInvoke(del, new object[] { path });
+                    return;
+                }
+                
+                DataRow myDataRow = myDataTable9.NewRow();
+                string s1 = path;
+                string sImage = s1.Substring(s1.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                string sArtist = null;
+                if (sImage.IndexOf("L.") > 0)
+                {
+                    sArtist = sImage.Substring(0, sImage.IndexOf("L."));
+                }
+                else
+                {
+                    sArtist = sImage.Substring(0, sImage.IndexOf("."));
+                }
+                myDataRow["Artist"] = sArtist;
+                myDataRow["Type"] = "Album";
+                myDataRow["Image"] = sImage;
+                myDataRow["Image Path"] = path;
+                myDataTable9.Rows.Add(myDataRow);
+
+                dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
+                progressBar2.Minimum = 0;
+                progressBar2.Maximum = Convert.ToInt32(Utils.GetDbm().TotArtistsBeingScraped);
+                progressBar2.Value = Convert.ToInt32(Utils.GetDbm().CurrArtistsBeingScraped);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("UpdateFanartThumbTable: " + ex.ToString());
+                dataGridView9.DataSource = null;
+                DataTable d = new DataTable();
+                d.Columns.Add("Artist");
+                d.Columns.Add("Type");
+                d.Columns.Add("Locked");
+                d.Columns.Add("Image");
+                d.Columns.Add("Image Path");
+                dataGridView9.DataSource = d;
+                dataGridView9.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+                dataGridView9.Sort(dataGridView9.Columns["Artist"], ListSortDirection.Ascending);
+            }
+        }
+        
+
+        public static void FileWatcher_Created(object source, FileSystemEventArgs e)
+        {
+            try
+            {
+                if (!e.FullPath.Contains("_tmp"))
+                {
+                    UpdateFanartThumbTable(e.FullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("FileWatcher_Created: " + ex.ToString());
+            }                       
+        }  
+
+
         private void AddToDataGridView()
         {
             //Thread.Sleep(5000);
@@ -1613,6 +2042,8 @@ namespace FanartHandler
             StopScraper();
         }
 
+
+     
 
         private void UpdateFanartTableScoreCenter()
         {
@@ -1905,6 +2336,8 @@ namespace FanartHandler
             }
         }
 
+
+
         private delegate void UpdateFanartTableDelegate();
         private void UpdateFanartTable()
         {
@@ -1963,31 +2396,52 @@ namespace FanartHandler
             }
         }
 
-        private void UpdateThumbnailTableOnStartup()
+
+        private void UpdateThumbnailTableOnStartup(string path, string type)
         {
             try
             {
                 //get artists, scrape_successfult_thumb
-                SQLiteResultSet result = Utils.GetDbm().GetDataForThumbTable(lastIDThumb);                
-                int tmpID = 0;
+                ArrayList result = FanartHandlerSetup.GetThumbnails(path, "*.jpg");
+                //SQLiteResultSet result = Utils.GetDbm().GetDataForThumbTable(lastIDThumb);                
+                //int tmpID = 0;
                 if (result != null)
                 {
-                    if (result.Rows.Count > 0)
+                    if (result.Count > 0)
                     {
-                        for (int i = 0; i < result.Rows.Count; i++)
-                        {
-                            DataRow myDataRow = myDataTable9.NewRow();
-                            myDataRow["Artist"] = result.GetField(i, 0);
-                            myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
-                            myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
-                            if (tmpID > lastIDThumb)
+                        for (int i = 0; i < result.Count; i++)
+                        {                            
+                            string s = result[i].ToString();
+                            if (!s.Contains("_tmp"))
                             {
-                                lastIDThumb = tmpID;
+                                DataRow myDataRow = myDataTable9.NewRow();
+                                string sImage = s.Substring(s.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                                string sArtist = null;
+                                if (sImage.IndexOf("L.") > 0)
+                                {
+                                    sArtist = sImage.Substring(0, sImage.IndexOf("L."));
+                                }
+                                else
+                                {
+                                    sArtist = sImage.Substring(0, sImage.IndexOf("."));
+                                }
+                                myDataRow["Artist"] = sArtist;
+                                myDataRow["Type"] = type;
+                                myDataRow["Locked"] = Utils.GetDbm().GetThumbLock(s);
+                                myDataRow["Image"] = sImage;
+                                myDataRow["Image Path"] = s;
+                                myDataTable9.Rows.Add(myDataRow);
                             }
-                            myDataTable9.Rows.Add(myDataRow);
                         }
                     }
+                }
+                if (type.Equals("Album"))
+                {
+                    useFilter1 = DateTime.Now;
+                }
+                else
+                {
+                    useFilter2 = DateTime.Now;
                 }
                 result = null;
 
@@ -1998,6 +2452,8 @@ namespace FanartHandler
                 dataGridView9.DataSource = null;
                 DataTable d = new DataTable();
                 d.Columns.Add("Artist");
+                d.Columns.Add("Type");
+                d.Columns.Add("Locked");
                 d.Columns.Add("Image");
                 d.Columns.Add("Image Path");
                 dataGridView9.DataSource = d;
@@ -2066,6 +2522,92 @@ namespace FanartHandler
             }
         }
 
+        public void UpdateScraperThumbTimer(string onlyMissing)
+        {
+            try
+            {
+                StartThumbsScraper(onlyMissing);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("UpdateScraperThumbTimer: " + ex.ToString());
+            }
+        }
+
+        public static void StopThumbScraper(string onlyMissing)
+        {
+            try
+            {
+                if (onlyMissing.Equals("True"))
+                {
+                    if (button43 != null)
+                    {
+                        button43.Enabled = false;
+                    }
+                }
+                else
+                {
+                    if (button44 != null)
+                    {
+                        button44.Enabled = false;
+                    }
+                }
+                if (myScraperThumbWorker != null)
+                {
+                    myScraperThumbWorker.CancelAsync();
+                    myScraperThumbWorker.Dispose();
+                }
+                Utils.GetDbm().StopScraper = true;
+                if (onlyMissing.Equals("True"))
+                {
+                    if (button43 != null)
+                    {
+                        button43.Text = "Scrape for missing Artist/Album Thumbnails";
+                    }
+                }
+                else
+                {
+                    if (button44 != null)
+                    {
+                        button44.Text = "Scrape for all Artist/Album Thumbnails";
+                    }
+                }
+                isScraping = false;
+                if (Utils.GetDbm() != null)
+                {
+                    Utils.GetDbm().TotArtistsBeingScraped = 0;
+                    Utils.GetDbm().CurrArtistsBeingScraped = 0;
+                    Utils.GetDbm().StopScraper = false;
+                }
+                if (progressBar2 != null)
+                {
+                    progressBar2.Value = 0;
+                }
+                if (onlyMissing.Equals("True"))
+                {
+                    if (button43 != null)
+                    {
+                        button43.Enabled = true;
+                    }
+                }
+                else
+                {
+                    if (button44 != null)
+                    {
+                        button44.Enabled = true;
+                    }
+                }
+                button41.Enabled = true;
+                button42.Enabled = true;
+                button43.Enabled = true;
+                button44.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("StopThumbScraper: " + ex.ToString());
+            }
+        }
+
         private void StopScraper()
         {
             try
@@ -2099,7 +2641,10 @@ namespace FanartHandler
                 {
                     button6.Enabled = true;
                 }
-                UpdateThumbnailTableOnStartup();
+                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Albums";
+                UpdateThumbnailTableOnStartup(path, "Album");
+                path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                UpdateThumbnailTableOnStartup(path, "Artist");
                 button1.Enabled = true;
                 button2.Enabled = true;
                 button3.Enabled = true;
@@ -3146,6 +3691,41 @@ namespace FanartHandler
         private void checkBox8_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button43_Click(object sender, EventArgs e)
+        {
+            StartThumbsScrape("True");
+        }
+
+        private void button41_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedThumbsImages(true);
+        }
+
+        private void button42_Click(object sender, EventArgs e)
+        {
+            DeleteAllThumbsImages();
+        }
+
+        private void button44_Click(object sender, EventArgs e)
+        {
+            StartThumbsScrape("False");
+        }
+
+        private void label34_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            FilterThumbGrid();
+        }
+
+        private void button39_Click_1(object sender, EventArgs e)
+        {
+            LockUnlockThumb();
         }
 
     }

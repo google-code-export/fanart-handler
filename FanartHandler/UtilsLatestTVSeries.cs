@@ -78,7 +78,7 @@ namespace FanartHandler
                  */
                 latestTVSeries = new Hashtable();
                 int i0 = 1;
-                List<DBEpisode> episodes = DBEpisode.GetMostRecent(MostRecentType.Created, 60, 3);
+                List<DBEpisode> episodes = DBEpisode.GetMostRecent(MostRecentType.Created, 120, 3);
                 if (episodes != null)
                 {
                     //if (episodes.Count > 3) episodes.RemoveRange(3, episodes.Count - 3);
@@ -172,17 +172,13 @@ namespace FanartHandler
             //            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture) // COMMENTED BY CODEIT.RIGHT;
             if (FanartHandlerSetup.LatestTVSeries.Equals("True", StringComparison.CurrentCulture))// && !(windowId.Equals("9811") || windowId.Equals("9812") || windowId.Equals("9813") || windowId.Equals("9814") || windowId.Equals("9815")))
             {
-                //if (!initialSetup)
-                //{
-                //    logger.Debug("Updating Latest Media Info: New episode added in TVSeries");
-                //}
                 FanartHandler.LatestsCollection ht = null;
                 try
                 {
                     ht = UtilsLatestTVSeries.GetLatestTVSeries();
                 }
                 catch
-                { }
+                {}
                 if (ht != null)
                 {
                     for (int i = 0; i < ht.Count; i++)

@@ -225,6 +225,7 @@ namespace FanartHandler
                                     else
                                     {
                                         FanartAvailable = true;
+                                        FoundItem = true;
                                         currSelectedGeneric = sFilename;
                                     }
                                 }
@@ -269,6 +270,7 @@ namespace FanartHandler
                                     else
                                     {
                                         FanartAvailable = true;
+                                        FoundItem = true;
                                         currSelectedGeneric = sFilename;
                                     }
                                 }
@@ -570,8 +572,8 @@ namespace FanartHandler
         public void RefreshMusicSelectedProperties()
         {
             try
-            {                
-                FanartHandlerSetup.SelectedItem = GetMusicArtistFromListControl();                
+            {
+                FanartHandlerSetup.SelectedItem = GetMusicArtistFromListControl();
                 if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Length > 0)
                 {
                     //do nothing
@@ -579,7 +581,7 @@ namespace FanartHandler
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");                 
-                }                
+                }
                 //FanartHandlerSetup.SelectedItem = MediaPortal.Util.Utils.MakeFileName(FanartHandlerSetup.SelectedItem);
                 if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Equals("..", StringComparison.CurrentCulture) == false && FanartHandlerSetup.SelectedItem.Trim().Length > 0)
                 {
@@ -601,6 +603,7 @@ namespace FanartHandler
                             else
                             {
                                 FanartAvailable = true;
+                                FoundItem = true;
                                 CurrSelectedMusic = sFilename;
                             }
                         }
@@ -622,7 +625,6 @@ namespace FanartHandler
                         {
                             ResetCurrCount();
                         }
-                        //ResetCurrCount();
                     }
                     else if (CurrCount >= FanartHandlerSetup.MaxCountImage)
                     {
@@ -638,6 +640,7 @@ namespace FanartHandler
                             else
                             {
                                 FanartAvailable = true;
+                                FoundItem = true;
                                 CurrSelectedMusic = sFilename;
                             }
                         }
