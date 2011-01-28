@@ -94,7 +94,7 @@ namespace FanartHandler
                             string episodeIdx = episode[DBEpisode.cEpisodeIndex];
                             string seriesTitle = series.ToString();
                             string thumb = ImageAllocator.GetEpisodeImage(episode);
-                            string thumbSeries = ImageAllocator.GetSeriesPoster(series);
+                            string thumbSeries = ImageAllocator.GetSeriesPoster(series,false);
                             string fanart = Fanart.getFanart(episode[DBEpisode.cSeriesID]).FanartFilename;
                             string dateAdded = episode[DBEpisode.cFileDateAdded];
                             string seriesGenre = series[DBOnlineSeries.cGenre];

@@ -84,7 +84,7 @@
     </Reference>
     <Reference Include="MP-TVSeries">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\MP-TVSeries.dll</HintPath>
+      <HintPath>..\External\MP12\MP-TVSeries.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>

@@ -1977,11 +1977,11 @@ namespace FanartHandler
                 string sArtist = null;
                 if (sImage.IndexOf("L.") > 0)
                 {
-                    sArtist = sImage.Substring(0, sImage.IndexOf("L."));
+                    sArtist = sImage.Substring(0, sImage.LastIndexOf("L."));
                 }
                 else
                 {
-                    sArtist = sImage.Substring(0, sImage.IndexOf("."));
+                    sArtist = sImage.Substring(0, sImage.LastIndexOf("."));
                 }
                 myDataRow["Artist"] = sArtist;
                 myDataRow["Type"] = "Album";
@@ -2419,11 +2419,11 @@ namespace FanartHandler
                                 string sArtist = null;
                                 if (sImage.IndexOf("L.") > 0)
                                 {
-                                    sArtist = sImage.Substring(0, sImage.IndexOf("L."));
+                                    sArtist = sImage.Substring(0, sImage.LastIndexOf("L."));
                                 }
                                 else
                                 {
-                                    sArtist = sImage.Substring(0, sImage.IndexOf("."));
+                                    sArtist = sImage.Substring(0, sImage.LastIndexOf("."));
                                 }
                                 myDataRow["Artist"] = sArtist;
                                 myDataRow["Type"] = type;
@@ -2552,12 +2552,13 @@ namespace FanartHandler
                         button44.Enabled = false;
                     }
                 }
+                Utils.GetDbm().StopScraper = true;
                 if (myScraperThumbWorker != null)
                 {
                     myScraperThumbWorker.CancelAsync();
                     myScraperThumbWorker.Dispose();
                 }
-                Utils.GetDbm().StopScraper = true;
+                Thread.Sleep(3000);
                 if (onlyMissing.Equals("True"))
                 {
                     if (button43 != null)
@@ -2616,12 +2617,13 @@ namespace FanartHandler
                 {
                     button6.Enabled = false;
                 }
+                Utils.GetDbm().StopScraper = true;
                 if (myScraperWorker != null)
                 {
                     myScraperWorker.CancelAsync();
                     myScraperWorker.Dispose();
                 }
-                Utils.GetDbm().StopScraper = true;
+                Thread.Sleep(3000);
                 if (button6 != null)
                 {
                     button6.Text = "Start Scraper";
