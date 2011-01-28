@@ -188,11 +188,16 @@ namespace FanartHandler
                 else if (GUIWindowManager.ActiveWindow == 2003)
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#title");
-                } 
+                }
+                else if (GUIWindowManager.ActiveWindow == 9813)
+                {
+                    FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#TVSeries.Episode.SeriesName");
+                }    
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
                 }
+                
                 if (FanartHandlerSetup.SelectedItem != null && FanartHandlerSetup.SelectedItem.Trim().Length > 0)
                 {
                     if ((GUIWindowManager.ActiveWindow == 4755 && GUIWindowManager.GetWindow(4755).GetControl(51).IsVisible) || ((GUIWindowManager.ActiveWindow == 6 || GUIWindowManager.ActiveWindow == 25) && FanartHandlerSetup.SelectedItem.Equals("..", StringComparison.CurrentCulture) == true))
@@ -212,7 +217,7 @@ namespace FanartHandler
                             PrevSelectedGeneric = -1;
                             SetCurrentArtistsImageNames(null);
                             UpdateVisibilityCount = 0;
-                            string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedGeneric, ref PrevSelectedGeneric, type, "FanartSelected", true, isMusic);
+                            string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedGeneric, ref PrevSelectedGeneric, type, "FanartSelected", true, isMusic);                            
                             if (sFilename.Length == 0)
                             {
                                 if (property.Equals("music", StringComparison.CurrentCulture))

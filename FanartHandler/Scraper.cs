@@ -783,7 +783,7 @@ namespace FanartHandler
         }
 
 
-        public int GetThumbsImages(string artist, DatabaseManager dbm)
+        public int GetThumbsImages(string artist, DatabaseManager dbm, bool onlyMissing)
         {
             try
             {
@@ -862,14 +862,14 @@ namespace FanartHandler
                             sArtist = sArtist.Trim();
                             sArtist = Utils.GetArtist(sArtist, "MusicFanart Scraper");
                             if (Utils.IsMatch(dbArtist, sArtist, ((SearchResults)alSearchResults[x]).Alias))
-                            {                                
+                            {
                                 if (dbm.StopScraper == true)
                                 {
                                     break;
                                 }
                                 if (((SearchResults)alSearchResults[x]).Album.Equals("5", StringComparison.CurrentCulture) && !foundThumb)
                                 {
-                                    if (!Utils.GetDbm().HasArtistThumb(dbArtist))
+                                    if (!Utils.GetDbm().HasArtistThumb(dbArtist) || !onlyMissing)
                                     {
                                         //Artist Thumbnail
                                         logger.Debug("Found thumbnail for artist " + artist + ".");
@@ -890,7 +890,7 @@ namespace FanartHandler
                         if (!foundThumb)
                         {
                             dbm.SetSuccessfulScrapeThumb(dbArtist, 1);
-                            if (!Utils.GetDbm().HasArtistThumb(dbArtist))
+                            if (!Utils.GetDbm().HasArtistThumb(dbArtist) || !onlyMissing)
                             {
                                 GetLastFMArtistImages(artist, dbm);
                             }

@@ -215,7 +215,7 @@ namespace FanartHandler
                     {
                         if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
-                            if (windowId == 6 || windowId == 25 || windowId == 28 || windowId == 2003)
+                            if (windowId == 6 || windowId == 25 || windowId == 28 || windowId == 2003 || windowId == 9813)
                             {
                                 //User are in myVideo, myVideoTitle window or myvideoplaylist
                                 FanartHandlerSetup.IsSelectedVideo = true;

@@ -1008,6 +1008,10 @@ namespace FanartHandler
                         {
                             succThumb = "1";
                         }
+                        if (!onlyMissing)
+                        {
+                            succThumb = "0";
+                        }
                         sqlQuery = "SELECT count(Artist) FROM Music_Fanart WHERE Artist = '" + Utils.PatchSql(dbArtist) + "' AND Enabled = 'True' AND Type = 'MusicFanart Scraper';";
                         result = dbClient.Execute(sqlQuery);
                         if (successful_scrape == 1 && (succThumb.Equals("1", StringComparison.CurrentCulture) || succThumb.Equals("2", StringComparison.CurrentCulture)))
@@ -1017,7 +1021,7 @@ namespace FanartHandler
                             scraper = null;
                             return 0;
                         }
-                        totalImages = scraper.GetThumbsImages(artist, this);
+                        totalImages = scraper.GetThumbsImages(artist, this, onlyMissing);
                         if (totalImages == 0)
                         {
                             logger.Debug("No fanart found for artist " + artist + ".");
@@ -1236,7 +1240,7 @@ namespace FanartHandler
         {
             try
             {
-                logger.Info("InitialThumbScrape is starting...");
+                logger.Info("InitialThumbScrape is starting (only missing="+onlyMissing+")...");
                 musicDatabaseArtists = new ArrayList();
                 musicDatabaseAlbums = new List<AlbumInfo>();
                 m_db.GetAllArtists(ref musicDatabaseArtists);
