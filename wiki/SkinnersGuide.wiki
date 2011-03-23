@@ -27,14 +27,14 @@ The scope of this plugin is to;
   # push cycling fanart from the following folders for use anywhere in a skin for
     * thumbs\MovingPictures\Backdrops\FullSize
     * thumbs\Fan Art\fanart\original
-    * *~~thumbs\Skin Fanart\games~~ thumbs\Skin Fanart\UserDef\games* 
-    * *~~thumbs\Skin Fanart\movies~~ thumbs\Skin Fanart\UserDef\movies* 
-    * *~~thumbs\Skin Fanart\music~~ thumbs\Skin Fanart\UserDef\music* 
-    * *~~thumbs\Skin Fanart\pictures~~ thumbs\Skin Fanart\UserDef\pictures* 
-    * *~~thumbs\Skin Fanart\plugins~~ thumbs\Skin Fanart\UserDef\plugins* 
-    * *~~thumbs\Skin Fanart\tv~~ thumbs\Skin Fanart\UserDef\tv* 
-    * *~~thumbs\Skin Fanart\movies~~ thumbs\Skin Fanart\Scraper\movies* 
-    * *~~thumbs\Skin Fanart\music~~ thumbs\Skin Fanart\Scraper\music* 
+    * thumbs\Skin Fanart\games thumbs\Skin Fanart\UserDef\games* 
+    * thumbs\Skin Fanart\movies thumbs\Skin Fanart\UserDef\movies* 
+    * thumbs\Skin Fanart\music thumbs\Skin Fanart\UserDef\music* 
+    * thumbs\Skin Fanart\pictures thumbs\Skin Fanart\UserDef\pictures* 
+    * thumbs\Skin Fanart\plugins thumbs\Skin Fanart\UserDef\plugins* 
+    * thumbs\Skin Fanart\tv thumbs\Skin Fanart\UserDef\tv* 
+    * thumbs\Skin Fanart\movies thumbs\Skin Fanart\Scraper\movies* 
+    * thumbs\Skin Fanart\music thumbs\Skin Fanart\Scraper\music* 
 
 == Requirements ==
   * MediaPortal 1.1 or later
@@ -45,6 +45,8 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 2.2.3 to 2.2.4==
+New properties that makes latest recorded tv (4TR and MP) playable.
 ==Change Log - Version 2.2.2 to 2.2.3==
 No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.1 to 2.2.2==
@@ -113,14 +115,15 @@ No changes needed in skin files to support version 1.2 if your skin previously s
 {{{
 <define>#useSelectedFanart:Yes</define>
 }}}
- New tag that you have to include in every skin file that wants to use any of the  ".selected" properties (like #fanarthandler.music.backdrop1.selected). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
+New tag that you have to include in every skin file that wants to use any of the ".selected" properties (like #fanarthandler.music.backdrop1.selected). From v 2.2.4 it is possible to only add this property to a common file that is imported in the real xml file. Read more on this property in chapter below.
+
 
 
 ===New Define Tag: #usePlayFanart===
 {{{
 <define>#usePlayFanart:Yes</define>
 }}}
- New tag that you have to include in every skin file that wants to use any of the ".play" properties (like #fanarthandler.music.backdrop1.play). In version 1.0 it could take quite long time before correct fanart was shown when opening a new window in MP. This new property solves this. Read more on this property in chapter below.
+New tag that you have to include in every skin file that wants to use any of the ".play" properties (like #fanarthandler.music.backdrop1.play). From v 2.2.4 it is possible to only add this property to a common file that is imported in the real xml file. Read more on this property in chapter below.
 
 
 ===New Define Tag: #useRandomScoreCenterUserFanart===
@@ -175,6 +178,9 @@ By default no fanart for selected artist/title is loaded. The reason for this is
 <controls>
 }}}
 
+From v 2.2.4 it is possible to only add this property to a common file that is imported in the real xml file. Read more on this property in chapter below.
+
+
 == Add Support For "Now Playing" Images To A Skin File ==
 By default no fanart for now playing music is loaded. The reason for this is to save memory in MP. To enable fanart for now playing music to be pushed to a skin file you add "define" tags in the skin file header. See example below.
 {{{
@@ -188,6 +194,9 @@ By default no fanart for now playing music is loaded. The reason for this is to 
 <define>#usePlayFanart:Yes</define>  (Will be available in plugin version 1.1)
 <controls>
 }}}
+
+From v 2.2.4 it is possible to only add this property to a common file that is imported in the real xml file. Read more on this property in chapter below.
+
 
 == Add Support For "Random" Images To A Skin File ==
 By default no random images are loaded. The reason for this is to save memory in MP. If all random images for all supported paths (games, movies, moving pictures, music, pictures and tvseries) where loaded in all skin files this would mean unnecessary use of memory. To enable random images to be pushed to a skin file you add "define" tags in the skin file header. See example below.
@@ -333,7 +342,7 @@ By default no random images are loaded. The reason for this is to save memory in
 
 ==TVSeries==
 ||#fanarthandler.tvseries.latest1.thumb||Full path to thumb (episode image)||
-||*~~NEW~~ #fanarthandler.tvseries.latest1.serieThumb*||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest1.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest1.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest1.serieName||Series name||
 ||#fanarthandler.tvseries.latest1.seasonIndex||Season index||
@@ -347,7 +356,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest1.firstAired||First aired||
 ||#fanarthandler.tvseries.latest2.thumb||Full path to thumb (episode image)||
-||*~~NEW~~ #fanarthandler.tvseries.latest2.serieThumb*||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest2.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest2.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest2.serieName||Series name||
 ||#fanarthandler.tvseries.latest2.seasonIndex||Season index||
@@ -361,7 +370,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest2.firstAired||First aired||
 ||#fanarthandler.tvseries.latest3.thumb||Full path to thumb (episode image)||
-||*~~NEW~~ #fanarthandler.tvseries.latest3.serieThumb*||Full path to thumb (poster)||
+||#fanarthandler.tvseries.latest3.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest3.fanart||Full path to fanart||
 ||#fanarthandler.tvseries.latest3.serieName||Series name||
 ||#fanarthandler.tvseries.latest3.seasonIndex||Season index||
@@ -396,6 +405,7 @@ Playing support exists for;
   * music
   * moving pictures
   * tvseries
+  * *~~NEW~~*tv recordings (4therecord or mp)
 
 ===Button Ids===
 ||91919991||Moving Picture, first movie||
@@ -407,6 +417,9 @@ Playing support exists for;
 ||91919997||Music, first album||
 ||91919998||Music, second album||
 ||91919999||Music, third album||
+||*~~NEW~~91919984*||TV Recording, first recording||
+||*~~NEW~~91919985*||TV Recording, second recording||
+||*~~NEW~~91919986*||TV Recording, third recording||
 
 ===Example Button (Play First Moving Picture Movie)===
 {{{
