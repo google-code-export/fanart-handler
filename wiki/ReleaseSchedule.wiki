@@ -5,6 +5,7 @@
 This page is an attempt to announce new releases of the Fanart Handler plugin so that skinners, testers and others know when to expect a new release. I always try to keep the dates I put here but it is only my best guess ;)
 
 || *Version* || *Estimated Release Date* || *Status* ||
+||2.2.4||2011-04-09||Completed||
 ||2.2.3||2010-12-06||Completed||
 ||2.2.2||2010-11-01||Completed||
 ||2.2.1||2010-10-12||Completed||
