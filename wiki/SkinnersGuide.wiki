@@ -46,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.3 to 2.2.4==
-New properties that makes latest recorded tv (4TR and MP) playable.
+New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). 
 ==Change Log - Version 2.2.2 to 2.2.3==
 No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.1 to 2.2.2==
@@ -333,12 +333,15 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.music.latest3.fanart2||Full path to fanart image||
 
 ==Picture==
+||#fanarthandler.picture.latest1.title||Picture name (title)||
 ||#fanarthandler.picture.latest1.thumb||Full path to picture||
 ||#fanarthandler.picture.latest1.filename||Picture name||
 ||#fanarthandler.picture.latest1.dateAdded||Date when picture was added to MP||
+||#fanarthandler.picture.latest2.title||Picture name (title)||
 ||#fanarthandler.picture.latest2.thumb||Full path to picture||
 ||#fanarthandler.picture.latest2.filename||Picture name||
 ||#fanarthandler.picture.latest2.dateAdded||Date when picture was added to MP||
+||#fanarthandler.picture.latest3.title||Picture name (title)||
 ||#fanarthandler.picture.latest3.thumb||Full path to picture||
 ||#fanarthandler.picture.latest3.filename||Picture name||
 ||#fanarthandler.picture.latest3.dateAdded||Date when picture was added to MP||
