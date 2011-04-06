@@ -46,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.3 to 2.2.4==
-New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). New property for latest music (Genre). 
+New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). New property for latest music (Genre). New property for latest tvseries and movingpictures called plot.
 ==Change Log - Version 2.2.2 to 2.2.3==
 No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.1 to 2.2.2==
@@ -289,6 +289,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.movingpicture.latest1.year||Year of movie||
 ||*~~NEW TAG~~#fanarthandler.movingpicture.latest1.id*||ID of movie||
+||*~~NEW TAG~~#fanarthandler.movingpicture.latest1.plot*||Plot of movie||
 ||#fanarthandler.movingpicture.latest2.thumb||Full path to thumb (poster)||
 ||#fanarthandler.movingpicture.latest2.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest2.title||Movie title||
@@ -300,6 +301,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.movingpicture.latest2.year||Year of movie||
 ||*~~NEW TAG~~#fanarthandler.movingpicture.latest2.id*||ID of movie||
+||*~~NEW TAG~~#fanarthandler.movingpicture.latest2.plot*||Plot of movie||
 ||#fanarthandler.movingpicture.latest3.thumb||Full path to thumb (poster)||
 ||#fanarthandler.movingpicture.latest3.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest3.title||Movie title||
@@ -311,6 +313,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.movingpicture.latest3.runtime||Runtime in minutes||
 ||#fanarthandler.movingpicture.latest3.year||Year of movie||
 ||*~~NEW TAG~~#fanarthandler.movingpicture.latest3.id*||ID of movie||
+||*~~NEW TAG~~#fanarthandler.movingpicture.latest3.plot*||Plot of movie||
 
 ==Music==
 ||#fanarthandler.music.latest1.thumb||Full path to thumb (Album or if not available, artist)||
@@ -364,6 +367,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest1.classification||PG classification||
 ||#fanarthandler.tvseries.latest1.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest1.firstAired||First aired||
+||*~~NEW TAG~~#fanarthandler.tvseries.latest1.plot*||Plot of movie||
 ||#fanarthandler.tvseries.latest2.thumb||Full path to thumb (episode image)||
 ||#fanarthandler.tvseries.latest2.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest2.fanart||Full path to fanart||
@@ -378,6 +382,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest2.classification||PG classification||
 ||#fanarthandler.tvseries.latest2.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest2.firstAired||First aired||
+||*~~NEW TAG~~#fanarthandler.tvseries.latest2.plot*||Plot of movie||
 ||#fanarthandler.tvseries.latest3.thumb||Full path to thumb (episode image)||
 ||#fanarthandler.tvseries.latest3.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest3.fanart||Full path to fanart||
@@ -392,6 +397,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.tvseries.latest3.classification||PG classification||
 ||#fanarthandler.tvseries.latest3.runtime||Runtime in minutes||
 ||#fanarthandler.tvseries.latest3.firstAired||First aired||
+||*~~NEW TAG~~#fanarthandler.tvseries.latest3.plot*||Plot of movie||
 
 ==TV Recordings==
 ||#fanarthandler.tvrecordings.latest1.thumb||Full path to thumbnail||
