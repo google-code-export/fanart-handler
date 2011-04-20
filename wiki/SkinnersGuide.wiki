@@ -46,7 +46,7 @@ The scope of this plugin is to;
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
 ==Change Log - Version 2.2.3 to 2.2.4==
-New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). New property for latest music (Genre). New property for latest tvseries and movingpictures called plot.
+New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). New property for latest music (Genre). New property for latest tvseries and movingpictures called plot. New properties to "enabled" that can be used to decide if a user have enabled latest media tags.
 ==Change Log - Version 2.2.2 to 2.2.3==
 No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.1 to 2.2.2==
@@ -278,6 +278,7 @@ By default no random images are loaded. The reason for this is to save memory in
 
 = Latest Added Media Tags =
 ==Moving Pictures==
+||*~~NEW TAG~~#fanarthandler.movingpicture.latest.enabled||Boolean value (true or false) that can be used to see if a user has enabled latest media||
 ||#fanarthandler.movingpicture.latest1.thumb||Full path to thumb (poster)||
 ||#fanarthandler.movingpicture.latest1.fanart||Full path to fanart||
 ||#fanarthandler.movingpicture.latest1.title||Movie title||
@@ -316,6 +317,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||*~~NEW TAG~~#fanarthandler.movingpicture.latest3.plot*||Plot of movie||
 
 ==Music==
+||*~~NEW TAG~~#fanarthandler.music.latest.enabled||Boolean value (true or false) that can be used to see if a user has enabled latest media||
 ||#fanarthandler.music.latest1.thumb||Full path to thumb (Album or if not available, artist)||
 ||#fanarthandler.music.latest1.artist||Artist name||
 ||#fanarthandler.music.latest1.album||Album name||
@@ -339,6 +341,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.music.latest3.genre||Genre||
 
 ==Picture==
+||*~~NEW TAG~~#fanarthandler.picture.latest.enabled||Boolean value (true or false) that can be used to see if a user has enabled latest media||
 ||#fanarthandler.picture.latest1.title||Picture name (title)||
 ||#fanarthandler.picture.latest1.thumb||Full path to picture||
 ||#fanarthandler.picture.latest1.filename||Picture name||
@@ -353,6 +356,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||#fanarthandler.picture.latest3.dateAdded||Date when picture was added to MP||
 
 ==TVSeries==
+||*~~NEW TAG~~#fanarthandler.tvseries.latest.enabled||Boolean value (true or false) that can be used to see if a user has enabled latest media||
 ||#fanarthandler.tvseries.latest1.thumb||Full path to thumb (episode image)||
 ||#fanarthandler.tvseries.latest1.serieThumb||Full path to thumb (poster)||
 ||#fanarthandler.tvseries.latest1.fanart||Full path to fanart||
@@ -400,6 +404,7 @@ By default no random images are loaded. The reason for this is to save memory in
 ||*~~NEW TAG~~#fanarthandler.tvseries.latest3.plot*||Plot of movie||
 
 ==TV Recordings==
+||*~~NEW TAG~~#fanarthandler.tvrecordings.latest.enabled||Boolean value (true or false) that can be used to see if a user has enabled latest media||
 ||#fanarthandler.tvrecordings.latest1.thumb||Full path to thumbnail||
 ||#fanarthandler.tvrecordings.latest1.title||Recorded tv title||
 ||#fanarthandler.tvrecordings.latest1.dateAdded||Date when recordingwas added to MP||
