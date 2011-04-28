@@ -953,9 +953,9 @@ namespace FanartHandler
                     return totalImages;
                 }
                 catch (Exception ex)
-                {
-                    lock (lockObject) dbClient.Execute("ROLLBACK;");
+                {                    
                     logger.Error("doScrape: " + ex.ToString());
+                    lock (lockObject) dbClient.Execute("ROLLBACK;");
                 }
             }
 
@@ -1037,9 +1037,9 @@ namespace FanartHandler
                     return totalImages;
                 }
                 catch (Exception ex)
-                {
-                    lock (lockObject) dbClient.Execute("ROLLBACK;");
+                {                    
                     logger.Error("doScrapeThumbs: " + ex.ToString());
+                    lock (lockObject) dbClient.Execute("ROLLBACK;");
                 }
             }
 
@@ -1126,9 +1126,9 @@ namespace FanartHandler
                     return totalImages;
                 }
                 catch (Exception ex)
-                {
-                    lock (lockObject) dbClient.Execute("ROLLBACK;");
+                {                    
                     logger.Error("DoScrapeNew: " + ex.ToString());
+                    lock (lockObject) dbClient.Execute("ROLLBACK;");
                 }
             }
 

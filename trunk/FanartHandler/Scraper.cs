@@ -1202,6 +1202,13 @@ namespace FanartHandler
                 }            
                 return iCount;
             }
+            catch (WebException ex)
+            {                    
+                if (ex.Message.Contains("400"))
+                {
+                    //Do nothing. Last FM returns this if no artist is found
+                }
+            }
             catch (Exception ex)
             {
                 if (alSearchResults != null)
@@ -1239,7 +1246,7 @@ namespace FanartHandler
                     objRequest.ServicePoint.Expect100Continue = false;
                     string values = "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
                     values += "&artist=" + urlArtist;
-                    values += "&album=" + urlAlbum;
+                    values += "&album=" + urlAlbum;                  
                     objRequest.Method = "POST";
                     objRequest.ContentType = "application/x-www-form-urlencoded";
                     objRequest.ContentLength = values.Length;
@@ -1253,6 +1260,7 @@ namespace FanartHandler
                         strResult = sr.ReadToEnd();
                         sr.Close();
                     }
+                   
                     if (objResponse != null)
                     {
                         objResponse.Close();
@@ -1300,6 +1308,13 @@ namespace FanartHandler
                     objRequest = null;
                 }
                 return iCount;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("400"))
+                {
+                    //Do nothing. Last FM returns this if no artist is found
+                }
             }
             catch (Exception ex)
             {
