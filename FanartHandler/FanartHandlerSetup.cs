@@ -480,6 +480,49 @@ namespace FanartHandler
             return false;
         }
 
+        public static void SetupFilenamesRecursively(string dir, string filter, string type, int restricted, Hashtable ht)
+        {
+            string artist = String.Empty;
+            string typeOrg = type;
+            try
+            {
+                foreach (string d in Directory.GetDirectories(dir))
+                {
+                    //foreach (string f in Directory.GetFiles(d, txtFile.Text))
+                    foreach (string file in Directory.GetFiles(d, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture)))
+                    {
+                        if (!ht.Contains(file))
+                        {
+                            if (Utils.GetIsStopping())
+                            {
+                                break;
+                            }
+                            artist = Utils.GetArtist(file, type);
+
+                            if (type.Equals("MusicAlbum", StringComparison.CurrentCulture) || type.Equals("MusicArtist", StringComparison.CurrentCulture) || type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture) || type.Equals("MusicFanart User", StringComparison.CurrentCulture))
+                            {
+                                if (Utils.GetFilenameNoPath(file).ToLower(CultureInfo.CurrentCulture).StartsWith("default", StringComparison.CurrentCulture))
+                                {
+                                    type = "Default";
+                                }
+                                Utils.GetDbm().LoadMusicFanart(artist, file, file, type, 0);
+                                type = typeOrg;
+                            }
+                            else
+                            {
+                                Utils.GetDbm().LoadFanart(artist, file, file, type, restricted);
+                            }
+                        }
+                    }
+                    SetupFilenamesRecursively(d, filter, type, restricted, ht);
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                Console.WriteLine(excpt.Message);
+            }
+
+        }
 
         /// <summary>
         /// Add files in directory to hashtable
@@ -487,12 +530,13 @@ namespace FanartHandler
         public static void SetupFilenames(string s, string filter, string type, int restricted)
         {
             Hashtable ht = new Hashtable();
-            string artist = String.Empty;
-            string typeOrg = type;
+            //            string artist = String.Empty;
+            // string typeOrg = type;
             try
             {
                 ht = Utils.GetDbm().GetAllFilenames(type);
-                var files = Directory.GetFiles(s, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture));
+                SetupFilenamesRecursively(s, filter, type, restricted, ht);
+                /*var files = Directory.GetFiles(s, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture));
                 foreach (string file in files)
                 {
                     if (!ht.Contains(file))
@@ -518,13 +562,13 @@ namespace FanartHandler
                         }
                     }
                 }
-                files = null;
+                files = null;*/
                 ht.Clear();
                 ht = null;
             }
             catch (Exception ex)
             {
-                logger.Error("SetupFilenames: " + ex.ToString());                
+                logger.Error("SetupFilenames: " + ex.ToString());
             }
             
 /*            string artist = String.Empty;
