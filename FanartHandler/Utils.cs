@@ -690,12 +690,14 @@ namespace FanartHandler
                 return string.Empty;
             }
 
-            key = key.Replace("/", "\\");
+            /*key = key.Replace("/", "\\");
             if (key.LastIndexOf("\\", StringComparison.CurrentCulture) >= 0)
             {
                 return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
             }
-            return key;
+            return key;*/
+            return Path.GetFileName(key);
+            
         }
 
         /// <summary>

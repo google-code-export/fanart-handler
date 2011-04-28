@@ -2015,9 +2015,10 @@ namespace FanartHandler
                     string fanart = mySong.Artist;
                     string album = mySong.Album;
                     string sPath = mySong.FileName;
-                    if (sPath != null && sPath.Length > 0 && sPath.IndexOf("\\") > 0)
+                    if (sPath != null && sPath.Length > 0)// && sPath.IndexOf("\\") > 0)
                     {
-                        sPath = sPath.Substring(0, sPath.LastIndexOf("\\"));
+                        //sPath = sPath.Substring(0, sPath.LastIndexOf("\\"));
+                        sPath = Path.GetDirectoryName(sPath);
                     }
                     string dateAdded = mySong.DateTimeModified.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture);
                     if (album == null || album.Trim().Length == 0)
@@ -2082,8 +2083,8 @@ namespace FanartHandler
             if (Directory.Exists(_songFolder))
             {
                 LoadSongsFromFolder(_songFolder, false);
-            }
-            StartPlayback(0);
+                StartPlayback(0);
+            }            
         }
 
         private void StartPlayback(int item)
