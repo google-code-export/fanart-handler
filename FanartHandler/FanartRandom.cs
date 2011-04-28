@@ -1530,11 +1530,11 @@ namespace FanartHandler
         {
             string sout = String.Empty;
             int restricted = 0;
-            if (type.Equals("Movie User", StringComparison.CurrentCulture) || type.Equals("Movie Scraper", StringComparison.CurrentCulture) || type.Equals("MovingPicture", StringComparison.CurrentCulture) || type.Equals("myVideos", StringComparison.CurrentCulture) || type.Equals("Online Videos", StringComparison.CurrentCulture) || type.Equals("TV Section", StringComparison.CurrentCulture))
+            if (type.Equals("Movie User", StringComparison.CurrentCulture) || type.Equals("Movie Scraper", StringComparison.CurrentCulture) || type.Equals("MovingPicture", StringComparison.CurrentCulture) || type.Equals("Online Videos", StringComparison.CurrentCulture) || type.Equals("TV Section", StringComparison.CurrentCulture))
             {
                 try
                 {
-                    restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
+                    restricted = FanartHandlerSetup.Restricted;
                 }
                 catch { }
             }

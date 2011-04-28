@@ -51,13 +51,14 @@ namespace FanartHandler
             Thread.CurrentThread.Name = "DirectoryWorker";
             Utils.AllocateDelayStop("DirectoryWorker-OnDoWork");
             logger.Info("Refreshing local fanart is starting.");
+            FanartHandlerSetup.Restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
             if (Utils.GetIsStopping() == false)
             {
                 try
                 {
                     //Get latest media added to MP
                     GetLatestMediaInfo();
-
+                    
                     //Add games images
                     string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt\UserDef\games";
                     if (FanartHandlerSetup.FR.UseAnyGamesUser)
@@ -166,6 +167,7 @@ namespace FanartHandler
                     Utils.GetDbm().HTAnyTVSeries = null; //20200429
                     Utils.GetDbm().HTAnyTVFanart = null; //20200429
                     Utils.GetDbm().HTAnyPluginFanart = null; //20200429
+                    
                     FanartHandlerSetup.SyncPointDirectory = 0;
                 }
                 catch (Exception ex)
@@ -184,7 +186,7 @@ namespace FanartHandler
         private void GetLatestMediaInfo()
         {
             int z = 1;
-            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);           
+            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);
 
             if (FanartHandlerSetup.LatestTVRecordings.Equals("True", StringComparison.CurrentCulture))
             {
@@ -205,15 +207,17 @@ namespace FanartHandler
                             //Type.GetType("ForTheRecord.UI.Process");
                             latestTVRecordings = UtilsLatest4TRRecordings.Get4TRRecordings();
                             AppDomain.CurrentDomain.AssemblyResolve -= assemblyResolve;
+                            Utils.Used4TRTV = true;
                         }
                         catch
-                        {                            
+                        {
                             AppDomain.CurrentDomain.AssemblyResolve -= assemblyResolve;
                         }
                     }
                     else
                     {
                         latestTVRecordings = UtilsLatestTVRecordings.GetTVRecordings();
+                        Utils.Used4TRTV = false;
                     }
                 }
                 catch// (Exception ex)
@@ -232,10 +236,15 @@ namespace FanartHandler
                         z++;
                     }
                     latestTVRecordings.Clear();
-                }                
+                }
                 latestTVRecordings = null;
                 z = 1;
-            }                       
+                FanartHandlerSetup.SetProperty("#fanarthandler.tvrecordings.latest.enabled", "true");
+            }
+            else
+            {
+                FanartHandlerSetup.EmptyLatestMediaPropsTVRecordings();
+            }
 
             ExternalDatabaseManager edbm;
             if (FanartHandlerSetup.LatestPictures.Equals("True", StringComparison.CurrentCulture) && !(windowId.Equals("2", StringComparison.CurrentCulture)))
@@ -250,13 +259,14 @@ namespace FanartHandler
                         for (int i = 0; i < ht.Count; i++)
                         {
                             logger.Debug("Updating Latest Media Info: Latest picture " + z + ": " + ht[i].Thumb);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.picture.latest" + z + ".title", ht[i].Title);
                             FanartHandlerSetup.SetProperty("#fanarthandler.picture.latest" + z + ".thumb", ht[i].Thumb);
                             FanartHandlerSetup.SetProperty("#fanarthandler.picture.latest" + z + ".filename", ht[i].Thumb);
                             FanartHandlerSetup.SetProperty("#fanarthandler.picture.latest" + z + ".dateAdded", ht[i].DateAdded);
                             z++;
                         }
                         ht.Clear();
-                    }                    
+                    }
                     ht = null;
                 }
                 try
@@ -266,13 +276,18 @@ namespace FanartHandler
                 catch { }
                 edbm = null;
                 z = 1;
+                FanartHandlerSetup.SetProperty("#fanarthandler.picture.latest.enabled", "true");
+            }
+            else
+            {
+                FanartHandlerSetup.EmptyLatestMediaPropsPictures();
             }
 
             if (FanartHandlerSetup.LatestMusic.Equals("True", StringComparison.CurrentCulture) && !(windowId.Equals("987656", StringComparison.CurrentCulture) || windowId.Equals("504", StringComparison.CurrentCulture) || windowId.Equals("501", StringComparison.CurrentCulture) || windowId.Equals("500", StringComparison.CurrentCulture)))
             {
                 //Music
-                FanartHandler.LatestsCollection hTable = Utils.GetDbm().GetLatestMusic();
-                if (hTable != null)
+                FanartHandler.LatestsCollection hTable =  Utils.GetDbm().GetLatestMusic();
+               if (hTable != null)
                 {
                     for (int i = 0; i < hTable.Count; i++)
                     {
@@ -298,12 +313,18 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".dateAdded", hTable[i].DateAdded);
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".fanart1", hTable[i].Fanart1);
                         FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".fanart2", hTable[i].Fanart2);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.music.latest" + z + ".genre", hTable[i].Genre);
                         z++;
                     }
                     hTable.Clear();
                 }                
                 hTable = null;
                 z = 1;
+                FanartHandlerSetup.SetProperty("#fanarthandler.music.latest.enabled", "true");
+            }
+            else
+            {
+                FanartHandlerSetup.EmptyLatestMediaPropsMusic();
             }
         }
     }

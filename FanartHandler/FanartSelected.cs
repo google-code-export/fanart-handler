@@ -34,7 +34,8 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private Hashtable windowsUsingFanartSelected; //used to know what skin files that supports selected fanart        
+        private Hashtable windowsUsingFanartSelectedMusic; //used to know what skin files that supports selected fanart        
+        private Hashtable windowsUsingFanartSelectedMovie; //used to know what skin files that supports selected fanart        
         private bool doShowImageOne = true;  // Decides if property .1 or .2 should be set on next run                        
         private bool hasUpdatedCurrCount/* = false*/; // CurrCount have allready been updated this run                        
         private bool fanartAvailable/* = false*/;  //Holds if fanart is available (found) or not, controls visibility tag                
@@ -55,14 +56,14 @@ namespace FanartHandler
         private int currCount/* = 0*/;
         private Hashtable properties; //used to hold properties to be updated (Selected or Any)                                    
         private Hashtable currentArtistsImageNames = null;
-        private bool foundItem = false;        
+        //private bool foundItem = false;        
         #endregion
 
-        public bool FoundItem
+ /*       public bool FoundItem
         {
             get { return foundItem; }
             set { foundItem = value; }
-        }
+        }*/
 
         public Hashtable CurrentArtistsImageNames
         {
@@ -112,10 +113,16 @@ namespace FanartHandler
             set { doShowImageOne = value; }
         }
 
-        public Hashtable WindowsUsingFanartSelected
+        public Hashtable WindowsUsingFanartSelectedMusic
         {
-            get { return windowsUsingFanartSelected; }
-            set { windowsUsingFanartSelected = value; }
+            get { return windowsUsingFanartSelectedMusic; }
+            set { windowsUsingFanartSelectedMusic = value; }
+        }
+
+        public Hashtable WindowsUsingFanartSelectedMovie
+        {
+            get { return windowsUsingFanartSelectedMovie; }
+            set { windowsUsingFanartSelectedMovie = value; }
         }
 
         public FanartSelected()
@@ -147,7 +154,7 @@ namespace FanartHandler
             try
             {
                 bool isMusic = false;
-                FoundItem = false;
+                //FoundItem = false;
                 if (property.Equals("music", StringComparison.CurrentCulture))
                 {
                     isMusic = true;
@@ -192,7 +199,17 @@ namespace FanartHandler
                 else if (GUIWindowManager.ActiveWindow == 9813)
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#TVSeries.Episode.SeriesName");
-                }    
+                }
+                else if (GUIWindowManager.ActiveWindow == 30886)
+                {
+                    try
+                    {
+                        FanartHandlerSetup.SelectedItem = ((GUIFadeLabel)GUIWindowManager.GetWindow(GUIWindowManager.ActiveWindow).GetControl(1)).Label;
+                    }
+                    catch
+                    {
+                    }
+                }  
                 else
                 {
                     FanartHandlerSetup.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
@@ -226,22 +243,24 @@ namespace FanartHandler
                                     if (sFilename.Length == 0)
                                     {
                                         FanartAvailable = false;
+                                        //FoundItem = false;
                                     }
                                     else
                                     {
                                         FanartAvailable = true;
-                                        FoundItem = true;
+                                        //FoundItem = true;
                                         currSelectedGeneric = sFilename;
                                     }
                                 }
                                 else
                                 {
                                     FanartAvailable = false;
+                                    //FoundItem = false;
                                 }
                             }
                             else
-                            {
-                                FoundItem = true;
+                            {                                
+                                //FoundItem = true;
                                 FanartAvailable = true;
                             }
                             if (DoShowImageOne)
@@ -260,7 +279,7 @@ namespace FanartHandler
                             //ResetCurrCount();
                         }
                         else if (CurrCount >= FanartHandlerSetup.MaxCountImage)
-                        {                            
+                        {
                             string sFilenamePrev = currSelectedGeneric;
                             string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.SelectedItem, ref currSelectedGeneric, ref PrevSelectedGeneric, type, "FanartSelected", false, isMusic);
                             if (sFilename.Length == 0)
@@ -271,22 +290,24 @@ namespace FanartHandler
                                     if (sFilename.Length == 0)
                                     {
                                         FanartAvailable = false;
+                                        //FoundItem = false;
                                     }
                                     else
                                     {
                                         FanartAvailable = true;
-                                        FoundItem = true;
+                                        //FoundItem = true;
                                         currSelectedGeneric = sFilename;
                                     }
                                 }
                                 else
                                 {
+                                    //FoundItem = false;
                                     FanartAvailable = false;
                                 }
                             }
                             else
                             {
-                                FoundItem = true;
+                                //FoundItem = true;
                                 FanartAvailable = true;
                             }
                             if (DoShowImageOne)
@@ -604,17 +625,18 @@ namespace FanartHandler
                             if (sFilename.Length == 0)
                             {
                                 FanartAvailable = false;
+                                //FoundItem = false;
                             }
                             else
                             {
                                 FanartAvailable = true;
-                                FoundItem = true;
+                                //FoundItem = true;
                                 CurrSelectedMusic = sFilename;
                             }
                         }
                         else
                         {
-                            FoundItem = true;
+                            //FoundItem = true;
                             FanartAvailable = true;
                         }
                         if (DoShowImageOne)
@@ -641,17 +663,18 @@ namespace FanartHandler
                             if (sFilename.Length == 0)
                             {
                                 FanartAvailable = false;
+                                //FoundItem = false;
                             }
                             else
                             {
                                 FanartAvailable = true;
-                                FoundItem = true;
+                                //FoundItem = true;
                                 CurrSelectedMusic = sFilename;
                             }
                         }
                         else
                         {
-                            FoundItem = true;
+                            //FoundItem = true;
                             FanartAvailable = true;
                         }
                         if (DoShowImageOne)

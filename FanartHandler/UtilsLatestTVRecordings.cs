@@ -36,7 +36,8 @@ using ForTheRecord.ServiceContracts;
 using ForTheRecord.UI.Process.Recordings;
 using WindowPlugins.GUITVSeries;
 using System.Globalization;
-
+using TvPlugin;
+using TvControl;
 
 namespace FanartHandler
 {
@@ -45,6 +46,15 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static bool _isGetTypeRunningOnThisThread/* = false*/;
+        private static Hashtable latestTVRecordings;
+        private static TvDatabase.Recording _rec;
+        private static String _filename;
+     
+        public static Hashtable LatestTVRecordings
+        {
+            get { return UtilsLatestTVRecordings.latestTVRecordings; }
+            set { UtilsLatestTVRecordings.latestTVRecordings = value; }
+        }
         #endregion
 
         public static bool IsGetTypeRunningOnThisThread
@@ -67,13 +77,15 @@ namespace FanartHandler
                                                  Path.ChangeExtension(MediaPortal.Util.Utils.SplitFilename(rec.FileName), null),
                                                  MediaPortal.Util.Utils.GetThumbExtension());
                     thumbNail = thumbNail.Replace(".jpg", "L.jpg");
-                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), thumbNail, null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null, null, null, null, null));
+                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), thumbNail, null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null, null, rec, null, null, null, null));
                 }
                 latests.Sort(new LatestAddedComparer());
+                latestTVRecordings = new Hashtable();
                 for (int x0 = 0; x0 < latests.Count; x0++)
                 {
                     latests[x0].DateAdded = latests[x0].DateAdded.Substring(0, 10);
                     result.Add(latests[x0]);
+                    latestTVRecordings.Add(x, latests[x].Playable);
                     x++;
                     if (x == 3)
                     {
@@ -96,6 +108,73 @@ namespace FanartHandler
                 //logger.Error("GetTVRecordings: " + ex.ToString());
             }
             return result;
+        }
+
+        public static bool IsRecordingActual(TvDatabase.Recording aRecording)
+        {
+            return aRecording.IsRecording;
+        }             
+      
+        public static bool PlayRecording(int index)
+        {
+            TvDatabase.Recording rec = (TvDatabase.Recording)latestTVRecordings[index];
+            _rec = rec;
+            _filename = rec.FileName;            
+
+            bool _bIsLiveRecording = false;
+            IList<TvDatabase.Recording> itemlist = TvDatabase.Recording.ListAll();
+
+            TvServer server = new TvServer();
+            foreach (TvDatabase.Recording recItem in itemlist)
+            {
+              if (rec.IdRecording == recItem.IdRecording && IsRecordingActual(recItem))
+              {
+                  _bIsLiveRecording = true;
+                  break;
+              }
+            }
+
+            int stoptime = rec.StopTime;
+            if (_bIsLiveRecording)
+            {
+                stoptime = -1;
+            }
+
+            if (TVHome.Card != null)
+            {
+                TVHome.Card.StopTimeShifting();
+            }
+
+            string fileName = TVUtil.GetFileNameForRecording(rec);
+
+            bool useRTSP = TVHome.UseRTSP();
+
+            Log.Info("TvRecorded Play:{0} - using rtsp mode:{1}", fileName, useRTSP);
+            if (g_Player.Play(fileName, g_Player.MediaType.Recording))
+            {
+                if (MediaPortal.Util.Utils.IsVideo(fileName) && !g_Player.IsRadio)
+                {
+                    g_Player.ShowFullScreenWindow();
+                }
+                if (stoptime > 0)
+                {
+                    g_Player.SeekAbsolute(stoptime); 
+                }
+                else if (stoptime == -1)
+                {
+                    double dTime = g_Player.Duration - 5;
+                    g_Player.SeekAbsolute(dTime);
+                }
+                g_Player.currentFileName = rec.FileName;
+                g_Player.currentTitle = rec.Title;
+                g_Player.currentDescription = rec.Description;
+
+                rec.TimesWatched++;
+                rec.Persist();
+
+                return true;
+            }
+            return false;          
         }
 
         class LatestAddedComparer : IComparer<Latest>

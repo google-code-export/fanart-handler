@@ -177,24 +177,6 @@ or "MP Album Thumbs" you may want to leave this to
 with the "Display Only Wide Images (Aspect Ratio &gt;= 1.55)" 
 property.</value>
   </data>
-  <data name="button42.ToolTip" xml:space="preserve">
-    <value>WARNING: Pressing this button will delete all images
-stored on your harddrive in the "thumbs/Skin Fanart/music"
-folder and also from the fanart database.
-
-The purpose of this button is to reset everything and
-allow for a complete new initial scrape. </value>
-  </data>
-  <data name="button41.ToolTip" xml:space="preserve">
-    <value>Press this button to delete the selected fanart/backdrop
-from the fanart database but also from your harddrive. 
-The difference between pressing this button
-and the "Enable/Disable Selected Fanart" button is that 
-this button deletes the image from your harddrive and
-the fanart database and this saves harddisk space but 
-the image can re-appear because the scraper can find 
-the image on a future scrape.</value>
-  </data>
   <data name="checkBoxScraperMusicPlaying.ToolTip" xml:space="preserve">
     <value>Check this option if you want this plugin to automatically
 search the internet site www.htbackdrops.com for
@@ -275,6 +257,24 @@ example want to increase the number of imges per artis
 you will have to press this button to initiate a new intitial scrape
 the next time you start MediaPortal. After the initial scrape this
 plugin will only scrape the htbackdrop site for new images.</value>
+  </data>
+  <data name="button42.ToolTip" xml:space="preserve">
+    <value>WARNING: Pressing this button will delete all images
+stored on your harddrive in the "thumbs/Skin Fanart/music"
+folder and also from the fanart database.
+
+The purpose of this button is to reset everything and
+allow for a complete new initial scrape. </value>
+  </data>
+  <data name="button41.ToolTip" xml:space="preserve">
+    <value>Press this button to delete the selected fanart/backdrop
+from the fanart database but also from your harddrive. 
+The difference between pressing this button
+and the "Enable/Disable Selected Fanart" button is that 
+this button deletes the image from your harddrive and
+the fanart database and this saves harddisk space but 
+the image can re-appear because the scraper can find 
+the image on a future scrape.</value>
   </data>
   <data name="button8.ToolTip" xml:space="preserve">
     <value>Press this button to enable or disable the use of the

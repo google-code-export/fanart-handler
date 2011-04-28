@@ -482,19 +482,6 @@ namespace FanartHandler
                     checkBoxThumbsAlbum.Checked = false;
                 }
 
-               /* if (useAsyncImageLoading != null && useAsyncImageLoading.Length > 0)
-                {
-                    if (useAsyncImageLoading.Equals("True", StringComparison.CurrentCulture))
-                        checkBox4.Checked = true;
-                    else
-                        checkBox4.Checked = false;
-                }
-                else
-                {
-                    useAsyncImageLoading = "False";
-                    checkBox4.Checked = false;
-                }*/
-
                 if (doNotReplaceExistingThumbs != null && doNotReplaceExistingThumbs.Length > 0)
                 {
                     if (doNotReplaceExistingThumbs.Equals("True", StringComparison.CurrentCulture))
@@ -748,7 +735,6 @@ namespace FanartHandler
                 try
                 {
                     InitLogger();
-                    //System.Net.ServicePointManager.Expect100Continue = false;
                     logger.Info("Fanart Handler configuration is starting.");
                     logger.Info("Fanart Handler version is " + Utils.GetAllVersionNumber());
                     FanartHandlerSetup.SetupDirectories();                 
@@ -1059,7 +1045,8 @@ namespace FanartHandler
         /// </summary>
         private void InitLogger()
         {
-            LoggingConfiguration config = new LoggingConfiguration();
+            //LoggingConfiguration config = new LoggingConfiguration();
+            LoggingConfiguration config = LogManager.Configuration ?? new LoggingConfiguration();
 
             try
             {
@@ -1540,6 +1527,14 @@ namespace FanartHandler
             else if (e.KeyData == Keys.Delete)
             {                
                 DeleteSelectedFanart(false);
+            }
+            else if (e.KeyData == Keys.E)
+            {
+                EditImagePath(false);
+            }
+            else if (e.KeyData == Keys.A)
+            {
+                EditImagePath(true);
             }
             else if (e.KeyData == Keys.X)
             {
@@ -2478,10 +2473,13 @@ namespace FanartHandler
                             myDataRow["Enabled"] = result.GetField(i, 1);
                             myDataRow["Image"] = GetFilenameOnly(result.GetField(i, 2));
                             myDataRow["Image Path"] = result.GetField(i, 2);
-                            tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
-                            if (tmpID > lastID)
+                            if (result.GetField(i, 3) != null && result.GetField(i, 3).Length > 0)
                             {
-                                lastID = tmpID;
+                                tmpID = Convert.ToInt32(result.GetField(i, 3), CultureInfo.CurrentCulture);
+                                if (tmpID > lastID)
+                                {
+                                    lastID = tmpID;
+                                }
                             }
                             myDataTable.Rows.Add(myDataRow);
                         }
@@ -3728,6 +3726,82 @@ namespace FanartHandler
         private void button39_Click_1(object sender, EventArgs e)
         {
             LockUnlockThumb();
+        }
+
+        private void EditImagePath(bool doInsert)
+        {
+            try
+            {
+                if (dataGridView1.CurrentRow.Index >= 0)
+                {
+                    pictureBox1.Image = null;
+                    string sNewFilename = string.Empty;
+                    OpenFileDialog openFD = new OpenFileDialog();
+                    openFD.InitialDirectory = Config.GetFolder(Config.Dir.Thumbs);
+                    openFD.Title = "Select Image";
+                    openFD.FileName = textBoxDefaultBackdrop.Text;
+                    openFD.Filter = "Image Files(*.JPG)|*.JPG";
+                    if (openFD.ShowDialog() == DialogResult.Cancel)
+                    {
+                    }
+                    else
+                    {
+                        sNewFilename = openFD.FileName;
+                        if (doInsert)
+                        {
+                            Utils.GetDbm().LoadMusicFanart(dataGridView1.CurrentRow.Cells[0].Value.ToString(), sNewFilename, sNewFilename, "MusicFanart User", 0);
+                            DataRow myDataRow = myDataTable.NewRow();
+                            myDataRow["Artist"] = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+                            myDataRow["Enabled"] = "True";
+                            myDataRow["Image"] = GetFilenameOnly(sNewFilename);
+                            myDataRow["Image Path"] = sNewFilename;                            
+                            myDataTable.Rows.InsertAt(myDataRow, dataGridView1.CurrentRow.Index + 1);
+                        }
+                        else
+                        {
+                            dataGridView1.CurrentRow.Cells[3].Value = sNewFilename;
+
+                            Utils.GetDbm().LoadMusicFanart(dataGridView1.CurrentRow.Cells[0].Value.ToString(), sNewFilename, sNewFilename, "MusicFanart User", 0);
+                            string sFileName = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+
+                            if (File.Exists(sFileName))
+                            {
+                                Bitmap img = (Bitmap)Utils.LoadImageFastFromFile(sFileName);
+                                label30.Text = "Resolution: " + img.Width + "x" + img.Height;
+                                Size imgSize = new Size(182, 110);
+                                Bitmap finalImg = new Bitmap(img, imgSize.Width, imgSize.Height);
+                                Graphics gfx = Graphics.FromImage(finalImg);
+                                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                gfx.Dispose();
+                                pictureBox1.Image = null;
+                                pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                                pictureBox1.Image = finalImg;
+                                img.Dispose();
+                                img = null;
+                                gfx = null;
+                            }
+                            else
+                            {
+                                pictureBox1.Image = null;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("DeleteSelectedFanart: " + ex.ToString());
+            } 
+        }
+
+        private void button40_Click_1(object sender, EventArgs e)
+        {
+            EditImagePath(false);
+        }
+
+        private void button45_Click(object sender, EventArgs e)
+        {
+            EditImagePath(true);
         }
 
     }

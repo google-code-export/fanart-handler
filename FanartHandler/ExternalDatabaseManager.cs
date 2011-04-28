@@ -130,11 +130,12 @@ namespace FanartHandler
                         {                            
                             string thumb = resultSet.GetField(i, 0);
                             string dateAdded = resultSet.GetField(i, 1);
+                            string title = Utils.GetFilenameNoPath(thumb).ToUpperInvariant();
                             if (thumb != null && thumb.Trim().Length > 0)
                             {
                                 if (File.Exists(thumb))
                                 {
-                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, thumb, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null));
+                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, title, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
                                     x++;
                                 }
                             }
