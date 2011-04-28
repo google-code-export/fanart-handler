@@ -401,7 +401,7 @@ namespace FanartHandler
                 }
                 if ((CurrCountRandom >= FanartHandlerSetup.MaxCountImage) || FirstRandom || CurrCountRandom == 0)
                 {
-                    string sFilename = String.Empty;                    
+                    string sFilename = String.Empty;
                     if (SupportsRandomImages("useRandomMoviesUserFanart").Equals("True", StringComparison.CurrentCulture))
                     {
                         sFilename = GetRandomFilename(ref currAnyMoviesUser, "Movie User", ref PrevSelectedMoviesUser);                        

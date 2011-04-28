@@ -44,7 +44,7 @@ namespace FanartHandler
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
             }
-            else
+            else 
             {
                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             }
