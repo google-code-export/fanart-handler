@@ -1202,6 +1202,13 @@ namespace FanartHandler
                 }            
                 return iCount;
             }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("400"))
+                {
+                    //Do nothing. Last FM returns this if no artist is found
+                }
+            }
             catch (Exception ex)
             {
                 if (alSearchResults != null)
@@ -1300,6 +1307,13 @@ namespace FanartHandler
                     objRequest = null;
                 }
                 return iCount;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("400"))
+                {
+                    //Do nothing. Last FM returns this if no artist is found
+                }
             }
             catch (Exception ex)
             {

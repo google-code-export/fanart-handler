@@ -526,7 +526,7 @@ namespace FanartHandler
                 return string.Empty;
             }
 
-            key = GetFilenameNoPath(key);
+            key = GetFilenameNoPath1(key);
             key = Utils.RemoveExtension(key);
             key = Regex.Replace(key, @"\(\d{5}\)", String.Empty).Trim();
             if (type.Equals("MusicArtist", StringComparison.CurrentCulture))
@@ -697,6 +697,21 @@ namespace FanartHandler
             }
             return key;*/
             return Path.GetFileName(key);
+        }
+
+        public static string GetFilenameNoPath1(string key)
+        {
+            if (key == null)
+            {
+                return string.Empty;
+            }
+
+            key = key.Replace("/", "\\");
+            if (key.LastIndexOf("\\", StringComparison.CurrentCulture) >= 0)
+            {
+                return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+            }
+            return key;
         }
 
         /// <summary>
