@@ -1105,12 +1105,16 @@ namespace FanartHandler
 
         private string GetFilenameOnly(string filename)
         {
-            filename = filename.Replace("/", "\\");
+            /*filename = filename.Replace("/", "\\");
             if (filename.IndexOf("\\", StringComparison.CurrentCulture) >= 0)
             {
                 return filename.Substring(filename.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+            }*/
+            if (filename != null && filename.Length > 0)
+            {
+                return Path.GetFileName(filename);
             }
-            return filename;
+            return string.Empty;
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -1968,7 +1972,7 @@ namespace FanartHandler
                 
                 DataRow myDataRow = myDataTable9.NewRow();
                 string s1 = path;
-                string sImage = s1.Substring(s1.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                string sImage = Path.GetFileName(s1);//s1.Substring(s1.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
                 string sArtist = null;
                 if (sImage.IndexOf("L.") > 0)
                 {
@@ -2410,7 +2414,7 @@ namespace FanartHandler
                             if (!s.Contains("_tmp"))
                             {
                                 DataRow myDataRow = myDataTable9.NewRow();
-                                string sImage = s.Substring(s.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                                string sImage = Path.GetFileName(s);// s.Substring(s.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
                                 string sArtist = null;
                                 if (sImage.IndexOf("L.") > 0)
                                 {
