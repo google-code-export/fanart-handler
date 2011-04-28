@@ -78,7 +78,7 @@ namespace FanartHandler
                  */
                 latestTVSeries = new Hashtable();
                 int i0 = 1;
-                List<DBEpisode> episodes = DBEpisode.GetMostRecent(MostRecentType.Created, 120, 3);
+                List<DBEpisode> episodes = DBEpisode.GetMostRecent(MostRecentType.Created, 300, 3);
                 if (episodes != null)
                 {
                     //if (episodes.Count > 3) episodes.RemoveRange(3, episodes.Count - 3);
@@ -93,8 +93,8 @@ namespace FanartHandler
                             string seasonIdx = episode[DBEpisode.cSeasonIndex];
                             string episodeIdx = episode[DBEpisode.cEpisodeIndex];
                             string seriesTitle = series.ToString();
-                            string thumb = ImageAllocator.GetEpisodeImage(episode);
-                            string thumbSeries = ImageAllocator.GetSeriesPoster(series,false);
+                            string thumb = episode.Image.Trim();// ImageAllocator.GetEpisodeImage(episode);
+                            string thumbSeries = ImageAllocator.GetSeriesPosterAsFilename(series).Trim();//ImageAllocator.GetSeriesPoster(series,false);
                             string fanart = Fanart.getFanart(episode[DBEpisode.cSeriesID]).FanartFilename;
                             string dateAdded = episode[DBEpisode.cFileDateAdded];
                             string seriesGenre = series[DBOnlineSeries.cGenre];
@@ -102,7 +102,8 @@ namespace FanartHandler
                             string contentRating = episode[DBOnlineSeries.cContentRating];
                             string episodeRuntime = episode[DBEpisode.cLocalPlaytime];
                             string episodeFirstAired = episode[DBOnlineEpisode.cFirstAired];
-
+                            string episodeSummary = episode[DBOnlineEpisode.cEpisodeSummary];
+                           
                             System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.InstalledUICulture;
                             System.Globalization.NumberFormatInfo ni = (System.Globalization.NumberFormatInfo)ci.NumberFormat.Clone();
                             ni.NumberDecimalSeparator = ".";
@@ -118,7 +119,7 @@ namespace FanartHandler
                                 {
                                 }
                             }
-                            result.Add(new FanartHandler.Latest(dateAdded, thumb, fanart, seriesTitle, episodeTitle, null, null, seriesGenre, episodeRating, mathRoundToString, contentRating, episodeRuntime, episodeFirstAired, seasonIdx, episodeIdx, thumbSeries, null, null, null));
+                            result.Add(new FanartHandler.Latest(dateAdded, thumb, fanart, seriesTitle, episodeTitle, null, null, seriesGenre, episodeRating, mathRoundToString, contentRating, episodeRuntime, episodeFirstAired, seasonIdx, episodeIdx, thumbSeries, null, null, null, null, episodeSummary));
                             latestTVSeries.Add(i0, episode);
                             i0++;
                         }
@@ -169,8 +170,7 @@ namespace FanartHandler
         public static void TVSeriesUpdateLatest(bool initialSetup)
         {
             int z = 1;
-            //            string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture) // COMMENTED BY CODEIT.RIGHT;
-            if (FanartHandlerSetup.LatestTVSeries.Equals("True", StringComparison.CurrentCulture))// && !(windowId.Equals("9811") || windowId.Equals("9812") || windowId.Equals("9813") || windowId.Equals("9814") || windowId.Equals("9815")))
+            if (FanartHandlerSetup.LatestTVSeries.Equals("True", StringComparison.CurrentCulture))
             {
                 FanartHandler.LatestsCollection ht = null;
                 try
@@ -197,15 +197,20 @@ namespace FanartHandler
                         FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".roundedRating", ht[i].RoundedRating);
                         FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".classification", ht[i].Classification);
                         FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".runtime", ht[i].Runtime);
-                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".firstAired", ht[i].Year);                        
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".firstAired", ht[i].Year);
+                        FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest" + z + ".plot", ht[i].Summary);  
                         z++;
                     }
                     ht.Clear();
                 }
                 ht = null;
                 z = 1;
+                FanartHandlerSetup.SetProperty("#fanarthandler.tvseries.latest.enabled", "true");
             }
-
+            else
+            {
+                FanartHandlerSetup.EmptyLatestMediaPropsTVSeries();
+            }
         }
 
         public static Hashtable GetTVSeriesName(string type)

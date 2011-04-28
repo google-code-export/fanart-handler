@@ -17,7 +17,7 @@ using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using NLog;
+using NLog; 
 using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using MediaPortal.Util;
@@ -95,7 +95,7 @@ namespace FanartHandler
                     {
                         sTimestamp = item.DateAdded.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                         string fanart = item.CoverThumbFullPath;
-                        latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null, null, item, null, null));                        
+                        latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null, null, item, null, null, item.ID.ToString(),item.Summary));                        
                     }
                     if (vMovies != null)
                     {
@@ -128,7 +128,7 @@ namespace FanartHandler
                         string fanart = item.CoverThumbFullPath;
                         if (fanart != null && fanart.Trim().Length > 0)
                         {
-                            latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null, null, item, null, null));
+                            latests.Add(new Latest(sTimestamp, fanart, item.BackdropFullPath, item.Title, null, null, null, item.Genres.ToPrettyString(2), item.Score.ToString(CultureInfo.CurrentCulture), Math.Round(item.Score, MidpointRounding.AwayFromZero).ToString(CultureInfo.CurrentCulture), item.Certification, GetMovieRuntime(item) + " mins", item.Year.ToString(CultureInfo.CurrentCulture), null, null, null, item, null, null, item.ID.ToString(), item.Summary));
                         }
                     }
                     if (vMovies != null)
@@ -228,16 +228,24 @@ namespace FanartHandler
                             FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest" + z + ".classification", latestMovingPictures[i].Classification);
                             FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest" + z + ".runtime", latestMovingPictures[i].Runtime);
                             FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest" + z + ".year", latestMovingPictures[i].Year);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest" + z + ".id", latestMovingPictures[i].Id);
+                            FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest" + z + ".plot", latestMovingPictures[i].Summary);
                             z++;
                         }
                         latestMovingPictures.Clear();
                     }
                     latestMovingPictures = null;
                     z = 1;
+                    FanartHandlerSetup.SetProperty("#fanarthandler.movingpicture.latest.enabled", "true");
+                }
+                else
+                {
+                    FanartHandlerSetup.EmptyLatestMediaPropsMovingPictures();
                 }
             }
             catch (Exception ex)
             {
+                FanartHandlerSetup.EmptyLatestMediaPropsMovingPictures();
                 logger.Error("MovingPictureOnObjectInserted: " + ex.ToString());
             }
         }
@@ -279,7 +287,7 @@ namespace FanartHandler
                     if (fanart != null && fanart.Trim().Length > 0)
                     {
                         Utils.GetDbm().LoadFanartExternal(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 1);
-                        Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 1);
+                        Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 1);                        
                     }
                 }
                 if (vMovies2 != null)
@@ -296,7 +304,7 @@ namespace FanartHandler
                         if (fanart != null && fanart.Trim().Length > 0)
                         {
                             Utils.GetDbm().LoadFanartExternal(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 0);
-                            Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 0);
+                            Utils.GetDbm().LoadFanart(Utils.GetArtist(item.Title, "Movie Scraper"), fanart, fanart, "MovingPicture", 0);                            
                         }
                     }
                     if (vMovies1 != null)

@@ -39,7 +39,8 @@ namespace FanartHandler
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
         private const string RXMatchMPvs = @"{[0-9]}$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.2.4.203";  //Holds current pluginversion.
+        private const string RXMatchMPvs2 = @"([0-9])$"; // MyVideos fanart scraper filename index
+        public const string GetMajorMinorVersionNumber = "2.2.4.213";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -55,6 +56,13 @@ namespace FanartHandler
         private static Hashtable delayStop = null;
         private static int idleTimeInMillis = 150;//250;
         private static string doNotReplaceExistingThumbs = null;
+        private static bool used4TRTV = false;
+
+        public static bool Used4TRTV
+        {
+            get { return Utils.used4TRTV; }
+            set { Utils.used4TRTV = value; }
+        }
         #endregion
 
         /// <summary>
@@ -302,6 +310,9 @@ namespace FanartHandler
             //Remove MyVideos scraper fanart filename index
             newTitle = Regex.Replace(newTitle, RXMatchMPvs, String.Empty).Trim();
 
+            //Remove (0), (1) ....
+            newTitle = Regex.Replace(newTitle, RXMatchMPvs2, String.Empty).Trim();
+
             // Replace non-descriptive characters with spaces
             newTitle = Regex.Replace(newTitle, RXMatchNonWordCharacters, " ");
 
@@ -314,6 +325,8 @@ namespace FanartHandler
             // Remove the number 1 from the end of a title string
             newTitle = Regex.Replace(newTitle, @"\s(1)$", String.Empty);
 
+            // Replace non-descriptive characters with spaces
+            newTitle = Regex.Replace(newTitle, RXMatchNonWordCharacters, " ");
 
             // Remove double spaces and return the cleaned title
             return newTitle.TrimWhiteSpace();
@@ -490,14 +503,17 @@ namespace FanartHandler
         /// <summary>
         /// Remove _ from string.
         /// </summary>
-        public static string RemoveUnderline(string key)
+        public static string RemoveSpecialChars(string key)
         {
             if (key == null)
             {
                 return string.Empty;
             }
 
-            return Regex.Replace(key, @"_", String.Empty);
+            key = Regex.Replace(key, @"_", String.Empty);
+            key = Regex.Replace(key, @":", String.Empty);
+            key = Regex.Replace(key, @";", String.Empty);
+            return key;
         }
 
         /// <summary>
@@ -517,7 +533,7 @@ namespace FanartHandler
             {
                 key = Regex.Replace(key, "[L]$", String.Empty).Trim();
             }
-            key = Utils.RemoveUnderline(key);
+            key = Utils.RemoveSpecialChars(key);
             if (type.Equals("MusicAlbum", StringComparison.CurrentCulture))
             {
                 if (key.IndexOf("-", StringComparison.CurrentCulture) >= 0)
@@ -528,7 +544,7 @@ namespace FanartHandler
             //key = RemoveTrailingDigits(key);
             // Don't delete trailing digits in myVideos for proper fanart title selection
             // of movie sequal (ie. Die Hard & Die Hard 2)
-            if (!type.Equals("myVideos", StringComparison.CurrentCulture))
+            if (!type.Equals("Movie Scraper", StringComparison.CurrentCulture) && !type.Equals("Movie User", StringComparison.CurrentCulture))
             {
                 key = RemoveTrailingDigits(key);
             }

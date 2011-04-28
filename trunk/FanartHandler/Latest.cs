@@ -37,6 +37,20 @@ namespace FanartHandler
         object playable;
         string fanart1;        
         string fanart2;
+        string id;
+        string summary;
+
+        public string Summary
+        {
+            get { return summary; }
+            set { summary = value; }
+        }
+
+        public string Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
 
         public string Fanart1
         {
@@ -152,7 +166,7 @@ namespace FanartHandler
             set { episodeIndex = value; }
         }
 
-        public Latest(string dateAdded, string thumb, string fanart, string title, string subtitle, string artist, string album, string genre, string rating, string roundedRating, string classification, string runtime, string year, string seasonIndex, string episodeIndex, string thumbSeries, object playable, string fanart1, string fanart2)
+        public Latest(string dateAdded, string thumb, string fanart, string title, string subtitle, string artist, string album, string genre, string rating, string roundedRating, string classification, string runtime, string year, string seasonIndex, string episodeIndex, string thumbSeries, object playable, string fanart1, string fanart2, string id, string summary)
         {
             this.dateAdded = dateAdded;
             this.thumb = thumb;
@@ -173,6 +187,8 @@ namespace FanartHandler
             this.playable = playable;
             this.fanart1 = fanart1;
             this.fanart2 = fanart2;
+            this.id = id;
+            this.summary = summary;
         }
 
     }

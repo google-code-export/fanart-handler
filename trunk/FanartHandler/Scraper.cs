@@ -603,10 +603,6 @@ namespace FanartHandler
             try
             {                
                 bool result = CropImage(aInputFilename, iWidth, iHeight, aThumbTargetPath);
-                if (result && MediaPortal.Util.Utils.IsFileExistsCacheEnabled())
-                {
-                    MediaPortal.Util.Utils.DoInsertExistingFileIntoCache(aThumbTargetPath);
-                }
                 return result;
             }
             catch (Exception ex)
@@ -921,13 +917,14 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int GetImages(string artist, int iMax, DatabaseManager dbm, bool reportProgress)
+        public int GetImages(string artist, int iMax, DatabaseManager dbm, bool reportProgress, bool doTriggerRefresh)
         {
             try
             {
                 if (dbm.StopScraper == false)
                 {
                     Encoding enc = Encoding.GetEncoding("iso-8859-1");
+                    bool resetImageHash = false;
                     string dbArtist = null;
                     string strResult = null;
                     string path = null;
@@ -986,19 +983,13 @@ namespace FanartHandler
                     {
                     }
                     int iCount = 0;
+
                     if (alSearchResults != null)
                     {
                         logger.Debug("Trying to find fanart for artist " + artist + ".");
                         if (!reportProgress)
                         {
-                            if (alSearchResults.Count > iMax)
-                            {
-                                dbm.TotArtistsBeingScraped = iMax;
-                            }
-                            else
-                            {
-                                dbm.TotArtistsBeingScraped = alSearchResults.Count;
-                            }
+                            dbm.TotArtistsBeingScraped = alSearchResults.Count+1;
                             dbm.CurrArtistsBeingScraped = 0;
                             if (FanartHandlerSetup.MyScraperNowWorker != null)
                             {
@@ -1030,23 +1021,21 @@ namespace FanartHandler
                                             {
                                                 iCount = iCount + 1;
                                                 dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
-                                                if (FanartHandlerSetup.MyScraperNowWorker != null)
+                                                if (FanartHandlerSetup.MyScraperNowWorker != null && doTriggerRefresh)
                                                 {
                                                     FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
+                                                    doTriggerRefresh = false;
+                                                    resetImageHash = true;
+                                                }
+                                                else if (FanartHandlerSetup.MyScraperNowWorker != null && resetImageHash)
+                                                {
+                                                    FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null); //Reload images
                                                 }
                                             }
                                         }
                                         else
                                         {
                                             logger.Debug("Will not download fanart image as it already exist an image in your fanart database with this source image name.");
-                                        }
-                                    }
-                                    if (!reportProgress)
-                                    {
-                                        dbm.CurrArtistsBeingScraped++;
-                                        if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
-                                        {
-                                            FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                                         }
                                     }
                                 }
@@ -1067,14 +1056,25 @@ namespace FanartHandler
                                         sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                                         if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
                                         {
-                                            //dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicThumbnails", 0);
                                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                                             foundThumb = true;
                                         }
                                     }
+                                }                                
+                            }
+                            if (!reportProgress)
+                            {
+                                dbm.CurrArtistsBeingScraped++;
+                                if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                                {
+                                    FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                                 }
-                            }                            
+                            }
                         }
+                        /*if (resetImageHash)
+                        {                            
+                            FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null); //Reload images
+                        }*/
                         if (dbm.StopScraper == true)
                         {
                             return iCount;
@@ -1085,6 +1085,14 @@ namespace FanartHandler
                             if (!Utils.GetDbm().HasArtistThumb(dbArtist) && Utils.ScrapeThumbnails.Equals("True", StringComparison.CurrentCulture))
                             {
                                 GetLastFMArtistImages(artist, dbm);
+                            }
+                        }
+                        if (!reportProgress)
+                        {
+                            dbm.CurrArtistsBeingScraped++;
+                            if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                            {
+                                FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                             }
                         }
                     }

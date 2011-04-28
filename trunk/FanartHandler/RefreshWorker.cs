@@ -140,12 +140,13 @@ namespace FanartHandler
                         {
                         }
                     }
+
                     if (FanartHandlerSetup.UseMusicFanart.Equals("True", StringComparison.CurrentCulture) && isIdle)
                     {
-                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
+                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelectedMusic.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
                             if (windowId == 504 || windowId == 501 || windowId == 500)
-                            {
+                            {                                
                                 //User are in myMusicGenres window
                                 FanartHandlerSetup.IsSelectedMusic = true;
                                 resetFanartAvailableFlags = false;
@@ -210,17 +211,17 @@ namespace FanartHandler
                             }
                         }
                     }
-
+                    
                     if (FanartHandlerSetup.UseVideoFanart.Equals("True", StringComparison.CurrentCulture) && isIdle)
                     {
-                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelected.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
+                        if (FanartHandlerSetup.FS.WindowsUsingFanartSelectedMovie.ContainsKey(windowId.ToString(CultureInfo.CurrentCulture)))
                         {
                             if (windowId == 6 || windowId == 25 || windowId == 28 || windowId == 2003 || windowId == 9813)
                             {
                                 //User are in myVideo, myVideoTitle window or myvideoplaylist
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "myVideos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "Movie Scraper", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }                          
                             else if (windowId == 601 || windowId == 605 || windowId == 606 || windowId == 603 || windowId == 759 || windowId == 1 || windowId == 600 || windowId == 747 || windowId == 49849 || windowId == 49848 || windowId == 49850)
@@ -236,10 +237,10 @@ namespace FanartHandler
                                 //User are in basichome
                                 FanartHandlerSetup.IsSelectedVideo = true;
                                 resetFanartAvailableFlags = false;
-                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "myVideos", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
+                                FanartHandlerSetup.FS.RefreshGenericSelectedProperties("movie", ref FanartHandlerSetup.FS.ListSelectedMovies, "Movie Scraper", ref FanartHandlerSetup.FS.CurrSelectedMovie, ref FanartHandlerSetup.FS.CurrSelectedMovieTitle);
                                 Report(e);
                             }
-                            else if (!FanartHandlerSetup.FS.FoundItem)
+                            else //if (!FanartHandlerSetup.FS.FoundItem)
                             {
                                 //User are in myonlinevideos, mytrailers or UNKNOW/NOT SPECIFIED plugin that supports fanart handler
                                 FanartHandlerSetup.IsSelectedVideo = true;

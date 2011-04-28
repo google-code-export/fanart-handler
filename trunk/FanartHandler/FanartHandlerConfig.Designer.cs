@@ -113,6 +113,7 @@ namespace FanartHandler
             this.checkBoxScraperMusicPlaying = new System.Windows.Forms.CheckBox();
             this.checkBoxEnableScraperMPDatabase = new System.Windows.Forms.CheckBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.button40 = new System.Windows.Forms.Button();
             this.label30 = new System.Windows.Forms.Label();
             this.button15 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -144,6 +145,9 @@ namespace FanartHandler
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.button39 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label34 = new System.Windows.Forms.Label();
             button44 = new System.Windows.Forms.Button();
             button43 = new System.Windows.Forms.Button();
             button42 = new System.Windows.Forms.Button();
@@ -228,9 +232,7 @@ namespace FanartHandler
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label34 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button39 = new System.Windows.Forms.Button();
+            this.button45 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -1135,6 +1137,8 @@ namespace FanartHandler
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.button45);
+            this.tabPage7.Controls.Add(this.button40);
             this.tabPage7.Controls.Add(this.label30);
             this.tabPage7.Controls.Add(this.button15);
             this.tabPage7.Controls.Add(this.label8);
@@ -1163,6 +1167,18 @@ namespace FanartHandler
             this.tabPage7.Text = "Manage Fanart";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // button40
+            // 
+            this.button40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button40.Location = new System.Drawing.Point(372, 429);
+            this.button40.Name = "button40";
+            this.button40.Size = new System.Drawing.Size(174, 22);
+            this.button40.TabIndex = 18;
+            this.button40.Text = "Edit Image Path [E]";
+            this.toolTip1.SetToolTip(this.button40, "Press this button to manually edit the image path.");
+            this.button40.UseVisualStyleBackColor = true;
+            this.button40.Click += new System.EventHandler(this.button40_Click_1);
+            // 
             // label30
             // 
             this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1178,7 +1194,7 @@ namespace FanartHandler
             // button15
             // 
             this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button15.Location = new System.Drawing.Point(372, 455);
+            this.button15.Location = new System.Drawing.Point(372, 407);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(174, 22);
             this.button15.TabIndex = 16;
@@ -1283,7 +1299,7 @@ namespace FanartHandler
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(372, 433);
+            this.button5.Location = new System.Drawing.Point(372, 385);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(174, 22);
             this.button5.TabIndex = 5;
@@ -1297,7 +1313,7 @@ namespace FanartHandler
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(372, 364);
+            this.button4.Location = new System.Drawing.Point(372, 316);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(174, 22);
             this.button4.TabIndex = 4;
@@ -1309,7 +1325,7 @@ namespace FanartHandler
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(372, 410);
+            this.button3.Location = new System.Drawing.Point(372, 362);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(174, 22);
             this.button3.TabIndex = 3;
@@ -1322,7 +1338,7 @@ namespace FanartHandler
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Location = new System.Drawing.Point(553, 364);
+            this.pictureBox1.Location = new System.Drawing.Point(553, 316);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(182, 110);
             this.pictureBox1.TabIndex = 2;
@@ -1332,7 +1348,7 @@ namespace FanartHandler
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(372, 387);
+            this.button2.Location = new System.Drawing.Point(372, 339);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(174, 22);
             this.button2.TabIndex = 1;
@@ -1393,7 +1409,7 @@ namespace FanartHandler
             this.dataGridView1.ShowCellToolTips = false;
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.ShowRowErrors = false;
-            this.dataGridView1.Size = new System.Drawing.Size(731, 350);
+            this.dataGridView1.Size = new System.Drawing.Size(731, 302);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.VirtualMode = true;
             this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGridView1_KeyDown);
@@ -1563,6 +1579,44 @@ namespace FanartHandler
             this.tabPage22.TabIndex = 1;
             this.tabPage22.Text = "Manage Thumbnails";
             this.tabPage22.UseVisualStyleBackColor = true;
+            // 
+            // button39
+            // 
+            this.button39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button39.Location = new System.Drawing.Point(432, 362);
+            this.button39.Name = "button39";
+            this.button39.Size = new System.Drawing.Size(186, 22);
+            this.button39.TabIndex = 28;
+            this.button39.Text = "Lock/Unlock Selected Thumbnail";
+            this.toolTip1.SetToolTip(this.button39, "Press this button to lock/unlock selected thumbnail.\r\nLocking means that the tumb" +
+                    "nail will  not be overwritten\r\nby future scrapes. Unlocked images may be overwri" +
+                    "tten.");
+            this.button39.UseVisualStyleBackColor = true;
+            this.button39.Click += new System.EventHandler(this.button39_Click_1);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(9, 378);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(219, 21);
+            this.comboBox1.TabIndex = 27;
+            this.toolTip1.SetToolTip(this.comboBox1, "Choose how many images the scraper will try to\r\ndownload for every artist. Choosi" +
+                    "ng a higher number\r\nwill consume more harddisk space. ");
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            // 
+            // label34
+            // 
+            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 362);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(29, 13);
+            this.label34.TabIndex = 26;
+            this.label34.Text = "Filter";
+            this.label34.Click += new System.EventHandler(this.label34_Click);
             // 
             // button44
             // 
@@ -2662,43 +2716,17 @@ namespace FanartHandler
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // label34
+            // button45
             // 
-            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(6, 362);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(29, 13);
-            this.label34.TabIndex = 26;
-            this.label34.Text = "Filter";
-            this.label34.Click += new System.EventHandler(this.label34_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(9, 378);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(219, 21);
-            this.comboBox1.TabIndex = 27;
-            this.toolTip1.SetToolTip(this.comboBox1, "Choose how many images the scraper will try to\r\ndownload for every artist. Choosi" +
-                    "ng a higher number\r\nwill consume more harddisk space. ");
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
-            // 
-            // button39
-            // 
-            this.button39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button39.Location = new System.Drawing.Point(432, 362);
-            this.button39.Name = "button39";
-            this.button39.Size = new System.Drawing.Size(186, 22);
-            this.button39.TabIndex = 28;
-            this.button39.Text = "Lock/Unlock Selected Thumbnail";
-            this.toolTip1.SetToolTip(this.button39, "Press this button to lock/unlock selected thumbnail.\r\nLocking means that the tumb" +
-                    "nail will  not be overwritten\r\nby future scrapes. Unlocked images may be overwri" +
-                    "tten.");
-            this.button39.UseVisualStyleBackColor = true;
-            this.button39.Click += new System.EventHandler(this.button39_Click_1);
+            this.button45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button45.Location = new System.Drawing.Point(372, 453);
+            this.button45.Name = "button45";
+            this.button45.Size = new System.Drawing.Size(174, 22);
+            this.button45.TabIndex = 19;
+            this.button45.Text = "Add Image To Selected Artist [A]";
+            this.toolTip1.SetToolTip(this.button45, "Press this button to manually add an image to selected artist.");
+            this.button45.UseVisualStyleBackColor = true;
+            this.button45.Click += new System.EventHandler(this.button45_Click);
             // 
             // FanartHandlerConfig
             // 
@@ -2978,13 +3006,15 @@ namespace FanartHandler
         private System.Windows.Forms.CheckBox checkBox8;
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button39;
+        private System.Windows.Forms.Button button40;
+        private System.Windows.Forms.Button button45;
         private static System.Windows.Forms.ProgressBar progressBar2;
         private static System.Windows.Forms.DataGridView dataGridView9;
         private static System.Windows.Forms.Button button43;
         private static System.Windows.Forms.Button button42;
         private static System.Windows.Forms.Button button41;
         private static System.Windows.Forms.Button button44;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button39;
     }
 }

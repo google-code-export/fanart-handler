@@ -224,20 +224,10 @@ namespace FanartHandler
                     if (DoShowImageOnePlay)
                     {                        
                         AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
-                        string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop2.play");
-                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png", StringComparison.CurrentCulture))
-                        {
-                            AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
-                        }
                     }
                     else
                     {
                         AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
-                        string sTag = GUIPropertyManager.GetProperty("#fanarthandler.music.backdrop1.play");
-                        if (sTag == null || sTag.Length < 2 || sTag.EndsWith("transparent.png", StringComparison.CurrentCulture))
-                        {
-                            AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
-                        }
                     }
                     if (FanartHandlerSetup.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
                     {
@@ -247,7 +237,6 @@ namespace FanartHandler
                     {
                         ResetCurrCountPlay();
                     }
-                    //ResetCurrCountPlay();
                 }
                 else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
                 {
@@ -302,7 +291,7 @@ namespace FanartHandler
         /// Reset couners and trigger new image change
         /// </summary>
         public void ResetCurrCountPlay()
-        {
+        {           
             CurrCountPlay = 0;
             UpdateVisibilityCountPlay = 1;
             HasUpdatedCurrCountPlay = true;
