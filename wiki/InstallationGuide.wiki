@@ -12,9 +12,13 @@
     * New feature: Now scanning and import of local files are recursively into folders and subfolders.
     * New feature: New properties to "enabled" that can be used to decide if a user have enabled latest media tags
     * New feature: New property for latest pictures. Title.
+    * New feature: Configuration has a few new options.
     * New feature: FanartHandler now fully supports adding the fanart handler properties to separete xml files and import. Easier and more maintainable code
     * Bug fixed: Black fanart in some occasions
     * Bug fixed: Artist Thumb filename starts with a 'space' character when downloading thumbs for multi-artists tracks
+    * Bug fixed: Speedup of the plugin
+    * Bug fixed: Other small fixes and improvements
+This is a big change from previous versions. First time you run MP after an upgrade the scraper can run quite some time depending on the settings you have (if you scrape for thumbs for example).
 ==Change Log (version 2.2.2 to 2.2.3)==
   * For users that had the 2.2.2 Beta installed the 2.2.2 final version failed to upgrade.
   * Videos with "the" in the movie name failed to parse in FH.
