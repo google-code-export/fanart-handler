@@ -1058,6 +1058,11 @@ namespace FanartHandler
                                         {
                                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                                             foundThumb = true;
+                                            if (FanartHandlerSetup.IsPlaying)
+                                            {
+                                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+                                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                                            }
                                         }
                                     }
                                 }                                
@@ -1194,7 +1199,11 @@ namespace FanartHandler
                         dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                         if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
                         {
-                            //                       dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicThumbnails", 0);
+                            if (FanartHandlerSetup.IsPlaying)
+                            {
+                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                            }
                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                         }
                     }
@@ -1299,7 +1308,11 @@ namespace FanartHandler
                         dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                         if (DownloadImage(ref artist, album, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicAlbumThumbs"))
                         {
-                            //                       dbm.LoadMusicFanart(dbArtist, filename, sourceFilename, "MusicThumbnails", 0);
+                            if (FanartHandlerSetup.IsPlaying)
+                            {
+                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                            }
                             urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
                             urlAlbum = Utils.GetArtist(urlAlbum, "MusicFanart Scraper");
                             Utils.GetDbm().SetSuccessfulAlbumScrape(urlArtist, urlAlbum, "2");
