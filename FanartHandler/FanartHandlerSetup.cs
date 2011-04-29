@@ -1372,6 +1372,7 @@ namespace FanartHandler
         private void SetupVariables()
         {
             Utils.SetIsStopping(false);
+            Restricted = 0;
             PreventRefresh = false;
             IsPlaying = false;
             IsSelectedMusic = false;
@@ -2118,7 +2119,14 @@ namespace FanartHandler
                 Utils.DoNotReplaceExistingThumbs = doNotReplaceExistingThumbs;
                 Utils.InitiateDbm();
                 MDB = MusicDatabase.Instance;
-                FanartHandlerSetup.Restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
+                FanartHandlerSetup.Restricted = 0;
+                try
+                {
+                    FanartHandlerSetup.Restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
+                }
+                catch
+                {
+                }
                 myDirectoryTimer = new TimerCallback(UpdateDirectoryTimer);
                 directoryTimer = new System.Threading.Timer(myDirectoryTimer, null, 500, 900000);                                       
                 InitRandomProperties();
