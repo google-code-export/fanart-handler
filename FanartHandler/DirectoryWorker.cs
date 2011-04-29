@@ -51,7 +51,14 @@ namespace FanartHandler
             Thread.CurrentThread.Name = "DirectoryWorker";
             Utils.AllocateDelayStop("DirectoryWorker-OnDoWork");
             logger.Info("Refreshing local fanart is starting.");
-            FanartHandlerSetup.Restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
+            FanartHandlerSetup.Restricted = 0;
+            try
+            {
+                FanartHandlerSetup.Restricted = UtilsLatestMovingPictures.MovingPictureIsRestricted();
+            }
+            catch
+            {
+            }
             if (Utils.GetIsStopping() == false)
             {
                 try
