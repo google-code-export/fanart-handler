@@ -2141,6 +2141,7 @@ namespace FanartHandler
                 Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(OnSystemPowerModeChanged);
                 GUIWindowManager.OnActivateWindow += new GUIWindowManager.WindowActivationHandler(GuiWindowManagerOnActivateWindow);
                 g_Player.PlayBackStarted += new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
+                g_Player.PlayBackEnded += new MediaPortal.Player.g_Player.EndedHandler(OnPlayBackEnded);
                 refreshTimer = new System.Timers.Timer(250);
                 refreshTimer.Elapsed += new ElapsedEventHandler(UpdateImageTimer);
                 refreshTimer.Interval = 250;
@@ -2619,7 +2620,7 @@ namespace FanartHandler
                     FP.FanartAvailablePlay = false;
                     FP.FanartIsNotAvailablePlay(GUIWindowManager.ActiveWindow);
                     FP.PrevPlayMusic = -1;
-                    SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
+                    //SetProperty("#fanarthandler.music.artisthumb.play", string.Empty);
                     SetProperty("#fanarthandler.music.overlay.play", string.Empty);
                     SetProperty("#fanarthandler.music.backdrop1.play", string.Empty);
                     SetProperty("#fanarthandler.music.backdrop2.play", string.Empty);
@@ -2730,12 +2731,12 @@ namespace FanartHandler
             else
                 return true;
         }
-        
+
         public void OnPlayBackStarted(g_Player.MediaType type, string filename)
         {
             try
             {
-                string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);                                
+                string windowId = GUIWindowManager.ActiveWindow.ToString(CultureInfo.CurrentCulture);
                 IsPlaying = true;
                 if ((FP.WindowsUsingFanartPlay.ContainsKey(windowId) || (UseOverlayFanart != null && UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))) && AllowFanartInThisWindow(windowId))
                 {
@@ -2751,6 +2752,17 @@ namespace FanartHandler
             }
         }
 
+        public void OnPlayBackEnded(g_Player.MediaType type, string filename)
+        {
+            try
+            {
+                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("OnPlayBackEnded: " + ex.ToString());
+            }
+        }
 
 
         private static void CreateDirectoryIfMissing(string directory)
@@ -2959,6 +2971,7 @@ namespace FanartHandler
                 }
                 GUIWindowManager.OnActivateWindow -= new GUIWindowManager.WindowActivationHandler(GuiWindowManagerOnActivateWindow);
                 g_Player.PlayBackStarted -= new MediaPortal.Player.g_Player.StartedHandler(OnPlayBackStarted);
+                g_Player.PlayBackEnded -= new MediaPortal.Player.g_Player.EndedHandler(OnPlayBackEnded);
                 int ix = 0;
                 while (Utils.GetDelayStop() && ix < 20)
                 {
