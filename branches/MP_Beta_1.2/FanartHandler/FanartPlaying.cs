@@ -20,6 +20,7 @@ namespace FanartHandler
     using System.Linq;
     using System.Text;
     using MediaPortal.Configuration;
+    using System.IO;
 
     /// <summary>
     /// Class handling fanart for now playing music.
@@ -161,31 +162,56 @@ namespace FanartHandler
             }
         }
 
-        private void AddPlayingArtistThumbProperty(string artist, bool DoShowImageOnePlay)
+        public void AddPlayingArtistThumbProperty(string artist, bool DoShowImageOnePlay)
         {
             string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+            bool found = false;
             string filename = null;
-            if (artist.Contains("|"))
+
+            //Try to get album thumb
+            if (FanartHandlerSetup.CurrentAlbumTag != null && FanartHandlerSetup.CurrentAlbumTag.Length > 0)
             {
-                string[] artists = artist.Split('|');
-                if (artists != null && artists.Length >= 1 && DoShowImageOnePlay)
+                filename = MediaPortal.Util.Utils.GetAlbumThumbName(artist, FanartHandlerSetup.CurrentAlbumTag);
+                filename = MediaPortal.Util.Utils.ConvertToLargeCoverArt(filename);
+                if (File.Exists(filename))
                 {
-                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
-                }
-                else if (artists != null && artists.Length >= 2 && !DoShowImageOnePlay)
-                {
-                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[1].Trim()) + "L.jpg";
-                }
-                else if (artists != null && artists.Length >= 1 && !DoShowImageOnePlay)
-                {
-                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                    found = true;
                 }
             }
-            else
+
+            //If album not found try to find artist thumb
+            if (!found)
             {
-                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artist) + "L.jpg";
+                filename = null;
+                if (artist.Contains("|"))
+                {
+                    string[] artists = artist.Split('|');
+                    if (artists != null && artists.Length >= 1 && DoShowImageOnePlay)
+                    {
+                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                    }
+                    else if (artists != null && artists.Length >= 2 && !DoShowImageOnePlay)
+                    {
+                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[1].Trim()) + "L.jpg";
+                    }
+                    else if (artists != null && artists.Length >= 1 && !DoShowImageOnePlay)
+                    {
+                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                    }
+                }
+                else
+                {
+                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artist) + "L.jpg";
+                }
+                if (File.Exists(filename))
+                {
+                    found = true;
+                }
             }
-            AddPropertyPlay("#fanarthandler.music.artisthumb.play", filename, ref ListPlayMusic);
+            if (found)
+            {
+                AddPropertyPlay("#fanarthandler.music.artisthumb.play", filename, ref ListPlayMusic);
+            }
         }
 
         /// <summary>
