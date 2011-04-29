@@ -27,33 +27,74 @@
         <Items />
       </Sections>
       <Dependencies>
-        <Items />
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>0</Major>
+              <Minor>0</Minor>
+              <Build>0</Build>
+              <Revision>0</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>999</Revision>
+            </MaxVersion>
+            <WarnOnly>true</WarnOnly>
+            <Message>This version is not compatible with MediaPortal 1.2 Beta or later.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
       </Dependencies>
       <GeneralInfo>
         <Name>Fanart Handler</Name>
         <Id>814a6918-0183-4323-a3b4-c00fac11b4f6</Id>
         <Author>cul8er</Author>
         <HomePage>http://code.google.com/p/fanart-handler/</HomePage>
-        <ForumPage>http://forum.team-mediaportal.com/mediaportal-plugins-47/fanart-handler-plugin-v1-3-music-fanart-scraper-76535/</ForumPage>
+        <ForumPage>http://forum.team-mediaportal.com/fanart-handler-535/</ForumPage>
         <UpdateUrl>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>2</Major>
           <Minor>2</Minor>
-          <Build>3</Build>
+          <Build>4</Build>
           <Revision>0</Revision>
         </Version>
-        <ExtensionDescription>Fanart handler and music fanart scraper for MediaPortal. WARNING! Version 2.2.2 requres skin chnages. Please make sure your skin supports this version before upgrading.</ExtensionDescription>
-        <VersionDescription>WARNING!
-The plugin has undergone alot of changes to make it MP 1.2 compatible. MP 1.2 contains for example a new great feature for the myVideo plugin. The new feature allows MP to scrape movie fanart for movies handled by the myVideos plugin. This and a few other things has forced me to change the folder structure for the FanartHandler fanarts. More on this in the Fanart Handlers Wikis. This version require all skins to make changes to use the new structure. All community skinner has been notified but if you are unsure if your skin supports this new version then do not use this upgrade but wait instead for a new version of your used skin to be released.</VersionDescription>
+        <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
+
+    * Search and download music artist fanart or artist thumbnails (scrape) from the htbackdrops site (link).
+    * for all artists stored in your MP music database.
+    * for any artist currently being played (on the fly).
+    * Push fanart that you store on your local harddrive to the current used MP skin.
+    * push fanart for now played music
+    * push fanart for selected music or movie
+    * push random images from selected folders
+    * Push latest added media to your skin.
+    * latest added pictures
+    * latest added movies (moving pictures)
+    * latest added series (tvseries)
+    * latest added music
+    * latest added tv recordings</ExtensionDescription>
+        <VersionDescription>    * New feature: New option in configuration to enable or disable asynchronously loading of random images.
+    * New feature: Fanart support in my videos movie info screen (thanks Deda)
+    * New feature: New properties to support playing latest recorded tv (4TR or MP)
+    * New feature: Now scanning and import of local files are recursively into folders and subfolders.
+    * New feature: New properties to "enabled" that can be used to decide if a user have enabled latest media tags
+    * New feature: New property for latest pictures. Title.
+    * New feature: FanartHandler? now fully supports adding the fanart handler properties to separete xml files and import. Easier and more maintainable code
+    * Bug fixed: Black fanart in some occasions
+    * Bug fixed: Artist Thumb filename starts with a 'space' character when downloading thumbs for multi-artists tracks </VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
-        <ReleaseDate>2010-02-23T15:04:24.1976731+01:00</ReleaseDate>
+        <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
         <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
         <Params>
           <Items>
             <SectionParam Name="Icon">
-              <Value>E:\Visual Studio 2008\Projects\FanartHandler\FanartHandler_Icon.png</Value>
+              <Value>E:\Visual Studio 2008\Projects\FanartHandler112\FanartHandler_Icon.png</Value>
               <ValueType>File</ValueType>
               <Description>The icon file of the package (jpg,png,bmp)</Description>
             </SectionParam>
