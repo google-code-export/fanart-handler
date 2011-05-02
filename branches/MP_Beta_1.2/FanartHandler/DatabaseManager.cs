@@ -1643,6 +1643,16 @@ namespace FanartHandler
                     logger.Info("Upgraded Database to version 2.6");
                     currVersion = "2.6";
                 }
+                if ((tmpS != null && tmpS.Equals("2.6", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.7");
+                    sqlQuery = "DELETE FROM Timestamps WHERE Key LIKE 'Directory Ext - %';";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.7");
+                    currVersion = "2.7";
+                }
                 result = null;
                 sqlQuery = null;
                 tmpS = null;

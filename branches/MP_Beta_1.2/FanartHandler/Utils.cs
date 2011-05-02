@@ -38,9 +38,9 @@ namespace FanartHandler
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
-        private const string RXMatchMPvs = @"({)([0-9])(})$"; // MyVideos fanart scraper filename index
-        private const string RXMatchMPvs2 = @"(\()([0-9])(\))$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.2.4.500";  //Holds current pluginversion.
+        private const string RXMatchMPvs = @"({)([0-9]+)(})$"; // MyVideos fanart scraper filename index
+        private const string RXMatchMPvs2 = @"(\()([0-9]+)(\))$"; // MyVideos fanart scraper filename index
+        public const string GetMajorMinorVersionNumber = "2.2.4.501";  //Holds current pluginversion.
         private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
         private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
