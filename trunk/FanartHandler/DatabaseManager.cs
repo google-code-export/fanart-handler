@@ -1624,7 +1624,35 @@ namespace FanartHandler
                     justUpgraded = true;
                     logger.Info("Upgraded Database to version 2.5");
                     currVersion = "2.5";
-                }                
+                }
+                if ((tmpS != null && tmpS.Equals("2.5", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.6");
+                    sqlQuery = "DELETE FROM tvseries_fanart;";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    sqlQuery = "DELETE FROM Movie_Fanart;";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 2 - finished");
+                    sqlQuery = "DELETE FROM MovingPicture_Fanart;";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 3 - finished");
+                    sqlQuery = "UPDATE Version SET Version = '2.6'";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.6");
+                    currVersion = "2.6";
+                }
+                if ((tmpS != null && tmpS.Equals("2.6", StringComparison.CurrentCulture)) || justUpgraded)
+                {
+                    logger.Info("Upgrading Database to version 2.7");
+                    sqlQuery = "DELETE FROM Timestamps WHERE Key LIKE 'Directory Ext - %';";
+                    lock (lockObject) dbClient.Execute(sqlQuery);
+                    logger.Info("Upgrading Step 1 - finished");
+                    justUpgraded = true;
+                    logger.Info("Upgraded Database to version 2.7");
+                    currVersion = "2.7";
+                }
                 result = null;
                 sqlQuery = null;
                 tmpS = null;

@@ -1109,7 +1109,8 @@ namespace FanartHandler
             if (filename.IndexOf("\\", StringComparison.CurrentCulture) >= 0)
             {
                 return filename.Substring(filename.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
-            }*/
+            }
+            return filename;*/
             if (filename != null && filename.Length > 0)
             {
                 return Path.GetFileName(filename);
