@@ -478,18 +478,28 @@ namespace FanartHandler
                 logger.Error("CheckImageResolution: " + ex.ToString());
             }
             return false;
-        }
+        }       
 
-        public static void SetupFilenamesRecursively(string dir, string filter, string type, int restricted, Hashtable ht)
+        /// <summary>
+        /// Add files in directory to hashtable
+        /// </summary>
+        public static void SetupFilenames(string s, string filter, string type, int restricted)
         {
+            Hashtable ht = new Hashtable();
             string artist = String.Empty;
             string typeOrg = type;
             try
             {
-                foreach (string d in Directory.GetDirectories(dir))
+                if (Directory.Exists(s))
                 {
-                    //foreach (string f in Directory.GetFiles(d, txtFile.Text))
-                    foreach (string file in Directory.GetFiles(d, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture)))
+                    ht = Utils.GetDbm().GetAllFilenames(type);
+                    DirectoryInfo dir1 = new DirectoryInfo(s);                    
+                    FileInfo[] fileList = dir1.GetFiles("*.*", SearchOption.AllDirectories);
+                    var files = from fi in fileList
+                                where (fi.Extension.Equals(".jpg", StringComparison.CurrentCulture) || fi.Extension.Equals(".jpeg", StringComparison.CurrentCulture))
+                                //where (fi.LastAccessTime >= dt || fi.CreationTime >= dt || fi.LastWriteTime >= dt)
+                                select fi.FullName;
+                    foreach (string file in files)
                     {
                         if (!ht.Contains(file))
                         {
@@ -514,119 +524,18 @@ namespace FanartHandler
                             }
                         }
                     }
-                    SetupFilenamesRecursively(d, filter, type, restricted, ht);
+                    files = null;
                 }
-            }
-            catch (System.Exception excpt)
-            {
-                Console.WriteLine(excpt.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// Add files in directory to hashtable
-        /// </summary>
-        public static void SetupFilenames(string s, string filter, string type, int restricted)
-        {
-            Hashtable ht = new Hashtable();
-//            string artist = String.Empty;
-           // string typeOrg = type;
-            try
-            {
-                ht = Utils.GetDbm().GetAllFilenames(type);
-                SetupFilenamesRecursively(s, filter, type, restricted, ht);
-                /*var files = Directory.GetFiles(s, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture));
-                foreach (string file in files)
+                if (ht != null)
                 {
-                    if (!ht.Contains(file))
-                    {                        
-                        if (Utils.GetIsStopping())
-                        {
-                            break;
-                        }
-                        artist = Utils.GetArtist(file, type);
-
-                        if (type.Equals("MusicAlbum", StringComparison.CurrentCulture) || type.Equals("MusicArtist", StringComparison.CurrentCulture) || type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture) || type.Equals("MusicFanart User", StringComparison.CurrentCulture))
-                        {
-                            if (Utils.GetFilenameNoPath(file).ToLower(CultureInfo.CurrentCulture).StartsWith("default", StringComparison.CurrentCulture))
-                            {
-                                type = "Default";
-                            }
-                            Utils.GetDbm().LoadMusicFanart(artist, file, file, type, 0);
-                            type = typeOrg;
-                        }
-                        else
-                        {
-                            Utils.GetDbm().LoadFanart(artist, file, file, type, restricted);
-                        }
-                    }
+                    ht.Clear();
                 }
-                files = null;*/
-                ht.Clear();
                 ht = null;
             }
             catch (Exception ex)
             {
                 logger.Error("SetupFilenames: " + ex.ToString());                
-            }
-            
-/*            string artist = String.Empty;
-            string typeOrg = type;
-            bool match = false;
-            try
-            {
-                string dateTimeNowToString = DateTime.Now.ToString(CultureInfo.CurrentCulture);
-                if (Directory.Exists(s))
-                {                    
-                    string useFilter = Utils.GetDbm().GetTimeStamp("Directory - " + s);
-                    if (useFilter == null || useFilter.Length < 2)
-                    {
-                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString(CultureInfo.CurrentCulture);
-                    }
-                    DirectoryInfo dir1 = new DirectoryInfo(s);
-                    DateTime dt = Convert.ToDateTime(useFilter, CultureInfo.CurrentCulture);
-                    FileInfo[] fileList = dir1.GetFiles(filter, SearchOption.AllDirectories);
-                    var query = from fi in fileList
-                                where (fi.LastAccessTime >= dt || fi.CreationTime >= dt || fi.LastWriteTime >= dt)
-                                select fi.FullName;
-                    foreach (string dir in query)
-                    {
-                        if (Utils.GetIsStopping())
-                        {
-                            break;
-                        }
-                        artist = Utils.GetArtist(dir, type);
-
-                        if (type.Equals("MusicAlbum", StringComparison.CurrentCulture) || type.Equals("MusicArtist", StringComparison.CurrentCulture) || type.Equals("MusicFanart Scraper", StringComparison.CurrentCulture) || type.Equals("MusicFanart User", StringComparison.CurrentCulture))
-                        {
-                            if (Utils.GetFilenameNoPath(dir).ToLower(CultureInfo.CurrentCulture).StartsWith("default", StringComparison.CurrentCulture))
-                            {
-                                type = "Default";
-                            }
-                            Utils.GetDbm().LoadMusicFanart(artist, dir, dir, type, 0);
-                            type = typeOrg;
-                            match = true;
-                        }
-                        else
-                        {
-                            Utils.GetDbm().LoadFanart(artist, dir, dir, type, restricted);
-                            match = true;
-                        }
-                    }
-                    fileList = null;
-                    dir1 = null;                    
-                }
-                if (Utils.GetIsStopping() == false && match)
-                {
-                    Utils.GetDbm().SetTimeStamp("Directory - " + s, dateTimeNowToString);
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("SetupFilenames: " + ex.ToString());                
-            }
- */ 
+            }            
         }
 
         /// <summary>
@@ -660,59 +569,49 @@ namespace FanartHandler
             return al;
         }
 
-
-
-
         /// <summary>
         /// Add files in directory to hashtable
         /// </summary>
         public static void SetupFilenamesExternal(string s, string filter, string type, int restricted, Hashtable ht)
         {
+            Hashtable ht_All = new Hashtable();
             string artist = String.Empty;
-//            string typeOrg = type // COMMENTED BY CODEIT.RIGHT;
             try
             {
                 if (Directory.Exists(s))
                 {
-                    string useFilter = Utils.GetDbm().GetTimeStamp("Directory Ext - " + s);
-                    if (useFilter == null || useFilter.Length < 2)
+                    ht_All = Utils.GetDbm().GetAllFilenames(type);
+                    
+                    var files = Directory.GetFiles(s, "*.*").Where(f => f.EndsWith(".jpg", StringComparison.CurrentCulture) || f.EndsWith(".jpeg", StringComparison.CurrentCulture));
+                    foreach (string file in files)
                     {
-                        useFilter = new DateTime(1970, 1, 1, 1, 1, 1).ToString(CultureInfo.CurrentCulture);
-                    }
-                    DirectoryInfo dir1 = new DirectoryInfo(s);
-                    DateTime dt = Convert.ToDateTime(useFilter, CultureInfo.CurrentCulture);
-                    FileInfo[] fileList = dir1.GetFiles(filter, SearchOption.AllDirectories);
-                    var query = from fi in fileList
-                                where fi.CreationTime >= dt
-                                select fi.FullName;
-                    foreach (string dir in query)
-                    {
-                        if (Utils.GetIsStopping())
+                        if (!ht_All.Contains(file))
                         {
-                            break;
+                            if (Utils.GetIsStopping())
+                            {
+                                break;
+                            }
+                            artist = Utils.GetArtist(file, type);
+                            if (ht != null && ht.Contains(artist))
+                            {
+                                Utils.GetDbm().LoadFanartExternal(ht[artist].ToString(), file, file, type, restricted);
+                                Utils.GetDbm().LoadFanart(ht[artist].ToString(), file, file, type, restricted);
+                            } 
                         }
-                        artist = Utils.GetArtist(dir, type);
-                        if (ht != null && ht.Contains(artist))
-                        {
-                            Utils.GetDbm().LoadFanartExternal(ht[artist].ToString(), dir, dir, type, restricted);
-                            Utils.GetDbm().LoadFanart(ht[artist].ToString(), dir, dir, type, restricted);
-                        }                        
                     }
-                    fileList = null;
-                    dir1 = null;
-                    if (Utils.GetIsStopping() == false)
-                    {
-                        Utils.GetDbm().SetTimeStamp("Directory Ext - " + s, DateTime.Now.ToString(CultureInfo.CurrentCulture));
-                    }
+                    files = null;
                 }
+                if (ht_All != null)
+                {
+                    ht_All.Clear();
+                }
+                ht_All = null;
             }
             catch (Exception ex)
             {
                 logger.Error("SetupFilenamesExternal: " + ex.ToString());
-            }
-        }
-
-        
+            }           
+        }        
 
         /// <summary>
         /// Add files in directory to hashtable
@@ -2756,14 +2655,16 @@ namespace FanartHandler
         {
             try
             {
-                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+                if (type == g_Player.MediaType.Music || type == g_Player.MediaType.Radio)
+                {
+                    FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
+                }
             }
             catch (Exception ex)
             {
                 logger.Error("OnPlayBackEnded: " + ex.ToString());
             }
         }
-
 
         private static void CreateDirectoryIfMissing(string directory)
         {
