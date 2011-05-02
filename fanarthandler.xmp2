@@ -321,7 +321,7 @@ Please wait for the configuration screen to open...</Value>
       <Major>2</Major>
       <Minor>2</Minor>
       <Build>4</Build>
-      <Revision>300</Revision>
+      <Revision>301</Revision>
     </Version>
     <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
 
@@ -338,15 +338,8 @@ Please wait for the configuration screen to open...</Value>
     * latest added series (tvseries)
     * latest added music
     * latest added tv recordings</ExtensionDescription>
-    <VersionDescription>    * New feature: New option in configuration to enable or disable asynchronously loading of random images.
-    * New feature: Fanart support in my videos movie info screen (thanks Deda)
-    * New feature: New properties to support playing latest recorded tv (4TR or MP)
-    * New feature: Now scanning and import of local files are recursively into folders and subfolders.
-    * New feature: New properties to "enabled" that can be used to decide if a user have enabled latest media tags
-    * New feature: New property for latest pictures. Title.
-    * New feature: FanartHandler? now fully supports adding the fanart handler properties to separete xml files and import. Easier and more maintainable code
-    * Bug fixed: Black fanart in some occasions
-    * Bug fixed: Artist Thumb filename starts with a 'space' character when downloading thumbs for multi-artists tracks </VersionDescription>
+    <VersionDescription> * Fixed bug in TVSeries fanart not being displayed (random images)
+* Fixed bug in matching of videos (for myVideos)</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
     <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
@@ -530,7 +523,7 @@ Please wait for the configuration screen to open...</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>FanartHandler_Icon.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{e766f8ba-00c3-44b5-9c7d-12bb490357f4}-FanartHandler_Icon.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{71a0a89c-a203-4cc0-9d3e-d59017fc61fc}-FanartHandler_Icon.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
