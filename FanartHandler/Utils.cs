@@ -33,20 +33,20 @@ namespace FanartHandler
     /// <summary>
     /// Utility class used by the Fanart Handler plugin.
     /// </summary>
-    public static class Utils
+    static class Utils
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
         private const string RXMatchMPvs = @"({)([0-9]+)(})$"; // MyVideos fanart scraper filename index
         private const string RXMatchMPvs2 = @"(\()([0-9]+)(\))$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.2.4.302";  //Holds current pluginversion.
-        private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
-        private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
-        private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
-        private static string proxyUsername = null;  // Holds info read from fanarthandler.xml settings file
-        private static string proxyPassword = null;  // Holds info read from fanarthandler.xml settings file
-        private static string proxyDomain = null;  // Holds info read from fanarthandler.xml settings file
+        public const string GetMajorMinorVersionNumber = "2.2.6.521";  //Holds current pluginversion.
+//        private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
+//        private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
+//        private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
+//        private static string proxyUsername = null;  // Holds info read from fanarthandler.xml settings file
+//        private static string proxyPassword = null;  // Holds info read from fanarthandler.xml settings file
+//        private static string proxyDomain = null;  // Holds info read from fanarthandler.xml settings file
         private static bool isStopping/* = false*/;  //is the plugin about to stop, then this will be true
         private static DatabaseManager dbm;  //database handle
         private static string scraperMaxImages = null;  //Max scraper images allowed
@@ -57,6 +57,13 @@ namespace FanartHandler
         private static int idleTimeInMillis = 150;//250;
         private static string doNotReplaceExistingThumbs = null;
         private static bool used4TRTV = false;
+        private static DateTime lastRefreshRecording;
+
+        public static DateTime LastRefreshRecording
+        {
+            get { return Utils.lastRefreshRecording; }
+            set { Utils.lastRefreshRecording = value; }
+        }
 
         public static bool Used4TRTV
         {
@@ -86,6 +93,7 @@ namespace FanartHandler
           get { return Utils.idleTimeInMillis; }
           set { Utils.idleTimeInMillis = value; }
         }
+
         public static DatabaseManager GetDbm()
         {
             return dbm;
@@ -197,98 +205,98 @@ namespace FanartHandler
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetUseProxy()
+/*        public static string GetUseProxy()
         {            
             return useProxy;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetUseProxy(string s)
+/*        public static void SetUseProxy(string s)
         {
             useProxy = s;
-        }
+        }*/
 
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetProxyHostname()
+/*        public static string GetProxyHostname()
         {
             return proxyHostname;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetProxyHostname(string s)
+/*        public static void SetProxyHostname(string s)
         {
             proxyHostname = s;
-        }
+        }*/
 
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetProxyPort()
+/*        public static string GetProxyPort()
         {
             return proxyPort;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetProxyPort(string s)
+/*        public static void SetProxyPort(string s)
         {
             proxyPort = s;
-        }
+        }*/
 
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetProxyUsername()
+/*        public static string GetProxyUsername()
         {
             return proxyUsername;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetProxyUsername(string s)
+/*        public static void SetProxyUsername(string s)
         {
             proxyUsername = s;
-        }
+        }*/
 
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetProxyPassword()
+/*        public static string GetProxyPassword()
         {
             return proxyPassword;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetProxyPassword(string s)
+/*        public static void SetProxyPassword(string s)
         {
             proxyPassword = s;
-        }
+        }*/
 
         /// <summary>
         /// Return value.
         /// </summary>
-        public static string GetProxyDomain()
+/*        public static string GetProxyDomain()
         {
             return proxyDomain;
-        }
+        }*/
 
         /// <summary>
         /// Set value.
         /// </summary>
-        public static void SetProxyDomain(string s)
+/*        public static void SetProxyDomain(string s)
         {
             proxyDomain = s;
-        }
+        }*/
 
         /// <summary>
         /// Returns and converts the string into a common format. Thanks to Moving Picture developers for this
@@ -525,8 +533,8 @@ namespace FanartHandler
             {
                 return string.Empty;
             }
-            
-            key = GetFilenameNoPath1(key);
+
+            key = GetFilenameNoPath(key);
             key = Utils.RemoveExtension(key);
             key = Regex.Replace(key, @"\(\d{5}\)", String.Empty).Trim();
             if (type.Equals("MusicArtist", StringComparison.CurrentCulture))
@@ -696,24 +704,33 @@ namespace FanartHandler
                 return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
             }
             return key;*/
-            return Path.GetFileName(key);
-            
+            if (File.Exists(key))
+            {
+                return Path.GetFileName(key);
+            }
+            else
+            {
+                return key;
+            }
         }
 
-        public static string GetFilenameNoPath1(string key)
+        /*public static string GetFilenameNoPath1(string key)
         {
             if (key == null)
             {
                 return string.Empty;
             }
 
-            key = key.Replace("/", "\\");
-            if (key.LastIndexOf("\\", StringComparison.CurrentCulture) >= 0)
+            if (File.Exists(key))
             {
-                return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                key = key.Replace("/", "\\");
+                if (key.LastIndexOf("\\", StringComparison.CurrentCulture) >= 0)
+                {
+                    return key.Substring(key.LastIndexOf("\\", StringComparison.CurrentCulture) + 1);
+                }
             }
             return key;
-        }
+        }*/
 
         /// <summary>
         /// Remove file extension.
@@ -952,8 +969,22 @@ namespace FanartHandler
             return false;
         }
 
-      
-
+         public static bool ShouldRefreshRecording()
+        {
+            try
+            {
+                TimeSpan ts = DateTime.Now - LastRefreshRecording;
+                if (ts.TotalMilliseconds >= 600000)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("ShouldRefreshRecording: " + ex.ToString());
+            }
+            return false;
+        }
 
         /// <summary>
         /// User has been "idle" for a short time. Method used to see if
@@ -1055,7 +1086,11 @@ namespace FanartHandler
                     checkImage = null;
                     return true;
                 }
-
+                if (checkImage != null)
+                {
+                    checkImage.Dispose();
+                }
+                checkImage = null;
             }
             catch //(Exception ex)
             {

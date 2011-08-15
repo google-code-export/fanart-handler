@@ -21,7 +21,7 @@ namespace FanartHandler
     using System.Threading;
     using System.IO;
 
-    public class ScraperThumbWorker : BackgroundWorker
+    class ScraperThumbWorker : BackgroundWorker
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -37,10 +37,10 @@ namespace FanartHandler
         {
             try
             {
-                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.SyncPointScraper, 1, 0);
+                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.Fh.SyncPointScraper, 1, 0);
                 if (Utils.GetIsStopping() == false && sync == 0)
                 {
-                    if (FanartHandlerSetup.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
+                    if (FanartHandlerSetup.Fh.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
                     {
                         Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                     }
@@ -63,14 +63,14 @@ namespace FanartHandler
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
                     Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraper");
-                    FanartHandlerSetup.SyncPointScraper = 0;
+                    FanartHandlerSetup.Fh.SyncPointScraper = 0;
                     e.Result = 0;
                 }
             }
             catch (Exception ex)
             {
                 Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraper");
-                FanartHandlerSetup.SyncPointScraper = 0;
+                FanartHandlerSetup.Fh.SyncPointScraper = 0;
                 logger.Error("OnDoWork: " + ex.ToString());
             }
         }
@@ -95,7 +95,7 @@ namespace FanartHandler
                 FanartHandlerConfig.GetProgressBar2().Value = 1;
                 FanartHandlerConfig.StopThumbScraper(FanartHandlerConfig.oMissing);
                 FanartHandlerConfig.watcher1.Created -= new FileSystemEventHandler(FanartHandlerConfig.FileWatcher_Created);
-                FanartHandlerConfig.watcher2.Created -= new FileSystemEventHandler(FanartHandlerConfig.FileWatcher_Created);
+                FanartHandlerConfig.watcher2.Created -= new FileSystemEventHandler(FanartHandlerConfig.FileWatcher_Created);                
             }
             catch (Exception ex)
             {

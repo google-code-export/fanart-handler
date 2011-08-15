@@ -79,30 +79,22 @@ namespace FanartHandler
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.tabPage20 = new System.Windows.Forms.TabPage();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxProxyDomain = new System.Windows.Forms.TextBox();
-            this.textBoxProxyPassword = new System.Windows.Forms.TextBox();
-            this.textBoxProxyUsername = new System.Windows.Forms.TextBox();
-            this.textBoxProxyPort = new System.Windows.Forms.TextBox();
-            this.textBoxProxyHostname = new System.Windows.Forms.TextBox();
-            this.checkBoxProxy = new System.Windows.Forms.CheckBox();
+//            this.groupBox9 = new System.Windows.Forms.GroupBox();
+//            this.label21 = new System.Windows.Forms.Label();
+//            this.label19 = new System.Windows.Forms.Label();
+//            this.label17 = new System.Windows.Forms.Label();
+//            this.label15 = new System.Windows.Forms.Label();
+//            this.label4 = new System.Windows.Forms.Label();
+//            this.textBoxProxyDomain = new System.Windows.Forms.TextBox();
+//            this.textBoxProxyPassword = new System.Windows.Forms.TextBox();
+//            this.textBoxProxyUsername = new System.Windows.Forms.TextBox();
+//            this.textBoxProxyPort = new System.Windows.Forms.TextBox();
+//            this.textBoxProxyHostname = new System.Windows.Forms.TextBox();
+//            this.checkBoxProxy = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -113,6 +105,7 @@ namespace FanartHandler
             this.checkBoxScraperMusicPlaying = new System.Windows.Forms.CheckBox();
             this.checkBoxEnableScraperMPDatabase = new System.Windows.Forms.CheckBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.button45 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
             this.label30 = new System.Windows.Forms.Label();
             this.button15 = new System.Windows.Forms.Button();
@@ -146,7 +139,7 @@ namespace FanartHandler
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage22 = new System.Windows.Forms.TabPage();
             this.button39 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            comboBox1 = new System.Windows.Forms.ComboBox();
             this.label34 = new System.Windows.Forms.Label();
             button44 = new System.Windows.Forms.Button();
             button43 = new System.Windows.Forms.Button();
@@ -232,7 +225,6 @@ namespace FanartHandler
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button45 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -243,13 +235,11 @@ namespace FanartHandler
             this.tabControl1.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox12.SuspendLayout();
-            this.tabPage20.SuspendLayout();
-            this.groupBox11.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.groupBox9.SuspendLayout();
+//            this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.tabPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -690,7 +680,6 @@ namespace FanartHandler
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage8);
-            this.tabControl1.Controls.Add(this.tabPage20);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage19);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -746,108 +735,6 @@ namespace FanartHandler
             this.checkBox4.UseVisualStyleBackColor = true;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
-            // tabPage20
-            // 
-            this.tabPage20.Controls.Add(this.groupBox11);
-            this.tabPage20.Location = new System.Drawing.Point(4, 22);
-            this.tabPage20.Name = "tabPage20";
-            this.tabPage20.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage20.Size = new System.Drawing.Size(760, 516);
-            this.tabPage20.TabIndex = 7;
-            this.tabPage20.Text = "Latest Media";
-            this.tabPage20.UseVisualStyleBackColor = true;
-            // 
-            // groupBox11
-            // 
-            this.groupBox11.Controls.Add(this.checkBox2);
-            this.groupBox11.Controls.Add(this.checkBox3);
-            this.groupBox11.Controls.Add(this.label31);
-            this.groupBox11.Controls.Add(this.checkBox5);
-            this.groupBox11.Controls.Add(this.checkBox6);
-            this.groupBox11.Controls.Add(this.checkBox7);
-            this.groupBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox11.Location = new System.Drawing.Point(6, 6);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(378, 235);
-            this.groupBox11.TabIndex = 8;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Latest Media Options";
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox2.Location = new System.Drawing.Point(9, 113);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(84, 20);
-            this.checkBox2.TabIndex = 10;
-            this.checkBox2.Text = "TVSeries";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox3.Location = new System.Drawing.Point(9, 138);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(109, 20);
-            this.checkBox3.TabIndex = 8;
-            this.checkBox3.Text = "Recorded TV";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.Location = new System.Drawing.Point(6, 26);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(239, 16);
-            this.label31.TabIndex = 2;
-            this.label31.Text = "Enable Latest Media Support For:";
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Checked = true;
-            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox5.Location = new System.Drawing.Point(9, 44);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(75, 20);
-            this.checkBox5.TabIndex = 1;
-            this.checkBox5.Text = "Pictures";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            // 
-            // checkBox6
-            // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Checked = true;
-            this.checkBox6.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox6.Location = new System.Drawing.Point(9, 67);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(62, 20);
-            this.checkBox6.TabIndex = 3;
-            this.checkBox6.Text = "Music";
-            this.checkBox6.UseVisualStyleBackColor = true;
-            // 
-            // checkBox7
-            // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Checked = true;
-            this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox7.Location = new System.Drawing.Point(9, 90);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(122, 20);
-            this.checkBox7.TabIndex = 4;
-            this.checkBox7.Text = "Moving Pictures";
-            this.checkBox7.UseVisualStyleBackColor = true;
-            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.tabControl2);
@@ -890,7 +777,7 @@ namespace FanartHandler
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.groupBox9);
+//            this.tabPage6.Controls.Add(this.groupBox9);
             this.tabPage6.Controls.Add(this.groupBox8);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -903,7 +790,7 @@ namespace FanartHandler
             // 
             // groupBox9
             // 
-            this.groupBox9.Controls.Add(this.label21);
+/*            this.groupBox9.Controls.Add(this.label21);
             this.groupBox9.Controls.Add(this.label19);
             this.groupBox9.Controls.Add(this.label17);
             this.groupBox9.Controls.Add(this.label15);
@@ -920,103 +807,103 @@ namespace FanartHandler
             this.groupBox9.Size = new System.Drawing.Size(731, 281);
             this.groupBox9.TabIndex = 11;
             this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Proxy Options";
+            this.groupBox9.Text = "Proxy Options";*/
             // 
             // label21
             // 
-            this.label21.AutoSize = true;
+/*            this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label21.Location = new System.Drawing.Point(12, 148);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(55, 16);
             this.label21.TabIndex = 10;
-            this.label21.Text = "Domain";
+            this.label21.Text = "Domain";*/
             // 
             // label19
             // 
-            this.label19.AutoSize = true;
+/*            this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label19.Location = new System.Drawing.Point(12, 123);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(68, 16);
             this.label19.TabIndex = 9;
-            this.label19.Text = "Password";
+            this.label19.Text = "Password";*/
             // 
             // label17
             // 
-            this.label17.AutoSize = true;
+/*            this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label17.Location = new System.Drawing.Point(12, 92);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(71, 16);
             this.label17.TabIndex = 8;
-            this.label17.Text = "Username";
+            this.label17.Text = "Username";*/
             // 
             // label15
             // 
-            this.label15.AutoSize = true;
+/*            this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label15.Location = new System.Drawing.Point(352, 64);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(32, 16);
             this.label15.TabIndex = 7;
-            this.label15.Text = "Port";
+            this.label15.Text = "Port";*/
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
+/*            this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.label4.Location = new System.Drawing.Point(12, 64);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 16);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Hostname";
+            this.label4.Text = "Hostname";*/
             // 
             // textBoxProxyDomain
             // 
-            this.textBoxProxyDomain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+/*            this.textBoxProxyDomain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.textBoxProxyDomain.Location = new System.Drawing.Point(109, 145);
             this.textBoxProxyDomain.Name = "textBoxProxyDomain";
             this.textBoxProxyDomain.Size = new System.Drawing.Size(217, 22);
-            this.textBoxProxyDomain.TabIndex = 5;
+            this.textBoxProxyDomain.TabIndex = 5;*/
             // 
             // textBoxProxyPassword
             // 
-            this.textBoxProxyPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+/*            this.textBoxProxyPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.textBoxProxyPassword.Location = new System.Drawing.Point(109, 117);
             this.textBoxProxyPassword.Name = "textBoxProxyPassword";
             this.textBoxProxyPassword.PasswordChar = 'X';
             this.textBoxProxyPassword.Size = new System.Drawing.Size(220, 22);
             this.textBoxProxyPassword.TabIndex = 4;
-            this.textBoxProxyPassword.UseSystemPasswordChar = true;
+            this.textBoxProxyPassword.UseSystemPasswordChar = true;*/
             // 
             // textBoxProxyUsername
             // 
-            this.textBoxProxyUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+/*            this.textBoxProxyUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.textBoxProxyUsername.Location = new System.Drawing.Point(109, 89);
             this.textBoxProxyUsername.Name = "textBoxProxyUsername";
             this.textBoxProxyUsername.Size = new System.Drawing.Size(221, 22);
-            this.textBoxProxyUsername.TabIndex = 3;
+            this.textBoxProxyUsername.TabIndex = 3;*/
             // 
             // textBoxProxyPort
             // 
-            this.textBoxProxyPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+/*            this.textBoxProxyPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.textBoxProxyPort.Location = new System.Drawing.Point(397, 61);
             this.textBoxProxyPort.Name = "textBoxProxyPort";
             this.textBoxProxyPort.Size = new System.Drawing.Size(79, 22);
-            this.textBoxProxyPort.TabIndex = 2;
+            this.textBoxProxyPort.TabIndex = 2;*/
             // 
             // textBoxProxyHostname
             // 
-            this.textBoxProxyHostname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+/*            this.textBoxProxyHostname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.textBoxProxyHostname.Location = new System.Drawing.Point(109, 61);
             this.textBoxProxyHostname.Name = "textBoxProxyHostname";
             this.textBoxProxyHostname.Size = new System.Drawing.Size(221, 22);
-            this.textBoxProxyHostname.TabIndex = 1;
+            this.textBoxProxyHostname.TabIndex = 1;*/
             // 
             // checkBoxProxy
             // 
-            this.checkBoxProxy.AutoSize = true;
+/*            this.checkBoxProxy.AutoSize = true;
             this.checkBoxProxy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.checkBoxProxy.Location = new System.Drawing.Point(10, 32);
             this.checkBoxProxy.Name = "checkBoxProxy";
@@ -1024,7 +911,7 @@ namespace FanartHandler
             this.checkBoxProxy.TabIndex = 0;
             this.checkBoxProxy.Text = "Use Proxy";
             this.checkBoxProxy.UseVisualStyleBackColor = true;
-            this.checkBoxProxy.CheckedChanged += new System.EventHandler(this.checkBoxProxy_CheckedChanged);
+            this.checkBoxProxy.CheckedChanged += new System.EventHandler(this.checkBoxProxy_CheckedChanged);*/
             // 
             // groupBox8
             // 
@@ -1166,6 +1053,18 @@ namespace FanartHandler
             this.tabPage7.TabIndex = 2;
             this.tabPage7.Text = "Manage Fanart";
             this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // button45
+            // 
+            this.button45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button45.Location = new System.Drawing.Point(372, 453);
+            this.button45.Name = "button45";
+            this.button45.Size = new System.Drawing.Size(174, 22);
+            this.button45.TabIndex = 19;
+            this.button45.Text = "Add Image To Selected Artist [A]";
+            this.toolTip1.SetToolTip(this.button45, "Press this button to manually add an image to selected artist.");
+            this.button45.UseVisualStyleBackColor = true;
+            this.button45.Click += new System.EventHandler(this.button45_Click);
             // 
             // button40
             // 
@@ -1561,7 +1460,7 @@ namespace FanartHandler
             // tabPage22
             // 
             this.tabPage22.Controls.Add(this.button39);
-            this.tabPage22.Controls.Add(this.comboBox1);
+            this.tabPage22.Controls.Add(comboBox1);
             this.tabPage22.Controls.Add(this.label34);
             this.tabPage22.Controls.Add(button44);
             this.tabPage22.Controls.Add(button43);
@@ -1596,16 +1495,16 @@ namespace FanartHandler
             // 
             // comboBox1
             // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(9, 378);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(219, 21);
-            this.comboBox1.TabIndex = 27;
-            this.toolTip1.SetToolTip(this.comboBox1, "Choose how many images the scraper will try to\r\ndownload for every artist. Choosi" +
+            comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new System.Drawing.Point(9, 378);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(219, 21);
+            comboBox1.TabIndex = 27;
+            this.toolTip1.SetToolTip(comboBox1, "Choose how many images the scraper will try to\r\ndownload for every artist. Choosi" +
                     "ng a higher number\r\nwill consume more harddisk space. ");
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             // 
             // label34
             // 
@@ -2716,18 +2615,6 @@ namespace FanartHandler
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // button45
-            // 
-            this.button45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button45.Location = new System.Drawing.Point(372, 453);
-            this.button45.Name = "button45";
-            this.button45.Size = new System.Drawing.Size(174, 22);
-            this.button45.TabIndex = 19;
-            this.button45.Text = "Add Image To Selected Artist [A]";
-            this.toolTip1.SetToolTip(this.button45, "Press this button to manually add an image to selected artist.");
-            this.button45.UseVisualStyleBackColor = true;
-            this.button45.Click += new System.EventHandler(this.button45_Click);
-            // 
             // FanartHandlerConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2761,15 +2648,12 @@ namespace FanartHandler
             this.tabPage8.ResumeLayout(false);
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
-            this.tabPage20.ResumeLayout(false);
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
+//            this.groupBox9.ResumeLayout(false);
+//            this.groupBox9.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.tabPage7.ResumeLayout(false);
@@ -2901,18 +2785,18 @@ namespace FanartHandler
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.TabPage tabPage8;
         private System.Windows.Forms.CheckBox checkBoxEnableDefaultBackdrop;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.CheckBox checkBoxProxy;
-        private System.Windows.Forms.TextBox textBoxProxyPassword;
-        private System.Windows.Forms.TextBox textBoxProxyUsername;
-        private System.Windows.Forms.TextBox textBoxProxyPort;
-        private System.Windows.Forms.TextBox textBoxProxyHostname;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxProxyDomain;
+//        private System.Windows.Forms.GroupBox groupBox9;
+//        private System.Windows.Forms.CheckBox checkBoxProxy;
+//        private System.Windows.Forms.TextBox textBoxProxyPassword;
+//        private System.Windows.Forms.TextBox textBoxProxyUsername;
+//        private System.Windows.Forms.TextBox textBoxProxyPort;
+//        private System.Windows.Forms.TextBox textBoxProxyHostname;
+//        private System.Windows.Forms.Label label21;
+//        private System.Windows.Forms.Label label19;
+//        private System.Windows.Forms.Label label17;
+//        private System.Windows.Forms.Label label15;
+//        private System.Windows.Forms.Label label4;
+//        private System.Windows.Forms.TextBox textBoxProxyDomain;
         private System.Windows.Forms.TabControl tabControl3;
         private System.Windows.Forms.TabPage tabPage9;
         private System.Windows.Forms.TabPage tabPage10;
@@ -2987,14 +2871,6 @@ namespace FanartHandler
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TabPage tabPage19;
-        private System.Windows.Forms.TabPage tabPage20;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.CheckBox checkBox7;
         private System.Windows.Forms.TabControl tabControl6;
         private System.Windows.Forms.TabPage tabPage21;
         private System.Windows.Forms.TabPage tabPage22;
@@ -3006,7 +2882,7 @@ namespace FanartHandler
         private System.Windows.Forms.CheckBox checkBox8;
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private static System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button39;
         private System.Windows.Forms.Button button40;
         private System.Windows.Forms.Button button45;

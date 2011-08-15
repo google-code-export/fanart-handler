@@ -16,12 +16,16 @@ namespace FanartHandler
     using NLog;    
     using SQLite.NET;
     using System;
-    using System.Collections.Generic;
-    using System.Collections;
+//    using System.Collections.Generic;
+//    using System.Collections;
     using System.IO;
-    using System.Linq;   
+//    using System.Linq;   
     using System.Text;
-    
+//    using MediaPortal.Picture.Database;   
+  //  using MediaPortal.Util;
+//    using MediaPortal.Profile;
+  //  using MediaPortal.GUI.Library;
+
     /// <summary>
     /// Class handling all external (not fanart handler db) database access.
     /// </summary>
@@ -29,6 +33,7 @@ namespace FanartHandler
     {
         private static Logger logger = LogManager.GetCurrentClassLogger(); 
         private SQLiteClient dbClient;
+        //private VirtualDirectory virtualDirectory = new VirtualDirectory();
 
         /// <summary>
         /// Initiation of the DatabaseManager.
@@ -105,55 +110,8 @@ namespace FanartHandler
             {
             }
             return result;
-        }
-
+        }          
         
-        /// <summary>
-        /// Returns latest added movie thumbs from MovingPictures db.
-        /// </summary>
-        /// <param name="type">Type of data to fetch</param>
-        /// <returns>Resultset of matching data</returns>
-       public FanartHandler.LatestsCollection GetLatestPictures()
-        {
-            FanartHandler.LatestsCollection result = new FanartHandler.LatestsCollection();
-            string sqlQuery = null;
-            int x = 0;
-            try
-            {
-                sqlQuery = "select strFile, strDateTaken from picture where strFile not like '%kindgirls%' order by strDateTaken desc limit 10;";
-                SQLiteResultSet resultSet = dbClient.Execute(sqlQuery);
-                if (resultSet != null)
-                {
-                    if (resultSet.Rows.Count > 0)
-                    {                        
-                        for (int i = 0; i < resultSet.Rows.Count; i++)
-                        {                            
-                            string thumb = resultSet.GetField(i, 0);
-                            string dateAdded = resultSet.GetField(i, 1);
-                            string title = Utils.GetFilenameNoPath(thumb).ToUpperInvariant();
-                            if (thumb != null && thumb.Trim().Length > 0)
-                            {
-                                if (File.Exists(thumb))
-                                {
-                                    result.Add(new FanartHandler.Latest(dateAdded, thumb, null, title, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
-                                    x++;
-                                }
-                            }
-                            if (x == 3)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
-                resultSet = null;
-            }
-            catch //(Exception ex)
-            {
-                //logger.Error("getData: " + ex.ToString());
-            }
-            return result;
-        }        
 
     }
 }

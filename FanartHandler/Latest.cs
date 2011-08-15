@@ -16,7 +16,7 @@ using System.Text;
 
 namespace FanartHandler
 {
-    public class Latest
+    class Latest
     {
         string dateAdded;
         string thumb;
@@ -175,7 +175,14 @@ namespace FanartHandler
             this.subtitle = subtitle;
             this.artist = artist;
             this.album = album;
-            this.genre = genre;
+            if (genre != null && genre.Length > 0)
+            {
+                this.genre = genre.Replace("|",",");
+            }
+            else
+            {
+                this.genre = genre;
+            }
             this.rating = rating;
             this.roundedRating = roundedRating;
             this.classification = classification;
