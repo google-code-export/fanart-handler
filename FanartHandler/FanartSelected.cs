@@ -204,7 +204,10 @@ namespace FanartHandler
                 {
                     try
                     {
-                        FanartHandlerSetup.SelectedItem = ((GUIFadeLabel)GUIWindowManager.GetWindow(GUIWindowManager.ActiveWindow).GetControl(1)).Label;
+                        if (GUIWindowManager.GetWindow(GUIWindowManager.ActiveWindow).GetControl(1) != null)
+                        {
+                            FanartHandlerSetup.SelectedItem = ((GUIFadeLabel)GUIWindowManager.GetWindow(GUIWindowManager.ActiveWindow).GetControl(1)).Label;
+                        }
                     }
                     catch
                     {

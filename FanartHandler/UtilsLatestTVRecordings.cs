@@ -73,17 +73,32 @@ namespace FanartHandler
                 int x = 0;
                 foreach (TvDatabase.Recording rec in recordings)
                 {
-                    string thumbNail = string.Format(CultureInfo.CurrentCulture, "{0}\\{1}{2}", Thumbs.TVRecorded,
-                                                 Path.ChangeExtension(MediaPortal.Util.Utils.SplitFilename(rec.FileName), null),
-                                                 MediaPortal.Util.Utils.GetThumbExtension());
-                    thumbNail = thumbNail.Replace(".jpg", "L.jpg");
-                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), thumbNail, null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null, null, rec, null, null, null, null));
+                    latests.Add(new Latest(rec.StartTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture), "thumbNail", null, rec.Title, null, null, null, rec.Genre, null, null, null, null, null, null, null, null, rec, null, null, null, null));
                 }
                 latests.Sort(new LatestAddedComparer());
                 latestTVRecordings = new Hashtable();
                 for (int x0 = 0; x0 < latests.Count; x0++)
                 {
                     latests[x0].DateAdded = latests[x0].DateAdded.Substring(0, 10);
+                    string _filename = ((TvDatabase.Recording)latests[x0].Playable).FileName;
+                    string thumbNail = string.Format(CultureInfo.CurrentCulture, "{0}\\{1}{2}", Thumbs.TVRecorded,
+                                                Path.ChangeExtension(MediaPortal.Util.Utils.SplitFilename(_filename), null),
+                                                MediaPortal.Util.Utils.GetThumbExtension());
+                    if (File.Exists(thumbNail))
+                    {
+                        string tmpThumbNail = MediaPortal.Util.Utils.ConvertToLargeCoverArt(thumbNail);
+                        if (File.Exists(tmpThumbNail))
+                        {
+                            thumbNail = tmpThumbNail;
+                        }
+                    }
+                    if (!File.Exists(thumbNail))
+                    {
+                        thumbNail = string.Format(CultureInfo.CurrentCulture, "{0}{1}",
+                                                 Path.ChangeExtension(_filename, null),
+                                                 MediaPortal.Util.Utils.GetThumbExtension());
+                    }
+                    latests[x0].Thumb = thumbNail;
                     result.Add(latests[x0]);
                     latestTVRecordings.Add(x, latests[x].Playable);
                     x++;
