@@ -16,16 +16,16 @@ namespace FanartHandler
     using NLog;
     using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+//    using System.Collections.Generic;
+//    using System.Linq;
+//    using System.Text;
     using MediaPortal.Configuration;
     using System.IO;
 
     /// <summary>
     /// Class handling fanart for now playing music.
     /// </summary>
-    public class FanartPlaying
+    class FanartPlaying
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -164,53 +164,67 @@ namespace FanartHandler
 
         public void AddPlayingArtistThumbProperty(string artist, bool DoShowImageOnePlay)
         {
-            string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
-            bool found = false;
-            string filename = null;
+            try
+            {
+                string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Music\Artists";
+                bool found = false;
+                string filename = null;
 
-            //Try to get album thumb
-            if (FanartHandlerSetup.CurrentAlbumTag != null && FanartHandlerSetup.CurrentAlbumTag.Length > 0)
-            {
-                filename = MediaPortal.Util.Utils.GetAlbumThumbName(artist, FanartHandlerSetup.CurrentAlbumTag);
-                filename = MediaPortal.Util.Utils.ConvertToLargeCoverArt(filename);
-                if (File.Exists(filename))
+                if (artist != null)
                 {
-                    found = true;
-                }
-            }
 
-            //If album not found try to find artist thumb
-            if (!found)
+                    //Try to get album thumb
+                    if (artist != null && FanartHandlerSetup.Fh.CurrentAlbumTag != null && FanartHandlerSetup.Fh.CurrentAlbumTag.Length > 0)
+                    {
+                        filename = MediaPortal.Util.Utils.GetAlbumThumbName(artist, FanartHandlerSetup.Fh.CurrentAlbumTag);
+                        if (filename != null && filename.Length > 0)
+                        {
+                            filename = MediaPortal.Util.Utils.ConvertToLargeCoverArt(filename);
+                            if (File.Exists(filename))
+                            {
+                                found = true;
+                            }
+                        }
+                    }
+
+                    //If album not found try to find artist thumb
+                    if (!found)
+                    {
+                        filename = null;
+                        if (artist != null && artist.Contains("|"))
+                        {
+                            string[] artists = artist.Split('|');
+                            if (artists != null && artists.Length >= 1 && DoShowImageOnePlay)
+                            {
+                                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                            }
+                            else if (artists != null && artists.Length >= 2 && !DoShowImageOnePlay)
+                            {
+                                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[1].Trim()) + "L.jpg";
+                            }
+                            else if (artists != null && artists.Length >= 1 && !DoShowImageOnePlay)
+                            {
+                                filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
+                            }
+                        }
+                        else
+                        {
+                            filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artist) + "L.jpg";
+                        }
+                        if (File.Exists(filename))
+                        {
+                            found = true;
+                        }
+                    }
+                    if (found)
+                    {
+                        AddPropertyPlay("#fanarthandler.music.artisthumb.play", filename, ref ListPlayMusic);
+                    }
+                }
+             }
+            catch (Exception ex)
             {
-                filename = null;
-                if (artist.Contains("|"))
-                {
-                    string[] artists = artist.Split('|');
-                    if (artists != null && artists.Length >= 1 && DoShowImageOnePlay)
-                    {
-                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
-                    }
-                    else if (artists != null && artists.Length >= 2 && !DoShowImageOnePlay)
-                    {
-                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[1].Trim()) + "L.jpg";
-                    }
-                    else if (artists != null && artists.Length >= 1 && !DoShowImageOnePlay)
-                    {
-                        filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artists[0].Trim()) + "L.jpg";
-                    }
-                }
-                else
-                {
-                    filename = path + @"\" + MediaPortal.Util.Utils.MakeFileName(artist) + "L.jpg";
-                }
-                if (File.Exists(filename))
-                {
-                    found = true;
-                }
-            }
-            if (found)
-            {
-                AddPropertyPlay("#fanarthandler.music.artisthumb.play", filename, ref ListPlayMusic);
+                logger.Error("AddPlayingArtistThumbProperty: " + ex.ToString());
             }
         }
 
@@ -220,92 +234,94 @@ namespace FanartHandler
         public void RefreshMusicPlayingProperties()
         {
             try
-            {                
-                if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.CurrentTrackTag, StringComparison.CurrentCulture) == false)
+            {
+                if (Utils.GetIsStopping() == false)
                 {
-                    AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, DoShowImageOnePlay);
-                    string sFilenamePrev = CurrPlayMusic;
-                    CurrPlayMusic = String.Empty;
-                    PrevPlayMusic = -1;
-                    UpdateVisibilityCountPlay = 0;
-                    SetCurrentArtistsImageNames(null);
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart Scraper", "FanartPlaying", true, true);
-                    if (sFilename.Length == 0)
+                    if (CurrPlayMusicArtist.Equals(FanartHandlerSetup.Fh.CurrentTrackTag, StringComparison.CurrentCulture) == false)
                     {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
+                        AddPlayingArtistThumbProperty(FanartHandlerSetup.Fh.CurrentTrackTag, DoShowImageOnePlay);
+                        string sFilenamePrev = CurrPlayMusic;
+                        CurrPlayMusic = String.Empty;
+                        PrevPlayMusic = -1;
+                        UpdateVisibilityCountPlay = 0;
+                        SetCurrentArtistsImageNames(null);
+                        string sFilename = FanartHandlerSetup.Fh.GetFilename(FanartHandlerSetup.Fh.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart Scraper", "FanartPlaying", true, true);
                         if (sFilename.Length == 0)
                         {
-                            FanartAvailablePlay = false;
+                            sFilename = FanartHandlerSetup.Fh.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
+                            if (sFilename.Length == 0)
+                            {
+                                FanartAvailablePlay = false;
+                            }
+                            else
+                            {
+                                FanartAvailablePlay = true;
+                                CurrPlayMusic = sFilename;
+                            }
                         }
                         else
                         {
                             FanartAvailablePlay = true;
-                            CurrPlayMusic = sFilename;
+                        }
+                        if (DoShowImageOnePlay)
+                        {
+                            AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
+                        }
+                        else
+                        {
+                            AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
+                        }
+                        if (FanartHandlerSetup.Fh.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
+                        {
+                            AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
+                        }
+                        if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev, StringComparison.CurrentCulture) == false))
+                        {
+                            ResetCurrCountPlay();
                         }
                     }
-                    else
+                    else if (CurrCountPlay >= FanartHandlerSetup.Fh.MaxCountImage)
                     {
-                        FanartAvailablePlay = true;
-                    }                    
-                    if (DoShowImageOnePlay)
-                    {                        
-                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
-                    }
-                    else
-                    {
-                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
-                    }
-                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
-                    {
-                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
-                    }
-                    if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev, StringComparison.CurrentCulture) == false))
-                    {
-                        ResetCurrCountPlay();
-                    }
-                }
-                else if (CurrCountPlay >= FanartHandlerSetup.MaxCountImage)
-                {
-                    AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, DoShowImageOnePlay);
-                    string sFilenamePrev = CurrPlayMusic;
-                    string sFilename = FanartHandlerSetup.GetFilename(FanartHandlerSetup.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart Scraper", "FanartPlaying", false, true);
-                    if (sFilename.Length == 0)
-                    {
-                        sFilename = FanartHandlerSetup.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
+                        AddPlayingArtistThumbProperty(FanartHandlerSetup.Fh.CurrentTrackTag, DoShowImageOnePlay);
+                        string sFilenamePrev = CurrPlayMusic;
+                        string sFilename = FanartHandlerSetup.Fh.GetFilename(FanartHandlerSetup.Fh.CurrentTrackTag, ref CurrPlayMusic, ref PrevPlayMusic, "MusicFanart Scraper", "FanartPlaying", false, true);
                         if (sFilename.Length == 0)
                         {
-                            FanartAvailablePlay = false;
+                            sFilename = FanartHandlerSetup.Fh.GetRandomDefaultBackdrop(ref CurrPlayMusic, ref PrevPlayMusic);
+                            if (sFilename.Length == 0)
+                            {
+                                FanartAvailablePlay = false;
+                            }
+                            else
+                            {
+                                FanartAvailablePlay = true;
+                                CurrPlayMusic = sFilename;
+                            }
                         }
                         else
                         {
                             FanartAvailablePlay = true;
-                            CurrPlayMusic = sFilename;
+                        }
+                        if (DoShowImageOnePlay)
+                        {
+                            AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
+                        }
+                        else
+                        {
+                            AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
+                        }
+                        if (FanartHandlerSetup.Fh.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
+                        {
+                            AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
+                        }
+                        if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev, StringComparison.CurrentCulture) == false))
+                        {
+                            ResetCurrCountPlay();
                         }
                     }
-                    else
-                    {
-                        FanartAvailablePlay = true;
-                    }
-                    if (DoShowImageOnePlay)
-                    {
-                        AddPropertyPlay("#fanarthandler.music.backdrop1.play", sFilename, ref ListPlayMusic);
-                    }
-                    else
-                    {
-                        AddPropertyPlay("#fanarthandler.music.backdrop2.play", sFilename, ref ListPlayMusic);
-                    }
-                    if (FanartHandlerSetup.UseOverlayFanart.Equals("True", StringComparison.CurrentCulture))
-                    {
-                        AddPropertyPlay("#fanarthandler.music.overlay.play", sFilename, ref ListPlayMusic);
-                    }
-                    if ((sFilename.Length == 0) || (sFilename.Equals(sFilenamePrev, StringComparison.CurrentCulture) == false))
-                    {
-                        ResetCurrCountPlay();
-                    }
-                }
-                CurrPlayMusicArtist = FanartHandlerSetup.CurrentTrackTag;
-                IncreaseCurrCountPlay();
-                
+                    CurrPlayMusicArtist = FanartHandlerSetup.Fh.CurrentTrackTag;
+                    IncreaseCurrCountPlay();
+                }   
             }
             catch (Exception ex)
             {
@@ -344,7 +360,7 @@ namespace FanartHandler
             {
                 foreach (DictionaryEntry de in PropertiesPlay)
                 {
-                    FanartHandlerSetup.SetProperty(de.Key.ToString(), de.Value.ToString());
+                    FanartHandlerSetup.Fh.SetProperty(de.Key.ToString(), de.Value.ToString());
                 }
                 PropertiesPlay.Clear();
             }

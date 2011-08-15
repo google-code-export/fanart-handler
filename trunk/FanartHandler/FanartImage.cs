@@ -9,28 +9,29 @@
 //
 // Copyright        : Open Source software licensed under the GNU/GPL agreement.
 //***********************************************************************
-using System.Globalization;
+
 
 namespace FanartHandler
 {
-    using MediaPortal.Configuration;
-    using MediaPortal.Database;
-    using MediaPortal.GUI.Library;
-    using MediaPortal.Music.Database;
-    using MediaPortal.Picture.Database;
-    using NLog;
-    using SQLite.NET;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
+//    using MediaPortal.Configuration;
+//    using MediaPortal.Database;
+//    using MediaPortal.GUI.Library;
+//    using MediaPortal.Music.Database;
+//    using MediaPortal.Picture.Database;
+//    using NLog;
+//    using SQLite.NET;
+//    using System;
+//    using System.Collections;
+//    using System.Collections.Generic;
+//    using System.IO;
+//    using System.Linq;
+//    using System.Text;
+    //using System.Globalization;
 
     /// <summary>
     /// Container for fanart data.
     /// </summary>
-    public class FanartImage
+    class FanartImage
     {
         private string _id; // ENCAPSULATE FIELD BY CODEIT.RIGHT
 

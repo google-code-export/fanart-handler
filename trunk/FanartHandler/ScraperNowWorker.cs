@@ -20,7 +20,7 @@ namespace FanartHandler
     using System.ComponentModel;
     using System.Threading;
 
-    public class ScraperNowWorker : BackgroundWorker
+    class ScraperNowWorker : BackgroundWorker
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -57,10 +57,10 @@ namespace FanartHandler
         {
             try
             {
-                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.SyncPointScraper, 1, 0);
+                int sync = Interlocked.CompareExchange(ref FanartHandlerSetup.Fh.SyncPointScraper, 1, 0);
                 if (Utils.GetIsStopping() == false && sync == 0)
                 {
-                    if (FanartHandlerSetup.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
+                    if (FanartHandlerSetup.Fh.FHThreadPriority.Equals("Lowest", StringComparison.CurrentCulture))
                     {
                         Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                     }
@@ -74,21 +74,21 @@ namespace FanartHandler
                     this.album = s[1];                    
                     this.triggerRefresh = false;
                     Utils.GetDbm().IsScraping = true;
-                    FanartHandlerSetup.ShowScraperProgressIndicator();
-                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", "Now Playing Scrape");
+                    FanartHandlerSetup.Fh.ShowScraperProgressIndicator();
+                    FanartHandlerSetup.Fh.SetProperty("#fanarthandler.scraper.task", "Now Playing Scrape");
                     Utils.GetDbm().NowPlayingScrape(artist, album);
                     Utils.GetDbm().IsScraping = false;
                     ReportProgress(100, "Done");
                     Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
                     //FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
-                    FanartHandlerSetup.SyncPointScraper = 0;
+                    FanartHandlerSetup.Fh.SyncPointScraper = 0;
                     e.Result = 0;
                 }
             }
             catch (Exception ex)
             {
                 Utils.ReleaseDelayStop("FanartHandlerSetup-StartScraperNowPlaying");
-                FanartHandlerSetup.SyncPointScraper = 0;
+                FanartHandlerSetup.Fh.SyncPointScraper = 0;
                 logger.Error("OnDoWork: " + ex.ToString());
             }
         }
@@ -99,7 +99,7 @@ namespace FanartHandler
             {                
                 if (Utils.GetIsStopping() == false)
                 {
-                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty + e.ProgressPercentage);
+                    FanartHandlerSetup.Fh.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty + e.ProgressPercentage);
                 }
             }
             catch (Exception ex)
@@ -115,9 +115,9 @@ namespace FanartHandler
                 if (Utils.GetIsStopping() == false)
                 {
                     Thread.Sleep(1000);
-                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty);
-                    FanartHandlerSetup.SetProperty("#fanarthandler.scraper.task", String.Empty);
-                    FanartHandlerSetup.HideScraperProgressIndicator();
+                    FanartHandlerSetup.Fh.SetProperty("#fanarthandler.scraper.percent.completed", String.Empty);
+                    FanartHandlerSetup.Fh.SetProperty("#fanarthandler.scraper.task", String.Empty);
+                    FanartHandlerSetup.Fh.HideScraperProgressIndicator();
                     Utils.GetDbm().TotArtistsBeingScraped = 0;
                     Utils.GetDbm().CurrArtistsBeingScraped = 0;
                 }

@@ -16,7 +16,7 @@ namespace FanartHandler
     using MediaPortal.ExtensionMethods;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using MediaPortal.Util;
+//    using MediaPortal.Util;
     using MediaPortal.Configuration;
     using NLog;
     using System;    
@@ -24,7 +24,7 @@ namespace FanartHandler
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Management;
+//    using System.Management;
     using System.Net;
     using System.Text;    
     using System.Text.RegularExpressions;
@@ -41,7 +41,7 @@ namespace FanartHandler
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private Random randNumber = new Random();
-        private WebProxy proxy = null;
+//        private WebProxy proxy = null;
         private ArrayList alSearchResults = null; 
         
 
@@ -68,12 +68,17 @@ namespace FanartHandler
                 }
 
                 HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/searchXML?");
-                if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+/*                if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
                 {
                     proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                     proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
                     objRequest.Proxy = proxy;
+                }*/
+                try
+                {
+                    objRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                 }
+                catch (Exception) { }
                 objRequest.ServicePoint.Expect100Continue = false;
                 string values = "keywords=";
                 values += "&aid=1,5";
@@ -89,7 +94,7 @@ namespace FanartHandler
                     writer.Write(values);
                 }
 
-                WebResponse objResponse = objRequest.GetResponse();                
+                WebResponse objResponse = objRequest.GetResponse();    
                 using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
                 {
                     strResult = sr.ReadToEnd();
@@ -132,9 +137,9 @@ namespace FanartHandler
                 int iCountThumb = 0;
                 dbm.TotArtistsBeingScraped = alSearchResults.Count;                    
                 dbm.CurrArtistsBeingScraped = 0;
-                if (FanartHandlerSetup.MyScraperNowWorker != null)
+                if (FanartHandlerSetup.Fh.MyScraperNowWorker != null)
                 {
-                    FanartHandlerSetup.MyScraperNowWorker.ReportProgress(0, "Ongoing");
+                    FanartHandlerSetup.Fh.MyScraperNowWorker.ReportProgress(0, "Ongoing");
                 }
                 for (int x = 0; x < alSearchResults.Count; x++)
                 {
@@ -186,6 +191,7 @@ namespace FanartHandler
                                 {
                                     iCount = iCount + 1;
                                     dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
+                                    ExternalAccess.InvokeScraperCompleted("MusicFanart Scraper", dbArtist);
                                 }
                             }
                             else
@@ -222,6 +228,7 @@ namespace FanartHandler
                                 //dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicThumbnails", 0);                               
                                 dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                                 //foundThumb = true;
+                                ExternalAccess.InvokeScraperCompleted("MusicArtistThumbs", dbArtist);
                             }
 
                         }
@@ -243,9 +250,9 @@ namespace FanartHandler
                     {
                         break;
                     }
-                    if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                    if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.Fh.MyScraperNowWorker != null)
                     {
-                        FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
+                        FanartHandlerSetup.Fh.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                     }                    
                 }
                 if (!foundNewImages)
@@ -282,16 +289,24 @@ namespace FanartHandler
 
         public static Image CreateNonIndexedImage(string path)
         {
-            using (var sourceImage = Utils.LoadImageFastFromFile(path))
+            try
             {
-                var targetImage = new Bitmap(sourceImage.Width, sourceImage.Height,
-                  PixelFormat.Format32bppArgb);
-                using (var canvas = Graphics.FromImage(targetImage))
+                using (var sourceImage = Utils.LoadImageFastFromFile(path))
                 {
-                    canvas.DrawImageUnscaled(sourceImage, 0, 0);
+                    var targetImage = new Bitmap(sourceImage.Width, sourceImage.Height,
+                      PixelFormat.Format32bppArgb);
+                    using (var canvas = Graphics.FromImage(targetImage))
+                    {
+                        canvas.DrawImageUnscaled(sourceImage, 0, 0);
+                    }
+                    return targetImage;
                 }
-                return targetImage;
             }
+            catch (Exception ex)
+            {
+                logger.Error("CreateNonIndexedImage: " + ex.ToString());
+            }
+            return null;
         } 
 
         private bool HandleOldThumbs(string filenameOld, string filenameNew, ref bool doDownload, bool forceDelete, string type)
@@ -400,10 +415,15 @@ namespace FanartHandler
                     {
                         requestPic = (HttpWebRequest)WebRequest.Create(sourceFilename);
                         requestPic.ServicePoint.Expect100Continue = false;
-                        if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+                        /*if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
                         {
                             requestPic.Proxy = proxy;
+                        }*/
+                        try
+                        {
+                            requestPic.Proxy.Credentials = CredentialCache.DefaultCredentials;
                         }
+                        catch (Exception) { }
                         requestPic.AddRange((int)position);
                         requestPic.Timeout = 5000 + (1000 * maxCount);
                         requestPic.ReadWriteTimeout = 20000;
@@ -576,7 +596,9 @@ namespace FanartHandler
                 }
             }
             if (status.Equals("Success", StringComparison.CurrentCulture))
-                return true;
+            {
+                return true;                
+            }
             else
                 return false;
         }
@@ -707,7 +729,11 @@ namespace FanartHandler
                     checkImage = null;
                     return true;
                 }
-
+                if (checkImage != null)
+                {
+                    checkImage.SafeDispose();
+                }
+                checkImage = null;
             }
             catch
             {
@@ -792,12 +818,17 @@ namespace FanartHandler
                     bool foundThumb = false;
                     string filename = null;
                     HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/searchXML?");
-                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+                    /*if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
                     {
                         proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
                         proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
                         objRequest.Proxy = proxy;
+                    }*/
+                    try
+                    {
+                        objRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                     }
+                    catch (Exception) { }
                     objRequest.ServicePoint.Expect100Continue = false;
                     string values = "keywords=" + artist;
                     values += "&aid=5";
@@ -871,9 +902,10 @@ namespace FanartHandler
                                         logger.Debug("Found thumbnail for artist " + artist + ".");
                                         sourceFilename = "http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/download/" + ((SearchResults)alSearchResults[x]).Id + "/fullsize";
                                         if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
-                                        {
+                                        {                                            
                                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                                             foundThumb = true;
+                                            ExternalAccess.InvokeScraperCompleted("MusicArtistThumbs", dbArtist);
                                         }
                                     }
                                 }
@@ -888,7 +920,7 @@ namespace FanartHandler
                             dbm.SetSuccessfulScrapeThumb(dbArtist, 1);
                             if (!Utils.GetDbm().HasArtistThumb(dbArtist) || !onlyMissing)
                             {
-                                GetLastFMArtistImages(artist, dbm);
+                                GetLastFMArtistImages(artist, dbm, false);
                             }
                         }
                     }
@@ -914,10 +946,11 @@ namespace FanartHandler
             return 9999;
         }
 
+
         /// <summary>
         /// Scrapes image for a specific artist on htbackdrops.com.
         /// </summary>
-        public int GetImages(string artist, int iMax, DatabaseManager dbm, bool reportProgress, bool doTriggerRefresh)
+        public int GetImages(string artist, int iMax, DatabaseManager dbm, bool reportProgress, bool doTriggerRefresh, bool externalAccess)
         {
             try
             {
@@ -931,12 +964,12 @@ namespace FanartHandler
                     bool foundThumb = false;
                     string filename = null;
                     HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://htbackdrops.com/api/02274c29b2cc898a726664b96dcc0e76/searchXML?");
-                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+
+                    try
                     {
-                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
-                        proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                        objRequest.Proxy = proxy;
+                        objRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                     }
+                    catch (Exception) { }
                     objRequest.ServicePoint.Expect100Continue = false;
                     string values = "keywords=" + artist;
                     values += "&aid=1,5";
@@ -987,13 +1020,13 @@ namespace FanartHandler
                     if (alSearchResults != null)
                     {
                         logger.Debug("Trying to find fanart for artist " + artist + ".");
-                        if (!reportProgress)
+                        if (!reportProgress && !externalAccess)
                         {
                             dbm.TotArtistsBeingScraped = alSearchResults.Count+1;
                             dbm.CurrArtistsBeingScraped = 0;
-                            if (FanartHandlerSetup.MyScraperNowWorker != null)
+                            if (FanartHandlerSetup.Fh.MyScraperNowWorker != null)
                             {
-                                FanartHandlerSetup.MyScraperNowWorker.ReportProgress(0, "Ongoing");
+                                FanartHandlerSetup.Fh.MyScraperNowWorker.ReportProgress(0, "Ongoing");
                             }
                         }
                         dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
@@ -1021,16 +1054,17 @@ namespace FanartHandler
                                             {
                                                 iCount = iCount + 1;
                                                 dbm.LoadMusicFanart(dbArtist, filename, ((SearchResults)alSearchResults[x]).Id, "MusicFanart Scraper", 0);
-                                                if (FanartHandlerSetup.MyScraperNowWorker != null && doTriggerRefresh)
+                                                if (FanartHandlerSetup.Fh.MyScraperNowWorker != null && doTriggerRefresh && !externalAccess)
                                                 {
-                                                    FanartHandlerSetup.MyScraperNowWorker.TriggerRefresh = true;
+                                                    FanartHandlerSetup.Fh.MyScraperNowWorker.TriggerRefresh = true; 
                                                     doTriggerRefresh = false;
                                                     resetImageHash = true;
                                                 }
-                                                else if (FanartHandlerSetup.MyScraperNowWorker != null && resetImageHash)
+                                                else if (FanartHandlerSetup.Fh.MyScraperNowWorker != null && resetImageHash && !externalAccess)
                                                 {
-                                                    FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null); //Reload images
+                                                    FanartHandlerSetup.Fh.FP.SetCurrentArtistsImageNames(null); //Reload images
                                                 }
+                                                ExternalAccess.InvokeScraperCompleted("MusicFanart Scraper", dbArtist);
                                             }
                                         }
                                         else
@@ -1058,11 +1092,12 @@ namespace FanartHandler
                                         {
                                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
                                             foundThumb = true;
-                                            if (FanartHandlerSetup.IsPlaying)
+                                            if (FanartHandlerSetup.Fh.IsPlaying && !externalAccess)
                                             {
-                                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
-                                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                                                FanartHandlerSetup.Fh.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.Fh.CurrentTrackTag, FanartHandlerSetup.Fh.FP.DoShowImageOnePlay);
+                                                FanartHandlerSetup.Fh.FP.UpdatePropertiesPlay();
                                             }
+                                            ExternalAccess.InvokeScraperCompleted("MusicArtistThumbs", dbArtist);
                                         }
                                     }
                                 }                                
@@ -1070,16 +1105,13 @@ namespace FanartHandler
                             if (!reportProgress)
                             {
                                 dbm.CurrArtistsBeingScraped++;
-                                if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                                if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.Fh.MyScraperNowWorker != null && !externalAccess)
                                 {
-                                    FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
+                                    FanartHandlerSetup.Fh.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                                 }
                             }
                         }
-                        /*if (resetImageHash)
-                        {                            
-                            FanartHandlerSetup.FP.SetCurrentArtistsImageNames(null); //Reload images
-                        }*/
+
                         if (dbm.StopScraper == true)
                         {
                             return iCount;
@@ -1089,15 +1121,15 @@ namespace FanartHandler
                             dbm.SetSuccessfulScrapeThumb(dbArtist, 1);
                             if (!Utils.GetDbm().HasArtistThumb(dbArtist) && Utils.ScrapeThumbnails.Equals("True", StringComparison.CurrentCulture))
                             {
-                                GetLastFMArtistImages(artist, dbm);
+                                GetLastFMArtistImages(artist, dbm, externalAccess);
                             }
                         }
-                        if (!reportProgress)
+                        if (!reportProgress && !externalAccess)
                         {
                             dbm.CurrArtistsBeingScraped++;
-                            if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.MyScraperNowWorker != null)
+                            if (dbm.TotArtistsBeingScraped > 0 && FanartHandlerSetup.Fh.MyScraperNowWorker != null)
                             {
-                                FanartHandlerSetup.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
+                                FanartHandlerSetup.Fh.MyScraperNowWorker.ReportProgress(Convert.ToInt32((dbm.CurrArtistsBeingScraped / dbm.TotArtistsBeingScraped) * 100), "Ongoing");
                             }
                         }
                     }
@@ -1127,7 +1159,7 @@ namespace FanartHandler
         /// <summary>
         /// Scrapes image for a specific artist on Last FM.
         /// </summary>
-        public int GetLastFMArtistImages(string artist, DatabaseManager dbm)
+        public int GetLastFMArtistImages(string artist, DatabaseManager dbm, bool externalAccess)
         {
             try
             {
@@ -1142,12 +1174,12 @@ namespace FanartHandler
                     string filename = null;
                     bool b = true;
                     HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://ws.audioscrobbler.com/2.0/?method=artist.getimages");
-                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+                    
+                    try
                     {
-                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
-                        proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                        objRequest.Proxy = proxy;
+                        objRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                     }
+                    catch (Exception) { }
                     objRequest.ServicePoint.Expect100Continue = false;
                     string values = "&artist=" + urlArtist;
                     values += "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
@@ -1199,12 +1231,13 @@ namespace FanartHandler
                         dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                         if (DownloadImage(ref artist, null, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicArtistThumbs"))
                         {
-                            if (FanartHandlerSetup.IsPlaying)
+                            if (FanartHandlerSetup.Fh.IsPlaying &&!externalAccess)
                             {
-                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
-                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                                FanartHandlerSetup.Fh.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.Fh.CurrentTrackTag, FanartHandlerSetup.Fh.FP.DoShowImageOnePlay);
+                                FanartHandlerSetup.Fh.FP.UpdatePropertiesPlay();
                             }
                             dbm.SetSuccessfulScrapeThumb(dbArtist, 2);
+                            ExternalAccess.InvokeScraperCompleted("MusicArtistThumbs", dbArtist);
                         }
                     }
                     objRequest = null;
@@ -1212,7 +1245,7 @@ namespace FanartHandler
                 return iCount;
             }
             catch (WebException ex)
-            {                    
+            {
                 if (ex.Message.Contains("400"))
                 {
                     //Do nothing. Last FM returns this if no artist is found
@@ -1230,7 +1263,7 @@ namespace FanartHandler
             return 9999;
         }
 
-        public int GetLastFMAlbumImages(string artist, string album)
+        public int GetLastFMAlbumImages(string artist, string album, bool externalAccess)
         {
             try
             {
@@ -1246,16 +1279,16 @@ namespace FanartHandler
                     string filename = null;
                     bool b = true;
                     HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create("http://ws.audioscrobbler.com/2.0/?method=album.getinfo");
-                    if (Utils.GetUseProxy() != null && Utils.GetUseProxy().Equals("True", StringComparison.CurrentCulture))
+
+                    try
                     {
-                        proxy = new WebProxy(Utils.GetProxyHostname() + ":" + Utils.GetProxyPort());
-                        proxy.Credentials = new NetworkCredential(Utils.GetProxyUsername(), Utils.GetProxyPassword(), Utils.GetProxyDomain());
-                        objRequest.Proxy = proxy;
+                        objRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                     }
+                    catch (Exception) { }
                     objRequest.ServicePoint.Expect100Continue = false;
                     string values = "&api_key=7d97dee3440eec8b90c9cf5970eef5ca";
                     values += "&artist=" + urlArtist;
-                    values += "&album=" + urlAlbum;                  
+                    values += "&album=" + urlAlbum;
                     objRequest.Method = "POST";
                     objRequest.ContentType = "application/x-www-form-urlencoded";
                     objRequest.ContentLength = values.Length;
@@ -1269,7 +1302,6 @@ namespace FanartHandler
                         strResult = sr.ReadToEnd();
                         sr.Close();
                     }
-                   
                     if (objResponse != null)
                     {
                         objResponse.Close();
@@ -1308,14 +1340,15 @@ namespace FanartHandler
                         dbArtist = Utils.GetArtist(artist, "MusicFanart Scraper");
                         if (DownloadImage(ref artist, album, ref sourceFilename, ref path, ref filename, ref requestPic, ref responsePic, "MusicAlbumThumbs"))
                         {
-                            if (FanartHandlerSetup.IsPlaying)
+                            if (FanartHandlerSetup.Fh.IsPlaying && !externalAccess)
                             {
-                                FanartHandlerSetup.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.CurrentTrackTag, FanartHandlerSetup.FP.DoShowImageOnePlay);
-                                FanartHandlerSetup.FP.UpdatePropertiesPlay();
+                                FanartHandlerSetup.Fh.FP.AddPlayingArtistThumbProperty(FanartHandlerSetup.Fh.CurrentTrackTag, FanartHandlerSetup.Fh.FP.DoShowImageOnePlay);
+                                FanartHandlerSetup.Fh.FP.UpdatePropertiesPlay();
                             }
                             urlArtist = Utils.GetArtist(urlArtist, "MusicFanart Scraper");
                             urlAlbum = Utils.GetArtist(urlAlbum, "MusicFanart Scraper");
                             Utils.GetDbm().SetSuccessfulAlbumScrape(urlArtist, urlAlbum, "2");
+                            ExternalAccess.InvokeScraperCompleted("MusicAlbumThumbs", dbArtist);
                         }
                     }
                     objRequest = null;

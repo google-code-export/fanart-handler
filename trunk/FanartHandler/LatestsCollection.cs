@@ -34,7 +34,7 @@ using System.Globalization;
 
 namespace FanartHandler
 {
-    public class LatestsCollection : List<Latest>
+    class LatestsCollection : List<Latest>
     {
     }
 }

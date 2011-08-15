@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System;
+using MediaPortal.Common.Utils;
 
 [assembly: CLSCompliant(false)]
 
@@ -21,6 +22,7 @@ using System;
 [assembly: AssemblyCopyright("Open Source software licensed under the GNU/GPL agreement.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CompatibleVersion("1.1.6.27644")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
