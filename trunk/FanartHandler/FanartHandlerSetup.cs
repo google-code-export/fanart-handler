@@ -2311,13 +2311,13 @@ namespace FanartHandler
             try
             {
                 int ix = 0;
-                while (SyncPointRefresh != 0 && ix < 20)
+                while (SyncPointRefresh != 0 && ix < 40)
                 {
-                    System.Threading.Thread.Sleep(400);                    
+                    System.Threading.Thread.Sleep(200);                    
                     ix++;
-                }
-                string windowId = String.Empty+activeWindowId;
+                }                
                 PreventRefresh = true;
+                string windowId = String.Empty + activeWindowId;
                 if ((FR.WindowsUsingFanartRandom.ContainsKey(windowId) || FS.WindowsUsingFanartSelectedMusic.ContainsKey(windowId) || FS.WindowsUsingFanartSelectedMovie.ContainsKey(windowId) || FP.WindowsUsingFanartPlay.ContainsKey(windowId)) && AllowFanartInThisWindow(windowId))
                 {
                     if (Utils.GetDbm().GetIsScraping())
