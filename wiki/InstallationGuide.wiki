@@ -5,6 +5,11 @@
 
 ----
 =Change Logs=
+==Change Log (version 2.2.5 to 2.3.0)==
+    * Removed all hanlding of latest media (music, tv, movies, pictures...). This is all handled of the new LatestMediaHandler plugin.
+    * Several bug fixes.
+==Change Log (version 2.2.4 to 2.2.5)==
+    * Several bug fixes.
 ==Change Log (version 2.2.3 to 2.2.4)==
     * New feature: New option in configuration to enable or disable asynchronously loading of random images.
     * New feature: Fanart support in my videos movie info screen (thanks Deda)
