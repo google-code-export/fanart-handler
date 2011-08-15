@@ -45,6 +45,10 @@ The scope of this plugin is to;
 ----
 =Change Logs=
 This chapter describes changes that skinners need to consider when versions of the fanart handler plugin changes.
+==Change Log - Version 2.2.5 to 2.3.0==
+No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin. BUT all latest media tags is deprecated and should be replaced with the tags used by the new LatestMediaHandler plugin. Please see the [http://code.google.com/p/latestmediahandler/wiki/SkinnersGuide skinning guide] of that plugin for more information.
+==Change Log - Version 2.2.4 to 2.2.5==
+No changes needed in skin files to support version 2.2.3 if your skin previously supported version 1.1 - 2.2.2 of this plugin.
 ==Change Log - Version 2.2.3 to 2.2.4==
 New properties that makes latest recorded tv (4TR and MP) playable. New feature: New property for latest pictures (Title). New property for latest music (Genre). New property for latest tvseries and movingpictures called plot. New properties to "enabled" that can be used to decide if a user have enabled latest media tags.
 ==Change Log - Version 2.2.2 to 2.2.3==
