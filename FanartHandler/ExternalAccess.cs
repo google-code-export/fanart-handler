@@ -58,6 +58,18 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Returns a hashtable with all found fanart for artist
+        /// </summary>
+        /// <param name="artist"></param>
+        /// <param name="type"></param>
+        /// <param name="restricted"></param>
+        /// <returns></returns>
+        public Hashtable GetFanart(string artist, string type, int restricted)
+        {
+            return Utils.GetDbm().GetFanart(artist, type, restricted);
+        }
+
+        /// <summary>
         /// Return artist name as used by FanartHandler.
         /// </summary>
         /// <param name="_artist">Name of artist</param>
