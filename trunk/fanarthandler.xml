@@ -27,8 +27,45 @@
         <Items />
       </Sections>
       <Dependencies>
-        <Items />
+        <Items>
+          <DependencyItem>
+            <Type>MediaPortal</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>1</Minor>
+              <Build>6</Build>
+              <Revision>27644</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires MediaPortal version 1.2 RC.</Message>
+            <Name>MediaPortal</Name>
+          </DependencyItem>
+        </Items>
       </Dependencies>
+      <PluginDependencies>
+        <Items>
+          <PluginDependencyItem AssemblyName="FanartHandler.dll">
+            <CompatibleVersion>
+              <Items>
+                <CompatibleVersionItem>
+                  <MinRequiredVersion>1.1.6.27644</MinRequiredVersion>
+                  <DesignedForVersion>1.1.6.27644</DesignedForVersion>
+                </CompatibleVersionItem>
+              </Items>
+            </CompatibleVersion>
+            <SubSystemsUsed>
+              <Items />
+            </SubSystemsUsed>
+          </PluginDependencyItem>
+        </Items>
+      </PluginDependencies>
       <GeneralInfo>
         <Name>Fanart Handler</Name>
         <Id>814a6918-0183-4323-a3b4-c00fac11b4f6</Id>
@@ -38,9 +75,9 @@
         <UpdateUrl>http://code.google.com/p/fanart-handler/source/browse/branches/MP_Beta_1.2/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>2</Major>
-          <Minor>2</Minor>
-          <Build>4</Build>
-          <Revision>502</Revision>
+          <Minor>3</Minor>
+          <Build>1</Build>
+          <Revision>523</Revision>
         </Version>
         <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
 
@@ -51,26 +88,16 @@
     * push fanart for now played music
     * push fanart for selected music or movie
     * push random images from selected folders
-    * Push latest added media to your skin.
-    * latest added pictures
-    * latest added movies (moving pictures)
-    * latest added series (tvseries)
-    * latest added music
-    * latest added tv recordings</ExtensionDescription>
-        <VersionDescription> * Fixed bug in TVSeries fanart not being displayed (random images)
-* Fixed bug in matching of videos (for myVideos)</VersionDescription>
+ 
+</ExtensionDescription>
+        <VersionDescription>First official version of FanartHandler without latest media info.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://code.google.com/p/fanart-handler/source/browse/branches/MP_Beta_1.2/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
-        <Location>E:\Visual Studio 2008\Projects\FanartHandler12\fanarthandler.mpe1</Location>
+        <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
         <Params>
           <Items>
-            <SectionParam Name="Icon">
-              <Value>E:\Visual Studio 2008\Projects\FanartHandler12\FanartHandler_Icon.png</Value>
-              <ValueType>File</ValueType>
-              <Description>The icon file of the package (jpg,png,bmp)</Description>
-            </SectionParam>
             <SectionParam Name="Online Icon">
               <Value>http://fanart-handler.googlecode.com/svn/trunk/FanartHandler_Icon.png</Value>
               <ValueType>String</ValueType>
@@ -102,6 +129,7 @@
       <ProjectSettings>
         <FolderGroups />
       </ProjectSettings>
+      <IsSkin>false</IsSkin>
     </PackageClass>
   </Items>
 </ExtensionCollection>

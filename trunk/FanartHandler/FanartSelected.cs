@@ -206,10 +206,18 @@ namespace FanartHandler
                         string _movieid = GUIPropertyManager.GetProperty("#movieid");
                         if (_movieid == null || _movieid == string.Empty || _movieid == "-1")
                         {
-                            FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
+                            if (GUIWindowManager.ActiveWindow == 2003)
+                            {
+                                FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#title");
+                            }
+                            else
+                            {
+                                FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#selecteditem");
+                            }
                         }
                         else
                         {
+                            // New
                             FanartHandlerSetup.Fh.SelectedItem = _movieid;
                         }
                     }
@@ -220,6 +228,21 @@ namespace FanartHandler
                     else if (GUIWindowManager.ActiveWindow == 9813)
                     {
                         FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#TVSeries.Episode.SeriesName");
+                    }
+                    else if (GUIWindowManager.ActiveWindow == 112011)
+                    {
+                        //112011 MVCental - Main screen 
+                        FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvCentral.ArtistName");
+                    }
+                    else if (GUIWindowManager.ActiveWindow == 112012)
+                    {
+                        //112012 MVCental - Playlist Screen
+                        FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvCentral.ArtistName");
+                    }
+                    else if (GUIWindowManager.ActiveWindow == 112013)
+                    {
+                        //112013 MVCental - Info screen 
+                        FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvCentral.ArtistName");
                     }
                     else if (GUIWindowManager.ActiveWindow == 30886)
                     {
@@ -402,6 +425,16 @@ namespace FanartHandler
             HasUpdatedCurrCount = true;
         }
 
+        private string ParseScoreCenterTag(string s)
+        {
+            if (s == null) return " ";
+
+            if (s.IndexOf(">") > 0)
+            {
+                s = s.Substring(0, s.IndexOf(">")).Trim();
+            }
+            return s;
+        }
 
         /// <summary>
         /// Get and set properties for selected scorecenter title
@@ -412,7 +445,8 @@ namespace FanartHandler
             {
                 if (Utils.GetIsStopping() == false)
                 {
-                    FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#ScoreCenter.Category");
+                    //FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#ScoreCenter.Category");
+                    FanartHandlerSetup.Fh.SelectedItem = ParseScoreCenterTag(GUIPropertyManager.GetProperty("#ScoreCenter.Results"));                    
 
                     if (FanartHandlerSetup.Fh.SelectedItem != null && FanartHandlerSetup.Fh.SelectedItem.Equals("..", StringComparison.CurrentCulture) == false && FanartHandlerSetup.Fh.SelectedItem.Trim().Length > 0)
                     {
@@ -482,8 +516,15 @@ namespace FanartHandler
                         CurrSelectedScorecenter = String.Empty;
                         CurrSelectedScorecenterGenre = String.Empty;
                         PrevSelectedScorecenter = -1;
+                        FanartAvailable = false;
+                        if (DoShowImageOne)
+                            AddProperty("#fanarthandler.scorecenter.backdrop1.selected", string.Empty, ref ListSelectedMusic);
+                        else
+                            AddProperty("#fanarthandler.scorecenter.backdrop2.selected", string.Empty, ref ListSelectedMusic);
+                        ResetCurrCount();
                         SetCurrentArtistsImageNames(null);
                     }
+                     
                 }
             }
             catch (Exception ex)
