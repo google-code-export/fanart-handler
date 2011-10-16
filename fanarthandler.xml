@@ -72,7 +72,7 @@
         <Author>cul8er</Author>
         <HomePage>http://code.google.com/p/fanart-handler/</HomePage>
         <ForumPage>http://forum.team-mediaportal.com/fanart-handler-535/</ForumPage>
-        <UpdateUrl>http://code.google.com/p/fanart-handler/source/browse/branches/MP_Beta_1.2/fanarthandler.xml</UpdateUrl>
+        <UpdateUrl>http://code.google.com/p/fanart-handler/source/browse/trunk/fanarthandler.xml</UpdateUrl>
         <Version>
           <Major>2</Major>
           <Minor>3</Minor>
@@ -92,7 +92,7 @@
 </ExtensionDescription>
         <VersionDescription>First official version of FanartHandler without latest media info.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>http://code.google.com/p/fanart-handler/source/browse/branches/MP_Beta_1.2/fanarthandler.mpe1</OnlineLocation>
+        <OnlineLocation>http://code.google.com/p/fanart-handler/source/browse/trunk/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
         <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
