@@ -158,11 +158,12 @@ namespace FanartHandler
                         debugFlag = 16;
                         FanartHandlerSetup.Fh.FP.RefreshMusicPlayingProperties();
                         FanartHandlerSetup.Fh.IsPlaying = true;
+                        FanartHandlerSetup.Fh.IsPlayingCount = 0;
                         Report(e);
                     }
                     else
                     {
-                        if (FanartHandlerSetup.Fh.IsPlaying)
+                        if (FanartHandlerSetup.Fh.IsPlaying && FanartHandlerSetup.Fh.IsPlayingCount > 3)
                         {
                             debugFlag = 17;
                             FanartHandlerSetup.Fh.StopScraperNowPlaying();
@@ -180,7 +181,12 @@ namespace FanartHandler
                             FanartHandlerSetup.Fh.FP.CurrCountPlay = 0;
                             FanartHandlerSetup.Fh.FP.UpdateVisibilityCountPlay = 0;
                             FanartHandlerSetup.Fh.IsPlaying = false;
+                            FanartHandlerSetup.Fh.IsPlayingCount = 0;
                             Report(e);
+                        }
+                        else if (FanartHandlerSetup.Fh.IsPlaying)
+                        {
+                            FanartHandlerSetup.Fh.IsPlayingCount++;
                         }
                     }
                     debugFlag = 18;
