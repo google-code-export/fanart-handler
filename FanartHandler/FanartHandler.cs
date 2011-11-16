@@ -62,7 +62,8 @@ namespace FanartHandler
 
         private string m_CurrentTrackTag = null;  //is music playing and if so this holds current artist name                
         private string m_CurrentAlbumTag = null;  //is music playing and if so this holds current album name                
-        private bool isPlaying/* = false*/; //hold true if MP plays music        
+        private bool isPlaying/* = false*/; //hold true if MP plays music       
+        private int isPlayingCount = 0;
         private bool isSelectedMusic/* = false*/;
         private bool isSelectedVideo/* = false*/;
         private bool isSelectedScoreCenter/* = false*/;
@@ -233,6 +234,12 @@ namespace FanartHandler
         {
             get { return isPlaying; }
             set { isPlaying = value; }
+        }
+
+        internal int IsPlayingCount
+        {
+            get { return isPlayingCount; }
+            set { isPlayingCount = value; }
         }
 
         internal bool UseBasichomeFade
@@ -1260,6 +1267,7 @@ namespace FanartHandler
             Utils.SetIsStopping(false);
             Restricted = 0;
             IsPlaying = false;
+            IsPlayingCount = 0;
             MyFileWatcherKey = "All";
             IsSelectedPicture = false;
             IsSelectedMusic = false;
@@ -1974,6 +1982,7 @@ namespace FanartHandler
                                 FP.CurrCountPlay = 0;
                                 FP.UpdateVisibilityCountPlay = 0;
                                 IsPlaying = false;
+                                IsPlayingCount = 0;
                             }
                             else
                             {
@@ -2121,6 +2130,7 @@ namespace FanartHandler
                     FP.CurrCountPlay = 0;
                     FP.UpdateVisibilityCountPlay = 0;
                     IsPlaying = false;
+                    IsPlayingCount = 0;
                 }
                 if (IsSelectedMusic)
                 {
