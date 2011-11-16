@@ -356,7 +356,7 @@ cul8er</Value>
       <Major>2</Major>
       <Minor>3</Minor>
       <Build>1</Build>
-      <Revision>523</Revision>
+      <Revision>524</Revision>
     </Version>
     <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
 
@@ -553,7 +553,7 @@ cul8er</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>FanartHandler_Icon.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{08a6adf6-d358-4e54-8753-cd562bc8f4de}-FanartHandler_Icon.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{1af23fa6-8354-4a88-9a11-bc17658abec9}-FanartHandler_Icon.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
