@@ -222,4 +222,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(TargetDir)merge.bat"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

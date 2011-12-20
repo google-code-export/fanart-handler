@@ -173,6 +173,10 @@ namespace FanartHandler
                     {
                         FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvids.artist");
                     }
+                    else if (GUIWindowManager.ActiveWindow == 47286)
+                    {
+                        FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#Rockstar.SelectedTrack.ArtistName");
+                    }
                     else if (GUIWindowManager.ActiveWindow == 759)
                     {
                         FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#TV.RecordedTV.Title");
