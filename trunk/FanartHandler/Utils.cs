@@ -40,7 +40,7 @@ namespace FanartHandler
         private const string RXMatchNonWordCharacters = @"[^\w|;]";
         private const string RXMatchMPvs = @"({)([0-9]+)(})$"; // MyVideos fanart scraper filename index
         private const string RXMatchMPvs2 = @"(\()([0-9]+)(\))$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.3.1.525";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.3.1.526";  //Holds current pluginversion.
 //        private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
 //        private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
 //        private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -683,7 +683,7 @@ namespace FanartHandler
 
             if (key.IndexOf("-", StringComparison.CurrentCulture) >= 0)
             {
-                key = key.Substring(0, key.IndexOf("-", StringComparison.CurrentCulture));
+                key = key.Substring(0, key.LastIndexOf("-", StringComparison.CurrentCulture));
             }
             return key;
         }
