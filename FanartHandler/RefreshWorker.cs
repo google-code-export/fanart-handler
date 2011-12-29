@@ -238,6 +238,14 @@ namespace FanartHandler
                                 FanartHandlerSetup.Fh.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.Fh.FS.ListSelectedMusic, "Youtube.FM", ref FanartHandlerSetup.Fh.FS.CurrSelectedMusic, ref FanartHandlerSetup.Fh.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
+                            else if (windowId == 112011 || windowId == 112012 || windowId == 112013)
+                            {
+                              //User are in mvCentral windows
+                              FanartHandlerSetup.Fh.IsSelectedMusic = true;
+                              resetFanartAvailableFlags = false;
+                              FanartHandlerSetup.Fh.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.Fh.FS.ListSelectedMusic, "mvCentral", ref FanartHandlerSetup.Fh.FS.CurrSelectedMusic, ref FanartHandlerSetup.Fh.FS.CurrSelectedMusicArtist);
+                              Report(e);
+                            }
                             else if (windowId == 880)
                             {
                                 //User are in music videos window
