@@ -70,6 +70,43 @@ namespace FanartHandler
         }
 
         /// <summary>
+        /// Returns a hashtable with all found fanart for tvshow
+        /// </summary>
+        /// <param name="artist"></param>
+        /// <param name="type"></param>
+        /// <param name="restricted"></param>
+        /// <returns></returns>
+        public static Hashtable GetTVFanart(string tvshow)
+        {
+            Hashtable sout = new Hashtable();
+            try
+            {
+                tvshow = Utils.GetArtist(tvshow, "TV Section");
+                Hashtable tmp = Utils.GetDbm().GetFanart(tvshow, "TV Section", 0);
+                ICollection valueColl = tmp.Values;
+                int iStop = 0;
+                foreach (FanartImage s in valueColl)
+                {
+                    if (iStop < 2)
+                    {                        
+                        sout.Add(iStop, s.DiskImage);
+                        iStop++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                valueColl = null;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("GetTVFanart: " + ex.ToString());
+            }
+            return sout;
+        }
+
+        /// <summary>
         /// Return artist name as used by FanartHandler.
         /// </summary>
         /// <param name="_artist">Name of artist</param>
