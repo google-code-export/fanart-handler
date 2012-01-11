@@ -77,7 +77,7 @@
           <Major>2</Major>
           <Minor>3</Minor>
           <Build>1</Build>
-          <Revision>526</Revision>
+          <Revision>528</Revision>
         </Version>
         <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
 
@@ -90,7 +90,7 @@
     * push random images from selected folders
  
 </ExtensionDescription>
-        <VersionDescription>First official version of FanartHandler without latest media info.</VersionDescription>
+        <VersionDescription>A few bugfixes related to retreiving fanart for recordings.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
         <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
