@@ -82,7 +82,7 @@ namespace FanartHandler
             try
             {
                 tvshow = Utils.GetArtist(tvshow, "TV Section");
-                Hashtable tmp = Utils.GetDbm().GetFanart(tvshow, "TV Section", 0);
+                Hashtable tmp = Utils.GetDbm().GetFanart(tvshow, "TV Section", 1);
                 ICollection valueColl = tmp.Values;
                 int iStop = 0;
                 foreach (FanartImage s in valueColl)
@@ -179,13 +179,13 @@ namespace FanartHandler
                 tmp = Utils.GetDbm().GetHigResFanart(artist, 0);
                 if ((tmp != null && tmp.Count <= 0) && FanartHandlerSetup.Fh.SkipWhenHighResAvailable != null && FanartHandlerSetup.Fh.SkipWhenHighResAvailable.Equals("True", StringComparison.CurrentCulture) && ((FanartHandlerSetup.Fh.UseArtist.Equals("True", StringComparison.CurrentCulture)) || (FanartHandlerSetup.Fh.UseAlbum.Equals("True", StringComparison.CurrentCulture))))
                 {
-                    tmp = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 0);
+                    tmp = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 1);
                 }
                 else if (FanartHandlerSetup.Fh.SkipWhenHighResAvailable != null && FanartHandlerSetup.Fh.SkipWhenHighResAvailable.Equals("False", StringComparison.CurrentCulture) && ((FanartHandlerSetup.Fh.UseArtist.Equals("True", StringComparison.CurrentCulture)) || (FanartHandlerSetup.Fh.UseAlbum.Equals("True", StringComparison.CurrentCulture))))
                 {
                     if (tmp != null && tmp.Count > 0)
                     {
-                        Hashtable tmp1 = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 0);
+                        Hashtable tmp1 = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 1);
                         IDictionaryEnumerator _enumerator = tmp1.GetEnumerator();
                         int i = tmp.Count;
                         while (_enumerator.MoveNext())
@@ -201,7 +201,7 @@ namespace FanartHandler
                     }
                     else
                     {
-                        tmp = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 0);
+                        tmp = Utils.GetDbm().GetFanart(artist, "MusicFanart Scraper", 1);
                     }
                 }
                 if (tmp != null && tmp.Count > 0)
