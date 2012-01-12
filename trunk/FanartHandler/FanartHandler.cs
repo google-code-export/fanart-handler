@@ -1802,7 +1802,7 @@ namespace FanartHandler
                     refreshTimer.Start();                    
                 }
 
-                GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
+//                GUIGraphicsContext.OnNewAction += new OnActionHandler(OnNewAction);
                 MyFileWatcher = new FileSystemWatcher();
                 string path = Config.GetFolder(Config.Dir.Thumbs) + @"\Skin FanArt";                
                 MyFileWatcher.Path = path;
@@ -1858,7 +1858,7 @@ namespace FanartHandler
             }
         }
 
-        void OnNewAction(MediaPortal.GUI.Library.Action action)
+/*        void OnNewAction(MediaPortal.GUI.Library.Action action)
      	{
             try
             {
@@ -1887,6 +1887,7 @@ namespace FanartHandler
                 logger.Error("OnNewAction: " + ex.ToString());
             }
         }
+        */
 
         internal void GuiWindowManagerOnActivateWindow(int activeWindowId)
         {
