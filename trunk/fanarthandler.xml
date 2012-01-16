@@ -93,7 +93,7 @@
         <VersionDescription>A few bugfixes related to retreiving fanart for recordings.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
-        <ReleaseDate>2011-04-29T15:04:24</ReleaseDate>
+        <ReleaseDate>2012-01-16T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
         <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
         <Params>
