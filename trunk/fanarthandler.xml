@@ -90,10 +90,10 @@
     * push random images from selected folders
  
 </ExtensionDescription>
-        <VersionDescription>A few bugfixes related to retreiving fanart for recordings.</VersionDescription>
+        <VersionDescription>A few bugfixes.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
-        <ReleaseDate>2012-01-16T15:04:24</ReleaseDate>
+        <ReleaseDate>2012-02-01T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
         <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
         <Params>
