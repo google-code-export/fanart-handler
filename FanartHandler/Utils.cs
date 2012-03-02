@@ -37,10 +37,11 @@ namespace FanartHandler
     {
         #region declarations
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private const string RXMatchNonWordCharacters = @"[^\w|;]";
+        //private const string RXMatchNonWordCharacters = @"[^\w|;]";
+        private const string RXMatchNonWordCharacters = @"[^\w|;&]";
         private const string RXMatchMPvs = @"({)([0-9]+)(})$"; // MyVideos fanart scraper filename index
         private const string RXMatchMPvs2 = @"(\()([0-9]+)(\))$"; // MyVideos fanart scraper filename index
-        public const string GetMajorMinorVersionNumber = "2.3.1.529";  //Holds current pluginversion.
+        public const string GetMajorMinorVersionNumber = "2.3.1.530";  //Holds current pluginversion.
 //        private static string useProxy = null;  // Holds info read from fanarthandler.xml settings file
 //        private static string proxyHostname = null;  // Holds info read from fanarthandler.xml settings file
 //        private static string proxyPort = null;  // Holds info read from fanarthandler.xml settings file
@@ -307,7 +308,8 @@ namespace FanartHandler
         /// <returns></returns>
         public static string Equalize(this String self)
         {
-            if (self == null)
+            //if (self == null)
+            if (string.IsNullOrEmpty(self))
             {
                 return string.Empty;
             }
@@ -329,6 +331,17 @@ namespace FanartHandler
 
             // Equalize: Common characters with words of the same meaning
             newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
+
+            // Equalize: Roman Numbers To Numeric
+            newTitle = Regex.Replace(newTitle, @"\si(\b)", @" 1$1");
+            newTitle = Regex.Replace(newTitle, @"\sii(\b)", @" 2$1");
+            newTitle = Regex.Replace(newTitle, @"\siii(\b)", @" 3$1");
+            newTitle = Regex.Replace(newTitle, @"\siv(\b)", @" 4$1");
+            newTitle = Regex.Replace(newTitle, @"\sv(\b)", @" 5$1");
+            newTitle = Regex.Replace(newTitle, @"\svi(\b)", @" 6$1");
+            newTitle = Regex.Replace(newTitle, @"\svii(\b)", @" 7$1");
+            newTitle = Regex.Replace(newTitle, @"\sviii(\b)", @" 8$1");
+            newTitle = Regex.Replace(newTitle, @"\six(\b)", @" 9$1");
 
             // Remove the number 1 from the end of a title string
             newTitle = Regex.Replace(newTitle, @"\s(1)$", String.Empty);
@@ -566,17 +579,20 @@ namespace FanartHandler
         /// <summary>
         /// Split artist names based on MP artist pipe (| artist |) in artist name
         /// </summary>    
-        public static string HandleMultipleArtistNamesForDBQuery(string s)
+        public static string HandleMultipleArtistNamesForDBQuery(string inputName)
         {
-            if (s == null)
+            //if (s == null)
+            if (string.IsNullOrEmpty(inputName))
             {
                 return string.Empty;
             }
 
+            string s = inputName.ToLower();
             s = s.Replace(";","|");
-            s = s.ToLower().Replace(" ft ", "|");
-            s = s.ToLower().Replace(" and ", "|");
-            s = s.ToLower().Replace(" & ", "|");
+            s = s.Replace(" ft ", "|");
+            s = s.Replace(" feat ", "|");
+            s = s.Replace(" and ", "|");
+            s = s.Replace(" & ", "|");
             string[] words = s.Split('|');
             string sout = String.Empty;
             string tmpWord = String.Empty;
@@ -592,6 +608,7 @@ namespace FanartHandler
                     sout = sout + ",'" + tmpWord + "'";
                 }
             }
+            sout = sout + ",'" + inputName + "'";
             return sout;
         }
 
@@ -936,7 +953,7 @@ namespace FanartHandler
                     filenames[k] = temp;
                 }
             }
-            object[] keys = new object[filenames.Keys.Count];
+            /*object[] keys = new object[filenames.Keys.Count];
             filenames.Keys.CopyTo(keys, 0);
             for(int i = 0; i < keys.Length; i++)
             {
@@ -944,7 +961,7 @@ namespace FanartHandler
                 {
                     filenames.Remove(keys[i]);
                 }
-            }
+            }*/
         }
 
         /// <summary>
