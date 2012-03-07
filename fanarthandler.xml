@@ -77,23 +77,33 @@
           <Major>2</Major>
           <Minor>3</Minor>
           <Build>1</Build>
-          <Revision>530</Revision>
+          <Revision>531</Revision>
         </Version>
-        <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
-
-    * Search and download music artist fanart or artist thumbnails (scrape) from the htbackdrops site (link).
-    * for all artists stored in your MP music database.
-    * for any artist currently being played (on the fly).
-    * Push fanart that you store on your local harddrive to the current used MP skin.
-    * push fanart for now played music
-    * push fanart for selected music or movie
-    * push random images from selected folders
- 
+        <ExtensionDescription>Fanart Handler is a plugin for MediaPortal (MP). The plugin basically supports;
+
+
+
+    * Search and download music artist fanart or artist thumbnails (scrape) from the htbackdrops site (link).
+
+    * for all artists stored in your MP music database.
+
+    * for any artist currently being played (on the fly).
+
+    * Push fanart that you store on your local harddrive to the current used MP skin.
+
+    * push fanart for now played music
+
+    * push fanart for selected music or movie
+
+    * push random images from selected folders
+
+ 
+
 </ExtensionDescription>
-        <VersionDescription>A few bugfixes.</VersionDescription>
+        <VersionDescription>Added support for mvCentral SmartDJ screen.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://fanart-handler.googlecode.com/svn/trunk/fanarthandler.mpe1</OnlineLocation>
-        <ReleaseDate>2012-03-02T15:04:24</ReleaseDate>
+        <ReleaseDate>2012-03-07T15:04:24</ReleaseDate>
         <Tags>fanart,music,scraper</Tags>
         <Location>E:\Visual Studio 2008\Projects\FanartHandler\fanarthandler.mpe1</Location>
         <Params>
