@@ -248,6 +248,11 @@ namespace FanartHandler
                         //112013 MVCental - Info screen 
                         FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvCentral.ArtistName");
                     }
+                    else if (GUIWindowManager.ActiveWindow == 112015)
+                    {
+                        //112015 MVCental - SmartDJ screen 
+                        FanartHandlerSetup.Fh.SelectedItem = GUIPropertyManager.GetProperty("#mvCentral.ArtistName");
+                    }
                     else if (GUIWindowManager.ActiveWindow == 30886)
                     {
                         try

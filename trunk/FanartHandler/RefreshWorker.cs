@@ -238,7 +238,7 @@ namespace FanartHandler
                                 FanartHandlerSetup.Fh.FS.RefreshGenericSelectedProperties("music", ref FanartHandlerSetup.Fh.FS.ListSelectedMusic, "Youtube.FM", ref FanartHandlerSetup.Fh.FS.CurrSelectedMusic, ref FanartHandlerSetup.Fh.FS.CurrSelectedMusicArtist);
                                 Report(e);
                             }
-                            else if (windowId == 112011 || windowId == 112012 || windowId == 112013)
+                            else if (windowId == 112011 || windowId == 112012 || windowId == 112013 || windowId == 112015)
                             {
                               //User are in mvCentral windows
                               FanartHandlerSetup.Fh.IsSelectedMusic = true;
